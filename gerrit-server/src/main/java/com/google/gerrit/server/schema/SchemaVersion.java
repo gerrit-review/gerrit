@@ -32,7 +32,11 @@ import java.util.List;
 /** A version of the database schema. */
 public abstract class SchemaVersion {
   /** The current schema version. */
+<<<<<<< HEAD   (e6ebbb Refactor how we tie the SSH objects into the HTTP injector)
   private static final Class<? extends SchemaVersion> C = Schema_100.class;
+=======
+  private static final Class<? extends SchemaVersion> C = Schema_34.class;
+>>>>>>> BRANCH (a78a37 Simplify reference level access control.)
 
   public static class Module extends AbstractModule {
     @Override
