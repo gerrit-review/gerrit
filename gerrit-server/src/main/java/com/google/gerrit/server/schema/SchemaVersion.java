@@ -32,7 +32,11 @@ import java.util.List;
 /** A version of the database schema. */
 public abstract class SchemaVersion {
   /** The current schema version. */
+<<<<<<< HEAD   (098b26 Allowed web sessions to be database backed)
   private static final Class<? extends SchemaVersion> C = Schema_100.class;
+=======
+  private static final Class<? extends SchemaVersion> C = Schema_35.class;
+>>>>>>> BRANCH (04132a Index changes by external issue tracking systems)
 
   public static class Module extends AbstractModule {
     @Override

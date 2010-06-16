@@ -62,7 +62,17 @@ class LdapRealm implements Realm {
   static final String USERNAME = "username";
   private static final String GROUPNAME = "groupname";
 
+<<<<<<< HEAD   (098b26 Allowed web sessions to be database backed)
   private final Helper helper;
+=======
+  private final Config config;
+  private final String server;
+  private final String username;
+  private final String password;
+  private final String referral;
+  private final boolean sslVerify;
+
+>>>>>>> BRANCH (04132a Index changes by external issue tracking systems)
   private final AuthConfig authConfig;
   private final EmailExpander emailExpander;
   private final Cache<String, Account.Id> usernameCache;
@@ -84,6 +94,14 @@ class LdapRealm implements Realm {
     this.usernameCache = usernameCache;
     this.membershipCache = membershipCache;
 
+<<<<<<< HEAD   (098b26 Allowed web sessions to be database backed)
+=======
+    this.server = required(config, "server");
+    this.username = optional(config, "username");
+    this.password = optional(config, "password");
+    this.referral = optional(config, "referral");
+    this.sslVerify = config.getBoolean("ldap", "sslverify", true);
+>>>>>>> BRANCH (04132a Index changes by external issue tracking systems)
     this.readOnlyAccountFields = new HashSet<Account.FieldName>();
 
     if (optdef(config, "accountFullName", "DEFAULT") != null) {
@@ -339,10 +357,85 @@ class LdapRealm implements Realm {
       try {
         return helper.queryForGroups(ctx, username, null);
       } finally {
+<<<<<<< HEAD   (098b26 Allowed web sessions to be database backed)
         try {
           ctx.close();
         } catch (NamingException e) {
           log.warn("Cannot close LDAP query handle", e);
+=======
+        db.close();
+      }
+    } catch (OrmException e) {
+      log.warn("Cannot query for username in database", e);
+      return null;
+    }
+  }
+
+  private Properties createContextProperties() {
+    final Properties env = new Properties();
+    env.put(Context.INITIAL_CONTEXT_FACTORY, LDAP);
+    env.put(Context.PROVIDER_URL, server);
+    if (server.startsWith("ldaps:") && !sslVerify) {
+      Class<? extends SSLSocketFactory> factory = BlindSSLSocketFactory.class;
+      env.put("java.naming.ldap.factory.socket", factory.getName());
+    }
+    return env;
+  }
+
+  private DirContext open() throws NamingException {
+    final Properties env = createContextProperties();
+    if (username != null) {
+      env.put(Context.SECURITY_AUTHENTICATION, "simple");
+      env.put(Context.SECURITY_PRINCIPAL, username);
+      env.put(Context.SECURITY_CREDENTIALS, password != null ? password : "");
+      env.put(Context.REFERRAL, referral != null ? referral : "ignore");
+    }
+    return new InitialDirContext(env);
+  }
+
+  private DirContext authenticate(String dn, String password)
+      throws AccountException {
+    final Properties env = createContextProperties();
+    env.put(Context.SECURITY_AUTHENTICATION, "simple");
+    env.put(Context.SECURITY_PRINCIPAL, dn);
+    env.put(Context.SECURITY_CREDENTIALS, password != null ? password : "");
+    env.put(Context.REFERRAL, referral != null ? referral : "ignore");
+    try {
+      return new InitialDirContext(env);
+    } catch (NamingException e) {
+      throw new AccountException("Incorrect username or password", e);
+    }
+  }
+
+  private LdapQuery.Result findAccount(final LdapSchema schema,
+      final DirContext ctx, final String username) throws NamingException,
+      AccountException {
+    final HashMap<String, String> params = new HashMap<String, String>();
+    params.put(USERNAME, username);
+
+    final List<LdapQuery.Result> res = new ArrayList<LdapQuery.Result>();
+    for (LdapQuery accountQuery : schema.accountQueryList) {
+      res.addAll(accountQuery.query(ctx, params));
+    }
+
+    switch (res.size()) {
+      case 0:
+        throw new AccountException("No such user:" + username);
+
+      case 1:
+        return res.get(0);
+
+      default:
+        throw new AccountException("Duplicate users: " + username);
+    }
+  }
+
+  private LdapSchema getSchema(DirContext ctx) {
+    if (ldapSchema == null) {
+      synchronized (this) {
+        if (ldapSchema == null) {
+          ldapSchema = new LdapSchema(ctx);
+>>>>>>> BRANCH (04132a Index changes by external issue tracking systems)
         }
       }
     }

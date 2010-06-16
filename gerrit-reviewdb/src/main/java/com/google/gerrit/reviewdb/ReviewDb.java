@@ -109,7 +109,11 @@ public interface ReviewDb extends Schema {
   RefRightAccess refRights();
 
   @Relation
+<<<<<<< HEAD   (098b26 Allowed web sessions to be database backed)
   ActiveSessionAccess activeSessions();
+=======
+  TrackingIdAccess trackingIds();
+>>>>>>> BRANCH (04132a Index changes by external issue tracking systems)
 
   /** Create the next unique id for an {@link Account}. */
   @Sequence(startWith = 1000000)
