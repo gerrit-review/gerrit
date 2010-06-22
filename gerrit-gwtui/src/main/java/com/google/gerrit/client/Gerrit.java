@@ -238,8 +238,11 @@ public class Gerrit implements EntryPoint {
         myConfig = result.config;
         if (result.account != null) {
           myAccount = result.account;
+<<<<<<< HEAD   (9124e9 Fix exp-nosql build caused by merge error)
           xsrfToken = result.xsrfToken;
           applyUserPreferences();
+=======
+>>>>>>> BRANCH (faee65 Start 2.1.4 development)
         }
         onModuleLoad2();
       }
@@ -376,6 +379,7 @@ public class Gerrit implements EntryPoint {
         gStarting.getElement());
     RootPanel.detachNow(gStarting);
 
+    applyUserPreferences();
     initHistoryHooks();
     populateBottomMenu(gBottomMenu);
     refreshMenuBar();
@@ -482,13 +486,15 @@ public class Gerrit implements EntryPoint {
   }
 
   public static void applyUserPreferences() {
-    final AccountGeneralPreferences p = myAccount.getGeneralPreferences();
-    CopyableLabel.setFlashEnabled(p.isUseFlashClipboard());
-    if (siteHeader != null) {
-      siteHeader.setVisible(p.isShowSiteHeader());
-    }
-    if (siteFooter != null) {
-      siteFooter.setVisible(p.isShowSiteHeader());
+    if (myAccount != null) {
+      final AccountGeneralPreferences p = myAccount.getGeneralPreferences();
+      CopyableLabel.setFlashEnabled(p.isUseFlashClipboard());
+      if (siteHeader != null) {
+        siteHeader.setVisible(p.isShowSiteHeader());
+      }
+      if (siteFooter != null) {
+        siteFooter.setVisible(p.isShowSiteHeader());
+      }
     }
   }
 
