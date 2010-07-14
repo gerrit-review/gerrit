@@ -27,6 +27,7 @@ import com.google.gerrit.common.data.GerritConfig;
 import com.google.gerrit.common.data.HostPageData;
 import com.google.gerrit.common.data.SystemInfoService;
 import com.google.gerrit.reviewdb.Account;
+import com.google.gerrit.reviewdb.AccountDiffPreference;
 import com.google.gerrit.reviewdb.AccountGeneralPreferences;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -69,7 +70,11 @@ public class Gerrit implements EntryPoint {
   private static String myHost;
   private static GerritConfig myConfig;
   private static Account myAccount;
+<<<<<<< HEAD   (729e95 Re-added support for whitespace ignore)
   private static String xsrfToken;
+=======
+  private static AccountDiffPreference myAccountDiffPref;
+>>>>>>> BRANCH (077b2c Persisting users diff formatting preferences)
 
   private static TabPanel menuLeft;
   private static LinkMenuBar menuRight;
@@ -172,6 +177,15 @@ public class Gerrit implements EntryPoint {
     return myAccount;
   }
 
+  /** @return the currently signed in users's diff preferences; null if no diff preferences defined for the account */
+  public static AccountDiffPreference getAccountDiffPreference() {
+    return myAccountDiffPref;
+  }
+
+  public static void setAccountDiffPreference(AccountDiffPreference accountDiffPref) {
+    myAccountDiffPref = accountDiffPref;
+  }
+
   /** @return true if the user is currently authenticated */
   public static boolean isSignedIn() {
     return getUserAccount() != null;
@@ -202,7 +216,11 @@ public class Gerrit implements EntryPoint {
 
   static void deleteSessionCookie() {
     myAccount = null;
+<<<<<<< HEAD   (729e95 Re-added support for whitespace ignore)
     xsrfToken = null;
+=======
+    myAccountDiffPref = null;
+>>>>>>> BRANCH (077b2c Persisting users diff formatting preferences)
     refreshMenuBar();
 
     // If the cookie was HttpOnly, this request to delete it will
@@ -238,7 +256,13 @@ public class Gerrit implements EntryPoint {
         myConfig = result.config;
         if (result.account != null) {
           myAccount = result.account;
+<<<<<<< HEAD   (729e95 Re-added support for whitespace ignore)
           xsrfToken = result.xsrfToken;
+=======
+        }
+        if (result.accountDiffPref != null) {
+          myAccountDiffPref = result.accountDiffPref;
+>>>>>>> BRANCH (077b2c Persisting users diff formatting preferences)
         }
         onModuleLoad2();
       }
@@ -415,7 +439,8 @@ public class Gerrit implements EntryPoint {
     if (signedIn) {
       m = new LinkMenuBar();
       addLink(m, C.menuMyChanges(), PageLinks.MINE);
-      addLink(m, C.menyMyDrafts(), PageLinks.MINE_DRAFTS);
+      addLink(m, C.menuMyDrafts(), PageLinks.MINE_DRAFTS);
+      addLink(m, C.menuMyWatchedChanges(), PageLinks.MINE_WATCHED);
       addLink(m, C.menuMyStarredChanges(), PageLinks.MINE_STARRED);
       menuLeft.add(m, C.menuMine());
       menuLeft.selectTab(1);

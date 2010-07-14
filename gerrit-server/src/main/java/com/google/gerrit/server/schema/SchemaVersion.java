@@ -32,7 +32,11 @@ import java.util.List;
 /** A version of the database schema. */
 public abstract class SchemaVersion {
   /** The current schema version. */
+<<<<<<< HEAD   (729e95 Re-added support for whitespace ignore)
   private static final Class<? extends SchemaVersion> C = Schema_100.class;
+=======
+  private static final Class<? extends SchemaVersion> C = Schema_38.class;
+>>>>>>> BRANCH (077b2c Persisting users diff formatting preferences)
 
   public static class Module extends AbstractModule {
     @Override

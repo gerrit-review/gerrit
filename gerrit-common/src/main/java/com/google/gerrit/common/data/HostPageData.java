@@ -15,10 +15,15 @@
 package com.google.gerrit.common.data;
 
 import com.google.gerrit.reviewdb.Account;
+import com.google.gerrit.reviewdb.AccountDiffPreference;
 
 /** Data sent as part of the host page, to bootstrap the UI. */
 public class HostPageData {
   public Account account;
+<<<<<<< HEAD   (729e95 Re-added support for whitespace ignore)
   public String xsrfToken;
+=======
+  public AccountDiffPreference accountDiffPref;
+>>>>>>> BRANCH (077b2c Persisting users diff formatting preferences)
   public GerritConfig config;
 }

@@ -69,6 +69,7 @@ class UserPassAuthServiceImpl implements UserPassAuthService {
 
     result.success = true;
     result.isNew = res.isNew();
+<<<<<<< HEAD   (729e95 Re-added support for whitespace ignore)
     try {
       webSession.get().login(res, false);
     } catch (OrmException e) {
@@ -77,6 +78,9 @@ class UserPassAuthServiceImpl implements UserPassAuthService {
       callback.onSuccess(result);
       return;
     }
+=======
+    webSession.get().login(res, true /* persistent cookie */);
+>>>>>>> BRANCH (077b2c Persisting users diff formatting preferences)
     callback.onSuccess(result);
   }
 }

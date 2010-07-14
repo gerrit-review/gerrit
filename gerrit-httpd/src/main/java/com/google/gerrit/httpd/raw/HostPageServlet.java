@@ -161,11 +161,18 @@ public class HostPageServlet extends HttpServlet {
       w.write(HPD_ID + ".account=");
       json(((IdentifiedUser) user).getAccount(), w);
       w.write(";");
+<<<<<<< HEAD   (729e95 Re-added support for whitespace ignore)
       if (session.get().getToken() != null) {
         w.write(HPD_ID + ".xsrfToken=");
         json(session.get().getToken(), w);
         w.write(";");
       }
+=======
+      w.write(HPD_ID + ".accountDiffPref=");
+      json(((IdentifiedUser) user).getAccountDiffPreference(), w);
+      w.write(";");
+
+>>>>>>> BRANCH (077b2c Persisting users diff formatting preferences)
       final byte[] userData = w.toString().getBytes("UTF-8");
 
       raw = concat(page.part1, userData, page.part2);

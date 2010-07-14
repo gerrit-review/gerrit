@@ -19,7 +19,11 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+<<<<<<< HEAD   (729e95 Re-added support for whitespace ignore)
 import java.util.Collections;
+=======
+import java.util.Iterator;
+>>>>>>> BRANCH (077b2c Persisting users diff formatting preferences)
 import java.util.List;
 import java.util.Locale;
 
@@ -129,6 +133,14 @@ public abstract class EmailHeader {
 
     public void add(Address addr) {
       list.add(addr);
+    }
+
+    void remove(java.lang.String email) {
+      for (Iterator<Address> i = list.iterator(); i.hasNext();) {
+        if (i.next().email.equals(email)) {
+          i.remove();
+        }
+      }
     }
 
     @Override

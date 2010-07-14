@@ -138,6 +138,7 @@ class HttpLoginServlet extends HttpServlet {
     }
     rdr.append(token);
 
+<<<<<<< HEAD   (729e95 Re-added support for whitespace ignore)
     try {
       webSession.get().login(arsp, false);
     } catch (OrmException e) {
@@ -153,6 +154,9 @@ class HttpLoginServlet extends HttpServlet {
       out.close();
       return;
     }
+=======
+    webSession.get().login(arsp, true /* persistent cookie */);
+>>>>>>> BRANCH (077b2c Persisting users diff formatting preferences)
     rsp.sendRedirect(rdr.toString());
   }
 
