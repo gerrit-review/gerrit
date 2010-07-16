@@ -77,6 +77,10 @@ import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
 
+<<<<<<< HEAD   (d3f3a9 Added key and value class info to CacheProvider)
+=======
+import org.eclipse.jgit.diff.DiffEntry;
+>>>>>>> BRANCH (00ed45 Implemented rename detection)
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.Edit;
 import org.eclipse.jgit.diff.MyersDiff;
@@ -84,6 +88,10 @@ import org.eclipse.jgit.diff.RawText;
 import org.eclipse.jgit.diff.RawTextIgnoreAllWhitespace;
 import org.eclipse.jgit.diff.RawTextIgnoreTrailingWhitespace;
 import org.eclipse.jgit.diff.RawTextIgnoreWhitespaceChange;
+<<<<<<< HEAD   (d3f3a9 Added key and value class info to CacheProvider)
+=======
+import org.eclipse.jgit.diff.RenameDetector;
+>>>>>>> BRANCH (00ed45 Implemented rename detection)
 import org.eclipse.jgit.diff.ReplaceEdit;
 import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.Config;
@@ -100,12 +108,19 @@ import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
+<<<<<<< HEAD   (d3f3a9 Added key and value class info to CacheProvider)
 import org.eclipse.jgit.util.QuotedString;
+=======
+import org.eclipse.jgit.util.io.DisabledOutputStream;
+>>>>>>> BRANCH (00ed45 Implemented rename detection)
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+<<<<<<< HEAD   (d3f3a9 Added key and value class info to CacheProvider)
 import java.io.PrintStream;
+=======
+>>>>>>> BRANCH (00ed45 Implemented rename detection)
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -184,6 +199,7 @@ public class PatchListCacheImpl implements PatchListCache {
 
     private PatchList readPatchList(final PatchListKey key,
         final Repository repo) throws IOException {
+<<<<<<< HEAD   (d3f3a9 Added key and value class info to CacheProvider)
       // TODO(jeffschu) correctly handle file renames
       // TODO(jeffschu) correctly handle merge commits
 
@@ -289,6 +305,56 @@ public class PatchListCacheImpl implements PatchListCache {
         default:
           return new RawText(raw);
       }
+=======
+      // TODO(jeffschu) correctly handle merge commits
+
+      final RevWalk rw = new RevWalk(repo);
+      final RevCommit b = rw.parseCommit(key.getNewId());
+      final AnyObjectId a = aFor(key, repo, b);
+
+      if (a == null) {
+        return new PatchList(a, b, computeIntraline, new PatchListEntry[0]);
+      }
+
+      RevTree aTree = rw.parseTree(a);
+      RevTree bTree = b.getTree();
+
+      final TreeWalk walk = new TreeWalk(repo);
+      walk.reset();
+      walk.setRecursive(true);
+      walk.addTree(aTree);
+      walk.addTree(bTree);
+      walk.setFilter(TreeFilter.ANY_DIFF);
+
+      DiffFormatter df = new DiffFormatter(DisabledOutputStream.INSTANCE);
+      df.setRepository(repo);
+      switch (key.getWhitespace()) {
+        case IGNORE_ALL_SPACE:
+          df.setRawTextFactory(RawTextIgnoreAllWhitespace.FACTORY);
+          break;
+        case IGNORE_NONE:
+          df.setRawTextFactory(RawText.FACTORY);
+          break;
+        case IGNORE_SPACE_AT_EOL:
+          df.setRawTextFactory(RawTextIgnoreTrailingWhitespace.FACTORY);
+          break;
+        case IGNORE_SPACE_CHANGE:
+          df.setRawTextFactory(RawTextIgnoreWhitespaceChange.FACTORY);
+          break;
+      }
+
+      RenameDetector rd = new RenameDetector(repo);
+      rd.addAll(DiffEntry.scan(walk));
+      List<DiffEntry> diffEntries = rd.compute();
+
+      final int cnt = diffEntries.size();
+      final PatchListEntry[] entries = new PatchListEntry[cnt];
+      for (int i = 0; i < cnt; i++) {
+        FileHeader fh = df.createFileHeader(diffEntries.get(i));
+        entries[i] = newEntry(repo, aTree, bTree, fh);
+      }
+      return new PatchList(a, b, computeIntraline, entries);
+>>>>>>> BRANCH (00ed45 Implemented rename detection)
     }
 
     private PatchListEntry newEntry(Repository repo, RevTree aTree,

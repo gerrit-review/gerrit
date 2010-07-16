@@ -32,7 +32,11 @@ import java.util.List;
 /** A version of the database schema. */
 public abstract class SchemaVersion {
   /** The current schema version. */
+<<<<<<< HEAD   (d3f3a9 Added key and value class info to CacheProvider)
   private static final Class<? extends SchemaVersion> C = Schema_100.class;
+=======
+  private static final Class<? extends SchemaVersion> C = Schema_39.class;
+>>>>>>> BRANCH (00ed45 Implemented rename detection)
 
   public static class Module extends AbstractModule {
     @Override

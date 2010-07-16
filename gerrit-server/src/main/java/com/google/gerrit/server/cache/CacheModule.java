@@ -40,7 +40,11 @@ public abstract class CacheModule extends AbstractModule {
    */
   protected <K, V> UnnamedCacheBinding<K, V> core(
       final TypeLiteral<Cache<K, V>> type) {
+<<<<<<< HEAD   (d3f3a9 Added key and value class info to CacheProvider)
     return core(Key.get(type), type);
+=======
+    return core(Key.get(type));
+>>>>>>> BRANCH (00ed45 Implemented rename detection)
   }
 
   /**
@@ -55,13 +59,25 @@ public abstract class CacheModule extends AbstractModule {
    */
   protected <K, V> NamedCacheBinding<K, V> core(
       final TypeLiteral<Cache<K, V>> type, final String name) {
+<<<<<<< HEAD   (d3f3a9 Added key and value class info to CacheProvider)
     return core(Key.get(type, Names.named(name)), type).name(name);
+=======
+    return core(Key.get(type, Names.named(name))).name(name);
+>>>>>>> BRANCH (00ed45 Implemented rename detection)
   }
 
+<<<<<<< HEAD   (d3f3a9 Added key and value class info to CacheProvider)
   private <K, V> UnnamedCacheBinding<K, V> core(final Key<Cache<K, V>> key,
       final TypeLiteral<Cache<K, V>> type) {
+=======
+  private <K, V> UnnamedCacheBinding<K, V> core(final Key<Cache<K, V>> key) {
+>>>>>>> BRANCH (00ed45 Implemented rename detection)
     final boolean disk = false;
+<<<<<<< HEAD   (d3f3a9 Added key and value class info to CacheProvider)
     final CacheProvider<K, V> b = new CacheProvider<K, V>(disk, this, type);
+=======
+    final CacheProvider<K, V> b = new CacheProvider<K, V>(disk, this);
+>>>>>>> BRANCH (00ed45 Implemented rename detection)
     bind(key).toProvider(b).in(Scopes.SINGLETON);
     return b;
   }
@@ -97,10 +113,18 @@ public abstract class CacheModule extends AbstractModule {
     return disk(Key.get(type, Names.named(name)), type).name(name);
   }
 
+<<<<<<< HEAD   (d3f3a9 Added key and value class info to CacheProvider)
   private <K, V> UnnamedCacheBinding<K, V> disk(final Key<Cache<K, V>> key,
       final TypeLiteral<Cache<K, V>> type) {
+=======
+  private <K, V> UnnamedCacheBinding<K, V> disk(final Key<Cache<K, V>> key) {
+>>>>>>> BRANCH (00ed45 Implemented rename detection)
     final boolean disk = true;
+<<<<<<< HEAD   (d3f3a9 Added key and value class info to CacheProvider)
     final CacheProvider<K, V> b = new CacheProvider<K, V>(disk, this, type);
+=======
+    final CacheProvider<K, V> b = new CacheProvider<K, V>(disk, this);
+>>>>>>> BRANCH (00ed45 Implemented rename detection)
     bind(key).toProvider(b).in(Scopes.SINGLETON);
     return b;
   }

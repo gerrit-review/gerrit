@@ -27,7 +27,11 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.concurrent.TimeUnit;
 
+<<<<<<< HEAD   (d3f3a9 Added key and value class info to CacheProvider)
 public final class CacheProvider<K, V> implements Provider<Cache<K, V>>,
+=======
+final class CacheProvider<K, V> implements Provider<Cache<K, V>>,
+>>>>>>> BRANCH (00ed45 Implemented rename detection)
     NamedCacheBinding<K, V>, UnnamedCacheBinding<K, V> {
   private final CacheModule module;
   private final boolean disk;
@@ -36,14 +40,23 @@ public final class CacheProvider<K, V> implements Provider<Cache<K, V>>,
   private long maxAge;
   private EvictionPolicy evictionPolicy;
   private String cacheName;
+<<<<<<< HEAD   (d3f3a9 Added key and value class info to CacheProvider)
   private ProxyCache<K, V> cache;
   private Provider<EntryCreator<K, V>> entryCreator;
   private Class<K> keyClass;
   private Class<V> valueClass;
+=======
+  private ProxyEhcache cache;
+  private Provider<EntryCreator<K, V>> entryCreator;
+>>>>>>> BRANCH (00ed45 Implemented rename detection)
 
+<<<<<<< HEAD   (d3f3a9 Added key and value class info to CacheProvider)
   @SuppressWarnings("unchecked")
   CacheProvider(final boolean disk, CacheModule module,
       TypeLiteral<Cache<K, V>> typeLiteral) {
+=======
+  CacheProvider(final boolean disk, CacheModule module) {
+>>>>>>> BRANCH (00ed45 Implemented rename detection)
     this.disk = disk;
     this.module = module;
 
@@ -159,6 +172,13 @@ public final class CacheProvider<K, V> implements Provider<Cache<K, V>>,
     if (cache == null) {
       throw new ProvisionException("Cache \"" + cacheName + "\" not available");
     }
+<<<<<<< HEAD   (d3f3a9 Added key and value class info to CacheProvider)
     return cache;
+=======
+    if (entryCreator != null) {
+      return new PopulatingCache<K, V>(cache, entryCreator.get());
+    }
+    return new SimpleCache<K, V>(cache);
+>>>>>>> BRANCH (00ed45 Implemented rename detection)
   }
 }

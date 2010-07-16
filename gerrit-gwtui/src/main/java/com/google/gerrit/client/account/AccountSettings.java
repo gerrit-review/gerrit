@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (d3f3a9 Added key and value class info to CacheProvider)
 // Copyright (C) 2008 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -181,3 +182,5 @@ public class AccountSettings extends AccountScreen {
     info.setText(3, fieldIdx, account.getId().toString());
   }
 }
+=======
+>>>>>>> BRANCH (00ed45 Implemented rename detection)

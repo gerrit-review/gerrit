@@ -46,8 +46,13 @@ limitations under the License.
   </issueManagement>
 
   <properties>
+<<<<<<< HEAD   (d3f3a9 Added key and value class info to CacheProvider)
     <jgitVersion>0.8.4.43-g3fd4918</jgitVersion>
     <gwtormVersion>1.2-SNAPSHOT</gwtormVersion>
+=======
+    <jgitVersion>0.8.4.84-g6e155d5</jgitVersion>
+    <gwtormVersion>1.1.4</gwtormVersion>
+>>>>>>> BRANCH (00ed45 Implemented rename detection)
     <gwtjsonrpcVersion>1.2.2</gwtjsonrpcVersion>
     <gwtexpuiVersion>1.2.1</gwtexpuiVersion>
     <gwtVersion>2.0.3</gwtVersion>
@@ -550,9 +555,15 @@ limitations under the License.
       </dependency>
 
       <dependency>
+<<<<<<< HEAD   (d3f3a9 Added key and value class info to CacheProvider)
         <groupId>com.google.protobuf</groupId>
         <artifactId>protobuf-java</artifactId>
         <version>2.3.0</version>
+=======
+        <groupId>commons-lang</groupId>
+        <artifactId>commons-lang</artifactId>
+        <version>2.5</version>
+>>>>>>> BRANCH (00ed45 Implemented rename detection)
       </dependency>
 
       <dependency>
@@ -732,6 +743,12 @@ limitations under the License.
         <artifactId>juniversalchardet</artifactId>
         <version>1.0.3</version>
       </dependency>
+
+      <dependency>
+        <groupId>dk.brics.automaton</groupId>
+        <artifactId>automaton</artifactId>
+        <version>1.11.2</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -764,6 +781,11 @@ limitations under the License.
     <repository>
       <id>objectweb-repository</id>
       <url>http://maven.objectweb.org/maven2/</url>
+    </repository>
+
+    <repository>
+      <id>clojars-repo</id>
+      <url>http://clojars.org/repo</url>
     </repository>
   </repositories>
 </project>
