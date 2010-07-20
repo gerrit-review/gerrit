@@ -32,7 +32,11 @@ import java.util.List;
 /** A version of the database schema. */
 public abstract class SchemaVersion {
   /** The current schema version. */
+<<<<<<< HEAD   (f0543f Merge branch 'master' into exp-nosql)
   private static final Class<? extends SchemaVersion> C = Schema_101.class;
+=======
+  private static final Class<? extends SchemaVersion> C = Schema_40.class;
+>>>>>>> BRANCH (228e8d Update JGit to 0.8.4.87-g395d236)
 
   public static class Module extends AbstractModule {
     @Override

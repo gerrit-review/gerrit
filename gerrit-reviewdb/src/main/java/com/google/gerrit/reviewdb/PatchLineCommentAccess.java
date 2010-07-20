@@ -25,6 +25,16 @@ public interface PatchLineCommentAccess extends
   @PrimaryKey("key")
   PatchLineComment get(PatchLineComment.Key id) throws OrmException;
 
+<<<<<<< HEAD   (f0543f Merge branch 'master' into exp-nosql)
+=======
+  @Query("WHERE key.patchKey.patchSetId.changeId = ?")
+  ResultSet<PatchLineComment> byChange(Change.Id id) throws OrmException;
+
+  @Query("WHERE key.patchKey = ? AND status = '"
+      + PatchLineComment.STATUS_PUBLISHED + "' ORDER BY lineNbr,writtenOn")
+  ResultSet<PatchLineComment> published(Patch.Key patch) throws OrmException;
+
+>>>>>>> BRANCH (228e8d Update JGit to 0.8.4.87-g395d236)
   @Query("WHERE key.patchKey.patchSetId.changeId = ?"
       + " AND key.patchKey.fileName = ? AND status = '"
       + PatchLineComment.STATUS_PUBLISHED + "' ORDER BY lineNbr,writtenOn")
