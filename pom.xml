@@ -46,7 +46,11 @@ limitations under the License.
   </issueManagement>
 
   <properties>
+<<<<<<< HEAD   (5f11b2 Update to JGit 0.8.4.240-g8e9cc82)
     <jgitVersion>0.8.4.240-g8e9cc82</jgitVersion>
+=======
+    <jgitVersion>0.8.4.89-ge2f5716</jgitVersion>
+>>>>>>> BRANCH (b0cdb1 Update 2.1.4 release notes)
     <gwtormVersion>1.1.4</gwtormVersion>
     <gwtjsonrpcVersion>1.2.2</gwtjsonrpcVersion>
     <gwtexpuiVersion>1.2.1</gwtexpuiVersion>
