@@ -32,7 +32,11 @@ import java.util.List;
 /** A version of the database schema. */
 public abstract class SchemaVersion {
   /** The current schema version. */
+<<<<<<< HEAD   (f4c716 Gave unique IDs for each relation in ReviewDB)
   private static final Class<? extends SchemaVersion> C = Schema_101.class;
+=======
+  private static final Class<? extends SchemaVersion> C = Schema_40.class;
+>>>>>>> BRANCH (5f11b2 Update to JGit 0.8.4.240-g8e9cc82)
 
   public static class Module extends AbstractModule {
     @Override
