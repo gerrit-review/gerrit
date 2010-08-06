@@ -88,13 +88,18 @@ import org.eclipse.jgit.diff.RawTextIgnoreAllWhitespace;
 import org.eclipse.jgit.diff.RawTextIgnoreTrailingWhitespace;
 import org.eclipse.jgit.diff.RawTextIgnoreWhitespaceChange;
 import org.eclipse.jgit.diff.RenameDetector;
+<<<<<<< HEAD   (f4c716 Gave unique IDs for each relation in ReviewDB)
+=======
+import org.eclipse.jgit.diff.ReplaceEdit;
+import org.eclipse.jgit.errors.MissingObjectException;
+>>>>>>> BRANCH (5f11b2 Update to JGit 0.8.4.240-g8e9cc82)
 import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.FileMode;
 import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.ObjectInserter;
 import org.eclipse.jgit.lib.ObjectLoader;
-import org.eclipse.jgit.lib.ObjectWriter;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.patch.FileHeader;
 import org.eclipse.jgit.patch.FileHeader.PatchType;
@@ -287,9 +292,15 @@ public class PatchListCacheImpl implements PatchListCache {
 
         if (e.getType() == Edit.Type.REPLACE) {
           if (aContent == null) {
+<<<<<<< HEAD   (f4c716 Gave unique IDs for each relation in ReviewDB)
             edits = new ArrayList<LineEdit>(edits);
             aContent = read(repo, fileHeader.getOldName(), aTree);
             bContent = read(repo, fileHeader.getNewName(), bTree);
+=======
+            edits = new ArrayList<Edit>(edits);
+            aContent = read(repo, fileHeader.getOldPath(), aTree);
+            bContent = read(repo, fileHeader.getNewPath(), bTree);
+>>>>>>> BRANCH (5f11b2 Update to JGit 0.8.4.240-g8e9cc82)
             combineLineEdits(edits, aContent, bContent);
             i = -1; // restart the entire scan after combining lines.
             continue;
@@ -552,8 +563,10 @@ public class PatchListCacheImpl implements PatchListCache {
       if (tw == null || tw.getFileMode(0).getObjectType() != Constants.OBJ_BLOB) {
         return Text.EMPTY;
       }
-      ObjectLoader ldr = repo.openObject(tw.getObjectId(0));
-      if (ldr == null) {
+      ObjectLoader ldr;
+      try {
+        ldr = repo.open(tw.getObjectId(0), Constants.OBJ_BLOB);
+      } catch (MissingObjectException notFound) {
         return Text.EMPTY;
       }
       return new Text(ldr.getCachedBytes());
@@ -577,7 +590,14 @@ public class PatchListCacheImpl implements PatchListCache {
     }
 
     private static ObjectId emptyTree(final Repository repo) throws IOException {
-      return new ObjectWriter(repo).writeCanonicalTree(new byte[0]);
+      ObjectInserter oi = repo.newObjectInserter();
+      try {
+        ObjectId id = oi.insert(Constants.OBJ_TREE, new byte[] {});
+        oi.flush();
+        return id;
+      } finally {
+        oi.release();
+      }
     }
   }
 }

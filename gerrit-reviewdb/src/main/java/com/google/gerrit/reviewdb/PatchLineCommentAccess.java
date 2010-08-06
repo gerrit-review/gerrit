@@ -25,6 +25,16 @@ public interface PatchLineCommentAccess extends
   @PrimaryKey("key")
   PatchLineComment get(PatchLineComment.Key id) throws OrmException;
 
+<<<<<<< HEAD   (f4c716 Gave unique IDs for each relation in ReviewDB)
+=======
+  @Query("WHERE key.patchKey.patchSetId.changeId = ?")
+  ResultSet<PatchLineComment> byChange(Change.Id id) throws OrmException;
+
+  @Query("WHERE key.patchKey = ? AND status = '"
+      + PatchLineComment.STATUS_PUBLISHED + "' ORDER BY lineNbr,writtenOn")
+  ResultSet<PatchLineComment> published(Patch.Key patch) throws OrmException;
+
+>>>>>>> BRANCH (5f11b2 Update to JGit 0.8.4.240-g8e9cc82)
   @Query("WHERE key.patchKey.patchSetId.changeId = ?"
       + " AND key.patchKey.fileName = ? AND status = '"
       + PatchLineComment.STATUS_PUBLISHED + "' ORDER BY lineNbr,writtenOn")

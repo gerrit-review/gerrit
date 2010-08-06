@@ -19,7 +19,6 @@ import com.google.gerrit.reviewdb.AccountDiffPreference;
 import com.google.gerrit.reviewdb.AccountGroup;
 import com.google.gerrit.reviewdb.AccountProjectWatch;
 import com.google.gerrit.reviewdb.Change;
-import com.google.gerrit.reviewdb.Project;
 import com.google.gerrit.reviewdb.ReviewDb;
 import com.google.gerrit.reviewdb.StarredChange;
 import com.google.gerrit.server.account.AccountCache;
@@ -45,9 +44,11 @@ import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.SocketAddress;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -84,6 +85,11 @@ public class IdentifiedUser extends CurrentUser {
 
     public IdentifiedUser create(final Account.Id id) {
       return create(AccessPath.UNKNOWN, null, id);
+    }
+
+    public IdentifiedUser create(Provider<ReviewDb> db, Account.Id id) {
+      return new IdentifiedUser(AccessPath.UNKNOWN, authConfig, canonicalUrl,
+          realm, accountCache, null, db, id);
     }
 
     public IdentifiedUser create(AccessPath accessPath,
@@ -164,7 +170,7 @@ public class IdentifiedUser extends CurrentUser {
   private Set<String> emailAddresses;
   private Set<AccountGroup.Id> effectiveGroups;
   private Set<Change.Id> starredChanges;
-  private Set<Project.NameKey> watchedProjects;
+  private Collection<AccountProjectWatch> notificationFilters;
 
   private IdentifiedUser(final AccessPath accessPath,
       final AuthConfig authConfig, final Provider<String> canonicalUrl,
@@ -253,20 +259,29 @@ public class IdentifiedUser extends CurrentUser {
   }
 
   @Override
-  public Set<Project.NameKey> getWatchedProjects() {
-    if (watchedProjects == null) {
+  public Collection<AccountProjectWatch> getNotificationFilters() {
+    if (notificationFilters == null) {
       if (dbProvider == null) {
         throw new OutOfScopeException("Not in request scoped user");
       }
+<<<<<<< HEAD   (f4c716 Gave unique IDs for each relation in ReviewDB)
       final Set<Project.NameKey> h = new HashSet<Project.NameKey>();
       for (AccountProjectWatch projectWatch : accountProjectWatchCache
           .byAccount(getAccountId())) {
         h.add(projectWatch.getProjectNameKey());
+=======
+      List<AccountProjectWatch> r;
+      try {
+        r = dbProvider.get().accountProjectWatches() //
+            .byAccount(getAccountId()).toList();
+      } catch (OrmException e) {
+        log.warn("Cannot query notification filters of a user", e);
+        r = Collections.emptyList();
+>>>>>>> BRANCH (5f11b2 Update to JGit 0.8.4.240-g8e9cc82)
       }
-      watchedProjects = Collections.unmodifiableSet(h);
+      notificationFilters = Collections.unmodifiableList(r);
     }
-
-    return watchedProjects;
+    return notificationFilters;
   }
 
   public PersonIdent newRefLogIdent() {

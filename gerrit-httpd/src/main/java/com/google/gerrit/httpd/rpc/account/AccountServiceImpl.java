@@ -17,6 +17,7 @@ package com.google.gerrit.httpd.rpc.account;
 import com.google.gerrit.common.data.AccountProjectWatchInfo;
 import com.google.gerrit.common.data.AccountService;
 import com.google.gerrit.common.data.AgreementInfo;
+import com.google.gerrit.common.errors.InvalidQueryException;
 import com.google.gerrit.common.errors.NoSuchEntityException;
 import com.google.gerrit.httpd.rpc.BaseServiceImplementation;
 import com.google.gerrit.reviewdb.Account;
@@ -31,8 +32,11 @@ import com.google.gerrit.server.account.AccountDiffPreferencesCache;
 import com.google.gerrit.server.account.AccountProjectWatchCache;
 import com.google.gerrit.server.project.NoSuchProjectException;
 import com.google.gerrit.server.project.ProjectControl;
+import com.google.gerrit.server.query.QueryParseException;
+import com.google.gerrit.server.query.change.ChangeQueryBuilder;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwtjsonrpc.client.VoidResult;
+import com.google.gwtorm.client.OrmDuplicateKeyException;
 import com.google.gwtorm.client.OrmException;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -49,8 +53,12 @@ class AccountServiceImpl extends BaseServiceImplementation implements
   private final AccountCache accountCache;
   private final ProjectControl.Factory projectControlFactory;
   private final AgreementInfoFactory.Factory agreementInfoFactory;
+<<<<<<< HEAD   (f4c716 Gave unique IDs for each relation in ReviewDB)
   private final AccountProjectWatchCache accountProjectWatchCache;
   private final AccountDiffPreferencesCache accountDiffPreferencesCache;
+=======
+  private final ChangeQueryBuilder.Factory queryBuilder;
+>>>>>>> BRANCH (5f11b2 Update to JGit 0.8.4.240-g8e9cc82)
 
   @Inject
   AccountServiceImpl(final Provider<ReviewDb> schema,
@@ -58,15 +66,23 @@ class AccountServiceImpl extends BaseServiceImplementation implements
       final AccountCache accountCache,
       final ProjectControl.Factory projectControlFactory,
       final AgreementInfoFactory.Factory agreementInfoFactory,
+<<<<<<< HEAD   (f4c716 Gave unique IDs for each relation in ReviewDB)
       final AccountProjectWatchCache accountProjectWatchCache,
       final AccountDiffPreferencesCache accountDiffPreferencesCache) {
+=======
+      final ChangeQueryBuilder.Factory queryBuilder) {
+>>>>>>> BRANCH (5f11b2 Update to JGit 0.8.4.240-g8e9cc82)
     super(schema, identifiedUser);
     this.currentUser = identifiedUser;
     this.accountCache = accountCache;
     this.projectControlFactory = projectControlFactory;
     this.agreementInfoFactory = agreementInfoFactory;
+<<<<<<< HEAD   (f4c716 Gave unique IDs for each relation in ReviewDB)
     this.accountProjectWatchCache = accountProjectWatchCache;
     this.accountDiffPreferencesCache = accountDiffPreferencesCache;
+=======
+    this.queryBuilder = queryBuilder;
+>>>>>>> BRANCH (5f11b2 Update to JGit 0.8.4.240-g8e9cc82)
   }
 
   public void myAccount(final AsyncCallback<Account> callback) {
@@ -147,20 +163,42 @@ class AccountServiceImpl extends BaseServiceImplementation implements
     });
   }
 
-  public void addProjectWatch(final String projectName,
+  public void addProjectWatch(final String projectName, final String filter,
       final AsyncCallback<AccountProjectWatchInfo> callback) {
     run(callback, new Action<AccountProjectWatchInfo>() {
       public AccountProjectWatchInfo run(ReviewDb db) throws OrmException,
-          NoSuchProjectException {
+          NoSuchProjectException, InvalidQueryException {
         final Project.NameKey nameKey = new Project.NameKey(projectName);
         final ProjectControl ctl = projectControlFactory.validateFor(nameKey);
 
+<<<<<<< HEAD   (f4c716 Gave unique IDs for each relation in ReviewDB)
         final AccountProjectWatch.Key key =
             new AccountProjectWatch.Key(((IdentifiedUser) ctl.getCurrentUser())
                 .getAccountId(), nameKey);
         final AccountProjectWatch watch = new AccountProjectWatch(key);
         db.accountProjectWatches().insert(Collections.singleton(watch));
         accountProjectWatchCache.evict(key);
+=======
+        if (filter != null) {
+          try {
+            ChangeQueryBuilder builder = queryBuilder.create(currentUser.get());
+            builder.setAllowFile(true);
+            builder.parse(filter);
+          } catch (QueryParseException badFilter) {
+            throw new InvalidQueryException(badFilter.getMessage(), filter);
+          }
+        }
+
+        AccountProjectWatch watch =
+            new AccountProjectWatch(new AccountProjectWatch.Key(
+                ((IdentifiedUser) ctl.getCurrentUser()).getAccountId(),
+                nameKey, filter));
+        try {
+          db.accountProjectWatches().insert(Collections.singleton(watch));
+        } catch (OrmDuplicateKeyException alreadyHave) {
+          watch = db.accountProjectWatches().get(watch.getKey());
+        }
+>>>>>>> BRANCH (5f11b2 Update to JGit 0.8.4.240-g8e9cc82)
         return new AccountProjectWatchInfo(watch, ctl.getProject());
       }
     });
