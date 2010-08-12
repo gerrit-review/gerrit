@@ -37,7 +37,10 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+<<<<<<< HEAD   (dfd895 Shorten the name of the group_agreements cache)
 import java.util.concurrent.Future;
+=======
+>>>>>>> BRANCH (f855f3 Fix all of our pom.xml versions to be 2.1-SNAPSHOT)
 
 class SuggestServiceImpl extends BaseServiceImplementation implements
     SuggestService {
@@ -84,8 +87,8 @@ class SuggestServiceImpl extends BaseServiceImplementation implements
     });
   }
 
-  public void suggestAccount(final String query, final int limit,
-      final AsyncCallback<List<AccountInfo>> callback) {
+  public void suggestAccount(final String query, final Boolean active,
+      final int limit, final AsyncCallback<List<AccountInfo>> callback) {
     run(callback, new Action<List<AccountInfo>>() {
       public List<AccountInfo> run(final ReviewDb db) throws OrmException {
         final String a = query;
@@ -93,16 +96,31 @@ class SuggestServiceImpl extends BaseServiceImplementation implements
         final int max = 10;
         final int n = limit <= 0 ? max : Math.min(limit, max);
 
+<<<<<<< HEAD   (dfd895 Shorten the name of the group_agreements cache)
         LinkedHashMap<Account.Id, AccountInfo> res = Maps.newLinkedHashMap();
         for (Account p : db.accounts().suggestByFullName(a, b, n)) {
           res.put(p.getId(), new AccountInfo(p));
+=======
+        final LinkedHashMap<Account.Id, AccountInfo> r =
+            new LinkedHashMap<Account.Id, AccountInfo>();
+        for (final Account p : db.accounts().suggestByFullName(a, b, n)) {
+          addSuggestion(r, p, new AccountInfo(p), active);
+>>>>>>> BRANCH (f855f3 Fix all of our pom.xml versions to be 2.1-SNAPSHOT)
         }
+<<<<<<< HEAD   (dfd895 Shorten the name of the group_agreements cache)
         if (res.size() < n) {
           for (Account p : db.accounts().suggestByPreferredEmail(a, b,
               n - res.size())) {
             res.put(p.getId(), new AccountInfo(p));
+=======
+        if (r.size() < n) {
+          for (final Account p : db.accounts().suggestByPreferredEmail(a, b,
+              n - r.size())) {
+            addSuggestion(r, p, new AccountInfo(p), active);
+>>>>>>> BRANCH (f855f3 Fix all of our pom.xml versions to be 2.1-SNAPSHOT)
           }
         }
+<<<<<<< HEAD   (dfd895 Shorten the name of the group_agreements cache)
         if (res.size() < n) {
           Map<String, Future<Account>> want = Maps.newHashMap();
           for (AccountExternalId e : db.accountExternalIds()
@@ -110,6 +128,16 @@ class SuggestServiceImpl extends BaseServiceImplementation implements
             if (!res.containsKey(e.getAccountId())) {
               want.put(e.getEmailAddress(), //
                   accountCache.getAccount(e.getAccountId()));
+=======
+        if (r.size() < n) {
+          for (final AccountExternalId e : db.accountExternalIds()
+              .suggestByEmailAddress(a, b, n - r.size())) {
+            if (!r.containsKey(e.getAccountId())) {
+              final Account p = accountCache.get(e.getAccountId()).getAccount();
+              final AccountInfo info = new AccountInfo(p);
+              info.setPreferredEmail(e.getEmailAddress());
+              addSuggestion(r, p, info, active);
+>>>>>>> BRANCH (f855f3 Fix all of our pom.xml versions to be 2.1-SNAPSHOT)
             }
           }
 
@@ -123,6 +151,13 @@ class SuggestServiceImpl extends BaseServiceImplementation implements
         return new ArrayList<AccountInfo>(res.values());
       }
     });
+  }
+
+  private void addSuggestion(Map map, Account account, AccountInfo info,
+      Boolean active) {
+    if (active == null || active == account.isActive()) {
+      map.put(account.getId(), info);
+    }
   }
 
   public void suggestAccountGroup(final String query, final int limit,

@@ -133,9 +133,14 @@ class ProjectDigestFilter implements Filter {
       return false;
     }
 
+<<<<<<< HEAD   (dfd895 Shorten the name of the group_agreements cache)
     final AccountExternalId who = FutureUtil.get( //
         accountCache.get(AccountExternalId.forUsername(username)));
     if (who == null) {
+=======
+    final AccountState who = accountCache.getByUsername(username);
+    if (who == null || ! who.getAccount().isActive()) {
+>>>>>>> BRANCH (f855f3 Fix all of our pom.xml versions to be 2.1-SNAPSHOT)
       rsp.sendError(SC_UNAUTHORIZED);
       return false;
     }

@@ -32,7 +32,11 @@ import java.util.List;
 /** A version of the database schema. */
 public abstract class SchemaVersion {
   /** The current schema version. */
+<<<<<<< HEAD   (dfd895 Shorten the name of the group_agreements cache)
   private static final Class<? extends SchemaVersion> C = Schema_103.class;
+=======
+  private static final Class<? extends SchemaVersion> C = Schema_41.class;
+>>>>>>> BRANCH (f855f3 Fix all of our pom.xml versions to be 2.1-SNAPSHOT)
 
   public static class Module extends AbstractModule {
     @Override

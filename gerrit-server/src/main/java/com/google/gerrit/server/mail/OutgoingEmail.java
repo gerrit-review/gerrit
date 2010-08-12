@@ -16,13 +16,26 @@ package com.google.gerrit.server.mail;
 
 import com.google.gerrit.reviewdb.Account;
 import com.google.gerrit.reviewdb.UserIdentity;
+<<<<<<< HEAD   (dfd895 Shorten the name of the group_agreements cache)
+=======
+import com.google.gerrit.server.account.AccountState;
+>>>>>>> BRANCH (f855f3 Fix all of our pom.xml versions to be 2.1-SNAPSHOT)
 import com.google.gerrit.server.mail.EmailHeader.AddressList;
+<<<<<<< HEAD   (dfd895 Shorten the name of the group_agreements cache)
 import com.google.gerrit.server.util.FutureUtil;
+=======
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.velocity.app.Velocity;
+import org.apache.velocity.exception.ResourceNotFoundException;
+import org.apache.velocity.VelocityContext;
+>>>>>>> BRANCH (f855f3 Fix all of our pom.xml versions to be 2.1-SNAPSHOT)
 
 import org.eclipse.jgit.util.SystemReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -33,6 +46,10 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+<<<<<<< HEAD   (dfd895 Shorten the name of the group_agreements cache)
+=======
+
+>>>>>>> BRANCH (f855f3 Fix all of our pom.xml versions to be 2.1-SNAPSHOT)
 
 /** Sends an email to one or more interested parties. */
 public abstract class OutgoingEmail {
@@ -47,6 +64,7 @@ public abstract class OutgoingEmail {
   private final List<Address> smtpRcptTo = new ArrayList<Address>();
   private Address smtpFromAddress;
   private StringBuilder body;
+  protected VelocityContext velocityContext;
 
   protected final EmailArguments args;
   protected Account.Id fromId;
@@ -114,10 +132,12 @@ public abstract class OutgoingEmail {
   }
 
   /** Format the message body by calling {@link #appendText(String)}. */
-  protected abstract void format();
+  protected abstract void format() throws EmailException;
 
   /** Setup the message headers and envelope (TO, CC, BCC). */
-  protected void init() {
+  protected void init() throws EmailException {
+    setupVelocityContext();
+
     smtpFromAddress = args.fromAddressGenerator.from(fromId);
     setHeader("Date", new Date());
     headers.put("From", new EmailHeader.AddressList(smtpFromAddress));
@@ -141,6 +161,7 @@ public abstract class OutgoingEmail {
     body = new StringBuilder();
 
     if (fromId != null && args.fromAddressGenerator.isGenericAddress(fromId)) {
+<<<<<<< HEAD   (dfd895 Shorten the name of the group_agreements cache)
       final Account account =
           FutureUtil.get(args.accountCache.getAccount(fromId));
       final String name = account.getFullName();
@@ -157,10 +178,33 @@ public abstract class OutgoingEmail {
         }
         body.append(":\n\n");
       }
+=======
+      appendText(getFromLine());
+>>>>>>> BRANCH (f855f3 Fix all of our pom.xml versions to be 2.1-SNAPSHOT)
     }
   }
 
-  protected String getGerritHost() {
+  protected String getFromLine() {
+    final Account account = args.accountCache.get(fromId).getAccount();
+    final String name = account.getFullName();
+    final String email = account.getPreferredEmail();
+    StringBuilder f = new StringBuilder();
+
+    if ((name != null && !name.isEmpty())
+        || (email != null && !email.isEmpty())) {
+      f.append("From");
+      if (name != null && !name.isEmpty()) {
+        f.append(" ").append(name);
+      }
+      if (email != null && !email.isEmpty()) {
+        f.append(" <").append(email).append(">");
+      }
+      f.append(":\n\n");
+    }
+    return f.toString();
+  }
+
+  public String getGerritHost() {
     if (getGerritUrl() != null) {
       try {
         return new URL(getGerritUrl()).getHost();
@@ -186,8 +230,14 @@ public abstract class OutgoingEmail {
     return null;
   }
 
-  protected String getGerritUrl() {
+  public String getGerritUrl() {
     return args.urlProvider.get();
+  }
+
+  /** Set a header in the outgoing message using a template. */
+  protected void setVHeader(final String name, final String value) throws
+      EmailException {
+    setHeader(name, velocify(value));
   }
 
   /** Set a header in the outgoing message. */
@@ -224,10 +274,17 @@ public abstract class OutgoingEmail {
     return name;
   }
 
+<<<<<<< HEAD   (dfd895 Shorten the name of the group_agreements cache)
   protected String getNameEmailFor(Account.Id accountId) {
     Account who = FutureUtil.get(args.accountCache.getAccount(accountId));
     String name = who.getFullName();
     String email = who.getPreferredEmail();
+=======
+  public String getNameEmailFor(Account.Id accountId) {
+    AccountState who = args.accountCache.get(accountId);
+    String name = who.getAccount().getFullName();
+    String email = who.getAccount().getPreferredEmail();
+>>>>>>> BRANCH (f855f3 Fix all of our pom.xml versions to be 2.1-SNAPSHOT)
 
     if (name != null && email != null) {
       return name + " <" + email + ">";
@@ -313,9 +370,46 @@ public abstract class OutgoingEmail {
   private Address toAddress(final Account.Id id) {
     final Account a = FutureUtil.get(args.accountCache.getAccount(id));
     final String e = a.getPreferredEmail();
-    if (e == null) {
+    if (!a.isActive() || e == null) {
       return null;
     }
     return new Address(a.getFullName(), e);
+  }
+
+  protected void setupVelocityContext() {
+    velocityContext = new VelocityContext();
+
+    velocityContext.put("email", this);
+    velocityContext.put("messageClass", messageClass);
+    velocityContext.put("StringUtils", StringUtils.class);
+  }
+
+  protected String velocify(String tpl) throws EmailException {
+    try {
+      StringWriter w = new StringWriter();
+      Velocity.evaluate(velocityContext, w, "OutgoingEmail", tpl);
+      return w.toString();
+    } catch(Exception e) {
+      throw new EmailException("Velocity template "+ tpl.toString(), e);
+    }
+  }
+
+  protected String velocifyFile(String name) throws EmailException {
+    try {
+      StringWriter w = new StringWriter();
+      Velocity.mergeTemplate(name, velocityContext, w);
+      return w.toString();
+    } catch(ResourceNotFoundException e) {
+      try {
+        StringWriter w = new StringWriter();
+        String pkg = "com/google/gerrit/server/mail/";
+        Velocity.mergeTemplate(pkg + name, velocityContext, w);
+        return w.toString();
+      } catch(Exception e2) {
+        throw new EmailException("Velocity WAR template" + name + ".\n", e2);
+      }
+    } catch(Exception e) {
+      throw new EmailException("Velocity template " + name + ".\n", e);
+    }
   }
 }
