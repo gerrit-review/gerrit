@@ -19,6 +19,7 @@ import com.google.gerrit.reviewdb.AccountGroup;
 import com.google.gerrit.reviewdb.AccountProjectWatch;
 import com.google.gerrit.reviewdb.Change;
 import com.google.gerrit.reviewdb.ChangeMessage;
+import com.google.gerrit.reviewdb.Patch;
 import com.google.gerrit.reviewdb.PatchSet;
 import com.google.gerrit.reviewdb.PatchSetApproval;
 import com.google.gerrit.reviewdb.PatchSetInfo;
@@ -34,6 +35,10 @@ import com.google.gerrit.server.query.change.ChangeData;
 import com.google.gerrit.server.query.change.ChangeQueryBuilder;
 import com.google.gwtorm.client.OrmException;
 
+<<<<<<< HEAD   (f855f3 Fix all of our pom.xml versions to be 2.1-SNAPSHOT)
+=======
+import java.text.MessageFormat;
+>>>>>>> BRANCH (04bbac Clarify the upgrade instructions)
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -221,11 +226,32 @@ public abstract class ChangeEmail extends OutgoingEmail {
     }
 
     if (patchSet != null) {
+<<<<<<< HEAD   (f855f3 Fix all of our pom.xml versions to be 2.1-SNAPSHOT)
       detail.append("---\n");
       for (PatchListEntry p : getPatchList().getPatches()) {
         detail.append(p.getChangeType().getCode() + " " + p.getNewName() + "\n");
+=======
+      appendText("---\n");
+      PatchList patchList = getPatchList();
+      for (PatchListEntry p : patchList.getPatches()) {
+        if (Patch.COMMIT_MSG.equals(p.getNewName())) {
+          continue;
+        }
+        appendText(p.getChangeType().getCode() + " " + p.getNewName() + "\n");
+>>>>>>> BRANCH (04bbac Clarify the upgrade instructions)
       }
+<<<<<<< HEAD   (f855f3 Fix all of our pom.xml versions to be 2.1-SNAPSHOT)
       detail.append("\n");
+=======
+      appendText(MessageFormat.format("" //
+          + "{0,choice,0#0 files|1#1 file|1<{0} files} changed, " //
+          + "{1,choice,0#0 insertions|1#1 insertion|1<{1} insertions}(+), " //
+          + "{2,choice,0#0 deletions|1#1 deletion|1<{2} deletions}(-)" //
+          + "\n", patchList.getPatches().size() - 1, //
+          patchList.getInsertions(), //
+          patchList.getDeletions()));
+      appendText("\n");
+>>>>>>> BRANCH (04bbac Clarify the upgrade instructions)
     }
     return detail.toString();
   }

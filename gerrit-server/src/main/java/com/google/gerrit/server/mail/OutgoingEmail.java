@@ -18,11 +18,14 @@ import com.google.gerrit.reviewdb.Account;
 import com.google.gerrit.reviewdb.UserIdentity;
 import com.google.gerrit.server.account.AccountState;
 import com.google.gerrit.server.mail.EmailHeader.AddressList;
+<<<<<<< HEAD   (f855f3 Fix all of our pom.xml versions to be 2.1-SNAPSHOT)
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.VelocityContext;
+=======
+>>>>>>> BRANCH (04bbac Clarify the upgrade instructions)
 
 import org.eclipse.jgit.util.SystemReader;
 import org.slf4j.Logger;
@@ -39,7 +42,10 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+<<<<<<< HEAD   (f855f3 Fix all of our pom.xml versions to be 2.1-SNAPSHOT)
 
+=======
+>>>>>>> BRANCH (04bbac Clarify the upgrade instructions)
 
 /** Sends an email to one or more interested parties. */
 public abstract class OutgoingEmail {
