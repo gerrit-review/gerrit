@@ -1,0 +1,10 @@
+Change-Id: I1920d0ade3c120dd4d112afdad53a1bf67426859
+Code-Review+2: Shawn Pearce <sop@google.com>
+Verified+1: Shawn Pearce <sop@google.com>
+Code-Review+1: Cedric Beust <cbeust@google.com>
+Verified+1: Cedric Beust <cbeust@google.com>
+Submitted-by: Shawn Pearce <sop@google.com>
+Submitted-at: Fri, 10 Jul 2009 08:50:07 -0700
+Reviewed-on: https://review.source.android.com/10629
+Project: tools/gerrit
+Branch: refs/heads/master

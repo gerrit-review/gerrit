@@ -1,0 +1,9 @@
+Change-Id: I8661e3200e29adfe09f62430677e834fe1325a47
+Code-Review+2: Shawn Pearce <sop@google.com>
+Verified+1: Shawn Pearce <sop@google.com>
+Code-Review+1: Edwin Kempin <edwin.kempin@sap.com>
+Submitted-by: Shawn Pearce <sop@google.com>
+Submitted-at: Tue, 12 Oct 2010 20:26:11 -0700
+Reviewed-on: https://review.source.android.com/17288
+Project: tools/gerrit
+Branch: refs/heads/master

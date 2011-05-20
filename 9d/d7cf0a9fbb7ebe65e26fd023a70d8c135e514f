@@ -1,0 +1,7 @@
+Code-Review+2: Shawn Pearce <sop@google.com>
+Verified+1: Shawn Pearce <sop@google.com>
+Submitted-by: Shawn Pearce <sop@google.com>
+Submitted-at: Fri, 04 Jun 2010 11:38:58 -0700
+Reviewed-on: https://review.source.android.com/15071
+Project: tools/gerrit
+Branch: refs/heads/exp-nosql

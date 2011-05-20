@@ -1,0 +1,8 @@
+Change-Id: I3c22840093dd632b7fc2ba3fe6ec7064eb01fa97
+Code-Review+2: Shawn Pearce <sop@google.com>
+Verified+1: Shawn Pearce <sop@google.com>
+Submitted-by: Shawn Pearce <sop@google.com>
+Submitted-at: Wed, 11 Aug 2010 17:17:22 -0700
+Reviewed-on: https://review.source.android.com/16452
+Project: tools/gerrit
+Branch: refs/heads/exp-nosql

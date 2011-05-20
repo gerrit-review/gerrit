@@ -1,0 +1,9 @@
+Change-Id: I0d0d16876df20a01821e963dc56c4d36d777c555
+Code-Review+1: Brad Larson <bklarson@gmail.com>
+Code-Review+2: Shawn Pearce <sop@google.com>
+Verified+1: Shawn Pearce <sop@google.com>
+Submitted-by: Shawn Pearce <sop@google.com>
+Submitted-at: Fri, 25 Jun 2010 15:50:29 -0700
+Reviewed-on: https://review.source.android.com/15177
+Project: tools/gerrit
+Branch: refs/heads/master

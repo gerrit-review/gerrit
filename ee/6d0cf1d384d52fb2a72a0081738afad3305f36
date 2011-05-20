@@ -1,0 +1,8 @@
+Change-Id: Iee6d0cf1d384d52fb2a72a0081738afad3305f36
+Code-Review+2: Shawn Pearce <sop@google.com>
+Verified+1: Shawn Pearce <sop@google.com>
+Submitted-by: Shawn Pearce <sop@google.com>
+Submitted-at: Mon, 27 Jul 2009 19:23:57 -0700
+Reviewed-on: https://review.source.android.com/10803
+Project: tools/gerrit
+Branch: refs/heads/master

@@ -1,0 +1,9 @@
+Change-Id: I1cad122fa97861d9e18d1f75d8958888a23599ad
+Code-Review+2: Shawn Pearce <sop@google.com>
+Code-Review+1: Grzegorz Kossakowski <grzegorz.kossakowski@gmail.com>
+Verified+1: Grzegorz Kossakowski <grzegorz.kossakowski@gmail.com>
+Submitted-by: Grzegorz Kossakowski <grzegorz.kossakowski@gmail.com>
+Submitted-at: Wed, 29 Jul 2009 14:42:05 -0700
+Reviewed-on: https://review.source.android.com/10817
+Project: tools/gerrit
+Branch: refs/heads/master
