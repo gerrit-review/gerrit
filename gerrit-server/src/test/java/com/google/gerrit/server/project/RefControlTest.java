@@ -284,8 +284,14 @@ public class RefControlTest extends TestCase {
         return new RefControl(projectControl, ref);
       }
     };
+<<<<<<< HEAD   (1118da Correct usage of @Nullable annotation in EventFactory)
     return new ProjectControl(Collections.<AccountGroup.UUID> emptySet(),
         Collections.<AccountGroup.UUID> emptySet(), refControlFactory,
+=======
+    return new ProjectControl(systemConfig,
+        Collections.<AccountGroup.Id> emptySet(),
+        Collections.<AccountGroup.Id> emptySet(), refControlFactory,
+>>>>>>> BRANCH (019d2c Fix ChangeDetailFactory's invocation of PatchSetDetailFactor)
         new MockUser(memberOf), newProjectState());
   }
 
