@@ -32,6 +32,7 @@ import com.google.inject.assistedinject.Assisted;
 import com.googlecode.prolog_cafe.compiler.CompileException;
 import com.googlecode.prolog_cafe.lang.JavaObjectTerm;
 import com.googlecode.prolog_cafe.lang.Prolog;
+<<<<<<< HEAD   (a111ad starting changes to load jar files)
 import com.googlecode.prolog_cafe.lang.StructureTerm;
 import com.googlecode.prolog_cafe.lang.SymbolTerm;
 import com.googlecode.prolog_cafe.lang.VariableTerm;
@@ -40,6 +41,11 @@ import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectLoader;
 import org.eclipse.jgit.lib.ObjectStream;
+=======
+import com.googlecode.prolog_cafe.lang.SymbolTerm;
+
+import org.eclipse.jgit.errors.RepositoryNotFoundException;
+>>>>>>> BRANCH (4bab2b Add per-project prolog submit rule files)
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.slf4j.Logger;
@@ -47,11 +53,16 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+<<<<<<< HEAD   (a111ad starting changes to load jar files)
 import java.io.InputStreamReader;
 import java.io.PushbackReader;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.Charset;
+=======
+import java.io.PushbackReader;
+import java.io.StringReader;
+>>>>>>> BRANCH (4bab2b Add per-project prolog submit rule files)
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -142,8 +153,13 @@ public class ProjectState {
   }
 
   /** @return Construct a new PrologEnvironment for the calling thread. */
+<<<<<<< HEAD   (a111ad starting changes to load jar files)
   public PrologEnvironment newPrologEnvironment() throws CompileException, IOException, ClassNotFoundException{
+=======
+  public PrologEnvironment newPrologEnvironment() throws CompileException {
+>>>>>>> BRANCH (4bab2b Add per-project prolog submit rule files)
     // TODO Replace this with a per-project ClassLoader to isolate rules.
+<<<<<<< HEAD   (a111ad starting changes to load jar files)
 
     PrologEnvironment env;
     //read jar from local filesystem if it exists
@@ -186,6 +202,26 @@ public class ProjectState {
           new StructureTerm("default_submit", var));
       StructureTerm clause = new StructureTerm(":-", head, defaultRule);
       env.execute(Prolog.BUILTIN, "assertz", clause);
+=======
+    PrologEnvironment env = envFactory.create(getClass().getClassLoader());
+
+    //consult rules.pl at refs/meta/config branch for custom submit rules
+    String rules;
+    try {
+      rules = getPrologRules();
+    } catch (RepositoryNotFoundException err) {
+      throw new CompileException("Local repository does not exist ", err);
+    }
+    if (rules != null) {
+      PushbackReader in =
+          new PushbackReader(new StringReader(rules), Prolog.PUSHBACK_SIZE);
+      JavaObjectTerm streamObject = new JavaObjectTerm(in);
+      if (!env.execute(Prolog.BUILTIN, "consult_stream",
+          SymbolTerm.makeSymbol("rules.pl"), streamObject)) {
+        throw new CompileException("Cannot consult rules.pl " +
+            getProject().getName() + " " + getConfig().getRevision());
+      }
+>>>>>>> BRANCH (4bab2b Add per-project prolog submit rule files)
     }
 
     return env;
@@ -303,6 +339,7 @@ public class ProjectState {
   }
 
   /**
+<<<<<<< HEAD   (a111ad starting changes to load jar files)
    * @return ObjectStream of the prolog rules in submit_rules.pl in
    *         refs/meta/config if it exists, null otherwise
    */
@@ -323,5 +360,18 @@ public class ProjectState {
     } finally {
       git.close();
     }
+=======
+   * @return String of the prolog rules in rules.pl in
+   *         refs/meta/config if it exists, null otherwise
+   * @throws RepositoryNotFoundException
+   */
+  private String getPrologRules() throws RepositoryNotFoundException {
+    Repository git = gitMgr.openRepository(getProject().getNameKey());
+    ProjectConfig config = getConfig();
+    if (config == null) {
+      return null;
+    }
+    return config.getPrologRules();
+>>>>>>> BRANCH (4bab2b Add per-project prolog submit rule files)
   }
 }

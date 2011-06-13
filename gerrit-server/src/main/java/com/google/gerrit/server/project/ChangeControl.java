@@ -32,7 +32,6 @@ import com.googlecode.prolog_cafe.compiler.CompileException;
 import com.googlecode.prolog_cafe.lang.IntegerTerm;
 import com.googlecode.prolog_cafe.lang.PrologException;
 import com.googlecode.prolog_cafe.lang.StructureTerm;
-import com.googlecode.prolog_cafe.lang.SymbolTerm;
 import com.googlecode.prolog_cafe.lang.Term;
 import com.googlecode.prolog_cafe.lang.VariableTerm;
 
@@ -260,12 +259,15 @@ public class ChangeControl {
     } catch (CompileException err) {
       log.error("cannot consult rules.pl", err);
       return new CanSubmitResult("Error reading submit rule");
+<<<<<<< HEAD   (a111ad starting changes to load jar files)
     } catch (IOException err) {
       log.error("IOException for object stream", err);
       return new CanSubmitResult("Error reading submit rule");
     } catch (ClassNotFoundException err) {
       log.error("Submit rule class not found in jar file", err);
       return new CanSubmitResult("Error reading submit rule");
+=======
+>>>>>>> BRANCH (4bab2b Add per-project prolog submit rule files)
     }
 
     env.set(StoredValues.REVIEW_DB, db);
@@ -273,7 +275,18 @@ public class ChangeControl {
     env.set(StoredValues.PATCH_SET_ID, patchSetId);
     env.set(StoredValues.CHANGE_CONTROL, this);
 
+<<<<<<< HEAD   (a111ad starting changes to load jar files)
     StructureTerm submitRule = SymbolTerm.makeSymbol("user", "submit_rule", 1);
+=======
+    Term submitRule = env.once("com.google.gerrit.rules.common", "locate_submit_rule",
+        new VariableTerm());
+
+    if (submitRule == null)
+    {
+      log.error("Error in locate_submit_rule: no submit_rule found");
+      return new CanSubmitResult("Error in finding submit rule");
+    }
+>>>>>>> BRANCH (4bab2b Add per-project prolog submit rule files)
 
     List<Term> results = new ArrayList<Term>();
     try {
