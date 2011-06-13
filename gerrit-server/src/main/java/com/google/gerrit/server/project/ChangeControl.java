@@ -267,9 +267,13 @@ public class ChangeControl {
 
     Term submitRule = env.once("com.google.gerrit.rules.common", "locate_submit_rule",
         new VariableTerm());
+<<<<<<< HEAD   (2f8ce3 Merge branch 'master' into jarload)
 
     if (submitRule == null)
     {
+=======
+    if (submitRule == null) {
+>>>>>>> BRANCH (c0593d Add per-project prolog submit rule files)
       log.error("Error in locate_submit_rule: no submit_rule found");
       return new CanSubmitResult("Error in finding submit rule");
     }

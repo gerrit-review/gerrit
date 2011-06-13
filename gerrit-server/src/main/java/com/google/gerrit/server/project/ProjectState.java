@@ -34,7 +34,10 @@ import com.googlecode.prolog_cafe.lang.JavaObjectTerm;
 import com.googlecode.prolog_cafe.lang.Prolog;
 import com.googlecode.prolog_cafe.lang.SymbolTerm;
 
+<<<<<<< HEAD   (2f8ce3 Merge branch 'master' into jarload)
 import org.eclipse.jgit.errors.RepositoryNotFoundException;
+=======
+>>>>>>> BRANCH (c0593d Add per-project prolog submit rule files)
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.slf4j.Logger;
@@ -44,8 +47,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PushbackReader;
 import java.io.StringReader;
+<<<<<<< HEAD   (2f8ce3 Merge branch 'master' into jarload)
 import java.net.URL;
 import java.net.URLClassLoader;
+=======
+>>>>>>> BRANCH (c0593d Add per-project prolog submit rule files)
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -136,8 +142,13 @@ public class ProjectState {
   }
 
   /** @return Construct a new PrologEnvironment for the calling thread. */
+<<<<<<< HEAD   (2f8ce3 Merge branch 'master' into jarload)
   public PrologEnvironment newPrologEnvironment() throws CompileException{
+=======
+  public PrologEnvironment newPrologEnvironment() throws CompileException {
+>>>>>>> BRANCH (c0593d Add per-project prolog submit rule files)
     // TODO Replace this with a per-project ClassLoader to isolate rules.
+<<<<<<< HEAD   (2f8ce3 Merge branch 'master' into jarload)
 
     PrologEnvironment env;
     //read jar from local filesystem if it exists
@@ -162,6 +173,12 @@ public class ProjectState {
     } catch (RepositoryNotFoundException err) {
       throw new CompileException("Local repository does not exist ", err);
     }
+=======
+    PrologEnvironment env = envFactory.create(getClass().getClassLoader());
+
+    //consult rules.pl at refs/meta/config branch for custom submit rules
+    String rules = getConfig().getPrologRules();
+>>>>>>> BRANCH (c0593d Add per-project prolog submit rule files)
     if (rules != null) {
       PushbackReader in =
           new PushbackReader(new StringReader(rules), Prolog.PUSHBACK_SIZE);
