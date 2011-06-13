@@ -140,10 +140,11 @@ public class ProjectState {
   }
 
   /** @return Construct a new PrologEnvironment for the calling thread. */
-  public PrologEnvironment newPrologEnvironment() {
+  public PrologEnvironment newPrologEnvironment() throws CompileException, IOException{
     // TODO Replace this with a per-project ClassLoader to isolate rules.
     PrologEnvironment env = envFactory.create(getClass().getClassLoader());
 
+<<<<<<< HEAD   (470443 Add per-project prolog submit rule files)
     //consult submit_rules.pl at refs/meta/config branch for custom submit rules
     ObjectStream ruleStream = getPrologRules();
     if (ruleStream != null) {
@@ -170,6 +171,30 @@ public class ProjectState {
       VariableTerm var = new VariableTerm();
       StructureTerm head = new StructureTerm("submit_rule", var);
       StructureTerm defaultRule= new StructureTerm(":",
+=======
+    //consult rules.pl at refs/meta/config branch for custom submit rules
+    ObjectStream ruleStream;
+    ruleStream = getPrologRules();
+    if (ruleStream != null) {
+      try {
+        PushbackReader in =
+            new PushbackReader(new InputStreamReader(ruleStream,
+                Charset.forName("UTF-8")), Prolog.PUSHBACK_SIZE);
+        JavaObjectTerm streamObject = new JavaObjectTerm(in);
+        if (!env.execute(Prolog.BUILTIN, "consult_stream",
+            SymbolTerm.makeSymbol("rules.pl"), streamObject)) {
+          throw new CompileException("Cannot consult " +
+              getProject().getName() + " " + getConfig().getRevision());
+        }
+      } finally {
+        ruleStream.close();
+      }
+    } else {
+      //assert submit_rule predicate to be default_submit if submit_rule doesn't exist
+      VariableTerm var = new VariableTerm();
+      StructureTerm head = new StructureTerm("submit_rule", var);
+      StructureTerm defaultRule = new StructureTerm(":",
+>>>>>>> BRANCH (5103b9 Add per-project prolog submit rule files)
           SymbolTerm.makeSymbol("com.google.gerrit.rules.common"),
           new StructureTerm("default_submit", var));
       StructureTerm clause = new StructureTerm(":-", head, defaultRule);
@@ -294,6 +319,7 @@ public class ProjectState {
    * @return ObjectStream of the prolog rules in submit_rules.pl in
    *         refs/meta/config if it exists, null otherwise
    */
+<<<<<<< HEAD   (470443 Add per-project prolog submit rule files)
   private ObjectStream getPrologRules() {
     try {
       Repository git = gitMgr.openRepository(getProject().getNameKey());
@@ -314,6 +340,24 @@ public class ProjectState {
       }
     } catch (IOException gone) {
       return null;
+=======
+  private ObjectStream getPrologRules() throws IOException{
+    Repository git = gitMgr.openRepository(getProject().getNameKey());
+    try {
+      ObjectId config = getConfig().getRevision();
+      ObjectId rules = git.resolve(config.getName() + ":rules.pl");
+      if (rules == null) {
+        return null;
+      }
+      ObjectLoader ldr = git.open(rules);
+      if (ldr.getType() != Constants.OBJ_BLOB) {
+        return null;
+      }
+
+      return ldr.openStream();
+    } finally {
+      git.close();
+>>>>>>> BRANCH (5103b9 Add per-project prolog submit rule files)
     }
   }
 }
