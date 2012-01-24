@@ -551,7 +551,11 @@ member of, just like for any other user.
 Ownership over a particular branch subspace may be delegated by
 entering a branch pattern.  To delegate control over all branches
 that begin with `qa/` to the QA group, add `Owner` category
+<<<<<<< HEAD   (9e1dcb Merge "Fix link and improve consistency in 'Prohibited by Ge)
 for reference `refs/heads/qa/*`.  Members of the QA group can
+=======
+for reference `refs/heads/qa/\*`.  Members of the QA group can
+>>>>>>> BRANCH (5c7718 Merge changes Ifccd40c8,I3fc7a181 into stable)
 further refine access, but only for references that begin with
 `refs/heads/qa/`. See <<project_owners,project owners>> to find
 out more about this role.

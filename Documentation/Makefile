@@ -75,7 +75,10 @@ $(DOC_HTML): %.html : %.txt
 	@rm -f $@+ $@
 	@$(ASCIIDOC) -a toc \
 		-a data-uri \
+<<<<<<< HEAD   (9e1dcb Merge "Fix link and improve consistency in 'Prohibited by Ge)
 		-a icons \
+=======
+>>>>>>> BRANCH (5c7718 Merge changes Ifccd40c8,I3fc7a181 into stable)
 		-a 'revision=$(REVISION)' \
 		-b xhtml11 \
 		-f asciidoc.conf \

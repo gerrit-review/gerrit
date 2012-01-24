@@ -178,7 +178,10 @@ class ProjectAccessFactory extends Handler<ProjectAccess> {
     }
 
     final ProjectAccess detail = new ProjectAccess();
+<<<<<<< HEAD   (9e1dcb Merge "Fix link and improve consistency in 'Prohibited by Ge)
     detail.setProjectName(projectName);
+=======
+>>>>>>> BRANCH (5c7718 Merge changes Ifccd40c8,I3fc7a181 into stable)
 
     if (config.getRevision() != null) {
       detail.setRevision(config.getRevision().name());

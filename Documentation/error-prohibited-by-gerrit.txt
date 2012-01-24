@@ -12,11 +12,18 @@ In particular this error occurs:
    link:access-control.html#category_push_review['Push'] on
    `refs/for/refs/heads/*`)
 2. if you bypass code review without
+<<<<<<< HEAD   (9e1dcb Merge "Fix link and improve consistency in 'Prohibited by Ge)
    link:access-control.html#category_push_direct['Push'] access right
    on `refs/heads/*`
 3. if you push an annotated tag without
    link:access-control.html#category_push_annotated['Push Annotated Tag']
    access right on 'refs/tags/*'
+=======
+   link:access-control.html#category_push_direct['Push'] privileges
+   on `refs/heads/*`
+3. if you push a signed or annotated tag without
+   link:access-control.html#category_pTAG['Push Tag'] privileges
+>>>>>>> BRANCH (5c7718 Merge changes Ifccd40c8,I3fc7a181 into stable)
 4. if you push a lightweight tag without the access right link:access-control.html#category_create['Create
    Reference'] for the reference name 'refs/tags/*'
 
