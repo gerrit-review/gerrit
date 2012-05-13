@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (0cd0b3 Merge "Fix the export-review-notes commands guice bindings.")
 // Copyright (C) 2009 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -678,3 +679,5 @@ public class PushReplication implements ReplicationQueue {
     }
   }
 }
+=======
+>>>>>>> BRANCH (5e9461 Export LifecycleListener in the extension API)
