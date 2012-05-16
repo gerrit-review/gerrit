@@ -1,11 +1,14 @@
 Gerrit Code Review - Release Notes
 ==================================
 
+<<<<<<< HEAD   (f0f9a1 Fix the export-review-notes commands guice bindings.)
 [[2_4]]
 Version 2.4.x
 -------------
 * link:ReleaseNotes-2.4.html[2.4]
 
+=======
+>>>>>>> BRANCH (eb9554 Fix merging of access sections)
 [[2_3]]
 Version 2.3.x
 -------------

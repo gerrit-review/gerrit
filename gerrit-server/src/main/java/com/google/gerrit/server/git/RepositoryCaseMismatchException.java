@@ -14,8 +14,12 @@
 
 package com.google.gerrit.server.git;
 
+<<<<<<< HEAD   (f0f9a1 Fix the export-review-notes commands guice bindings.)
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.client.Project.NameKey;
+=======
+import com.google.gerrit.reviewdb.Project;
+>>>>>>> BRANCH (eb9554 Fix merging of access sections)
 
 import org.eclipse.jgit.errors.RepositoryNotFoundException;
 
