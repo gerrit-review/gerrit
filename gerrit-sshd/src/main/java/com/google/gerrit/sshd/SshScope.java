@@ -59,6 +59,13 @@ class SshScope {
       this(s, c, p.created);
       started = p.started;
       finished = p.finished;
+<<<<<<< HEAD   (3379bc Export the universal version of GroupBackend to plugins)
+=======
+    }
+
+    Context(final SshSession s, final String c) {
+      this(s, c, System.currentTimeMillis());
+>>>>>>> BRANCH (d2fa1f Do not execute rejected commands)
     }
 
     String getCommandLine() {
@@ -123,7 +130,11 @@ class SshScope {
     protected Context continuingContext(Context ctx) {
       // The cleanup is not chained, since the RequestScopePropagator executors
       // the Context's cleanup when finished executing.
+<<<<<<< HEAD   (3379bc Export the universal version of GroupBackend to plugins)
       return sshScope.newContinuingContext(ctx);
+=======
+      return new Context(ctx, ctx.getSession(), ctx.getCommandLine());
+>>>>>>> BRANCH (d2fa1f Do not execute rejected commands)
     }
   }
 

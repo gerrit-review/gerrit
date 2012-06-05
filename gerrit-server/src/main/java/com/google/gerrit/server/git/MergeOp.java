@@ -37,7 +37,10 @@ import com.google.gerrit.server.GerritPersonIdent;
 import com.google.gerrit.server.IdentifiedUser;
 import com.google.gerrit.server.account.AccountCache;
 import com.google.gerrit.server.config.CanonicalWebUrl;
+<<<<<<< HEAD   (3379bc Export the universal version of GroupBackend to plugins)
 import com.google.gerrit.server.extensions.events.GitReferenceUpdated;
+=======
+>>>>>>> BRANCH (d2fa1f Do not execute rejected commands)
 import com.google.gerrit.server.mail.MergeFailSender;
 import com.google.gerrit.server.mail.MergedSender;
 import com.google.gerrit.server.patch.PatchSetInfoFactory;

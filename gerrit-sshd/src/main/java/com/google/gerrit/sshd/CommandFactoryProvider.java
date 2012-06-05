@@ -53,7 +53,10 @@ class CommandFactoryProvider implements Provider<CommandFactory> {
 
   private final DispatchCommandProvider dispatcher;
   private final SshLog log;
+<<<<<<< HEAD   (3379bc Export the universal version of GroupBackend to plugins)
   private final SshScope sshScope;
+=======
+>>>>>>> BRANCH (d2fa1f Do not execute rejected commands)
   private final ScheduledExecutorService startExecutor;
   private final Executor destroyExecutor;
 
