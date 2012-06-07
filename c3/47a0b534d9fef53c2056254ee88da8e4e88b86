@@ -1,0 +1,9 @@
+Code-Review+2: Shawn Pearce <sop@google.com>
+Verified+1: Saša Živkov <zivkov@gmail.com>
+Code-Review+1: Martin Fick <mfick@codeaurora.org>
+Code-Review+1: Edwin Kempin <edwin.kempin@gmail.com>
+Submitted-by: Saša Živkov <zivkov@gmail.com>
+Submitted-at: Thu, 07 Jun 2012 12:37:01 -0700
+Reviewed-on: https://gerrit-review.googlesource.com/35840
+Project: gerrit
+Branch: refs/heads/stable-2.4
