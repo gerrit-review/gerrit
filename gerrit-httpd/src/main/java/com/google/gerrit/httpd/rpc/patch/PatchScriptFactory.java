@@ -31,6 +31,7 @@ import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.IdentifiedUser;
 import com.google.gerrit.server.account.AccountInfoCacheFactory;
 import com.google.gerrit.server.git.GitRepositoryManager;
+import com.google.gerrit.server.git.LargeObjectException;
 import com.google.gerrit.server.patch.PatchList;
 import com.google.gerrit.server.patch.PatchListCache;
 import com.google.gerrit.server.patch.PatchListEntry;
@@ -121,7 +122,8 @@ class PatchScriptFactory extends Handler<PatchScript> {
   }
 
   @Override
-  public PatchScript call() throws OrmException, NoSuchChangeException {
+  public PatchScript call() throws OrmException, NoSuchChangeException,
+      LargeObjectException {
     validatePatchSetId(psa);
     validatePatchSetId(psb);
 
@@ -156,11 +158,20 @@ class PatchScriptFactory extends Handler<PatchScript> {
           content.getNewName());
 
         return b.toPatchScript(content, comments, history);
+<<<<<<< HEAD   (af4d3c Merge "Display the approval table on the Publish Comments sc)
     } catch (PatchListNotAvailableException e) {
       throw new NoSuchChangeException(changeId, e);
     } catch (IOException e) {
       log.error("File content unavailable", e);
       throw new NoSuchChangeException(changeId, e);
+=======
+      } catch (IOException e) {
+        log.error("File content unavailable", e);
+        throw new NoSuchChangeException(changeId, e);
+      } catch (org.eclipse.jgit.errors.LargeObjectException err) {
+        throw new LargeObjectException("File content is too large", err);
+      }
+>>>>>>> BRANCH (7c1a56 Gerrit 2.4.1 ReleaseNotes)
     } finally {
       git.close();
     }
