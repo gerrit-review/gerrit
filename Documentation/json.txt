@@ -69,6 +69,9 @@ neededBy:: List of changes that depend on this change in <<dependency,dependency
 submitRecords:: The <<submitRecord,submitRecord attribute>> contains
 information about whether this change has been or can be submitted.
 
+submitRecords:: The <<submitRecord,submitRecord attribute>> contains
+information about whether this change has been or can be submitted.
+
 [[trackingid]]
 trackingid
 ----------
@@ -202,6 +205,7 @@ status:: The status of the label.
 
 by:: The <<account,account>> that applied the label.
 
+<<<<<<< HEAD   (02e94f Merge "ChangeMessageAccess: Add index for byPathSet method.")
 [[dependency]]
 dependency
 ----------
@@ -267,6 +271,8 @@ insertions:: number of insertions of this patch.
 
 deletions::  number of deletions of this patch.
 
+=======
+>>>>>>> BRANCH (b2b6bf Merge "Fix plugin loading when running as hosted WAR or GWT )
 SEE ALSO
 --------
 

@@ -629,7 +629,12 @@ public class Gerrit implements EntryPoint {
         public void onSuccess(AccountCapabilities result) {
           if (result.canPerform(ADMINISTRATE_SERVER)) {
             addLink(pluginsBar, C.menuPluginsInstalled(), PageLinks.ADMIN_PLUGINS);
+<<<<<<< HEAD   (02e94f Merge "ChangeMessageAccess: Add index for byPathSet method.")
             menuLeft.add(pluginsBar, C.menuPlugins());
+=======
+            menuLeft.insert(pluginsBar, C.menuPlugins(),
+                menuLeft.getWidgetIndex(groupsBar) + 1);
+>>>>>>> BRANCH (b2b6bf Merge "Fix plugin loading when running as hosted WAR or GWT )
           }
         }
       }, ADMINISTRATE_SERVER);

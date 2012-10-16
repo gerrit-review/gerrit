@@ -51,6 +51,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -127,6 +128,47 @@ public class EventFactory {
     a.sortKey = change.getSortKey();
     a.open = change.getStatus().isOpen();
     a.status = change.getStatus();
+  }
+
+  /**
+   * Add submitRecords to an existing ChangeAttribute.
+   *
+   * @param ca
+   * @param submitRecords
+   */
+  public void addSubmitRecords(ChangeAttribute ca,
+      List<SubmitRecord> submitRecords) {
+    ca.submitRecords = new ArrayList<SubmitRecordAttribute>();
+
+    for (SubmitRecord submitRecord : submitRecords) {
+      SubmitRecordAttribute sa = new SubmitRecordAttribute();
+      sa.status = submitRecord.status.name();
+      if (submitRecord.status != SubmitRecord.Status.RULE_ERROR) {
+        addSubmitRecordLabels(submitRecord, sa);
+      }
+      ca.submitRecords.add(sa);
+    }
+    // Remove empty lists so a confusing label won't be displayed in the output.
+    if (ca.submitRecords.isEmpty()) {
+      ca.submitRecords = null;
+    }
+  }
+
+  private void addSubmitRecordLabels(SubmitRecord submitRecord,
+      SubmitRecordAttribute sa) {
+    if (submitRecord.labels != null && !submitRecord.labels.isEmpty()) {
+      sa.labels = new ArrayList<SubmitLabelAttribute>();
+      for (SubmitRecord.Label lbl : submitRecord.labels) {
+        SubmitLabelAttribute la = new SubmitLabelAttribute();
+        la.label = lbl.label;
+        la.status = lbl.status.name();
+        if(lbl.appliedBy != null) {
+          Account a = accountCache.get(lbl.appliedBy).getAccount();
+          la.by = asAccountAttribute(a);
+        }
+        sa.labels.add(la);
+      }
+    }
   }
 
   /**
