@@ -280,6 +280,15 @@ public class QueryProcessor {
             eventFactory.addSubmitRecords(c, submitResult);
           }
 
+          if (includeSubmitRecords) {
+            PatchSet.Id psId = d.getChange().currentPatchSetId();
+            PatchSet patchSet = db.get().patchSets().get(psId);
+            Change.Id changeId = psId.getParentKey();
+            List<SubmitRecord> submitResult = d.changeControl().canSubmit( //
+                db.get(), patchSet, null, false, true);
+            eventFactory.addSubmitRecords(c, submitResult);
+          }
+
           if (includeCommitMessage) {
             eventFactory.addCommitMessage(c, d.commitMessage(repoManager, db));
           }

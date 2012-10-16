@@ -354,7 +354,11 @@ public class ChangeControl {
       return ruleError("Project submit rule has no solution");
     }
 
+<<<<<<< HEAD   (02e94f Merge "ChangeMessageAccess: Add index for byPathSet method.")
     return resultsToSubmitRecord(evaluator.getSubmitRule(), results);
+=======
+    return resultsToSubmitRecord(submitRule, results);
+>>>>>>> BRANCH (b2b6bf Merge "Fix plugin loading when running as hosted WAR or GWT )
   }
 
   /**
