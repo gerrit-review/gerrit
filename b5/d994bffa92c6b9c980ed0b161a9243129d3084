@@ -1,0 +1,9 @@
+Code-Review+2: Shawn Pearce <sop@google.com>
+Verified+1: Shawn Pearce <sop@google.com>
+Code-Review+1: Edwin Kempin <edwin.kempin@gmail.com>
+Code-Review+1: Bruce Zu <zu.bruce.china@gmail.com>
+Submitted-by: Shawn Pearce <sop@google.com>
+Submitted-at: Mon, 22 Oct 2012 09:55:55 -0700
+Reviewed-on: https://gerrit-review.googlesource.com/38610
+Project: gerrit
+Branch: refs/heads/stable-2.5
