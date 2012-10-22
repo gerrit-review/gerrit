@@ -544,6 +544,10 @@ cache `"ldap_groups_byinclude"`::
 +
 Caches the hierarchical structure of LDAP groups.
 
+cache `"ldap_groups_byinclude"`::
++
+Caches the hierarchical structure of LDAP groups.
+
 cache `"ldap_usernames"`::
 +
 Caches a mapping of LDAP username to Gerrit account identity.  The

@@ -29,6 +29,7 @@ import com.google.gerrit.reviewdb.client.PatchSetApproval;
 import com.google.gerrit.reviewdb.client.RevId;
 import com.google.gerrit.reviewdb.client.TrackingId;
 import com.google.gerrit.reviewdb.server.ReviewDb;
+import com.google.gerrit.server.GerritPersonIdent;
 import com.google.gerrit.server.account.AccountCache;
 import com.google.gerrit.server.config.CanonicalWebUrl;
 import com.google.gerrit.server.patch.PatchList;
@@ -44,6 +45,7 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
 import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.PersonIdent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,20 +64,33 @@ public class EventFactory {
   private final ApprovalTypes approvalTypes;
   private final PatchListCache patchListCache;
   private final SchemaFactory<ReviewDb> schema;
+<<<<<<< HEAD   (4d3575 Merge "Adapt code to rename of gerrit module to gerrit_ui")
   private final PatchSetInfoFactory psInfoFactory;
+=======
+  private final PersonIdent myIdent;
+>>>>>>> BRANCH (cc3a3a Merge "LDAP-cache to minimize nbr of queries when unnesting )
 
   @Inject
   EventFactory(AccountCache accountCache,
       @CanonicalWebUrl @Nullable Provider<String> urlProvider,
       ApprovalTypes approvalTypes,
+<<<<<<< HEAD   (4d3575 Merge "Adapt code to rename of gerrit module to gerrit_ui")
       final PatchSetInfoFactory psif,
       PatchListCache patchListCache, SchemaFactory<ReviewDb> schema) {
+=======
+      PatchListCache patchListCache, SchemaFactory<ReviewDb> schema,
+      @GerritPersonIdent PersonIdent myIdent) {
+>>>>>>> BRANCH (cc3a3a Merge "LDAP-cache to minimize nbr of queries when unnesting )
     this.accountCache = accountCache;
     this.urlProvider = urlProvider;
     this.approvalTypes = approvalTypes;
     this.patchListCache = patchListCache;
     this.schema = schema;
+<<<<<<< HEAD   (4d3575 Merge "Adapt code to rename of gerrit module to gerrit_ui")
     this.psInfoFactory = psif;
+=======
+    this.myIdent = myIdent;
+>>>>>>> BRANCH (cc3a3a Merge "LDAP-cache to minimize nbr of queries when unnesting )
   }
 
   /**
@@ -416,6 +431,20 @@ public class EventFactory {
   }
 
   /**
+   * Create an AuthorAttribute for the given person ident suitable for
+   * serialization to JSON.
+   *
+   * @param ident
+   * @return object suitable for serialization to JSON
+   */
+  public AccountAttribute asAccountAttribute(PersonIdent ident) {
+    AccountAttribute who = new AccountAttribute();
+    who.name = ident.getName();
+    who.email = ident.getEmailAddress();
+    return who;
+  }
+
+  /**
    * Create an ApprovalAttribute for the given approval suitable for
    * serialization to JSON.
    *
@@ -439,7 +468,9 @@ public class EventFactory {
   public MessageAttribute asMessageAttribute(ChangeMessage message) {
     MessageAttribute a = new MessageAttribute();
     a.timestamp = message.getWrittenOn().getTime() / 1000L;
-    a.reviewer = asAccountAttribute(message.getAuthor());
+    a.reviewer =
+        message.getAuthor() != null ? asAccountAttribute(message.getAuthor())
+            : asAccountAttribute(myIdent);
     a.message = message.getMessage();
     return a;
   }

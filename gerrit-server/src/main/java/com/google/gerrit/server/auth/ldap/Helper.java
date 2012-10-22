@@ -14,7 +14,10 @@
 
 package com.google.gerrit.server.auth.ldap;
 
+<<<<<<< HEAD   (4d3575 Merge "Adapt code to rename of gerrit module to gerrit_ui")
 import com.google.common.base.Throwables;
+=======
+>>>>>>> BRANCH (cc3a3a Merge "LDAP-cache to minimize nbr of queries when unnesting )
 import com.google.common.cache.Cache;
 import com.google.common.collect.ImmutableSet;
 import com.google.gerrit.common.data.ParameterizedString;
