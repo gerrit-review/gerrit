@@ -16,7 +16,6 @@ package com.google.gerrit.httpd;
 
 import com.google.gerrit.reviewdb.client.Account;
 import com.google.gerrit.reviewdb.client.AccountExternalId;
-import com.google.gerrit.server.AccessPath;
 import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.account.AuthResult;
 
@@ -26,7 +25,12 @@ public interface WebSession {
   public boolean isValidAuthorization(String keyIn);
   public AccountExternalId.Key getLastLoginExternalId();
   public CurrentUser getCurrentUser();
+<<<<<<< HEAD   (5819c9 Adapt documentation to having 'Projects' as top level menu)
   public void login(AuthResult res, boolean rememberMe);
+=======
+
+  public void login(AuthResult res, AuthMethod meth, boolean rememberMe);
+>>>>>>> BRANCH (cc446f Improve wording in Gerrit 2.5.1 release notes)
 
   /** Set the user account for this current request only. */
   public void setUserAccountId(Account.Id id);

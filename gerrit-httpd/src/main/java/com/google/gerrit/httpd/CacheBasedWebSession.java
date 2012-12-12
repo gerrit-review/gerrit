@@ -37,6 +37,8 @@ import org.eclipse.jgit.http.server.GitSmartHttpTools;
 
 import java.util.EnumSet;
 
+import org.eclipse.jgit.http.server.GitSmartHttpTools;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -68,7 +70,11 @@ public final class CacheBasedWebSession implements WebSession {
   private final AuthConfig authConfig;
   private final Provider<AnonymousUser> anonymousProvider;
   private final IdentifiedUser.RequestFactory identified;
+<<<<<<< HEAD   (5819c9 Adapt documentation to having 'Projects' as top level menu)
   private final EnumSet<AccessPath> okPaths = EnumSet.of(AccessPath.UNKNOWN);
+=======
+  private AccessPath accessPath;
+>>>>>>> BRANCH (cc446f Improve wording in Gerrit 2.5.1 release notes)
   private Cookie outCookie;
 
   private Key key;
@@ -87,6 +93,12 @@ public final class CacheBasedWebSession implements WebSession {
     this.authConfig = authConfig;
     this.anonymousProvider = anonymousProvider;
     this.identified = identified;
+
+    if (GitSmartHttpTools.isGitClient(request)) {
+      accessPath = AccessPath.GIT;
+    } else {
+      accessPath = AccessPath.WEB_UI;
+    }
 
     if (!GitSmartHttpTools.isGitClient(request)) {
       String cookie = readCookie();
@@ -185,6 +197,11 @@ public final class CacheBasedWebSession implements WebSession {
     key = manager.createKey(id);
     val = manager.createVal(key, id, rememberMe, identity, null);
     saveCookie();
+<<<<<<< HEAD   (5819c9 Adapt documentation to having 'Projects' as top level menu)
+=======
+
+    authMethod = meth;
+>>>>>>> BRANCH (cc446f Improve wording in Gerrit 2.5.1 release notes)
   }
 
   /** Set the user account for this current request only. */

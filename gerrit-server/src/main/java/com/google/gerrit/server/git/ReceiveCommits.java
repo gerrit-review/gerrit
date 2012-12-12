@@ -58,6 +58,7 @@ import com.google.gerrit.server.ChangeUtil;
 import com.google.gerrit.server.GerritPersonIdent;
 import com.google.gerrit.server.IdentifiedUser;
 import com.google.gerrit.server.account.AccountResolver;
+import com.google.gerrit.server.config.AllProjectsName;
 import com.google.gerrit.server.config.CanonicalWebUrl;
 import com.google.gerrit.server.config.TrackingFooters;
 import com.google.gerrit.server.events.CommitReceivedEvent;
@@ -255,7 +256,11 @@ public class ReceiveCommits {
   private final WorkQueue workQueue;
   private final ListeningExecutorService changeUpdateExector;
   private final RequestScopePropagator requestScopePropagator;
+<<<<<<< HEAD   (5819c9 Adapt documentation to having 'Projects' as top level menu)
   private final SshInfo sshInfo;
+=======
+  private final AllProjectsName allProjectsName;
+>>>>>>> BRANCH (cc446f Improve wording in Gerrit 2.5.1 release notes)
 
   private final ProjectControl projectControl;
   private final Project project;
@@ -311,8 +316,13 @@ public class ReceiveCommits {
       final WorkQueue workQueue,
       @ChangeUpdateExecutor ListeningExecutorService changeUpdateExector,
       final RequestScopePropagator requestScopePropagator,
+<<<<<<< HEAD   (5819c9 Adapt documentation to having 'Projects' as top level menu)
       final SshInfo sshInfo,
       final DynamicSet<CommitValidationListener> commitValidationListeners,
+=======
+      final AllProjectsName allProjectsName,
+
+>>>>>>> BRANCH (cc446f Improve wording in Gerrit 2.5.1 release notes)
       @Assisted final ProjectControl projectControl,
       @Assisted final Repository repo,
       final SubmoduleOp.Factory subOpFactory) throws IOException {
@@ -336,7 +346,11 @@ public class ReceiveCommits {
     this.workQueue = workQueue;
     this.changeUpdateExector = changeUpdateExector;
     this.requestScopePropagator = requestScopePropagator;
+<<<<<<< HEAD   (5819c9 Adapt documentation to having 'Projects' as top level menu)
     this.sshInfo = sshInfo;
+=======
+    this.allProjectsName = allProjectsName;
+>>>>>>> BRANCH (cc446f Improve wording in Gerrit 2.5.1 release notes)
 
     this.projectControl = projectControl;
     this.project = projectControl.getProject();
@@ -837,6 +851,26 @@ public class ReceiveCommits {
                     + " tried to push invalid project configuration "
                     + cmd.getNewId().name() + " for " + project.getName());
                 continue;
+              }
+              Project.NameKey newParent = cfg.getProject().getParent(allProjectsName);
+              Project.NameKey oldParent = project.getParent(allProjectsName);
+              if (oldParent == null) {
+                // update of the 'All-Projects' project
+                if (newParent != null) {
+                  reject(cmd, "invalid project configuration: root project cannot have parent");
+                  continue;
+                }
+              } else {
+                if (!oldParent.equals(newParent)
+                    && !currentUser.getCapabilities().canAdministrateServer()) {
+                  reject(cmd, "invalid project configuration: only Gerrit admin can set parent");
+                  continue;
+                }
+
+                if (projectCache.get(newParent) == null) {
+                  reject(cmd, "invalid project configuration: parent does not exist");
+                  continue;
+                }
               }
             } catch (Exception e) {
               reject(cmd, "invalid project configuration");

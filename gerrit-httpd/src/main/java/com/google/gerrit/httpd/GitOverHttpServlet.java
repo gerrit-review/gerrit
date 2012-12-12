@@ -18,7 +18,6 @@ import com.google.common.cache.Cache;
 import com.google.gerrit.common.data.Capable;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.server.ReviewDb;
-import com.google.gerrit.server.AccessPath;
 import com.google.gerrit.server.AnonymousUser;
 import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.IdentifiedUser;
