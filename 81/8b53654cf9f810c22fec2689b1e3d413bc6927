@@ -1,0 +1,9 @@
+Verified+1: Shawn Pearce <sop@google.com>
+Code-Review+2: Martin Fick <mfick@codeaurora.org>
+Code-Review+2: Edwin Kempin <edwin.kempin@gmail.com>
+Code-Review+1: Jeremy Stanley <fungi@yuggoth.org>
+Submitted-by: Shawn Pearce <sop@google.com>
+Submitted-at: Wed, 19 Dec 2012 17:57:32 -0800
+Reviewed-on: https://gerrit-review.googlesource.com/40401
+Project: gerrit
+Branch: refs/heads/stable-2.5
