@@ -155,5 +155,132 @@ public class SchemaCreator {
     }
     c.systemConfig().insert(Collections.singleton(s));
     return s;
+<<<<<<< HEAD   (db415c Merge "Upgrade Apache SSH dependency to 0.6.0")
+=======
+  }
+
+  private void initAllProjects() throws IOException, ConfigInvalidException {
+    Repository git = null;
+    try {
+      git = mgr.openRepository(allProjectsName);
+      initAllProjects(git);
+    } catch (RepositoryNotFoundException notFound) {
+      // A repository may be missing if this project existed only to store
+      // inheritable permissions. For example 'All-Projects'.
+      try {
+        git = mgr.createRepository(allProjectsName);
+        initAllProjects(git);
+        final RefUpdate u = git.updateRef(Constants.HEAD);
+        u.link(GitRepositoryManager.REF_CONFIG);
+      } catch (RepositoryNotFoundException err) {
+        final String name = allProjectsName.get();
+        throw new IOException("Cannot create repository " + name, err);
+      }
+    } finally {
+      if (git != null) {
+        git.close();
+      }
+    }
+  }
+
+  private void initAllProjects(Repository git) throws IOException,
+      ConfigInvalidException {
+      MetaDataUpdate md =
+          new MetaDataUpdate(GitReferenceUpdated.DISABLED, allProjectsName, git);
+      md.getCommitBuilder().setAuthor(serverUser);
+      md.getCommitBuilder().setCommitter(serverUser);
+
+      ProjectConfig config = ProjectConfig.read(md);
+      Project p = config.getProject();
+      p.setDescription("Access inherited by all other projects.");
+      p.setRequireChangeID(InheritableBoolean.TRUE);
+      p.setUseContentMerge(InheritableBoolean.TRUE);
+      p.setUseContributorAgreements(InheritableBoolean.FALSE);
+      p.setUseSignedOffBy(InheritableBoolean.FALSE);
+
+      AccessSection cap = config.getAccessSection(AccessSection.GLOBAL_CAPABILITIES, true);
+      AccessSection all = config.getAccessSection(AccessSection.ALL, true);
+      AccessSection heads = config.getAccessSection(AccessSection.HEADS, true);
+      AccessSection tags = config.getAccessSection("refs/tags/*", true);
+      AccessSection meta = config.getAccessSection(GitRepositoryManager.REF_CONFIG, true);
+      AccessSection magic = config.getAccessSection("refs/for/" + AccessSection.ALL, true);
+
+      grant(config, cap, GlobalCapability.ADMINISTRATE_SERVER, admin);
+      grant(config, all, Permission.READ, admin, anonymous);
+
+      LabelType cr = initCodeReviewLabel(config);
+      grant(config, heads, cr, -1, 1, registered);
+      grant(config, heads, cr, -2, 2, admin, owners);
+      grant(config, heads, Permission.CREATE, admin, owners);
+      grant(config, heads, Permission.PUSH, admin, owners);
+      grant(config, heads, Permission.SUBMIT, admin, owners);
+      grant(config, heads, Permission.FORGE_AUTHOR, registered);
+      grant(config, heads, Permission.FORGE_COMMITTER, admin, owners);
+      grant(config, heads, Permission.EDIT_TOPIC_NAME, true, admin, owners);
+
+      grant(config, tags, Permission.PUSH_TAG, admin, owners);
+      grant(config, tags, Permission.PUSH_SIGNED_TAG, admin, owners);
+
+      grant(config, magic, Permission.PUSH, registered);
+      grant(config, magic, Permission.PUSH_MERGE, registered);
+
+      meta.getPermission(Permission.READ, true).setExclusiveGroup(true);
+      grant(config, meta, Permission.READ, admin, owners);
+      grant(config, meta, cr, -2, 2, admin, owners);
+      grant(config, meta, Permission.PUSH, admin, owners);
+      grant(config, meta, Permission.SUBMIT, admin, owners);
+
+      md.setMessage("Initialized Gerrit Code Review " + Version.getVersion());
+      config.commit(md);
+  }
+
+  private PermissionRule grant(ProjectConfig config, AccessSection section,
+      String permission, AccountGroup group1, AccountGroup... groupList) {
+    return grant(config, section, permission, false, group1, groupList);
+  }
+
+  private PermissionRule grant(ProjectConfig config, AccessSection section,
+      String permission, boolean force, AccountGroup group1,
+      AccountGroup... groupList) {
+    Permission p = section.getPermission(permission, true);
+    PermissionRule rule = rule(config, group1);
+    rule.setForce(force);
+    p.add(rule);
+    for (AccountGroup group : groupList) {
+      rule = rule(config, group);
+      rule.setForce(force);
+      p.add(rule);
+    }
+    return rule;
+  }
+
+  private void grant(ProjectConfig config,
+      AccessSection section, LabelType type,
+      int min, int max, AccountGroup... groupList) {
+    String name = Permission.LABEL + type.getName();
+    Permission p = section.getPermission(name, true);
+    for (AccountGroup group : groupList) {
+      PermissionRule r = rule(config, group);
+      r.setRange(min, max);
+      p.add(r);
+    }
+  }
+
+  private PermissionRule rule(ProjectConfig config, AccountGroup group) {
+    return new PermissionRule(config.resolve(group));
+  }
+
+  public static LabelType initCodeReviewLabel(ProjectConfig c) {
+    LabelType type = new LabelType("Code-Review", ImmutableList.of(
+        new LabelValue((short) 2, "Looks good to me, approved"),
+        new LabelValue((short) 1, "Looks good to me, but someone else must approve"),
+        new LabelValue((short) 0, "No score"),
+        new LabelValue((short) -1, "I would prefer that you didn't submit this"),
+        new LabelValue((short) -2, "Do not submit")));
+    type.setAbbreviatedName("CR");
+    type.setCopyMinScore(true);
+    c.getLabelSections().put(type.getName(), type);
+    return type;
+>>>>>>> BRANCH (3c0a06 Merge "REST API documentation: Move endpoints before protoco)
   }
 }
