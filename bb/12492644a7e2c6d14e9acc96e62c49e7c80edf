@@ -1,0 +1,7 @@
+Verified+1: Shawn Pearce <sop@google.com>
+Code-Review+2: Martin Fick <mfick@codeaurora.org>
+Submitted-by: Shawn Pearce <sop@google.com>
+Submitted-at: Wed, 17 Apr 2013 02:48:09 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/44670
+Project: gerrit
+Branch: refs/heads/stable-2.6
