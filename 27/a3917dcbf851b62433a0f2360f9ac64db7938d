@@ -1,0 +1,7 @@
+Code-Review+2: Shawn Pearce <sop@google.com>
+Verified+1: Chad Horohoe <chorohoe@wikimedia.org>
+Submitted-by: Shawn Pearce <sop@google.com>
+Submitted-at: Wed, 17 Apr 2013 13:52:51 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/44712
+Project: gerrit
+Branch: refs/heads/stable-2.6
