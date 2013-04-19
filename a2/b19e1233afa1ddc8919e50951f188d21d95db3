@@ -1,0 +1,8 @@
+Code-Review+2: Shawn Pearce <sop@google.com>
+Verified+1: Shawn Pearce <sop@google.com>
+Code-Review+1: Blair Zajac <blair@orcaware.com>
+Submitted-by: Shawn Pearce <sop@google.com>
+Submitted-at: Fri, 19 Apr 2013 00:16:44 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/44760
+Project: gerrit
+Branch: refs/heads/stable-2.6
