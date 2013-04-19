@@ -1,0 +1,9 @@
+Code-Review+2: Martin Fick <mfick@codeaurora.org>
+Verified+1: Orgad Shaneh <orgads@gmail.com>
+Code-Review+1: David Pursehouse <david.pursehouse@sonymobile.com>
+Code-Review+1: Øyvind Harboe <oyvindharboe@gmail.com>
+Submitted-by: David Pursehouse <david.pursehouse@sonymobile.com>
+Submitted-at: Fri, 19 Apr 2013 12:22:46 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/44730
+Project: gerrit
+Branch: refs/heads/stable-2.6
