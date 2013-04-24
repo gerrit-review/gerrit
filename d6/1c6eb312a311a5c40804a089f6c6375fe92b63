@@ -1,0 +1,8 @@
+Verified+1: Shawn Pearce <sop@google.com>
+Code-Review+2: Saša Živkov <zivkov@gmail.com>
+Code-Review+1: David Ostrovsky <david.ostrovsky@gmail.com>
+Submitted-by: Shawn Pearce <sop@google.com>
+Submitted-at: Wed, 24 Apr 2013 16:24:30 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/44971
+Project: gerrit
+Branch: refs/heads/stable-2.6
