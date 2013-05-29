@@ -1,0 +1,9 @@
+Code-Review+2: Shawn Pearce <sop@google.com>
+Verified+1: Shawn Pearce <sop@google.com>
+Code-Review-1: Dave Borowitz <dborowitz@google.com>
+Code-Review+1: Thomas Broyer <t.broyer@gmail.com>
+Submitted-by: Shawn Pearce <sop@google.com>
+Submitted-at: Wed, 29 May 2013 23:36:21 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/46072
+Project: gerrit
+Branch: refs/heads/master
