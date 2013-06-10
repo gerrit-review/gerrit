@@ -43,6 +43,11 @@ import com.google.gerrit.server.project.NoSuchChangeException;
 import com.google.gerrit.server.project.NoSuchProjectException;
 import com.google.gerrit.server.project.RefControl;
 import com.google.gerrit.server.util.IdGenerator;
+<<<<<<< HEAD   (65c082 Merge "Fix typos in documentation of `DiffIntraLineInfo` RES)
+=======
+import com.google.gerrit.server.util.MagicBranch;
+import com.google.gwtorm.server.AtomicUpdate;
+>>>>>>> BRANCH (54ef73 Merge branch 'stable-2.6' into stable-2.7)
 import com.google.gwtorm.server.OrmConcurrencyException;
 import com.google.gwtorm.server.OrmException;
 
@@ -252,11 +257,14 @@ public class ChangeUtil {
           changeInserterFactory.create(refControl, change, revertCommit);
       PatchSet ps = ins.getPatchSet();
 
+      String ref = refControl.getRefName();
+      final String cmdRef =
+          MagicBranch.NEW_PUBLISH_CHANGE
+              + ref.substring(ref.lastIndexOf("/") + 1);
       CommitReceivedEvent commitReceivedEvent =
           new CommitReceivedEvent(new ReceiveCommand(ObjectId.zeroId(),
-              revertCommit.getId(), ps.getRefName()), refControl
-              .getProjectControl().getProject(), refControl.getRefName(),
-              revertCommit, user);
+              revertCommit.getId(), cmdRef), refControl.getProjectControl()
+              .getProject(), refControl.getRefName(), revertCommit, user);
 
       try {
         commitValidators.validateForGerritCommits(commitReceivedEvent);
@@ -359,6 +367,7 @@ public class ChangeUtil {
           "Patch Set " + newPatchSet.getPatchSetId()
               + ": Commit message was updated";
 
+<<<<<<< HEAD   (65c082 Merge "Fix typos in documentation of `DiffIntraLineInfo` RES)
       change = patchSetInserterFactory
           .create(git, revWalk, refControl, change, newCommit)
           .setPatchSet(newPatchSet)
@@ -366,6 +375,96 @@ public class ChangeUtil {
           .setCopyLabels(true)
           .setValidateForReceiveCommits(true)
           .insert();
+=======
+      final String refName = newPatchSet.getRefName();
+      CommitReceivedEvent commitReceivedEvent =
+          new CommitReceivedEvent(new ReceiveCommand(ObjectId.zeroId(),
+              newCommit.getId(), refName.substring(0,
+                  refName.lastIndexOf("/") + 1) + "new"), refControl
+              .getProjectControl().getProject(), refControl.getRefName(),
+              newCommit, user);
+
+      try {
+        commitValidators.validateForReceiveCommits(commitReceivedEvent);
+      } catch (CommitValidationException e) {
+        throw new InvalidChangeOperationException(e.getMessage());
+      }
+
+      final RefUpdate ru = git.updateRef(newPatchSet.getRefName());
+      ru.setExpectedOldObjectId(ObjectId.zeroId());
+      ru.setNewObjectId(newCommit);
+      ru.disableRefLog();
+      if (ru.update(revWalk) != RefUpdate.Result.NEW) {
+        throw new IOException(String.format(
+            "Failed to create ref %s in %s: %s", newPatchSet.getRefName(),
+            change.getDest().getParentKey().get(), ru.getResult()));
+      }
+      gitRefUpdated.fire(change.getProject(), ru);
+
+      db.changes().beginTransaction(change.getId());
+      try {
+        Change updatedChange = db.changes().get(change.getId());
+        if (updatedChange != null && updatedChange.getStatus().isOpen()) {
+          change = updatedChange;
+        } else {
+          throw new InvalidChangeOperationException(String.format(
+              "Change %s is closed", change.getId()));
+        }
+
+        ChangeUtil.insertAncestors(db, newPatchSet.getId(), commit);
+        db.patchSets().insert(Collections.singleton(newPatchSet));
+        updatedChange =
+            db.changes().atomicUpdate(change.getId(), new AtomicUpdate<Change>() {
+              @Override
+              public Change update(Change change) {
+                if (change.getStatus().isClosed()) {
+                  return null;
+                }
+                if (!change.currentPatchSetId().equals(patchSetId)) {
+                  return null;
+                }
+                if (change.getStatus() != Change.Status.DRAFT) {
+                  change.setStatus(Change.Status.NEW);
+                }
+                change.setLastSha1MergeTested(null);
+                change.setCurrentPatchSet(info);
+                ChangeUtil.updated(change);
+                return change;
+              }
+            });
+        if (updatedChange != null) {
+          change = updatedChange;
+        } else {
+          throw new InvalidChangeOperationException(String.format(
+              "Change %s was modified", change.getId()));
+        }
+
+        ApprovalsUtil.copyLabels(db,
+            refControl.getProjectControl().getLabelTypes(),
+            originalPS.getId(),
+            change.currentPatchSetId());
+
+        final List<FooterLine> footerLines = newCommit.getFooterLines();
+        updateTrackingIds(db, change, trackingFooters, footerLines);
+
+        final ChangeMessage cmsg =
+            new ChangeMessage(new ChangeMessage.Key(changeId,
+                ChangeUtil.messageUUID(db)), user.getAccountId(), patchSetId);
+        final String msg = "Patch Set " + newPatchSet.getPatchSetId() + ": Commit message was updated";
+        cmsg.setMessage(msg);
+        db.changeMessages().insert(Collections.singleton(cmsg));
+        db.commit();
+
+        final CommitMessageEditedSender cm = commitMessageEditedSenderFactory.create(change);
+        cm.setFrom(user.getAccountId());
+        cm.setChangeMessage(cmsg);
+        cm.send();
+      } finally {
+        db.rollback();
+      }
+
+      hooks.doPatchsetCreatedHook(change, newPatchSet, db);
+>>>>>>> BRANCH (54ef73 Merge branch 'stable-2.6' into stable-2.7)
 
       return change.getId();
     } finally {
