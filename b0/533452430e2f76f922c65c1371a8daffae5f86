@@ -1,0 +1,7 @@
+Code-Review+2: Shawn Pearce <sop@google.com>
+Verified+1: Diffy Cuckoo
+Submitted-by: Shawn Pearce <sop@google.com>
+Submitted-at: Sat, 21 Sep 2013 06:01:02 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/49961
+Project: gerrit
+Branch: refs/heads/master
