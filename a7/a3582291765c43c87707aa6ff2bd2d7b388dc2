@@ -1,0 +1,7 @@
+Code-Review+2: Shawn Pearce <sop@google.com>
+Verified+1: David Pursehouse <david.pursehouse@sonymobile.com>
+Submitted-by: Shawn Pearce <sop@google.com>
+Submitted-at: Thu, 26 Sep 2013 06:12:52 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/50140
+Project: gerrit
+Branch: refs/heads/stable-2.6
