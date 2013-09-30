@@ -1,0 +1,9 @@
+Code-Review+2: Martin Fick <mfick@codeaurora.org>
+Code-Review+1: Edwin Kempin <edwin.kempin@gmail.com>
+Verified+1: Bruce Zu <bruce.zu@sonymobile.com>
+Code-Review+1: David Pursehouse <david.pursehouse@sonymobile.com>
+Submitted-by: Martin Fick <mfick@codeaurora.org>
+Submitted-at: Mon, 30 Sep 2013 01:34:03 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/50143
+Project: gerrit
+Branch: refs/heads/stable-2.6
