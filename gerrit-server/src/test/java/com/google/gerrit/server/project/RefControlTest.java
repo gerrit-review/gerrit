@@ -395,5 +395,202 @@ public class RefControlTest extends TestCase {
         u.controlForRef("refs/heads/master").getRange(LABEL + "Code-Review");
     assertFalse("u can't vote -2", range.contains(-2));
     assertFalse("u can't vote 2", range.contains(2));
+<<<<<<< HEAD   (96e70c Merge "Document how a plugin can get its name injected")
+=======
+  }
+  // -----------------------------------------------------------------------
+
+  private final Map<Project.NameKey, ProjectState> all;
+  private final AllProjectsName allProjectsName = new AllProjectsName("parent");
+  private final ProjectCache projectCache;
+
+  private ProjectConfig local;
+  private ProjectConfig parent;
+  private PermissionCollection.Factory sectionSorter;
+
+  private final AccountGroup.UUID admin = new AccountGroup.UUID("test.admin");
+  private final AccountGroup.UUID anonymous = AccountGroup.ANONYMOUS_USERS;
+  private final AccountGroup.UUID registered = AccountGroup.REGISTERED_USERS;
+
+  private final AccountGroup.UUID devs = new AccountGroup.UUID("test.devs");
+  private final AccountGroup.UUID fixers = new AccountGroup.UUID("test.fixers");
+
+  private final CapabilityControl.Factory capabilityControlFactory;
+
+  public RefControlTest() {
+    all = new HashMap<Project.NameKey, ProjectState>();
+    projectCache = new ProjectCache() {
+      @Override
+      public ProjectState getAllProjects() {
+        return get(allProjectsName);
+      }
+
+      @Override
+      public ProjectState get(Project.NameKey projectName) {
+        return all.get(projectName);
+      }
+
+      @Override
+      public void evict(Project p) {
+      }
+
+      @Override
+      public void remove(Project p) {
+      }
+
+      @Override
+      public Iterable<Project.NameKey> all() {
+        return Collections.emptySet();
+      }
+
+      @Override
+      public Iterable<Project.NameKey> byName(String prefix) {
+        return Collections.emptySet();
+      }
+
+      @Override
+      public void onCreateProject(Project.NameKey newProjectName) {
+      }
+
+      @Override
+      public Set<AccountGroup.UUID> guessRelevantGroupUUIDs() {
+        return Collections.emptySet();
+      }
+    };
+
+    Injector injector = Guice.createInjector(new FactoryModule() {
+      @Override
+      protected void configure() {
+        bind(Config.class)
+            .annotatedWith(GerritServerConfig.class)
+            .toInstance(new Config());
+
+        factory(CapabilityControl.Factory.class);
+        bind(ProjectCache.class).toInstance(projectCache);
+      }
+    });
+    capabilityControlFactory = injector.getInstance(CapabilityControl.Factory.class);
+  }
+
+  @Override
+  public void setUp() throws Exception {
+    super.setUp();
+
+    parent = new ProjectConfig(new Project.NameKey("parent"));
+    parent.createInMemory();
+
+    local = new ProjectConfig(new Project.NameKey("local"));
+    local.createInMemory();
+
+    Cache<SectionSortCache.EntryKey, SectionSortCache.EntryVal> c =
+        CacheBuilder.newBuilder().build();
+    sectionSorter = new PermissionCollection.Factory(new SectionSortCache(c));
+  }
+
+  private static void assertOwner(String ref, ProjectControl u) {
+    assertTrue("OWN " + ref, u.controlForRef(ref).isOwner());
+  }
+
+  private static void assertNotOwner(String ref, ProjectControl u) {
+    assertFalse("NOT OWN " + ref, u.controlForRef(ref).isOwner());
+  }
+
+  private PermissionRule grant(ProjectConfig project, String permissionName,
+      AccountGroup.UUID group, String ref) {
+    return grant(project, permissionName, newRule(project, group), ref);
+  }
+
+  private PermissionRule grant(ProjectConfig project, String permissionName,
+      int min, int max, AccountGroup.UUID group, String ref) {
+    PermissionRule rule = newRule(project, group);
+    rule.setMin(min);
+    rule.setMax(max);
+    return grant(project, permissionName, rule, ref);
+  }
+
+
+  private PermissionRule grant(ProjectConfig project, String permissionName,
+      PermissionRule rule, String ref) {
+    project.getAccessSection(ref, true) //
+        .getPermission(permissionName, true) //
+        .add(rule);
+    return rule;
+  }
+
+  private void doNotInherit(ProjectConfig project, String permissionName,
+      String ref) {
+    project.getAccessSection(ref, true) //
+        .getPermission(permissionName, true) //
+        .setExclusiveGroup(true);
+  }
+
+  private PermissionRule newRule(ProjectConfig project, AccountGroup.UUID groupUUID) {
+    GroupReference group = new GroupReference(groupUUID, groupUUID.get());
+    group = project.resolve(group);
+
+    return new PermissionRule(group);
+  }
+
+  private ProjectControl user(AccountGroup.UUID... memberOf) {
+    return user(null, memberOf);
+  }
+
+  private ProjectControl user(String name, AccountGroup.UUID... memberOf) {
+    String canonicalWebUrl = "http://localhost";
+
+    return new ProjectControl(Collections.<AccountGroup.UUID> emptySet(),
+        Collections.<AccountGroup.UUID> emptySet(), projectCache,
+        sectionSorter, null,
+        canonicalWebUrl, new MockUser(name, memberOf),
+        newProjectState());
+  }
+
+  private ProjectState newProjectState() {
+    PrologEnvironment.Factory envFactory = null;
+    GitRepositoryManager mgr = null;
+    ProjectControl.AssistedFactory projectControlFactory = null;
+    RulesCache rulesCache = null;
+    all.put(local.getProject().getNameKey(), new ProjectState(
+        null, projectCache, allProjectsName, projectControlFactory,
+        envFactory, mgr, rulesCache, null, local));
+    all.put(parent.getProject().getNameKey(), new ProjectState(
+        null, projectCache, allProjectsName, projectControlFactory,
+        envFactory, mgr, rulesCache, null, parent));
+    return all.get(local.getProject().getNameKey());
+  }
+
+  private class MockUser extends CurrentUser {
+    private final String username;
+    private final GroupMembership groups;
+
+    MockUser(String name, AccountGroup.UUID[] groupId) {
+      super(RefControlTest.this.capabilityControlFactory);
+      username = name;
+      ArrayList<AccountGroup.UUID> groupIds = Lists.newArrayList(groupId);
+      groupIds.add(registered);
+      groupIds.add(anonymous);
+      groups = new ListGroupMembership(groupIds);
+    }
+
+    @Override
+    public GroupMembership getEffectiveGroups() {
+      return groups;
+    }
+
+    @Override
+    public String getUserName() {
+      return username;
+    }
+
+    @Override
+    public Set<Change.Id> getStarredChanges() {
+      return Collections.emptySet();
+    }
+
+    @Override
+    public Collection<AccountProjectWatch> getNotificationFilters() {
+      return Collections.emptySet();
+    }
+>>>>>>> BRANCH (d292e7 Merge branch 'stable-2.6' into stable-2.7)
   }
 }
