@@ -23,6 +23,11 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import org.apache.commons.codec.binary.Base64;
+<<<<<<< HEAD   (a4b4ea Merge branch 'stable-2.6' into stable-2.7)
+=======
+import org.apache.sshd.common.future.CloseFuture;
+import org.apache.sshd.common.future.SshFutureListener;
+>>>>>>> BRANCH (e5b7f1 Bump SSHD version to 0.9.0.201311081)
 import org.apache.sshd.common.KeyPairProvider;
 import org.apache.sshd.common.SshException;
 import org.apache.sshd.common.util.Buffer;
@@ -157,6 +162,50 @@ class DatabasePubKeyAuth implements PublickeyAuthenticator {
       peerKeyCache = p;
     }
     return p.keys;
+<<<<<<< HEAD   (a4b4ea Merge branch 'stable-2.6' into stable-2.7)
+=======
+  }
+
+  private boolean success(final String username, final ServerSession session,
+      final SshSession sd, final CurrentUser user) {
+    if (sd.getCurrentUser() == null) {
+      sd.authenticationSuccess(username, user);
+
+      // If this is the first time we've authenticated this
+      // session, record a login event in the log and add
+      // a close listener to record a logout event.
+      //
+      Context ctx = sshScope.newContext(null, sd, null);
+      Context old = sshScope.set(ctx);
+      try {
+        sshLog.onLogin();
+      } finally {
+        sshScope.set(old);
+      }
+
+      GerritServerSession s = (GerritServerSession)session;
+      s.addCloseSessionListener(
+          new SshFutureListener<CloseFuture>() {
+            @Override
+            public void operationComplete(CloseFuture future) {
+              Context ctx = sshScope.newContext(null, sd, null);
+              Context old = sshScope.set(ctx);
+              try {
+                sshLog.onLogout();
+              } finally {
+                sshScope.set(old);
+              }
+            }
+          });
+    }
+
+    return true;
+  }
+
+  private IdentifiedUser createUser(final SshSession sd,
+      final SshKeyCacheEntry key) {
+    return userFactory.create(sd.getRemoteAddress(), key.getAccount());
+>>>>>>> BRANCH (e5b7f1 Bump SSHD version to 0.9.0.201311081)
   }
 
   private SshKeyCacheEntry find(final Iterable<SshKeyCacheEntry> keyList,
