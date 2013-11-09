@@ -26,8 +26,14 @@ import com.google.gerrit.sshd.SshDaemon;
 import com.google.gerrit.sshd.SshSession;
 import com.google.inject.Inject;
 
+<<<<<<< HEAD   (f4a8de Merge "Add REST API to toggle starred change state" into sta)
 import org.apache.mina.core.service.IoAcceptor;
 import org.apache.mina.core.session.IoSession;
+=======
+import org.apache.sshd.common.io.IoAcceptor;
+import org.apache.sshd.common.io.IoSession;
+import org.apache.sshd.common.io.mina.MinaSession;
+>>>>>>> BRANCH (e4893e Merge branch 'stable-2.6' into stable-2.7)
 import org.apache.sshd.server.Environment;
 import org.apache.sshd.server.session.ServerSession;
 import org.kohsuke.args4j.Option;
@@ -84,10 +90,16 @@ final class ShowConnections extends SshCommand {
     Collections.sort(list, new Comparator<IoSession>() {
       @Override
       public int compare(IoSession arg0, IoSession arg1) {
-        if (arg0.getCreationTime() < arg1.getCreationTime()) {
-          return -1;
-        } else if (arg0.getCreationTime() > arg1.getCreationTime()) {
-          return 1;
+        if (arg0 instanceof MinaSession) {
+          MinaSession mArg0 = (MinaSession) arg0;
+          MinaSession mArg1 = (MinaSession) arg1;
+          if (mArg0.getSession().getCreationTime() < mArg1.getSession()
+              .getCreationTime()) {
+            return -1;
+          } else if (mArg0.getSession().getCreationTime() > mArg1.getSession()
+              .getCreationTime()) {
+            return 1;
+          }
         }
         return (int) (arg0.getId() - arg1.getId());
       }
@@ -104,8 +116,15 @@ final class ShowConnections extends SshCommand {
       SshSession sd = s != null ? s.getAttribute(SshSession.KEY) : null;
 
       final SocketAddress remoteAddress = io.getRemoteAddress();
-      final long start = io.getCreationTime();
-      final long idle = now - io.getLastIoTime();
+      MinaSession minaSession = io instanceof MinaSession
+          ? (MinaSession) io
+          : null;
+      final long start = minaSession == null
+          ? 0
+          : minaSession.getSession().getCreationTime();
+      final long idle = minaSession == null
+          ? now
+          : now - minaSession.getSession().getLastIoTime();
 
       stdout.print(String.format("%8s %8s %8s   %-15.15s %s\n", //
           id(sd), //
