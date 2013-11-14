@@ -494,8 +494,16 @@ public class ProjectControl {
     try {
       Repository repo = repoManager.openRepository(projName);
       try {
+<<<<<<< HEAD   (ea2272 Add release notes for recently made changes)
         Map<String, Ref> allRefs = repo.getRefDatabase().getRefs(ALL);
         for (Entry<String, Ref> entry : allRefs.entrySet()) {
+=======
+        for (Entry<String, Ref> entry : repo.getAllRefs().entrySet()) {
+          String refName = entry.getKey();
+          if (!refName.startsWith("refs/heads") && !refName.startsWith("refs/tags")) {
+            continue;
+          }
+>>>>>>> BRANCH (6a7191 Merge branch 'stable-2.6' into stable-2.7)
           RevCommit tip;
           try {
             tip = rw.parseCommit(entry.getValue().getObjectId());
