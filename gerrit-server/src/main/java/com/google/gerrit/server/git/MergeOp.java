@@ -984,7 +984,45 @@ public class MergeOp {
   }
 
   private void sendMergeFail(final Change c, final ChangeMessage msg,
+<<<<<<< HEAD   (6d0a93 Merge "Allow large patches to function reasonably in diffs" )
       boolean makeNew) {
+=======
+      final boolean makeNew) {
+    if (makeNew) {
+      try {
+        db.changes().atomicUpdate(c.getId(), new AtomicUpdate<Change>() {
+          @Override
+          public Change update(Change c) {
+            if (c.getStatus().isOpen()) {
+              c.setStatus(Change.Status.NEW);
+              ChangeUtil.updated(c);
+            }
+            return c;
+          }
+        });
+      } catch (OrmConcurrencyException err) {
+      } catch (OrmException err) {
+        log.warn("Cannot update change status", err);
+      }
+    } else {
+      try {
+        ChangeUtil.touch(c, db);
+      } catch (OrmException err) {
+        log.warn("Cannot update change timestamp", err);
+      }
+    }
+
+    if (isDuplicate(msg)) {
+      return;
+    }
+
+    try {
+      db.changeMessages().insert(Collections.singleton(msg));
+    } catch (OrmException err) {
+      log.warn("Cannot record merge failure message", err);
+    }
+
+>>>>>>> BRANCH (b3faa8 Merge branch 'stable-2.6' into stable-2.7)
     PatchSetApproval submitter = null;
     try {
       submitter = getSubmitter(db, c.currentPatchSetId());
