@@ -127,7 +127,23 @@ public class Submit implements RestModifyView<RevisionResource, Input> {
       case MERGED:
         return new Output(Status.MERGED, change);
       case NEW:
+<<<<<<< HEAD   (6a7191 Merge branch 'stable-2.6' into stable-2.7)
         ChangeMessage msg = getConflictMessage(rsrc);
+=======
+        // If the merge was attempted and it failed the system usually
+        // writes a comment as a ChangeMessage and sets status to NEW.
+        // Find the relevant message and report that as the conflict.
+        ChangeMessage msg = Iterables.getFirst(Iterables.filter(
+          Lists.reverse(dbProvider.get().changeMessages()
+              .byChange(change.getId())
+              .toList()),
+          new Predicate<ChangeMessage>() {
+            @Override
+            public boolean apply(ChangeMessage input) {
+              return input.getAuthor() == null;
+            }
+          }), null);
+>>>>>>> BRANCH (5174e3 Merge "Update patch status before skipping duplicate emails")
         if (msg != null) {
           throw new ResourceConflictException(msg.getMessage());
         }
