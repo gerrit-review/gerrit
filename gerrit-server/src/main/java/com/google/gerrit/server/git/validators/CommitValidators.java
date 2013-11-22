@@ -546,6 +546,96 @@ public class CommitValidators {
   }
 
   /**
+<<<<<<< HEAD   (27e1fc Merge "canReadCommit: move check for READ on refs/* on top" )
+=======
+   * We handle 3 cases:
+   * 1. No change id in the commit message at all.
+   * 2. Change id last in the commit message but missing empty line to create the footer.
+   * 3. There is a change-id somewhere in the commit message, but we ignore it.
+   *
+   * @return The fixed up commit message
+   */
+  private static CommitValidationMessage getFixedCommitMsgWithChangeId(final String errMsg,
+      final RevCommit c, final IdentifiedUser currentUser,
+      String canonicalWebUrl, final SshInfo sshInfo) {
+    final String changeId = "Change-Id:";
+    StringBuilder sb = new StringBuilder();
+    sb.append("ERROR: ").append(errMsg);
+    sb.append('\n');
+    sb.append("Suggestion for commit message:\n");
+
+    if (c.getFullMessage().indexOf(changeId) == -1) {
+      sb.append(c.getFullMessage());
+      sb.append('\n');
+      sb.append(changeId).append(" I").append(c.name());
+    } else {
+      String lines[] = c.getFullMessage().trim().split("\n");
+      String lastLine = lines.length > 0 ? lines[lines.length - 1] : "";
+
+      if (lastLine.indexOf(changeId) == 0) {
+        for (int i = 0; i < lines.length - 1; i++) {
+          sb.append(lines[i]);
+          sb.append('\n');
+        }
+
+        sb.append('\n');
+        sb.append(lastLine);
+      } else {
+        sb.append(c.getFullMessage());
+        sb.append('\n');
+        sb.append(changeId).append(" I").append(c.name());
+        sb.append('\n');
+        sb.append("Hint: A potential Change-Id was found, but it was not in the ");
+        sb.append("footer (last paragraph) of the commit message.");
+      }
+    }
+    sb.append('\n');
+    sb.append('\n');
+    sb.append("Hint: To automatically insert Change-Id, install the hook:\n");
+    sb.append(getCommitMessageHookInstallationHint(currentUser,
+        canonicalWebUrl, sshInfo)).append('\n');
+    sb.append('\n');
+
+    return new CommitValidationMessage(sb.toString(), false);
+  }
+
+  private static String getCommitMessageHookInstallationHint(
+      final IdentifiedUser currentUser, String canonicalWebUrl,
+      final SshInfo sshInfo) {
+    final List<HostKey> hostKeys = sshInfo.getHostKeys();
+
+    // If there are no SSH keys, the commit-msg hook must be installed via
+    // HTTP(S)
+    if (hostKeys.isEmpty()) {
+      String p = "$gitdir/hooks/commit-msg";
+      return String.format(
+          "  gitdir=$(git rev-parse --git-dir) curl -o %s %s/tools/hooks/commit-msg ; chmod +x %s", p,
+          getGerritUrl(canonicalWebUrl), p);
+    }
+
+    // SSH keys exist, so the hook can be installed with scp.
+    String sshHost;
+    int sshPort;
+    String host = hostKeys.get(0).getHost();
+    int c = host.lastIndexOf(':');
+    if (0 <= c) {
+      if (host.startsWith("*:")) {
+        sshHost = getGerritHost(canonicalWebUrl);
+      } else {
+        sshHost = host.substring(0, c);
+      }
+      sshPort = Integer.parseInt(host.substring(c + 1));
+    } else {
+      sshHost = host;
+      sshPort = 22;
+    }
+
+    return String.format("  gitdir=$(git rev-parse --git-dir) scp -p -P %d %s@%s:hooks/commit-msg $gitdir/hooks/",
+        sshPort, currentUser.getUserName(), sshHost);
+  }
+
+  /**
+>>>>>>> BRANCH (10532a Merge branch 'stable-2.6' into stable-2.7)
    * Get the Gerrit URL.
    *
    * @return the canonical URL (with any trailing slash removed) if it is
