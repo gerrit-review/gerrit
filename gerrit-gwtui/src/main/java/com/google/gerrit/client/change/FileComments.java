@@ -14,6 +14,7 @@
 
 package com.google.gerrit.client.change;
 
+<<<<<<< HEAD   (2d6c1e Fix build failure caused by missing 'gerrit-plugin-gwtui:cli)
 import com.google.gerrit.client.Dispatcher;
 import com.google.gerrit.client.Gerrit;
 import com.google.gerrit.client.changes.CommentInfo;
@@ -71,5 +72,72 @@ class FileComments extends Composite {
 
   private static String url(PatchSet.Id ps, CommentInfo info) {
     return Dispatcher.toSideBySide(null, ps, info.path());
+=======
+import com.google.gerrit.client.Gerrit;
+import com.google.gerrit.client.changes.CommentInfo;
+import com.google.gerrit.client.ui.CommentLinkProcessor;
+import com.google.gerrit.reviewdb.client.Change;
+import com.google.gerrit.reviewdb.client.PatchSet;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwtorm.client.KeyUtil;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+class FileComments extends Composite {
+  interface Binder extends UiBinder<HTMLPanel, FileComments> {}
+  private static final Binder uiBinder = GWT.create(Binder.class);
+
+  private final String url;
+  @UiField Anchor path;
+  @UiField FlowPanel comments;
+
+  FileComments(CommentLinkProcessor clp,
+      PatchSet.Id ps,
+      String title,
+      List<CommentInfo> list) {
+    initWidget(uiBinder.createAndBindUi(this));
+
+    url = url(ps, list.get(0));
+    path.setHref("#" + url);
+    path.setText(title);
+
+    Collections.sort(list, new Comparator<CommentInfo>() {
+      @Override
+      public int compare(CommentInfo a, CommentInfo b) {
+        return a.line() - b.line();
+      }
+    });
+    for (CommentInfo c : list) {
+      comments.add(new LineComment(clp, c));
+    }
+  }
+
+  @UiHandler("path")
+  void onClick(ClickEvent e) {
+    e.preventDefault();
+    e.stopPropagation();
+    Gerrit.display(url);
+  }
+
+  private static String url(PatchSet.Id ps, CommentInfo info) {
+    // TODO(sop): Switch to Dispatcher.toPatchSideBySide.
+    Change.Id c = ps.getParentKey();
+    return new StringBuilder()
+      .append("/c/").append(c.get()).append('/')
+      .append(ps.get()).append('/')
+      .append(KeyUtil.encode(info.path()))
+      .append(",cm")
+      .toString();
+>>>>>>> BRANCH (a310bb SideBySide2: Draw a line under the file header when "fullscr)
   }
 }

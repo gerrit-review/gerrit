@@ -154,7 +154,10 @@ public class ChangeScreen2 extends Screen {
   @UiField CommitBox commit;
   @UiField RelatedChanges related;
   @UiField FileTable files;
+<<<<<<< HEAD   (2d6c1e Fix build failure caused by missing 'gerrit-plugin-gwtui:cli)
   @UiField ListBox diffBase;
+=======
+>>>>>>> BRANCH (a310bb SideBySide2: Draw a line under the file header when "fullscr)
   @UiField History history;
 
   @UiField Button includedIn;
@@ -749,7 +752,10 @@ public class ChangeScreen2 extends Screen {
     renderCommitSubject(info);
     renderOwner(info);
     renderActionTextDate(info);
+<<<<<<< HEAD   (2d6c1e Fix build failure caused by missing 'gerrit-plugin-gwtui:cli)
     renderDiffBaseListBox(info);
+=======
+>>>>>>> BRANCH (a310bb SideBySide2: Draw a line under the file header when "fullscr)
     initIncludedInAction(info);
     initRevisionsAction(info, revision);
     initDownloadAction(info, revision);
@@ -765,6 +771,7 @@ public class ChangeScreen2 extends Screen {
     related.set(info, revision);
     reviewers.set(info);
     quickApprove.set(info, revision);
+    history.set(commentLinkProcessor, changeId, info);
 
     if (Gerrit.isSignedIn()) {
       initEditMessageAction(info, revision);
@@ -829,6 +836,7 @@ public class ChangeScreen2 extends Screen {
     }
     actionText.setInnerText(action);
     actionDate.setInnerText(FormatUtil.relativeFormat(info.updated()));
+<<<<<<< HEAD   (2d6c1e Fix build failure caused by missing 'gerrit-plugin-gwtui:cli)
   }
 
   private void renderDiffBaseListBox(ChangeInfo info) {
@@ -856,6 +864,8 @@ public class ChangeScreen2 extends Screen {
       "");
 
     diffBase.setSelectedIndex(selectedIdx);
+=======
+>>>>>>> BRANCH (a310bb SideBySide2: Draw a line under the file header when "fullscr)
   }
 
   void showUpdates(ChangeInfo newInfo) {

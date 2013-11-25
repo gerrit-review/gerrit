@@ -65,7 +65,10 @@ class Message extends Composite {
   private final History history;
   private final MessageInfo info;
   private List<CommentInfo> commentList;
+<<<<<<< HEAD   (2d6c1e Fix build failure caused by missing 'gerrit-plugin-gwtui:cli)
   private boolean autoOpen;
+=======
+>>>>>>> BRANCH (a310bb SideBySide2: Draw a line under the file header when "fullscr)
 
   @UiField(provided = true)
   AvatarImage avatar;
@@ -96,11 +99,15 @@ class Message extends Composite {
       summary.setInnerText(msg);
       message.setInnerSafeHtml(history.getCommentLinkProcessor()
         .apply(new SafeHtmlBuilder().append(msg).wikify()));
+<<<<<<< HEAD   (2d6c1e Fix build failure caused by missing 'gerrit-plugin-gwtui:cli)
     } else {
       reply.getElement().getStyle().setVisibility(Visibility.HIDDEN);
+=======
+>>>>>>> BRANCH (a310bb SideBySide2: Draw a line under the file header when "fullscr)
     }
   }
 
+<<<<<<< HEAD   (2d6c1e Fix build failure caused by missing 'gerrit-plugin-gwtui:cli)
   @UiHandler("reply")
   void onReply(ClickEvent e) {
     e.stopPropagation();
@@ -112,6 +119,8 @@ class Message extends Composite {
     }
   }
 
+=======
+>>>>>>> BRANCH (a310bb SideBySide2: Draw a line under the file header when "fullscr)
   MessageInfo getMessageInfo() {
     return info;
   }
@@ -140,6 +149,7 @@ class Message extends Composite {
     }
   }
 
+<<<<<<< HEAD   (2d6c1e Fix build failure caused by missing 'gerrit-plugin-gwtui:cli)
   void autoOpen() {
     if (commentList == null) {
       autoOpen = true;
@@ -159,6 +169,15 @@ class Message extends Composite {
       if (autoOpen && !commentList.isEmpty()) {
         setOpen(true);
       }
+=======
+  void addComments(List<CommentInfo> list) {
+    if (isOpen()) {
+      renderComments(list);
+      comments.setVisible(comments.getWidgetCount() > 0);
+      commentList = Collections.emptyList();
+    } else {
+      commentList = list;
+>>>>>>> BRANCH (a310bb SideBySide2: Draw a line under the file header when "fullscr)
     }
   }
 

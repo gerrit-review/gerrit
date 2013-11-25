@@ -40,6 +40,7 @@ import java.util.Set;
 
 class History extends FlowPanel {
   private CommentLinkProcessor clp;
+<<<<<<< HEAD   (2d6c1e Fix build failure caused by missing 'gerrit-plugin-gwtui:cli)
   private ReplyAction replyAction;
   private Change.Id changeId;
 
@@ -151,6 +152,73 @@ class History extends FlowPanel {
           active--;
         }
       });
+=======
+  private Change.Id changeId;
+
+  private final Set<Integer> loaded = new HashSet<Integer>();
+  private final Map<AuthorRevision, List<CommentInfo>> byAuthor =
+      new HashMap<AuthorRevision, List<CommentInfo>>();
+
+  void set(CommentLinkProcessor clp, Change.Id id, ChangeInfo info) {
+    this.clp = clp;
+    this.changeId = id;
+
+    JsArray<MessageInfo> messages = info.messages();
+    if (messages != null) {
+      for (MessageInfo msg : Natives.asList(messages)) {
+        Message ui = new Message(this, msg);
+        if (loaded.contains(msg._revisionNumber())) {
+          ui.addComments(comments(msg));
+        }
+        add(ui);
+      }
+    }
+  }
+
+  CommentLinkProcessor getCommentLinkProcessor() {
+    return clp;
+  }
+
+  Change.Id getChangeId() {
+    return changeId;
+  }
+
+  void addComments(int id, NativeMap<JsArray<CommentInfo>> map) {
+    loaded.add(id);
+
+    for (String path : map.keySet()) {
+      for (CommentInfo c : Natives.asList(map.get(path))) {
+        c.setPath(path);
+        if (c.author() != null) {
+          AuthorRevision k = new AuthorRevision(c.author(), id);
+          List<CommentInfo> l = byAuthor.get(k);
+          if (l == null) {
+            l = new ArrayList<CommentInfo>();
+            byAuthor.put(k, l);
+          }
+          l.add(c);
+        }
+      }
+    }
+  }
+
+  void load(final int revisionNumber) {
+    if (revisionNumber > 0 && loaded.add(revisionNumber)) {
+      ChangeApi.revision(new PatchSet.Id(changeId, revisionNumber))
+        .view("comments")
+        .get(new AsyncCallback<NativeMap<JsArray<CommentInfo>>>() {
+          @Override
+          public void onSuccess(NativeMap<JsArray<CommentInfo>> result) {
+            addComments(revisionNumber, result);
+            update(revisionNumber);
+          }
+
+          @Override
+          public void onFailure(Throwable caught) {
+          }
+        });
+    }
+>>>>>>> BRANCH (a310bb SideBySide2: Draw a line under the file header when "fullscr)
   }
 
   private void update(int revisionNumber) {
