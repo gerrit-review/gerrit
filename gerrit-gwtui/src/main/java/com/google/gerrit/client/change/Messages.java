@@ -15,6 +15,7 @@
 package com.google.gerrit.client.change;
 
 public interface Messages extends com.google.gwt.i18n.client.Messages {
+<<<<<<< HEAD   (abce5a Merge branch 'stable-2.8')
   String revisions(int currentlyViewedPatchSet, int currentPatchSet);
   String changeWithNoRevisions(int changeId);
   String relatedChanges(int count);
@@ -25,4 +26,7 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
   String cherryPicks(String count);
   String sameTopic(int count);
   String sameTopic(String count);
+=======
+  String changeWithNoRevisions(int changeId);
+>>>>>>> BRANCH (630e28 Fix build errors)
 }
