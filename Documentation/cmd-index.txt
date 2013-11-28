@@ -51,12 +51,15 @@ see link:user-upload.html#test_ssh[Testing Your SSH Connection].
 [[user_commands]]User Commands
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+<<<<<<< HEAD   (261f03 Merge "Trim the Dispatcher.patch()")
 link:cmd-apropos.html[gerrit apropos]::
 	Search Gerrit documentation index.
 
 'gerrit approve'::
 	'Deprecated alias for `gerrit review`.'
 
+=======
+>>>>>>> BRANCH (737f3f Update the 2.8 release notes with recently merged changes)
 link:cmd-ban-commit.html[gerrit ban-commit]::
 	Bans a commit from a project's repository.
 
