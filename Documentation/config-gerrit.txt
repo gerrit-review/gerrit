@@ -1854,10 +1854,17 @@ A link:http://lucene.apache.org/[Lucene] index is used.
 A link:http://lucene.apache.org/solr/[Solr] index is used.
 
 +
+<<<<<<< HEAD   (3fb08a Merge branch 'stable-2.8')
 By default, `LUCENE`.
 +
 After changing the secondary index type, the index must be rebuilt
 using the link:pgm-reindex.html[reindex program] before restarting the
+=======
+By default, `SQL`.
+
+After enabling the secondary index, the index must be built using
+the link:pgm-reindex.html[reindex program] before restarting the
+>>>>>>> BRANCH (63d673 Update cloud storage console URL in artifact deployment inst)
 Gerrit server.
 
 [[ldap]]Section ldap

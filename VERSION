@@ -2,4 +2,8 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (3fb08a Merge branch 'stable-2.8')
 GERRIT_VERSION = '2.9-SNAPSHOT'
+=======
+GERRIT_VERSION = '2.8'
+>>>>>>> BRANCH (63d673 Update cloud storage console URL in artifact deployment inst)
