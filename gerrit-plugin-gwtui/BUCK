@@ -1,4 +1,5 @@
 SRC = 'src/main/java/com/google/gerrit/'
+<<<<<<< HEAD   (aba0f4 Merge "SideBySide2: Scroll to first diff chunk when opening )
 SRCS = glob([SRC + '**/*.java'])
 
 DEPS = [
@@ -28,5 +29,24 @@ java_doc(
   paths = ['$SRCDIR/src/main/java'],
   srcs = SRCS,
   deps = DEPS,
+=======
+
+gwt_module(
+  name = 'client',
+  srcs = glob([SRC + '**/*.java']),
+  gwtxml = SRC + 'Plugin.gwt.xml',
+  resources = glob(['src/main/resources/**/*']),
+  deps = [
+    '//lib/gwt:user',
+    '//lib/gwt:dev',
+  ],
+  visibility = ['PUBLIC'],
+)
+
+java_library(
+  name = 'src',
+  srcs = [],
+  resources = glob(['src/main/**/*']),
+>>>>>>> BRANCH (acc959 Buck: add build for gerrit-plugin-gwtui)
   visibility = ['PUBLIC'],
 )
