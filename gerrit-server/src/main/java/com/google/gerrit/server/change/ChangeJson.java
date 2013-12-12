@@ -985,6 +985,7 @@ public class ChangeJson {
   }
 
   public static class CommitInfo {
+<<<<<<< HEAD   (43e54b Mention gwtorm and gwtjsonrpc updates in 2.9 release notes)
     public final String kind = "gerritcodereview#commit";
     public String commit;
     public List<CommitInfo> parents;
@@ -992,6 +993,15 @@ public class ChangeJson {
     public GitPerson committer;
     public String subject;
     public String message;
+=======
+    final String kind = "gerritcodereview#commit";
+    String commit;
+    List<CommitInfo> parents;
+    GitPerson author;
+    GitPerson committer;
+    String subject;
+    String message;
+>>>>>>> BRANCH (e2b922 Don't include the same change twice in GetRelated.)
   }
 
   public static class LabelInfo {
