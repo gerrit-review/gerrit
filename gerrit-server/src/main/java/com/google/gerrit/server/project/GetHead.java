@@ -63,11 +63,23 @@ public class GetHead implements RestReadView<ProjectResource> {
             return head.getObjectId().name();
           }
           throw new AuthException();
+<<<<<<< HEAD   (0623c5 Correct --recheck-mergeable flag in 2.9 release notes)
         } catch (MissingObjectException | IncorrectObjectTypeException e) {
           if (rsrc.getControl().isOwner()) {
             return head.getObjectId().name();
           }
           throw new AuthException();
+=======
+        } catch (MissingObjectException e) {
+          if (rsrc.getControl().isOwner()) {
+            return head.getObjectId().name();
+          }
+          throw new AuthException();
+        } catch (IncorrectObjectTypeException e) {
+          if (rsrc.getControl().isOwner()) {
+            return head.getObjectId().name();
+          }
+>>>>>>> BRANCH (0adf27 Correct description of revisions field in ChangeInfo)
         } finally {
           rw.release();
         }
