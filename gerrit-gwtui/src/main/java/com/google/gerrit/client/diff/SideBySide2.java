@@ -300,6 +300,7 @@ public class SideBySide2 extends Screen {
     cm.on("gutterClick", onGutterClick(cm));
     cm.on("focus", updateActiveLine(cm));
     cm.addKeyMap(KeyMap.create()
+<<<<<<< HEAD   (8905dd Remove unused imports in acceptance tests)
         .on("'a'", upToChange(true))
         .on("'u'", upToChange(false))
         .on("[", header.navigate(Direction.PREV))
@@ -317,6 +318,15 @@ public class SideBySide2 extends Screen {
         .on("Shift-Left", moveCursorToSide(cm, DisplaySide.A))
         .on("Shift-Right", moveCursorToSide(cm, DisplaySide.B))
         .on("'i'", new Runnable() {
+=======
+        .on("A", upToChange(true))
+        .on("U", upToChange(false))
+        .on("R", toggleReviewed())
+        .on("O", toggleOpenBox(cm))
+        .on("Enter", toggleOpenBox(cm))
+        .on("C", insertNewDraft(cm))
+        .on("Alt-U", new Runnable() {
+>>>>>>> BRANCH (527200 SideBySide2: Fix copy in Firefox and Safari)
           public void run() {
             switch (getIntraLineStatus()) {
               case OFF:
