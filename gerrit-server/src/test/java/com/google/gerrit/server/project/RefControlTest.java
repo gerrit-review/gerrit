@@ -141,7 +141,35 @@ public class RefControlTest {
         u.controlForRef("refs/heads/foobar").canUpload());
   }
 
+<<<<<<< HEAD   (c6f745 Merge "Apply "type inference for generic instance creation" )
   @Test
+=======
+  public void testBlockPushDrafts() {
+    grant(util.getParentConfig(), PUSH, REGISTERED, "refs/for/refs/*");
+    grant(util.getParentConfig(), PUSH, ANONYMOUS, "refs/drafts/*")
+        .setBlock();
+
+    ProjectControl u = util.user(local);
+    assertTrue("can upload refs/heads/master",
+        u.controlForRef("refs/heads/master").canUpload());
+    assertTrue("push is blocked to refs/drafts/master",
+        u.controlForRef("refs/drafts/refs/heads/master").isBlocked(PUSH));
+  }
+
+  public void testBlockPushDraftsUnblockAdmin() {
+    grant(util.getParentConfig(), PUSH, ANONYMOUS, "refs/drafts/*")
+        .setBlock();
+    grant(util.getParentConfig(), PUSH, ADMIN, "refs/drafts/*");
+
+    assertTrue("push is blocked for anonymous to refs/drafts/master",
+        util.user(local).controlForRef("refs/drafts/refs/heads/master")
+            .isBlocked(PUSH));
+    assertFalse("push is blocked for admin refs/drafts/master",
+        util.user(local, "a", ADMIN).controlForRef("refs/drafts/refs/heads/master")
+            .isBlocked(PUSH));
+  }
+
+>>>>>>> BRANCH (28b367 Merge changes I236a2969,I1c94aade,I448d9591 into stable-2.8)
   public void testInheritRead_SingleBranchDoesNotOverrideInherited() {
     grant(util.getParentConfig(), READ, REGISTERED_USERS, "refs/*");
     grant(util.getParentConfig(), PUSH, REGISTERED_USERS, "refs/for/refs/*");

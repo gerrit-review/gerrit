@@ -1,8 +1,13 @@
 include_defs('//gerrit-acceptance-tests/tests.defs')
 
 acceptance_tests(
+<<<<<<< HEAD   (c6f745 Merge "Apply "type inference for generic instance creation" )
   srcs = ['SubmitOnPushIT.java'],
   deps = ['//gerrit-acceptance-tests:lib'],
+=======
+  srcs = ['DraftChangeBlockedIT.java', 'SubmitOnPushIT.java'],
+  deps = [':util'],
+>>>>>>> BRANCH (28b367 Merge changes I236a2969,I1c94aade,I448d9591 into stable-2.8)
 )
 
 acceptance_tests(
