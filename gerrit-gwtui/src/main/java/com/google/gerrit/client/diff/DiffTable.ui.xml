@@ -29,6 +29,7 @@ limitations under the License.
       border-bottom: 1px solid #ddd;
     }
 
+<<<<<<< HEAD   (d36f7c Merge "Refactor the way of binding ssh commands")
     .difftable {
       -webkit-touch-callout: none;
       -webkit-user-select: none;
@@ -36,6 +37,8 @@ limitations under the License.
       -moz-user-select: none;
       -ms-user-select: none;
     }
+=======
+>>>>>>> BRANCH (4ff2f2 Update 2.8.2 release notes with recently merged changes)
     .difftable .CodeMirror-lines { padding: 0; }
     .difftable .CodeMirror pre {
       padding: 0;
@@ -116,6 +119,7 @@ limitations under the License.
       text-decoration: underline;
       z-index: 2;
     }
+<<<<<<< HEAD   (d36f7c Merge "Refactor the way of binding ssh commands")
     .difftable .CodeMirror-dialog-bottom {
       border-top: 0;
       border-left: 1px solid #000;
@@ -127,6 +131,9 @@ limitations under the License.
       left: auto;
     }
     .showTabs .cm-tab:before {
+=======
+    .showtabs .cm-tab:before {
+>>>>>>> BRANCH (4ff2f2 Update 2.8.2 release notes with recently merged changes)
       position: absolute;
       content: "\00bb";
       color: #f00;

@@ -159,6 +159,13 @@ limitations under the License.
       vertical-align: top;
       text-align: left;
       padding: 0 5px 0 0;
+<<<<<<< HEAD   (d36f7c Merge "Refactor the way of binding ssh commands")
+=======
+    }
+
+    .clippy div {
+      float: right;
+>>>>>>> BRANCH (4ff2f2 Update 2.8.2 release notes with recently merged changes)
     }
 
     .queryProject {
