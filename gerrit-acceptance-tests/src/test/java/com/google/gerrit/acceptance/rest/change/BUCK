@@ -1,5 +1,6 @@
 include_defs('//gerrit-acceptance-tests/tests.defs')
 
+<<<<<<< HEAD   (5cc069 Update replication plugin)
 SUBMIT_UTIL_SRCS = [
   'AbstractSubmit.java',
   'AbstractSubmitByMerge.java',
@@ -7,6 +8,16 @@ SUBMIT_UTIL_SRCS = [
 
 SUBMIT_TESTS = glob(['Submit*IT.java'], excludes = SUBMIT_UTIL_SRCS)
 OTHER_TESTS = glob(['*IT.java'], excludes = SUBMIT_TESTS + SUBMIT_UTIL_SRCS)
+=======
+acceptance_tests(
+  srcs = ['CustomLabelIT.java', 'ChangeMessagesIT.java',
+          'DeleteDraftChangeIT.java', 'DeleteDraftPatchSetIT.java'],
+  deps = [
+    ':util',
+    '//gerrit-acceptance-tests/src/test/java/com/google/gerrit/acceptance/git:util',
+  ],
+)
+>>>>>>> BRANCH (68c530 Update replication plugin)
 
 acceptance_tests(
   srcs = OTHER_TESTS,
@@ -27,6 +38,11 @@ java_library(
   name = 'submit_util',
   srcs = SUBMIT_UTIL_SRCS,
   deps = [
+<<<<<<< HEAD   (5cc069 Update replication plugin)
+=======
+    '//lib:guava',
+    '//gerrit-reviewdb:server',
+>>>>>>> BRANCH (68c530 Update replication plugin)
     '//gerrit-acceptance-tests:lib',
   ],
 )
