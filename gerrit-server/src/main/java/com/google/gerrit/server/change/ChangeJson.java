@@ -983,6 +983,55 @@ public class ChangeJson {
     }
   }
 
+<<<<<<< HEAD   (1fa3ca Add submit rule evaluation tests for custom labels)
+=======
+  static class RevisionInfo {
+    private transient boolean isCurrent;
+    Boolean draft;
+    Boolean hasDraftComments;
+    int _number;
+    Map<String, FetchInfo> fetch;
+    CommitInfo commit;
+    Map<String, FileInfoJson.FileInfo> files;
+    Map<String, ActionInfo> actions;
+  }
+
+  static class FetchInfo {
+    String url;
+    String ref;
+    Map<String, String> commands;
+
+    FetchInfo(String url, String ref) {
+      this.url = url;
+      this.ref = ref;
+    }
+
+    void addCommand(String name, String command) {
+      if (commands == null) {
+        commands = Maps.newTreeMap();
+      }
+      commands.put(name, command);
+    }
+  }
+
+  static class GitPerson {
+    String name;
+    String email;
+    Timestamp date;
+    int tz;
+  }
+
+  public static class CommitInfo {
+    final String kind = "gerritcodereview#commit";
+    String commit;
+    List<CommitInfo> parents;
+    GitPerson author;
+    GitPerson committer;
+    String subject;
+    String message;
+  }
+
+>>>>>>> BRANCH (68c530 Update replication plugin)
   public static class LabelInfo {
     transient SubmitRecord.Label.Status _status;
 
