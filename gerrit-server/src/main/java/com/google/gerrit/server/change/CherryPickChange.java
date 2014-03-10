@@ -244,23 +244,37 @@ public class CherryPickChange {
           change.getDest().getParentKey().get(), ru.getResult()));
     }
 
-    ins.setMessage(buildChangeMessage(patchSetId, change)).insert();
+    ins.setMessage(buildChangeMessage(patchSetId, change, cherryPickCommit))
+        .insert();
 
     return change.getId();
   }
 
-  private ChangeMessage buildChangeMessage(PatchSet.Id patchSetId, Change dest)
-      throws OrmException {
+  private ChangeMessage buildChangeMessage(PatchSet.Id patchSetId, Change dest,
+      RevCommit cherryPickCommit) throws OrmException {
     ChangeMessage cmsg = new ChangeMessage(
         new ChangeMessage.Key(
             patchSetId.getParentKey(), ChangeUtil.messageUUID(db)),
         currentUser.getAccountId(), TimeUtil.nowTs(), patchSetId);
+<<<<<<< HEAD   (29e328 Protect reload plugin command with allow remote admin option)
     StringBuilder msgBuf = new StringBuilder();
     msgBuf.append("Patch Set ").append(patchSetId.get())
           .append(": Cherry Picked");
     msgBuf.append("\n\n");
     msgBuf.append("This patchset was cherry picked to change: ")
           .append(dest.getKey().get());
+=======
+    String destBranchName = dest.getDest().get();
+    StringBuilder msgBuf = new StringBuilder("Patch Set ")
+        .append(patchSetId.get())
+        .append(": Cherry Picked")
+        .append("\n\n")
+        .append("This patchset was cherry picked to branch ")
+        .append(destBranchName.substring(
+            destBranchName.indexOf("refs/heads/") + "refs/heads/".length()))
+        .append(" as commit ")
+        .append(cherryPickCommit.getId().getName());
+>>>>>>> BRANCH (f67d09 Update 2.8.2 release notes)
     cmsg.setMessage(msgBuf.toString());
     return cmsg;
   }
