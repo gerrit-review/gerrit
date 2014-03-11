@@ -333,6 +333,7 @@ public class PostReview implements RestModifyView<RevisionResource, ReviewInput>
         e.setWrittenOn(timestamp);
         e.setSide(c.side == Side.PARENT ? (short) 0 : (short) 1);
         e.setMessage(c.message);
+<<<<<<< HEAD   (2b29b4 Remove unused import in EditIteratorTest)
         if (c.range != null) {
           e.setRange(new CommentRange(
               c.range.startLine,
@@ -340,6 +341,9 @@ public class PostReview implements RestModifyView<RevisionResource, ReviewInput>
               c.range.endLine,
               c.range.endCharacter));
         }
+=======
+        e.setRange(c.range);
+>>>>>>> BRANCH (2115a6 Update 2.8.2 release notes)
         ups.add(e);
       }
     }
@@ -409,8 +413,14 @@ public class PostReview implements RestModifyView<RevisionResource, ReviewInput>
       } else if (c != null && c.getValue() != ent.getValue()) {
         c.setValue(ent.getValue());
         c.setGranted(timestamp);
+<<<<<<< HEAD   (2b29b4 Remove unused import in EditIteratorTest)
         ups.add(c);
         addLabelDelta(normName, c.getValue());
+=======
+        c.cache(change);
+        ups.add(c);
+        labelDelta.add(format(normName, c.getValue()));
+>>>>>>> BRANCH (2115a6 Update 2.8.2 release notes)
         categories.put(normName, c.getValue());
         update.putApproval(ent.getKey(), ent.getValue());
       } else if (c != null && c.getValue() == ent.getValue()) {
@@ -422,8 +432,14 @@ public class PostReview implements RestModifyView<RevisionResource, ReviewInput>
                 lt.getLabelId()),
             ent.getValue(), TimeUtil.nowTs());
         c.setGranted(timestamp);
+<<<<<<< HEAD   (2b29b4 Remove unused import in EditIteratorTest)
         ups.add(c);
         addLabelDelta(normName, c.getValue());
+=======
+        c.cache(change);
+        ups.add(c);
+        labelDelta.add(format(normName, c.getValue()));
+>>>>>>> BRANCH (2115a6 Update 2.8.2 release notes)
         categories.put(normName, c.getValue());
         update.putApproval(ent.getKey(), ent.getValue());
       }
@@ -450,6 +466,10 @@ public class PostReview implements RestModifyView<RevisionResource, ReviewInput>
                 .getLabelId()),
             (short) 0, TimeUtil.nowTs());
         c.setGranted(timestamp);
+<<<<<<< HEAD   (2b29b4 Remove unused import in EditIteratorTest)
+=======
+        c.cache(change);
+>>>>>>> BRANCH (2115a6 Update 2.8.2 release notes)
         ups.add(c);
       } else {
         // Pick a random label that is about to be deleted and keep it.

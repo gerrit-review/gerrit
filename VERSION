@@ -2,5 +2,9 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (2b29b4 Remove unused import in EditIteratorTest)
 GERRIT_VERSION = '2.9-SNAPSHOT'
 
+=======
+GERRIT_VERSION = '2.8.2'
+>>>>>>> BRANCH (2115a6 Update 2.8.2 release notes)

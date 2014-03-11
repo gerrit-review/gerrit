@@ -17,7 +17,10 @@ package com.google.gerrit.server.git;
 import static com.google.gerrit.reviewdb.client.RefNames.REFS_CHANGES;
 import static com.google.gerrit.server.git.MultiProgressMonitor.UNKNOWN;
 import static com.google.gerrit.server.mail.MailUtil.getRecipientsFromFooters;
+<<<<<<< HEAD   (2b29b4 Remove unused import in EditIteratorTest)
 import static com.google.gerrit.server.mail.MailUtil.getRecipientsFromReviewers;
+=======
+>>>>>>> BRANCH (2115a6 Update 2.8.2 release notes)
 import static org.eclipse.jgit.lib.Constants.R_HEADS;
 import static org.eclipse.jgit.lib.RefDatabase.ALL;
 import static org.eclipse.jgit.transport.ReceiveCommand.Result.NOT_ATTEMPTED;
@@ -1780,7 +1783,11 @@ public class ReceiveCommits {
       if (newCommit == priorCommit) {
         // Ignore requests to make the change its current state.
         skip = true;
+<<<<<<< HEAD   (2b29b4 Remove unused import in EditIteratorTest)
         reject(inputCommand, "commit already exists");
+=======
+        reject(inputCommand, "commit already exists (as current patchset)");
+>>>>>>> BRANCH (2115a6 Update 2.8.2 release notes)
         return false;
       }
 
@@ -1792,8 +1799,16 @@ public class ReceiveCommits {
         reject(inputCommand, "change " + ontoChange + " closed");
         return false;
       } else if (revisions.containsKey(newCommit)) {
-        reject(inputCommand, "commit already exists");
+        reject(inputCommand, "commit already exists (in the change)");
         return false;
+      }
+
+      for (final Ref r : rp.getRepository().getRefDatabase()
+          .getRefs("refs/changes").values()) {
+        if (r.getObjectId().equals(inputCommand.getNewId())) {
+          reject(inputCommand, "commit already exists (in the project)");
+          return false;
+        }
       }
 
       for (RevCommit prior : revisions.keySet()) {
