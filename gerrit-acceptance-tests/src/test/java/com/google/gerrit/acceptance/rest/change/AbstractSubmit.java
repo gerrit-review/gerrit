@@ -22,7 +22,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
+<<<<<<< HEAD   (9e6945 Handle absolute URLs in the TopLevel menu.)
 import com.google.common.collect.Iterables;
+=======
+import com.google.common.collect.Lists;
+>>>>>>> BRANCH (7d3ee8 Fix Merge Always and Merge If Necessary strategies)
 import com.google.gerrit.acceptance.AbstractDaemonTest;
 import com.google.gerrit.acceptance.GitUtil;
 import com.google.gerrit.acceptance.PushOneCommit;
@@ -31,7 +35,10 @@ import com.google.gerrit.acceptance.SshSession;
 import com.google.gerrit.extensions.api.changes.ReviewInput;
 import com.google.gerrit.extensions.api.changes.SubmitInput;
 import com.google.gerrit.reviewdb.client.Change;
+<<<<<<< HEAD   (9e6945 Handle absolute URLs in the TopLevel menu.)
 import com.google.gerrit.reviewdb.client.PatchSet;
+=======
+>>>>>>> BRANCH (7d3ee8 Fix Merge Always and Merge If Necessary strategies)
 import com.google.gerrit.reviewdb.client.PatchSetApproval;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.client.Project.InheritableBoolean;
@@ -44,6 +51,10 @@ import com.google.gerrit.server.notedb.ChangeNotes;
 import com.google.gerrit.server.project.PutConfig;
 import com.google.gson.reflect.TypeToken;
 import com.google.gwtorm.server.OrmException;
+<<<<<<< HEAD   (9e6945 Handle absolute URLs in the TopLevel menu.)
+=======
+import com.google.gwtorm.server.SchemaFactory;
+>>>>>>> BRANCH (7d3ee8 Fix Merge Always and Merge If Necessary strategies)
 import com.google.inject.Inject;
 
 import com.jcraft.jsch.JSchException;
@@ -62,6 +73,9 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class AbstractSubmit extends AbstractDaemonTest {
 
@@ -153,6 +167,22 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
     submit(changeId, HttpStatus.SC_CONFLICT);
   }
 
+  protected void submitStatusOnly(String changeId)
+      throws IOException, OrmException {
+    approve(changeId);
+    Change c = db.changes().byKey(new Change.Key(changeId)).toList().get(0);
+    c.setStatus(Change.Status.SUBMITTED);
+    db.changes().update(Collections.singleton(c));
+    db.patchSetApprovals().insert(Collections.singleton(
+        new PatchSetApproval(
+            new PatchSetApproval.Key(
+                c.currentPatchSetId(),
+                admin.id,
+                PatchSetApproval.LabelId.SUBMIT),
+            (short) 1,
+            new Timestamp(System.currentTimeMillis()))));
+  }
+
   private void submit(String changeId, int expectedStatus) throws IOException {
     approve(changeId);
     SubmitInput subm = new SubmitInput();
@@ -231,6 +261,22 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
     Repository repo = repoManager.openRepository(project);
     try {
       return getHead(repo, "refs/heads/master");
+    } finally {
+      repo.close();
+    }
+  }
+
+  protected List<RevCommit> getRemoteLog() throws IOException {
+    Repository repo = repoManager.openRepository(project);
+    try {
+      RevWalk rw = new RevWalk(repo);
+      try {
+        rw.markStart(rw.parseCommit(
+            repo.getRef("refs/heads/master").getObjectId()));
+        return Lists.newArrayList(rw);
+      } finally {
+        rw.release();
+      }
     } finally {
       repo.close();
     }
