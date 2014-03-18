@@ -1878,6 +1878,13 @@ bundled with the .war will be used instead.
 
 The index section configures the secondary index.
 
+Note that after enabling the secondary index, the index must be built
+using the link:pgm-reindex.html[reindex program] before restarting the
+Gerrit server.
+
+Open and closed changes are indexed in separate indexes named
+'changes_open' and 'changes_closed' respectively.
+
 [[index.type]]index.type::
 +
 Type of secondary indexing employed by Gerrit.  The supported
@@ -1893,6 +1900,7 @@ A link:https://cwiki.apache.org/confluence/display/solr/SolrCloud[
 SolrCloud] index is used.
 
 +
+<<<<<<< HEAD   (79c4d8 Plugin documentation: Linkify multiple and root SSH commands)
 By default, `LUCENE`.
 +
 After changing the secondary index type, the index must be rebuilt
@@ -1907,6 +1915,15 @@ Open and closed changes are indexed in separate indexes named
 Only used when the type is `SOLR`.
 +
 URL of the index server.
+=======
+By default, `SQL`.
+
+[[index.threads]]index.threads::
++
+Determines the number of threads to use for indexing.
++
+Defaults to 1 if not set, or set to a negative value.
+>>>>>>> BRANCH (904db3 Add documentation of the index.threads setting)
 
 [[index.name.ramBufferSize]]index.name.ramBufferSize::
 +
