@@ -41,8 +41,12 @@ import javax.inject.Inject;
 /**
  * Implements a command that allows the user to see the members of a group.
  */
+<<<<<<< HEAD   (6ea964 Split mergeability checks by priority)
 @CommandMetaData(name = "ls-members", description = "Lists the members of a given group",
   runsAt = MASTER_OR_SLAVE)
+=======
+@CommandMetaData(name = "ls-members", description = "List the members of a given group")
+>>>>>>> BRANCH (701218 Emit ref-updated event when editing project access via web U)
 public class ListMembersCommand extends BaseCommand {
   @Inject
   ListMembersCommandImpl impl;

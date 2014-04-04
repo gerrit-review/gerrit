@@ -787,6 +787,11 @@ public class ChangeScreen2 extends Screen {
     commit.set(commentLinkProcessor, info, revision);
     related.set(info, revision);
     reviewers.set(info);
+<<<<<<< HEAD   (6ea964 Split mergeability checks by priority)
+=======
+    quickApprove.set(info, revision);
+    history.set(commentLinkProcessor, changeId, info, expandAll, collapseAll);
+>>>>>>> BRANCH (701218 Emit ref-updated event when editing project access via web U)
 
     if (Gerrit.isSignedIn()) {
       initEditMessageAction(info, revision);
