@@ -26,8 +26,19 @@ genrule(
 gwt_application(
   name = 'ui_opt',
   module_target = MODULE,
+<<<<<<< HEAD   (6ea964 Split mergeability checks by priority)
   compiler_opts = GWT_COMPILER_OPTS,
   deps = APP_DEPS,
+=======
+  compiler_opts = [
+    '-strict',
+    '-style', 'OBF',
+    '-optimize', '9',
+    '-XdisableClassMetadata',
+    '-XdisableCastChecking',
+  ],
+  deps = APP_DEPS + [':ui_dbg'],
+>>>>>>> BRANCH (701218 Emit ref-updated event when editing project access via web U)
 )
 
 gwt_application(
