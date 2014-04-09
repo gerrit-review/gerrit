@@ -14,12 +14,19 @@
 
 package com.google.gerrit.httpd.rpc.project;
 
+import com.google.gerrit.common.ChangeHooks;
 import com.google.gerrit.common.Nullable;
 import com.google.gerrit.common.data.AccessSection;
 import com.google.gerrit.common.data.ProjectAccess;
+import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.reviewdb.client.Project;
+import com.google.gerrit.server.IdentifiedUser;
 import com.google.gerrit.server.account.GroupBackend;
+<<<<<<< HEAD   (6ea964 Split mergeability checks by priority)
 import com.google.gerrit.server.config.AllProjectsNameProvider;
+=======
+import com.google.gerrit.server.git.GitRepositoryManager;
+>>>>>>> BRANCH (701218 Emit ref-updated event when editing project access via web U)
 import com.google.gerrit.server.git.MetaDataUpdate;
 import com.google.gerrit.server.git.ProjectConfig;
 import com.google.gerrit.server.project.NoSuchProjectException;
@@ -32,6 +39,7 @@ import com.google.inject.assistedinject.Assisted;
 
 import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.revwalk.RevCommit;
 
 import java.io.IOException;
 import java.util.List;
@@ -46,16 +54,26 @@ class ChangeProjectAccess extends ProjectAccessHandler<ProjectAccess> {
         @Nullable @Assisted String message);
   }
 
+  private final ChangeHooks hooks;
+  private final IdentifiedUser user;
   private final ProjectAccessFactory.Factory projectAccessFactory;
   private final ProjectCache projectCache;
 
   @Inject
+<<<<<<< HEAD   (6ea964 Split mergeability checks by priority)
   ChangeProjectAccess(ProjectAccessFactory.Factory projectAccessFactory,
       ProjectControl.Factory projectControlFactory,
       ProjectCache projectCache, GroupBackend groupBackend,
       MetaDataUpdate.User metaDataUpdateFactory,
       AllProjectsNameProvider allProjects,
       Provider<SetParent> setParent,
+=======
+  ChangeProjectAccess(final ProjectAccessFactory.Factory projectAccessFactory,
+      final ProjectControl.Factory projectControlFactory,
+      final ProjectCache projectCache, final GroupBackend groupBackend,
+      final MetaDataUpdate.User metaDataUpdateFactory,
+      ChangeHooks hooks, IdentifiedUser user,
+>>>>>>> BRANCH (701218 Emit ref-updated event when editing project access via web U)
 
       @Assisted("projectName") Project.NameKey projectName,
       @Nullable @Assisted ObjectId base,
@@ -67,13 +85,25 @@ class ChangeProjectAccess extends ProjectAccessHandler<ProjectAccess> {
         parentProjectName, message, true);
     this.projectAccessFactory = projectAccessFactory;
     this.projectCache = projectCache;
+    this.hooks = hooks;
+    this.user = user;
   }
 
   @Override
   protected ProjectAccess updateProjectConfig(ProjectConfig config,
+<<<<<<< HEAD   (6ea964 Split mergeability checks by priority)
       MetaDataUpdate md, boolean parentProjectUpdate) throws IOException,
       NoSuchProjectException, ConfigInvalidException {
     config.commit(md);
+=======
+      MetaDataUpdate md) throws IOException, NoSuchProjectException, ConfigInvalidException {
+    RevCommit commit = config.commit(md);
+
+    hooks.doRefUpdatedHook(
+      new Branch.NameKey(config.getProject().getNameKey(), GitRepositoryManager.REF_CONFIG),
+      base, commit.getId(), user.getAccount());
+
+>>>>>>> BRANCH (701218 Emit ref-updated event when editing project access via web U)
     projectCache.evict(config.getProject());
     return projectAccessFactory.create(projectName).call();
   }

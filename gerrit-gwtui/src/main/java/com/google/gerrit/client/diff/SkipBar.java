@@ -109,14 +109,26 @@ class SkipBar extends Composite {
       }
     });
 
+<<<<<<< HEAD   (6ea964 Split mergeability checks by priority)
     int skipped = end - start + 1;
     if (skipped <= UP_DOWN_THRESHOLD) {
       addStyleName(style.noExpand());
     } else {
+=======
+  void setMarker(TextMarker marker, int length) {
+    this.marker = marker;
+    numSkipLines = length;
+    if (checkAndUpdateArrows()) {
+>>>>>>> BRANCH (701218 Emit ref-updated event when editing project access via web U)
       upArrow.setHTML(PatchUtil.M.expandBefore(NUM_ROWS_TO_EXPAND));
       downArrow.setHTML(PatchUtil.M.expandAfter(NUM_ROWS_TO_EXPAND));
     }
+<<<<<<< HEAD   (6ea964 Split mergeability checks by priority)
     skipNum.setText(Integer.toString(skipped));
+=======
+    skipNum.setText(PatchUtil.M.patchSkipRegion(Integer
+        .toString(length)));
+>>>>>>> BRANCH (701218 Emit ref-updated event when editing project access via web U)
   }
 
   static void link(SkipBar barA, SkipBar barB) {
@@ -124,6 +136,24 @@ class SkipBar extends Composite {
     barB.otherBar = barA;
   }
 
+<<<<<<< HEAD   (6ea964 Split mergeability checks by priority)
+=======
+  private void updateSkipNum() {
+    numSkipLines -= NUM_ROWS_TO_EXPAND;
+    skipNum.setText(PatchUtil.M.patchSkipRegion(Integer
+        .toString(numSkipLines)));
+    checkAndUpdateArrows();
+  }
+
+  private boolean checkAndUpdateArrows() {
+    if (numSkipLines <= UP_DOWN_THRESHOLD) {
+      addStyleName(style.noExpand());
+      return false;
+    }
+    return true;
+  }
+
+>>>>>>> BRANCH (701218 Emit ref-updated event when editing project access via web U)
   private void clearMarkerAndWidget() {
     textMarker.clear();
     lineWidget.clear();
