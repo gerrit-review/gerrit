@@ -112,8 +112,14 @@ class DownloadBox extends VerticalPanel {
         insertCommand(commandName, copyLabel);
       }
     }
+<<<<<<< HEAD   (6ea964 Split mergeability checks by priority)
     insertPatch();
     insertArchive();
+=======
+    if (change.revision(revision).commit().parents().length() == 1) {
+      insertPatch();
+    }
+>>>>>>> BRANCH (701218 Emit ref-updated event when editing project access via web U)
     insertCommand(null, scheme);
   }
 

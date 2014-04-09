@@ -2,5 +2,9 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (6ea964 Split mergeability checks by priority)
 GERRIT_VERSION = '2.9-SNAPSHOT'
 
+=======
+GERRIT_VERSION = '2.8.4'
+>>>>>>> BRANCH (701218 Emit ref-updated event when editing project access via web U)
