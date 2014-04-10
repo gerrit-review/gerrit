@@ -576,6 +576,7 @@ public class Dispatcher {
     }
   }
 
+<<<<<<< HEAD   (382070 Merge "Fix link behaviour inconsistencies in change info pan)
   private static void extension(final String token) {
     ExtensionScreen view = new ExtensionScreen(skip(token));
     if (view.isFound()) {
@@ -589,6 +590,10 @@ public class Dispatcher {
     if (!Gerrit.getConfig().getNewFeatures()) {
       return false;
     } else if (changeScreen2) {
+=======
+  public static boolean isChangeScreen2() {
+    if (changeScreen2) {
+>>>>>>> BRANCH (b4eb7e SideBySide2: Show [ and ] shortcut keys in nav arrow tooltip)
       return true;
     }
 
@@ -650,7 +655,23 @@ public class Dispatcher {
             panel = 0 <= c ? token.substring(c + 1) : "";
           }
 
+<<<<<<< HEAD   (382070 Merge "Fix link behaviour inconsistencies in change info pan)
           if ("unified".equals(panel)) {
+=======
+          if ("".equals(panel)) {
+            if (isChangeScreen2()) {
+              return new SideBySide2(baseId, id.getParentKey(), id.get());
+            }
+            return new PatchScreen.SideBySide( //
+                id, //
+                patchIndex, //
+                patchSetDetail, //
+                patchTable, //
+                top, //
+                baseId //
+            );
+          } else if ("unified".equals(panel)) {
+>>>>>>> BRANCH (b4eb7e SideBySide2: Show [ and ] shortcut keys in nav arrow tooltip)
             return new PatchScreen.Unified( //
                 id, //
                 patchIndex, //

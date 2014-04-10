@@ -250,12 +250,23 @@ class Header extends Composite {
       : Dispatcher.toSideBySide(base, patchSetId, info.path());
   }
 
+<<<<<<< HEAD   (382070 Merge "Fix link behaviour inconsistencies in change info pan)
   private KeyCommand setupNav(InlineHyperlink link, int key, String help, FileInfo info) {
+=======
+  private void setupNav(InlineHyperlink link, char key, String help, FileInfo info) {
+>>>>>>> BRANCH (b4eb7e SideBySide2: Show [ and ] shortcut keys in nav arrow tooltip)
     if (info != null) {
       final String url = url(info);
       link.setTargetHistoryToken(url);
+<<<<<<< HEAD   (382070 Merge "Fix link behaviour inconsistencies in change info pan)
       link.setTitle(FileInfo.getFileName(info.path()));
       KeyCommand k = new KeyCommand(0, key, help) {
+=======
+      link.setTitle(PatchUtil.M.fileNameWithShortcutKey(
+          FileInfo.getFileName(info.path()),
+          Character.toString(key)));
+      keys.add(new KeyCommand(0, key, help) {
+>>>>>>> BRANCH (b4eb7e SideBySide2: Show [ and ] shortcut keys in nav arrow tooltip)
         @Override
         public void onKeyPress(KeyPressEvent event) {
           Gerrit.display(url);

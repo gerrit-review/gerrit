@@ -72,6 +72,19 @@ public class PostReviewers implements RestModifyView<ChangeResource, AddReviewer
   public static final int DEFAULT_MAX_REVIEWERS_WITHOUT_CHECK = 10;
   public static final int DEFAULT_MAX_REVIEWERS = 20;
 
+<<<<<<< HEAD   (382070 Merge "Fix link behaviour inconsistencies in change info pan)
+=======
+  public static class Input {
+    @DefaultInput
+    public String reviewer;
+    public Boolean confirmed;
+
+    boolean confirmed() {
+      return Objects.firstNonNull(confirmed, false);
+    }
+  }
+
+>>>>>>> BRANCH (b4eb7e SideBySide2: Show [ and ] shortcut keys in nav arrow tooltip)
   private final AccountsCollection accounts;
   private final ReviewerResource.Factory reviewerFactory;
   private final ApprovalsUtil approvalsUtil;
