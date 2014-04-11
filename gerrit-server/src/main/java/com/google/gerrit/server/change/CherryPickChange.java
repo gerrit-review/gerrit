@@ -176,7 +176,7 @@ public class CherryPickChange {
           // The change key exists on the destination branch. The cherry pick
           // will be added as a new patch set.
           return insertPatchSet(git, revWalk, destChanges.get(0), patchSetId,
-              cherryPickCommit, refControl);
+              cherryPickCommit, refControl, currentUser);
         } else {
           // Change key not found on destination branch. We can create a new
           // change.
@@ -193,10 +193,16 @@ public class CherryPickChange {
 
   private Change.Id insertPatchSet(Repository git, RevWalk revWalk, Change change,
       PatchSet.Id patchSetId, RevCommit cherryPickCommit,
+<<<<<<< HEAD   (0cedeb Merge "Fix JavaDoc warning" into stable-2.9)
       RefControl refControl) throws InvalidChangeOperationException,
       IOException, OrmException, NoSuchChangeException {
     final ChangeControl changeControl =
         refControl.getProjectControl().controlFor(change);
+=======
+      RefControl refControl, IdentifiedUser uploader)
+      throws InvalidChangeOperationException, IOException, OrmException,
+      NoSuchChangeException {
+>>>>>>> BRANCH (429c79 Release notes for Gerrit 2.8.4)
     final PatchSetInserter inserter = patchSetInserterFactory
         .create(git, revWalk, changeControl, cherryPickCommit);
     final PatchSet.Id newPatchSetId = inserter.getPatchSetId();
@@ -204,6 +210,7 @@ public class CherryPickChange {
     inserter
       .setMessage("Uploaded patch set " + newPatchSetId.get() + ".")
       .setDraft(current.isDraft())
+      .setUploader(uploader.getAccountId())
       .insert();
     return change.getId();
   }
