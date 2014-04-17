@@ -185,10 +185,17 @@ public class Submit implements RestModifyView<RevisionResource, SubmitInput>,
     PatchSet.Id current = resource.getChange().currentPatchSetId();
     return new UiAction.Description()
       .setTitle(String.format(
+<<<<<<< HEAD   (049c35 Allow plugins to refresh Gerrit's menu bar)
           "Merge patch set %d into %s",
           resource.getPatchSet().getPatchSetId(),
           resource.getChange().getDest().getShortName()))
       .setVisible(resource.getChange().getStatus().isOpen()
+=======
+          "Submit revision %d",
+          resource.getPatchSet().getPatchSetId()))
+      .setVisible(!resource.getPatchSet().isDraft()
+          && resource.getChange().getStatus().isOpen()
+>>>>>>> BRANCH (77bb62 Enable automatic close changes on 'refs/meta/config')
           && resource.getPatchSet().getId().equals(current)
           && resource.getControl().canSubmit());
   }
