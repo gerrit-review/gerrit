@@ -1,0 +1,8 @@
+Verified+1: Diffy Cuckoo (Automated Verifier)
+Code-Review+1: David Pursehouse <david.pursehouse@sonymobile.com>
+Code-Review+2: Shawn Pearce <sop@google.com>
+Submitted-by: Shawn Pearce <sop@google.com>
+Submitted-at: Thu, 24 Apr 2014 02:27:17 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/56320
+Project: gerrit
+Branch: refs/heads/stable-2.8
