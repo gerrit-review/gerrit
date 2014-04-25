@@ -63,7 +63,11 @@ class LibraryDownloader {
   LibraryDownloader(ConsoleUI ui, SitePaths site) {
     this.ui = ui;
     this.lib_dir = site.lib_dir;
+<<<<<<< HEAD   (605b61 Merge changes I944f73e9,Ib4971b20,I9d5fdf99 into stable-2.9)
     this.needs = new ArrayList<>(2);
+=======
+    this.needs = new ArrayList<LibraryDownloader>(2);
+>>>>>>> BRANCH (a1ffd9 Install open ssl jar into Gerrit site for bouncycastle crypt)
   }
 
   void setName(final String name) {

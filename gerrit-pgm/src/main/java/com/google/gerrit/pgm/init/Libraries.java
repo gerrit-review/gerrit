@@ -60,6 +60,7 @@ class Libraries {
     }
 
     for (Field f : Libraries.class.getDeclaredFields()) {
+<<<<<<< HEAD   (605b61 Merge changes I944f73e9,Ib4971b20,I9d5fdf99 into stable-2.9)
       if ((f.getModifiers() & Modifier.STATIC) == 0
           && f.getType() == LibraryDownloader.class) {
         try {
@@ -71,12 +72,39 @@ class Libraries {
     }
 
     for (Field f : Libraries.class.getDeclaredFields()) {
+=======
+>>>>>>> BRANCH (a1ffd9 Install open ssl jar into Gerrit site for bouncycastle crypt)
+      if ((f.getModifiers() & Modifier.STATIC) == 0
+          && f.getType() == LibraryDownloader.class) {
+        try {
+<<<<<<< HEAD   (605b61 Merge changes I944f73e9,Ib4971b20,I9d5fdf99 into stable-2.9)
+          init(f, cfg);
+        } catch (IllegalArgumentException | IllegalAccessException
+            | NoSuchFieldException | SecurityException e) {
+          throw new IllegalStateException("Cannot configure " + f.getName());
+=======
+          f.set(this, downloadProvider.get());
+        } catch (IllegalArgumentException e) {
+          throw new IllegalStateException("Cannot initialize " + f.getName());
+        } catch (IllegalAccessException e) {
+          throw new IllegalStateException("Cannot initialize " + f.getName());
+>>>>>>> BRANCH (a1ffd9 Install open ssl jar into Gerrit site for bouncycastle crypt)
+        }
+      }
+    }
+
+    for (Field f : Libraries.class.getDeclaredFields()) {
       if ((f.getModifiers() & Modifier.STATIC) == 0
           && f.getType() == LibraryDownloader.class) {
         try {
           init(f, cfg);
-        } catch (IllegalArgumentException | IllegalAccessException
-            | NoSuchFieldException | SecurityException e) {
+        } catch (IllegalArgumentException e) {
+          throw new IllegalStateException("Cannot configure " + f.getName());
+        } catch (IllegalAccessException e) {
+          throw new IllegalStateException("Cannot configure " + f.getName());
+        } catch (NoSuchFieldException e) {
+          throw new IllegalStateException("Cannot configure " + f.getName());
+        } catch (SecurityException e) {
           throw new IllegalStateException("Cannot configure " + f.getName());
         }
       }
