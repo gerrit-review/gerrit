@@ -1,4 +1,8 @@
+<<<<<<< HEAD   (04cc24 Merge "Allow illegal label names from default search predica)
 # These are needed as workaround for the 'verify: false' bug in Jcraft SSH library
+=======
+# these need as workaround for the 'verify: false' bug in Jcraft SSH library
+>>>>>>> BRANCH (7d0d9b Merge branch 'stable-2.8' into stable-2.9)
 BOUNCYCASTLE = [
   '//lib/bouncycastle:bcpkix',
   '//lib/bouncycastle:bcpg',
