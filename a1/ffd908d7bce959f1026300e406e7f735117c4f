@@ -1,0 +1,10 @@
+Code-Review+1: David Ostrovsky <david.ostrovsky@gmail.com>
+Code-Review+1: Bruce Zu <bruce.zu@sonymobile.com>
+Verified+1: Bruce Zu <bruce.zu@sonymobile.com>
+Code-Review+2: Shawn Pearce <sop@google.com>
+Library-Compliance+1: Shawn Pearce <sop@google.com>
+Submitted-by: Shawn Pearce <sop@google.com>
+Submitted-at: Fri, 25 Apr 2014 00:38:49 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/56351
+Project: gerrit
+Branch: refs/heads/stable-2.8
