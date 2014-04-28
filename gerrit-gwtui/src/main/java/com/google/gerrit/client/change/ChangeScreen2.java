@@ -43,6 +43,7 @@ import com.google.gerrit.client.rpc.ScreenLoadCallback;
 import com.google.gerrit.client.ui.BranchLink;
 import com.google.gerrit.client.ui.ChangeLink;
 import com.google.gerrit.client.ui.CommentLinkProcessor;
+import com.google.gerrit.client.ui.Hyperlink;
 import com.google.gerrit.client.ui.InlineHyperlink;
 import com.google.gerrit.client.ui.Screen;
 import com.google.gerrit.client.ui.UserActivityMonitor;
@@ -55,6 +56,7 @@ import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsArrayString;
+import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.SelectElement;
@@ -69,6 +71,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -139,6 +142,10 @@ public class ChangeScreen2 extends Screen {
   @UiField InlineHyperlink ownerLink;
   @UiField Element statusText;
   @UiField Image projectSettings;
+<<<<<<< HEAD   (73a50a Merge "Accept HEAD in RestApiServlet")
+=======
+  @UiField AnchorElement projectSettingsLink;
+>>>>>>> BRANCH (839835 ChangeScreen2: Make project settings gear icon a proper hype)
   @UiField InlineHyperlink projectDashboard;
   @UiField InlineHyperlink branchLink;
   @UiField Element strategy;
@@ -356,11 +363,19 @@ public class ChangeScreen2 extends Screen {
   }
 
   private void initProjectLinks(final ChangeInfo info) {
+<<<<<<< HEAD   (73a50a Merge "Accept HEAD in RestApiServlet")
+=======
+    projectSettingsLink.setHref(
+        "#" + PageLinks.toProject(info.project_name_key()));
+>>>>>>> BRANCH (839835 ChangeScreen2: Make project settings gear icon a proper hype)
     projectSettings.addDomHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        Gerrit.display(
-            PageLinks.toProject(info.project_name_key()));
+        if (Hyperlink.impl.handleAsClick((Event) event.getNativeEvent())) {
+          event.stopPropagation();
+          event.preventDefault();
+          Gerrit.display(PageLinks.toProject(info.project_name_key()));
+        }
       }
     }, ClickEvent.getType());
     projectDashboard.setText(info.project());

@@ -75,10 +75,13 @@ public interface GerritResources extends ClientBundle {
 
   @Source("warning.png")
   public ImageResource warning();
+<<<<<<< HEAD   (73a50a Merge "Accept HEAD in RestApiServlet")
 
   @Source("listAdd.png")
   public ImageResource listAdd();
 
   @Source("dashboard.png")
   public ImageResource dashboard();
+=======
+>>>>>>> BRANCH (839835 ChangeScreen2: Make project settings gear icon a proper hype)
 }

@@ -386,6 +386,7 @@ limitations under the License.
                      title='Go to project dashboard'>
                      <ui:attribute name='title'/>
                   </x:InlineHyperlink>
+<<<<<<< HEAD   (73a50a Merge "Accept HEAD in RestApiServlet")
                   <g:Image
                      ui:field='projectSettings'
                      resource='{ico.gear}'
@@ -393,6 +394,17 @@ limitations under the License.
                      title='Go to project settings'>
                     <ui:attribute name='title'/>
                   </g:Image>
+=======
+                  <a ui:field='projectSettingsLink'
+                     class='{style.projectSettings}'>
+                    <g:Image
+                       ui:field='projectSettings'
+                       resource='{ico.gear}'
+                       title='Go to project settings'>
+                      <ui:attribute name='title'/>
+                    </g:Image>
+                  </a>
+>>>>>>> BRANCH (839835 ChangeScreen2: Make project settings gear icon a proper hype)
               </td>
             </tr>
             <tr>
