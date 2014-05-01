@@ -136,13 +136,21 @@ project directories in `buck-out/gen`, here as example for plugin API:
   buck-out/gen/gerrit-plugin-api/plugin-api-javadoc.jar
 ----
 
+<<<<<<< HEAD   (9ee6b2 Merge "ChangeScreen2: Include space before 'in Settings' in )
 Install {extension,plugin,gwt}-api to the local maven repository:
+=======
+Install {extension,plugin}-api and gerrit.war to the local maven repository:
+>>>>>>> BRANCH (3ffc86 Include gerrit.war in api_{install,deploy})
 
 ----
   buck build api_install
 ----
 
+<<<<<<< HEAD   (9ee6b2 Merge "ChangeScreen2: Include space before 'in Settings' in )
 Deploy {extension,plugin,gwt}-api to the remote maven repository:
+=======
+Deploy {extension,plugin}-api and gerrit.war to the remote maven repository
+>>>>>>> BRANCH (3ffc86 Include gerrit.war in api_{install,deploy})
 
 ----
   buck build api_deploy

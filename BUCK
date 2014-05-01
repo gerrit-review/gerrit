@@ -3,8 +3,13 @@ include_defs('//tools/build.defs')
 gerrit_war(name = 'gerrit')
 gerrit_war(name = 'chrome',   ui = 'ui_chrome')
 gerrit_war(name = 'firefox',  ui = 'ui_firefox')
+<<<<<<< HEAD   (9ee6b2 Merge "ChangeScreen2: Include space before 'in Settings' in )
 gerrit_war(name = 'withdocs', docs = True)
 gerrit_war(name = 'release',  docs = True, context = ['//plugins:core.zip'])
+=======
+gerrit_war(name = 'withdocs', context = DOCS)
+gerrit_war(name = 'release',  context = DOCS + ['//plugins:core.zip'],  visibility = ['//tools/maven:'])
+>>>>>>> BRANCH (3ffc86 Include gerrit.war in api_{install,deploy})
 
 API_DEPS = [
   '//gerrit-extension-api:extension-api',

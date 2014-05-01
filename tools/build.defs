@@ -78,7 +78,11 @@ def war(
     visibility = visibility,
   )
 
+<<<<<<< HEAD   (9ee6b2 Merge "ChangeScreen2: Include space before 'in Settings' in )
 def gerrit_war(name, ui = 'ui_optdbg', context = [], docs = False):
+=======
+def gerrit_war(name, ui = 'ui_optdbg', context = [], visibility = []):
+>>>>>>> BRANCH (3ffc86 Include gerrit.war in api_{install,deploy})
   war(
     name = name,
     libs = LIBS + ['//gerrit-war:version'],
@@ -88,5 +92,9 @@ def gerrit_war(name, ui = 'ui_optdbg', context = [], docs = False):
       '//gerrit-war:webapp_assets.zip',
       '//gerrit-gwtui:' + ui + '.zip',
     ] + context,
+<<<<<<< HEAD   (9ee6b2 Merge "ChangeScreen2: Include space before 'in Settings' in )
     docs = docs,
+=======
+    visibility = visibility,
+>>>>>>> BRANCH (3ffc86 Include gerrit.war in api_{install,deploy})
   )

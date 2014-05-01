@@ -18,11 +18,19 @@ def maven_package(
     url = None,
     jar = {},
     src = {},
+<<<<<<< HEAD   (9ee6b2 Merge "ChangeScreen2: Include space before 'in Settings' in )
     doc = {}):
+=======
+    war = {}):
+>>>>>>> BRANCH (3ffc86 Include gerrit.war in api_{install,deploy})
   cmd = ['$(exe //tools/maven:mvn)', '-v', version, '-o', '$OUT']
   dep = []
 
+<<<<<<< HEAD   (9ee6b2 Merge "ChangeScreen2: Include space before 'in Settings' in )
   for type,d in [('jar', jar), ('java-source', src), ('javadoc', doc)]:
+=======
+  for type,d in [('jar', jar), ('java-source', src), ('war', war)]:
+>>>>>>> BRANCH (3ffc86 Include gerrit.war in api_{install,deploy})
     for a,t in d.iteritems():
       cmd.append('-s %s:%s:$(location %s)' % (a,type,t))
       dep.append(t)
