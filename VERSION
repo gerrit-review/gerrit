@@ -2,5 +2,9 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (53b1bd Change "Merge Change" to "Submit" in review UI documentation)
 GERRIT_VERSION = '2.9-SNAPSHOT'
 
+=======
+GERRIT_VERSION = '2.8.5'
+>>>>>>> BRANCH (bd13d7 Release notes for Gerrit 2.8.5)
