@@ -37,12 +37,23 @@ import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+<<<<<<< HEAD   (c376f9 Bump guava version to 17.0)
 import com.google.gwt.user.client.DOM;
+=======
+import com.google.gwt.user.client.ui.Anchor;
+>>>>>>> BRANCH (13dd33 Merge "Fix testBlockRule_ParentBlocksChild() from RefControl)
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
+<<<<<<< HEAD   (c376f9 Bump guava version to 17.0)
+=======
+import com.google.gwt.user.client.ui.UIObject;
+import com.google.gwt.user.client.ui.VerticalPanel;
+>>>>>>> BRANCH (13dd33 Merge "Fix testBlockRule_ParentBlocksChild() from RefControl)
 import com.google.gwtexpui.clippy.client.CopyableLabel;
 import com.google.gwtexpui.safehtml.client.SafeHtmlBuilder;
 
@@ -53,11 +64,21 @@ class CommitBox extends Composite {
   interface Style extends CssResource {
     String collapsed();
     String expanded();
+    String clippy();
+    String parentWebLink();
   }
 
   @UiField Style style;
+  @UiField Image mergeCommit;
   @UiField CopyableLabel commitName;
+<<<<<<< HEAD   (c376f9 Bump guava version to 17.0)
   @UiField TableCellElement webLinkCell;
+=======
+  @UiField AnchorElement browserLink;
+  @UiField Element parents;
+  @UiField FlowPanel parentCommits;
+  @UiField VerticalPanel parentWebLinks;
+>>>>>>> BRANCH (13dd33 Merge "Fix testBlockRule_ParentBlocksChild() from RefControl)
   @UiField InlineHyperlink authorNameEmail;
   @UiField Element authorDate;
   @UiField InlineHyperlink committerNameEmail;
@@ -114,6 +135,7 @@ class CommitBox extends Composite {
       addWebLink(gw.toRevision(change.project(), revision), gw.getLinkName());
     }
 
+<<<<<<< HEAD   (c376f9 Bump guava version to 17.0)
     JsArray<WebLinkInfo> links = revInfo.web_links();
     if (links != null) {
       for (WebLinkInfo link : Natives.asList(links)) {
@@ -127,6 +149,29 @@ class CommitBox extends Composite {
     a.setHref(href);
     a.setInnerText(name);
     webLinkCell.appendChild(a);
+=======
+    if (revInfo.commit().parents().length() > 1) {
+      mergeCommit.setVisible(true);
+      setParents(change.project(), revInfo.commit().parents());
+    }
+  }
+
+  private void setParents(String project, JsArray<CommitInfo> commits) {
+    setVisible(parents, true);
+    for (CommitInfo c : Natives.asList(commits)) {
+      CopyableLabel copyLabel = new CopyableLabel(c.commit());
+      copyLabel.setStyleName(style.clippy());
+      parentCommits.add(copyLabel);
+
+      GitwebLink gw = Gerrit.getGitwebLink();
+      if (gw != null) {
+        Anchor a =
+            new Anchor(gw.toRevision(project, c.commit()), gw.getLinkName());
+        a.setStyleName(style.parentWebLink());
+        parentWebLinks.add(a);
+      }
+    }
+>>>>>>> BRANCH (13dd33 Merge "Fix testBlockRule_ParentBlocksChild() from RefControl)
   }
 
   private static void formatLink(GitPerson person, InlineHyperlink name,
