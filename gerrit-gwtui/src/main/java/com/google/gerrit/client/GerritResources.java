@@ -76,6 +76,11 @@ public interface GerritResources extends ClientBundle {
   @Source("warning.png")
   public ImageResource warning();
 
+<<<<<<< HEAD   (c376f9 Bump guava version to 17.0)
   @Source("listAdd.png")
   public ImageResource listAdd();
+=======
+  @Source("important.png")
+  public ImageResource important();
+>>>>>>> BRANCH (13dd33 Merge "Fix testBlockRule_ParentBlocksChild() from RefControl)
 }
