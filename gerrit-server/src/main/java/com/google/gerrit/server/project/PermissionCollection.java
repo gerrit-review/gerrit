@@ -109,9 +109,14 @@ public class PermissionCollection {
       List<AccessSection> sections = Lists.newArrayList(sectionToProject.keySet());
       sorter.sort(ref, sections);
 
+<<<<<<< HEAD   (a4ce89 Merge branch 'stable-2.9')
       Set<SeenRule> seen = new HashSet<>();
       Set<SeenRule> seenBlockingRules = new HashSet<>();
       Set<String> exclusiveGroupPermissions = new HashSet<>();
+=======
+      Set<SeenRule> seen = new HashSet<SeenRule>();
+      Set<String> exclusiveGroupPermissions = new HashSet<String>();
+>>>>>>> BRANCH (55e5e3 Link to solved issues from 2.9 release notes)
 
       HashMap<String, List<PermissionRule>> permissions = new HashMap<>();
       Map<PermissionRule, ProjectRef> ruleProps = Maps.newIdentityHashMap();
@@ -125,7 +130,7 @@ public class PermissionCollection {
             SeenRule s = new SeenRule(section, permission, rule);
             boolean addRule;
             if (rule.isBlock()) {
-              addRule = seenBlockingRules.add(s);
+              addRule = true;
             } else {
               addRule = seen.add(s) && !rule.isDeny() && !exclusivePermissionExists;
             }
