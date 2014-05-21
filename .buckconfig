@@ -1,8 +1,15 @@
 [alias]
   all = //:all
   api = //:api
+<<<<<<< HEAD   (a836a8 DirectChangeByCommit: Use Changes query API)
   api_deploy = //tools/maven:deploy
   api_install = //tools/maven:install
+=======
+  api_deploy = //tools/maven:api_deploy
+  api_install = //tools/maven:api_install
+  war_deploy = //tools/maven:war_deploy
+  war_install = //tools/maven:war_install
+>>>>>>> BRANCH (3557ac Merge "Move gerrit.war from api_{install,deploy} to war_{ins)
   chrome = //:chrome
   docs = //Documentation:html
   firefox = //:firefox
