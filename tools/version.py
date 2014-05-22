@@ -30,9 +30,15 @@ elif len(args) > 1:
 new_version = args[0]
 pattern = re.compile(r'(\s*)<version>[-.\w]+</version>')
 
+<<<<<<< HEAD   (5269a6 Add option to show ID in change table)
 for project in ['gerrit-plugin-archetype',
                 'gerrit-plugin-gwt-archetype',
                 'gerrit-plugin-js-archetype']:
+=======
+for project in ['gerrit-extension-api', 'gerrit-plugin-api',
+                'gerrit-plugin-archetype', 'gerrit-plugin-gwt-archetype',
+                'gerrit-plugin-gwtui', 'gerrit-plugin-js-archetype']:
+>>>>>>> BRANCH (7dfe6e Merge "Add pom with meta-data for plugin projects" into stab)
   pom = os.path.join(project, 'pom.xml')
   try:
     outxml = ""
