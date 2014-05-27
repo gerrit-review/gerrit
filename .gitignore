@@ -16,4 +16,8 @@
 /local.properties
 *.pyc
 /gwt-unitCache
+<<<<<<< HEAD   (c646a8 Implement Projects.list() method)
 *.swp
+=======
+*.asc
+>>>>>>> BRANCH (600872 Bash: Deploy plugin archetypes to Maven Central)
