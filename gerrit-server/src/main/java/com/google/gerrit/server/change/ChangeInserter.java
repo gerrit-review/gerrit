@@ -198,9 +198,18 @@ public class ChangeInserter {
         .addChange(change)
         .reindex()
         .runAsync();
+<<<<<<< HEAD   (aec45c Merge "Link to the query string syntax from the rest-api-cha)
 
     if(!messageIsForChange()) {
       commitMessageNotForChange();
+=======
+    if (!messageIsForChange()) {
+      insertMessage(db);
+      if (changeMessage != null) {
+        ChangeUtil.bumpRowVersionNotLastUpdatedOn(
+            changeMessage.getKey().getParentKey(), db);
+      }
+>>>>>>> BRANCH (22da0b Merge "Fix consultRules so that it does not bail out on Runt)
     }
     gitRefUpdated.fire(change.getProject(), patchSet.getRefName(),
         ObjectId.zeroId(), commit);
