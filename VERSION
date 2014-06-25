@@ -2,5 +2,9 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (dacbec Serve static resources for non-jar Server plugins)
 GERRIT_VERSION = '2.10-SNAPSHOT'
 
+=======
+GERRIT_VERSION = '2.9-SNAPSHOT'
+>>>>>>> BRANCH (2b4d04 Merge branch 'stable-2.8' into stable-2.9)
