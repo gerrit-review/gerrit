@@ -2,8 +2,12 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-plugin-gwtui</artifactId>
+<<<<<<< HEAD   (22da0b Merge "Fix consultRules so that it does not bail out on Runt)
   <version>2.9-SNAPSHOT</version>
   <packaging>jar</packaging>
+=======
+  <version>2.8.6</version>
+>>>>>>> BRANCH (c527b3 Bump API version to 2.8.6)
   <name>Gerrit Code Review - Plugin GWT UI</name>
   <description>Common Classes for Gerrit GWT UI Plugins</description>
   <url>http://code.google.com/p/gerrit/</url>

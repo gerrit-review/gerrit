@@ -2,5 +2,9 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (22da0b Merge "Fix consultRules so that it does not bail out on Runt)
 GERRIT_VERSION = '2.9-SNAPSHOT'
 
+=======
+GERRIT_VERSION = '2.8.6'
+>>>>>>> BRANCH (c527b3 Bump API version to 2.8.6)
