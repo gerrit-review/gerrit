@@ -224,6 +224,7 @@ public class ChangeInserter {
     return change;
   }
 
+<<<<<<< HEAD   (e6c82b Verify change and commit messages in cherry-pick test)
   private void commitMessageNotForChange() throws OrmException,
       IOException {
     ReviewDb db = dbProvider.get();
@@ -239,6 +240,15 @@ public class ChangeInserter {
       cmUtil.addChangeMessage(db, updateForOtherChange, changeMessage);
       updateForOtherChange.commit();
     }
+=======
+  private boolean messageIsForChange() {
+    if (changeMessage == null) {
+      return false;
+    }
+    Change.Id id = change.getId();
+    Change.Id msgId = changeMessage.getKey().getParentKey();
+    return msgId.equals(id);
+>>>>>>> BRANCH (0dd831 Merge branch 'stable-2.8' into stable-2.9)
   }
 
   private boolean messageIsForChange() {
