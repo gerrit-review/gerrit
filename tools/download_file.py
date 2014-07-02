@@ -23,6 +23,17 @@ from subprocess import check_call, CalledProcessError
 from sys import stderr
 from util import resolve_url
 from zipfile import ZipFile, BadZipfile, LargeZipFile
+<<<<<<< HEAD   (0dd831 Merge branch 'stable-2.8' into stable-2.9)
+=======
+
+REPO_ROOTS = {
+  'ATLASSIAN': 'https://maven.atlassian.com/content/repositories/atlassian-3rdparty',
+  'GERRIT': 'http://gerrit-maven.storage.googleapis.com',
+  'ECLIPSE': 'https://repo.eclipse.org/content/groups/releases',
+  'MAVEN_CENTRAL': 'http://repo1.maven.org/maven2',
+  'MAVEN_LOCAL': 'file://' + path.expanduser('~/.m2/repository'),
+}
+>>>>>>> BRANCH (7ec90c Update 2.8.6 release notes with recent fixes)
 
 GERRIT_HOME = path.expanduser('~/.gerritcodereview')
 CACHE_DIR = path.join(GERRIT_HOME, 'buck-cache')
