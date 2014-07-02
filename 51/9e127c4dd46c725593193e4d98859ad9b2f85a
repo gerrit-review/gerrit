@@ -1,0 +1,8 @@
+Verified+1: David Pursehouse <david.pursehouse@sonymobile.com>
+Library-Compliance+1: Dave Borowitz <dborowitz@google.com>
+Code-Review+2: Dave Borowitz <dborowitz@google.com>
+Submitted-by: Martin Fick <mfick@codeaurora.org>
+Submitted-at: Wed, 02 Jul 2014 23:18:34 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/58230
+Project: gerrit
+Branch: refs/heads/stable-2.9
