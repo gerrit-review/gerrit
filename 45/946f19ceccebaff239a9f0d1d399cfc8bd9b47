@@ -1,0 +1,10 @@
+Library-Compliance+1: Jonathan Nieder <jrn@google.com>
+Code-Review+1: Jonathan Nieder <jrn@google.com>
+Code-Review+1: David Ostrovsky <david.ostrovsky@gmail.com>
+Verified+1: David Ostrovsky <david.ostrovsky@gmail.com>
+Code-Review+2: David Pursehouse <david.pursehouse@sonymobile.com>
+Submitted-by: David Pursehouse <david.pursehouse@sonymobile.com>
+Submitted-at: Wed, 02 Jul 2014 00:45:25 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/58151
+Project: gerrit
+Branch: refs/heads/stable-2.8
