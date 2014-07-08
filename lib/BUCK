@@ -25,9 +25,15 @@ define_license(name = 'DO_NOT_DISTRIBUTE')
 
 maven_jar(
   name = 'gwtorm',
+<<<<<<< HEAD   (519e12 Merge branch 'stable-2.8' into stable-2.9)
   id = 'gwtorm:gwtorm:1.11',
   bin_sha1 = '526c98e8a200c5b3b34dcee69ccf6bc95daf84db',
   src_sha1 = 'fd07a195026be40709feece4483b48349c58cfe3',
+=======
+  id = 'gwtorm:gwtorm:1.7.3',
+  bin_sha1 = 'd3a088f0f25bec4857b086cdd9e60eab858ea973',
+  src_sha1 = 'd766b31bd9eb4e34b320500b425eca53bdd6963a',
+>>>>>>> BRANCH (c471c4 Release notes for Gerrit 2.8.6.1)
   license = 'Apache2.0',
   deps = [':protobuf'],
   repository = GERRIT,
