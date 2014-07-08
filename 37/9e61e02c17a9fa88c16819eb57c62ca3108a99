@@ -1,0 +1,8 @@
+Code-Review+2: Edwin Kempin <edwin.kempin@gmail.com>
+Verified+1: Edwin Kempin <edwin.kempin@gmail.com>
+Library-Compliance+1: Jonathan Nieder <jrn@google.com>
+Submitted-by: Edwin Kempin <edwin.kempin@gmail.com>
+Submitted-at: Tue, 08 Jul 2014 15:35:31 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/58267
+Project: gerrit
+Branch: refs/heads/stable-2.9
