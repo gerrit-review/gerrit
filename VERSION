@@ -2,4 +2,9 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (b1554f Merge "Preserve line breaks in inline and history comments")
 GERRIT_VERSION = '2.10-SNAPSHOT'
+=======
+GERRIT_VERSION = '2.9-SNAPSHOT'
+
+>>>>>>> BRANCH (379e61 Merge branch 'stable-2.8' into stable-2.9)

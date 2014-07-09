@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+ATLASSIAN = 'ATLASSIAN:'
 GERRIT = 'GERRIT:'
 GERRIT_API = 'GERRIT_API:'
 MAVEN_CENTRAL = 'MAVEN_CENTRAL:'
@@ -47,12 +48,15 @@ def maven_jar(
     raise NameError('expected id="groupId:artifactId:version"')
   group, artifact, version = parts
 
+<<<<<<< HEAD   (b1554f Merge "Preserve line breaks in inline and history comments")
   # SNAPSHOT artifacts are handled differently on Google storage bucket:
   # 'SNAPSHOT' is discarded from the directory name. However on other
   # Maven repositories, most notable local repository located in
   # ~/.m2/repository (and is supported through MAVEN_LOCAL repository)
   # it must be preserved, otherwise the artifact wouldn't be found.
   # Atm the SNAPSHOT part is only discarded for Google storage bucket.
+=======
+>>>>>>> BRANCH (379e61 Merge branch 'stable-2.8' into stable-2.9)
   if 'SNAPSHOT' in version and repository.startswith(GERRIT):
     file_version = version.replace('-SNAPSHOT', '')
     version = version.split('-SNAPSHOT')[0] + '-SNAPSHOT'
