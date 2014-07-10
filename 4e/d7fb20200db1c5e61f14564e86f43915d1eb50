@@ -1,0 +1,10 @@
+Code-Review+1: David Ostrovsky <david.ostrovsky@gmail.com>
+Code-Review+2: David Pursehouse <david.pursehouse@sonymobile.com>
+Code-Review+2: Dave Borowitz <dborowitz@google.com>
+Library-Compliance+1: Dave Borowitz <dborowitz@google.com>
+Verified+1: Edwin Kempin <edwin.kempin@gmail.com>
+Submitted-by: Edwin Kempin <edwin.kempin@gmail.com>
+Submitted-at: Thu, 10 Jul 2014 17:58:21 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/58402
+Project: gerrit
+Branch: refs/heads/master
