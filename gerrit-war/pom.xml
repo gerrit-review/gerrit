@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-war</artifactId>
+<<<<<<< HEAD   (629467 Add REST endpoint to ban commits)
   <version>2.10-SNAPSHOT</version>
+=======
+  <version>2.9</version>
+>>>>>>> BRANCH (7953f0 Set version to 2.9)
   <packaging>war</packaging>
   <name>Gerrit Code Review - WAR</name>
   <description>Gerrit WAR</description>
