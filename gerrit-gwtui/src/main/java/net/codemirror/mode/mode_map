@@ -36,9 +36,12 @@ text/x-erlang
 gas:
 text/x-gas
 
+<<<<<<< HEAD   (10c0da Merge "Fix example response in changes REST API documentatio)
 gerrit_commit:
 text/x-gerrit-commit-message
 
+=======
+>>>>>>> BRANCH (8d5bbc 2.9 release notes: Add warning about download commands)
 gfm:
 text/x-github-markdown
 
@@ -93,9 +96,12 @@ text/x-python
 
 r:
 text/r-src
+<<<<<<< HEAD   (10c0da Merge "Fix example response in changes REST API documentatio)
 
 rst:
 text/x-rst
+=======
+>>>>>>> BRANCH (8d5bbc 2.9 release notes: Add warning about download commands)
 
 ruby:
 text/x-ruby
@@ -119,9 +125,12 @@ text/x-plsql
 tcl:
 text/x-tcl
 
+<<<<<<< HEAD   (10c0da Merge "Fix example response in changes REST API documentatio)
 stex:
 text/x-stex
 
+=======
+>>>>>>> BRANCH (8d5bbc 2.9 release notes: Add warning about download commands)
 velocity:
 text/velocity
 

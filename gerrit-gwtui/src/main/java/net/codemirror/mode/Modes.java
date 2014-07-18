@@ -34,7 +34,10 @@ public interface Modes extends ClientBundle {
   @Source("dtd/dtd.js") @DoNotEmbed DataResource dtd();
   @Source("erlang/erlang.js") @DoNotEmbed DataResource erlang();
   @Source("gas/gas.js") @DoNotEmbed DataResource gas();
+<<<<<<< HEAD   (10c0da Merge "Fix example response in changes REST API documentatio)
   @Source("gerrit/commit.js") @DoNotEmbed DataResource gerrit_commit();
+=======
+>>>>>>> BRANCH (8d5bbc 2.9 release notes: Add warning about download commands)
   @Source("gfm/gfm.js") @DoNotEmbed DataResource gfm();
   @Source("go/go.js") @DoNotEmbed DataResource go();
   @Source("groovy/groovy.js") @DoNotEmbed DataResource groovy();
@@ -49,13 +52,19 @@ public interface Modes extends ClientBundle {
   @Source("properties/properties.js") @DoNotEmbed DataResource properties();
   @Source("python/python.js") @DoNotEmbed DataResource python();
   @Source("r/r.js") @DoNotEmbed DataResource r();
+<<<<<<< HEAD   (10c0da Merge "Fix example response in changes REST API documentatio)
   @Source("rst/rst.js") @DoNotEmbed DataResource rst();
+=======
+>>>>>>> BRANCH (8d5bbc 2.9 release notes: Add warning about download commands)
   @Source("ruby/ruby.js") @DoNotEmbed DataResource ruby();
   @Source("scheme/scheme.js") @DoNotEmbed DataResource scheme();
   @Source("shell/shell.js") @DoNotEmbed DataResource shell();
   @Source("smalltalk/smalltalk.js") @DoNotEmbed DataResource smalltalk();
   @Source("sql/sql.js") @DoNotEmbed DataResource sql();
+<<<<<<< HEAD   (10c0da Merge "Fix example response in changes REST API documentatio)
   @Source("stex/stex.js") @DoNotEmbed DataResource stex();
+=======
+>>>>>>> BRANCH (8d5bbc 2.9 release notes: Add warning about download commands)
   @Source("tcl/tcl.js") @DoNotEmbed DataResource tcl();
   @Source("velocity/velocity.js") @DoNotEmbed DataResource velocity();
   @Source("verilog/verilog.js") @DoNotEmbed DataResource verilog();

@@ -51,7 +51,10 @@ public class ModeInjector {
       Modes.I.dtd(),
       Modes.I.erlang(),
       Modes.I.gas(),
+<<<<<<< HEAD   (10c0da Merge "Fix example response in changes REST API documentatio)
       Modes.I.gerrit_commit(),
+=======
+>>>>>>> BRANCH (8d5bbc 2.9 release notes: Add warning about download commands)
       Modes.I.gfm(),
       Modes.I.go(),
       Modes.I.groovy(),
@@ -66,7 +69,10 @@ public class ModeInjector {
       Modes.I.properties(),
       Modes.I.python(),
       Modes.I.r(),
+<<<<<<< HEAD   (10c0da Merge "Fix example response in changes REST API documentatio)
       Modes.I.rst(),
+=======
+>>>>>>> BRANCH (8d5bbc 2.9 release notes: Add warning about download commands)
       Modes.I.ruby(),
       Modes.I.scheme(),
       Modes.I.shell(),

@@ -48,13 +48,19 @@ CM3_MODES = [
   'properties/properties.js',
   'python/python.js',
   'r/r.js',
+<<<<<<< HEAD   (10c0da Merge "Fix example response in changes REST API documentatio)
   'rst/rst.js',
+=======
+>>>>>>> BRANCH (8d5bbc 2.9 release notes: Add warning about download commands)
   'ruby/ruby.js',
   'scheme/scheme.js',
   'shell/shell.js',
   'smalltalk/smalltalk.js',
   'sql/sql.js',
+<<<<<<< HEAD   (10c0da Merge "Fix example response in changes REST API documentatio)
   'stex/stex.js',
+=======
+>>>>>>> BRANCH (8d5bbc 2.9 release notes: Add warning about download commands)
   'tcl/tcl.js',
   'velocity/velocity.js',
   'verilog/verilog.js',
