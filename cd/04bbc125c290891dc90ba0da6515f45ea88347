@@ -1,0 +1,8 @@
+Code-Review+2: Shawn Pearce <sop@google.com>
+Verified+1: Diffy Cuckoo (Automated Verifier)
+Verified+1: Bruce Zu <bruce.zu@sonymobile.com>
+Submitted-by: Shawn Pearce <sop@google.com>
+Submitted-at: Mon, 11 Aug 2014 14:25:44 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/58836
+Project: gerrit
+Branch: refs/heads/master
