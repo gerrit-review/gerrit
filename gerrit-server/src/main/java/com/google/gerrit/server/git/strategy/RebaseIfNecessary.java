@@ -32,7 +32,6 @@ import com.google.gerrit.server.project.NoSuchChangeException;
 import com.google.gwtorm.server.OrmException;
 
 import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.PersonIdent;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -43,17 +42,19 @@ public class RebaseIfNecessary extends SubmitStrategy {
   private final PatchSetInfoFactory patchSetInfoFactory;
   private final RebaseChange rebaseChange;
   private final Map<Change.Id, CodeReviewCommit> newCommits;
-  private final PersonIdent committerIdent;
 
   RebaseIfNecessary(SubmitStrategy.Arguments args,
       PatchSetInfoFactory patchSetInfoFactory,
-      RebaseChange rebaseChange,
-      PersonIdent committerIdent) {
+      RebaseChange rebaseChange) {
     super(args);
     this.patchSetInfoFactory = patchSetInfoFactory;
     this.rebaseChange = rebaseChange;
+<<<<<<< HEAD   (05dcd4 Merge "Allow debug and trace log statements to be printed in)
     this.newCommits = new HashMap<>();
     this.committerIdent = committerIdent;
+=======
+    this.newCommits = new HashMap<Change.Id, CodeReviewCommit>();
+>>>>>>> BRANCH (b0982e Merge "AddMembers.apply: Prevent NPE when account doesn't ex)
   }
 
   @Override
@@ -91,7 +92,7 @@ public class RebaseIfNecessary extends SubmitStrategy {
             final PatchSet newPatchSet =
                 rebaseChange.rebase(args.repo, args.rw, args.inserter,
                     n.getPatchsetId(), n.change(), uploader,
-                    newMergeTip, args.mergeUtil, committerIdent,
+                    newMergeTip, args.mergeUtil, args.serverIdent.get(),
                     false, false, ValidatePolicy.NONE);
 
             List<PatchSetApproval> approvals = Lists.newArrayList();
@@ -133,7 +134,7 @@ public class RebaseIfNecessary extends SubmitStrategy {
             newMergeTip = n;
           } else {
             newMergeTip = args.mergeUtil.mergeOneCommit(
-                args.myIdent, args.repo, args.rw, args.inserter,
+                args.serverIdent.get(), args.repo, args.rw, args.inserter,
                 args.canMergeFlag, args.destBranch, newMergeTip, n);
           }
           final PatchSetApproval submitApproval = args.mergeUtil.markCleanMerges(
