@@ -1,0 +1,10 @@
+Verified+1: Diffy Cuckoo (Automated Verifier)
+Code-Review+1: Jonathan Nieder <jrn@google.com>
+Code-Review+1: David Ostrovsky <david.ostrovsky@gmail.com>
+Code-Review+2: Saša Živkov <zivkov@gmail.com>
+Verified+1: David Pursehouse <david.pursehouse@sonymobile.com>
+Submitted-by: David Pursehouse <david.pursehouse@sonymobile.com>
+Submitted-at: Fri, 05 Sep 2014 09:10:36 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/59711
+Project: gerrit
+Branch: refs/heads/stable-2.9
