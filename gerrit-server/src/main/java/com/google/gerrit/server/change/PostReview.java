@@ -314,13 +314,21 @@ public class PostReview implements RestModifyView<RevisionResource, ReviewInput>
 
       Iterator<CommentInput> listItr = list.iterator();
       while (listItr.hasNext()) {
+<<<<<<< HEAD   (b8eee7 Merge branch 'stable-2.9' into stable-2.10)
         CommentInput c = listItr.next();
+=======
+        Comment c = listItr.next();
+        if (c == null) {
+          listItr.remove();
+          continue;
+        }
+>>>>>>> BRANCH (b8bb7c Merge "Fix NPE in /projects/{name}/children?recursive when a)
         if (c.line < 0) {
           throw new BadRequestException(String.format(
               "negative line number %d not allowed on %s",
               c.line, path));
         }
-        c.message = Strings.emptyToNull(c.message).trim();
+        c.message = Strings.nullToEmpty(c.message).trim();
         if (c.message.isEmpty()) {
           listItr.remove();
         }
