@@ -15,7 +15,6 @@
 package com.google.gerrit.server.change;
 
 import com.google.common.base.Strings;
-import com.google.common.util.concurrent.CheckedFuture;
 import com.google.gerrit.common.ChangeHooks;
 import com.google.gerrit.extensions.restapi.AuthException;
 import com.google.gerrit.extensions.restapi.DefaultInput;
@@ -122,12 +121,15 @@ class PutTopic implements RestModifyView<ChangeResource, Input>,
       } finally {
         db.rollback();
       }
+<<<<<<< HEAD   (37da58 Set the version to 2.10-SNAPSHOT)
       update.commit();
       CheckedFuture<?, IOException> indexFuture =
           indexer.indexAsync(change.getId());
+=======
+      indexer.index(db, change);
+>>>>>>> BRANCH (538e87 Add full names for options on list groups REST API)
       hooks.doTopicChangedHook(change, currentUser.getAccount(),
           oldTopicName, db);
-      indexFuture.checkedGet();
     }
     return Strings.isNullOrEmpty(newTopicName)
         ? Response.<String>none()
