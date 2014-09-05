@@ -33,9 +33,17 @@ jars = set()
 
 def link_jars(libs, directory):
   makedirs(directory)
+<<<<<<< HEAD   (37da58 Set the version to 2.10-SNAPSHOT)
   while not path.isfile('.buckconfig'):
     chdir('..')
   cp = check_output(['buck', 'audit', 'classpath'] + libs)
+=======
+  try:
+    cp = check_output(['buck', 'audit', 'classpath'] + libs)
+  except Exception as e:
+    print('call to buck audit failed: %s' % e, file=sys.stderr)
+    exit(1)
+>>>>>>> BRANCH (538e87 Add full names for options on list groups REST API)
   for j in cp.strip().splitlines():
     if j not in jars:
       jars.add(j)
