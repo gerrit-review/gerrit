@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-extension-api</artifactId>
+<<<<<<< HEAD   (a43ad9 Minor improvements in the 'squash commits first' error docum)
   <version>2.11-SNAPSHOT</version>
+=======
+  <version>2.10-SNAPSHOT</version>
+>>>>>>> BRANCH (b8eee7 Merge branch 'stable-2.9' into stable-2.10)
   <packaging>jar</packaging>
   <name>Gerrit Code Review - Extension API</name>
   <description>API for Gerrit Extensions</description>

@@ -2,4 +2,8 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (a43ad9 Minor improvements in the 'squash commits first' error docum)
 GERRIT_VERSION = '2.11-SNAPSHOT'
+=======
+GERRIT_VERSION = '2.10-SNAPSHOT'
+>>>>>>> BRANCH (b8eee7 Merge branch 'stable-2.9' into stable-2.10)
