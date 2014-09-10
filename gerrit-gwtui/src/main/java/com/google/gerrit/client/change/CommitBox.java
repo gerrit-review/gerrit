@@ -121,8 +121,8 @@ class CommitBox extends Composite {
 
     if (revInfo.commit().parents().length() > 1) {
       mergeCommit.setVisible(true);
-      setParents(change.project(), revInfo.commit().parents());
     }
+<<<<<<< HEAD   (114845 Merge branch 'stable-2.9' into stable-2.10)
   }
 
   private void setWebLinks(ChangeInfo change, String revision,
@@ -145,6 +145,9 @@ class CommitBox extends Composite {
     a.setHref(href);
     a.setInnerText(name);
     webLinkCell.appendChild(a);
+=======
+    setParents(change.project(), revInfo.commit().parents());
+>>>>>>> BRANCH (0b5898 Release notes for Gerrit 2.9.1)
   }
 
   private void setParents(String project, JsArray<CommitInfo> commits) {
