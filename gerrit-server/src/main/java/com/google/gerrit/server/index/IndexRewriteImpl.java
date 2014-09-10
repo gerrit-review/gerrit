@@ -14,8 +14,14 @@
 
 package com.google.gerrit.server.index;
 
+<<<<<<< HEAD   (13eec7 Merge "Add --rebase option to review command")
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.MoreObjects;
+=======
+import static com.google.gerrit.common.data.GlobalCapability.DEFAULT_MAX_QUERY_LIMIT;
+
+import com.google.common.base.Objects;
+>>>>>>> BRANCH (5afd5b Merge branch 'stable-2.9' into stable-2.10)
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.gerrit.reviewdb.client.Change;
@@ -60,9 +66,6 @@ public class IndexRewriteImpl implements ChangeQueryRewriter {
     OPEN_STATUSES = Sets.immutableEnumSet(open);
     CLOSED_STATUSES = Sets.immutableEnumSet(closed);
   }
-
-  @VisibleForTesting
-  static final int MAX_LIMIT = 1000;
 
   /**
    * Get the set of statuses that changes matching the given predicate may have.
@@ -135,13 +138,17 @@ public class IndexRewriteImpl implements ChangeQueryRewriter {
       throws QueryParseException {
     ChangeIndex index = indexes.getSearchIndex();
     in = basicRewrites.rewrite(in);
+<<<<<<< HEAD   (13eec7 Merge "Add --rebase option to review command")
     int limit =
         MoreObjects.firstNonNull(ChangeQueryBuilder.getLimit(in), MAX_LIMIT);
+=======
+    int limit = Objects.firstNonNull(
+        ChangeQueryBuilder.getLimit(in), DEFAULT_MAX_QUERY_LIMIT);
+>>>>>>> BRANCH (5afd5b Merge branch 'stable-2.9' into stable-2.10)
     // Increase the limit rather than skipping, since we don't know how many
     // skipped results would have been filtered out by the enclosing AndSource.
     limit += start;
     limit = Math.max(limit, 1);
-    limit = Math.min(limit, MAX_LIMIT);
 
     Predicate<ChangeData> out = rewriteImpl(in, index, limit);
     if (in == out || out instanceof IndexPredicate) {

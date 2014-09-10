@@ -18,6 +18,16 @@ import static com.google.gerrit.server.schema.DataSourceProvider.Context.MULTI_U
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+<<<<<<< HEAD   (13eec7 Merge "Add --rebase option to review command")
+=======
+import com.google.gerrit.common.ChangeHooks;
+import com.google.gerrit.common.Die;
+import com.google.gerrit.common.DisabledChangeHooks;
+import com.google.gerrit.extensions.events.GitReferenceUpdatedListener;
+import com.google.gerrit.extensions.events.LifecycleListener;
+import com.google.gerrit.extensions.registration.DynamicMap;
+import com.google.gerrit.extensions.registration.DynamicSet;
+>>>>>>> BRANCH (5afd5b Merge branch 'stable-2.9' into stable-2.10)
 import com.google.gerrit.lifecycle.LifecycleManager;
 import com.google.gerrit.lucene.LuceneIndexModule;
 import com.google.gerrit.pgm.util.BatchGitModule;
@@ -83,6 +93,7 @@ public class Reindex extends SiteProgram {
   private boolean dryRun;
 
   private Injector dbInjector;
+  private Config cfg;
   private Injector sysInjector;
   private ChangeIndex index;
 
@@ -90,7 +101,14 @@ public class Reindex extends SiteProgram {
   public int run() throws Exception {
     mustHaveValidSite();
     dbInjector = createDbInjector(MULTI_USER);
+<<<<<<< HEAD   (13eec7 Merge "Add --rebase option to review command")
     threads = ThreadLimiter.limitThreads(dbInjector, threads);
+=======
+    cfg = dbInjector.getInstance(
+        Key.get(Config.class, GerritServerConfig.class));
+    checkNotSlaveMode();
+    limitThreads();
+>>>>>>> BRANCH (5afd5b Merge branch 'stable-2.9' into stable-2.10)
     disableLuceneAutomaticCommit();
     if (version == null) {
       version = ChangeSchemas.getLatest().getVersion();
@@ -119,6 +137,27 @@ public class Reindex extends SiteProgram {
     return result;
   }
 
+<<<<<<< HEAD   (13eec7 Merge "Add --rebase option to review command")
+=======
+  private void checkNotSlaveMode() throws Die {
+    if (cfg.getBoolean("container", "slave", false)) {
+      throw die("Cannot run reindex in slave mode");
+    }
+  }
+
+  private void limitThreads() {
+    boolean usePool = cfg.getBoolean("database", "connectionpool",
+        dbInjector.getInstance(DataSourceType.class).usePool());
+    int poolLimit = cfg.getInt("database", "poollimit",
+        DataSourceProvider.DEFAULT_POOL_LIMIT);
+    if (usePool && threads > poolLimit) {
+      log.warn("Limiting reindexing to " + poolLimit
+          + " threads due to database.poolLimit");
+      threads = poolLimit;
+    }
+  }
+
+>>>>>>> BRANCH (5afd5b Merge branch 'stable-2.9' into stable-2.10)
   private Injector createSysInjector() {
     List<Module> modules = Lists.newArrayList();
     Module changeIndexModule;
