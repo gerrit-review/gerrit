@@ -1,0 +1,10 @@
+Code-Review+1: Edwin Kempin <edwin.kempin@gmail.com>
+Code-Review+1: Nasser Grainawi <nasser@codeaurora.org>
+Library-Compliance+1: Dave Borowitz <dborowitz@google.com>
+Code-Review+2: Saša Živkov <zivkov@gmail.com>
+Verified+1: Saša Živkov <zivkov@gmail.com>
+Submitted-by: Saša Živkov <zivkov@gmail.com>
+Submitted-at: Tue, 21 Oct 2014 16:13:07 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/60953
+Project: gerrit
+Branch: refs/heads/stable-2.10
