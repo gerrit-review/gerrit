@@ -16,8 +16,11 @@ package com.google.gerrit.httpd.auth.become;
 
 import static com.google.gerrit.reviewdb.client.AccountExternalId.SCHEME_USERNAME;
 
+<<<<<<< HEAD   (7d9add Merge "Introduce Google Truth in acceptance tests")
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
+=======
+>>>>>>> BRANCH (449eb8 Merge "Fix login redirect for non default (root) context" in)
 import com.google.gerrit.common.PageLinks;
 import com.google.gerrit.extensions.registration.DynamicItem;
 import com.google.gerrit.httpd.HtmlDomUtil;
@@ -120,9 +123,14 @@ class BecomeAnyAccountLoginServlet extends HttpServlet {
     if (res != null) {
       webSession.get().login(res, false);
       final StringBuilder rdr = new StringBuilder();
+<<<<<<< HEAD   (7d9add Merge "Introduce Google Truth in acceptance tests")
       rdr.append(MoreObjects.firstNonNull(
           Strings.emptyToNull(req.getContextPath()),
           "/"));
+=======
+      rdr.append(req.getContextPath());
+      rdr.append("/");
+>>>>>>> BRANCH (449eb8 Merge "Fix login redirect for non default (root) context" in)
       if (IS_DEV && req.getParameter("gwt.codesvr") != null) {
         if (rdr.indexOf("?") < 0) {
           rdr.append("?");
