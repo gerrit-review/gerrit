@@ -14,6 +14,11 @@
 
 package com.google.gerrit.server.change;
 
+<<<<<<< HEAD   (3e7054 Convert project REST API acceptance tests to use Google Trut)
+=======
+import com.google.common.collect.ImmutableList;
+import com.google.common.primitives.Ints;
+>>>>>>> BRANCH (b2ade8 Merge branch 'stable-2.9' into stable-2.10)
 import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.extensions.restapi.AcceptsPost;
 import com.google.gerrit.extensions.restapi.IdString;
@@ -23,8 +28,13 @@ import com.google.gerrit.extensions.restapi.RestCollection;
 import com.google.gerrit.extensions.restapi.RestView;
 import com.google.gerrit.extensions.restapi.TopLevelResource;
 import com.google.gerrit.reviewdb.client.Change;
+<<<<<<< HEAD   (3e7054 Convert project REST API acceptance tests to use Google Trut)
+=======
+import com.google.gerrit.reviewdb.server.ReviewDb;
+>>>>>>> BRANCH (b2ade8 Merge branch 'stable-2.9' into stable-2.10)
 import com.google.gerrit.server.ChangeUtil;
 import com.google.gerrit.server.CurrentUser;
+import com.google.gerrit.server.index.ChangeIndexer;
 import com.google.gerrit.server.project.ChangeControl;
 import com.google.gerrit.server.project.NoSuchChangeException;
 import com.google.gerrit.server.query.change.QueryChanges;
@@ -33,6 +43,11 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
+<<<<<<< HEAD   (3e7054 Convert project REST API acceptance tests to use Google Trut)
+=======
+import java.io.IOException;
+import java.util.Collections;
+>>>>>>> BRANCH (b2ade8 Merge branch 'stable-2.9' into stable-2.10)
 import java.util.List;
 
 @Singleton
@@ -45,6 +60,7 @@ public class ChangesCollection implements
   private final DynamicMap<RestView<ChangeResource>> views;
   private final ChangeUtil changeUtil;
   private final CreateChange createChange;
+  private final ChangeIndexer changeIndexer;
 
   @Inject
   ChangesCollection(
@@ -52,14 +68,22 @@ public class ChangesCollection implements
       ChangeControl.GenericFactory changeControlFactory,
       Provider<QueryChanges> queryFactory,
       DynamicMap<RestView<ChangeResource>> views,
+<<<<<<< HEAD   (3e7054 Convert project REST API acceptance tests to use Google Trut)
       ChangeUtil changeUtil,
       CreateChange createChange) {
+=======
+      CreateChange createChange,
+      ChangeUtil changeUtil,
+      ChangeIndexer changeIndexer) {
+    this.db = dbProvider;
+>>>>>>> BRANCH (b2ade8 Merge branch 'stable-2.9' into stable-2.10)
     this.user = user;
     this.changeControlFactory = changeControlFactory;
     this.queryFactory = queryFactory;
     this.views = views;
     this.changeUtil = changeUtil;
     this.createChange = createChange;
+    this.changeIndexer = changeIndexer;
   }
 
   @Override
@@ -75,7 +99,21 @@ public class ChangesCollection implements
   @Override
   public ChangeResource parse(TopLevelResource root, IdString id)
       throws ResourceNotFoundException, OrmException {
+<<<<<<< HEAD   (3e7054 Convert project REST API acceptance tests to use Google Trut)
     List<Change> changes = changeUtil.findChanges(id.encoded());
+=======
+    List<Change> changes = findChanges(id.encoded());
+    if (changes.isEmpty()) {
+      Integer changeId = Ints.tryParse(id.get());
+      if (changeId != null) {
+        try {
+          changeIndexer.delete(changeId);
+        } catch (IOException e) {
+          throw new ResourceNotFoundException(id.get(), e);
+        }
+      }
+    }
+>>>>>>> BRANCH (b2ade8 Merge branch 'stable-2.9' into stable-2.10)
     if (changes.size() != 1) {
       throw new ResourceNotFoundException(id);
     }
