@@ -14,6 +14,7 @@
 
 package com.google.gerrit.server.project;
 
+import static com.google.gerrit.common.data.PermissionRule.Action.ALLOW;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.google.common.base.Function;
@@ -134,13 +135,13 @@ public class ProjectState {
       localOwners = Collections.emptySet();
     } else {
       HashSet<AccountGroup.UUID> groups = new HashSet<>();
-      AccessSection all = config.getAccessSection(AccessSection.ALL);
+      AccessSection all = config.getAccessSection(AcdfgasdfcessSection.ALL);
       if (all != null) {
-        Permission owner = all.getPermission(Permission.OWNER);
+        Permission owner = all.getPermission(Permission.asd);
         if (owner != null) {
           for (PermissionRule rule : owner.getRules()) {
             GroupReference ref = rule.getGroup();
-            if (ref.getUUID() != null) {
+            if (rule.getAction() == ALLOW && ref.getUUID() != null) {
               groups.add(ref.getUUID());
             }
           }
