@@ -23,17 +23,49 @@ import com.google.gerrit.lifecycle.LifecycleManager;
 import com.google.gerrit.lucene.LuceneIndexModule;
 import com.google.gerrit.pgm.util.BatchProgramModule;
 import com.google.gerrit.pgm.util.SiteProgram;
+<<<<<<< HEAD   (4512fe Enable configurable 'maxBatchChanges' limit)
 import com.google.gerrit.pgm.util.ThreadLimiter;
+=======
+import com.google.gerrit.reviewdb.client.AccountGroup;
+>>>>>>> BRANCH (18a62d Update 2.10 release notes with information from 2.9.2)
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gerrit.server.config.GerritServerConfig;
+<<<<<<< HEAD   (4512fe Enable configurable 'maxBatchChanges' limit)
+=======
+import com.google.gerrit.server.config.GitReceivePackGroups;
+import com.google.gerrit.server.config.GitUploadPackGroups;
+import com.google.gerrit.server.git.GitModule;
+import com.google.gerrit.server.git.MergeUtil;
+import com.google.gerrit.server.git.WorkQueue;
+import com.google.gerrit.server.git.validators.CommitValidationListener;
+import com.google.gerrit.server.git.validators.CommitValidators;
+import com.google.gerrit.server.group.GroupModule;
+import com.google.gerrit.server.index.ChangeBatchIndexer;
+>>>>>>> BRANCH (18a62d Update 2.10 release notes with information from 2.9.2)
 import com.google.gerrit.server.index.ChangeIndex;
 import com.google.gerrit.server.index.ChangeSchemas;
 import com.google.gerrit.server.index.IndexCollection;
 import com.google.gerrit.server.index.IndexModule;
 import com.google.gerrit.server.index.IndexModule.IndexType;
+<<<<<<< HEAD   (4512fe Enable configurable 'maxBatchChanges' limit)
 import com.google.gerrit.server.index.SiteIndexer;
+=======
+import com.google.gerrit.server.mail.ReplacePatchSetSender;
+import com.google.gerrit.server.notedb.NoteDbModule;
+import com.google.gerrit.server.patch.PatchListCacheImpl;
+import com.google.gerrit.server.project.ChangeControl;
+import com.google.gerrit.server.project.CommentLinkInfo;
+import com.google.gerrit.server.project.CommentLinkProvider;
+import com.google.gerrit.server.project.ProjectCacheImpl;
+import com.google.gerrit.server.project.ProjectControl;
+import com.google.gerrit.server.project.ProjectState;
+import com.google.gerrit.server.project.SectionSortCache;
+import com.google.gerrit.server.query.change.ChangeData;
+import com.google.gerrit.server.schema.DataSourceProvider;
+import com.google.gerrit.server.schema.DataSourceType;
+>>>>>>> BRANCH (18a62d Update 2.10 release notes with information from 2.9.2)
 import com.google.gerrit.solr.SolrIndexModule;
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -126,7 +158,61 @@ public class Reindex extends SiteProgram {
         throw new IllegalStateException("unsupported index.type");
     }
     modules.add(changeIndexModule);
+<<<<<<< HEAD   (4512fe Enable configurable 'maxBatchChanges' limit)
     modules.add(dbInjector.getInstance(BatchProgramModule.class));
+=======
+    modules.add(new ReviewDbModule());
+    modules.add(new FactoryModule() {
+      @SuppressWarnings("rawtypes")
+      @Override
+      protected void configure() {
+        // Plugins are not loaded and we're just running through each change
+        // once, so don't worry about cache removal.
+        bind(new TypeLiteral<DynamicSet<CacheRemovalListener>>() {})
+            .toInstance(DynamicSet.<CacheRemovalListener> emptySet());
+        bind(new TypeLiteral<DynamicMap<Cache<?, ?>>>() {})
+            .toInstance(DynamicMap.<Cache<?, ?>> emptyMap());
+        bind(new TypeLiteral<List<CommentLinkInfo>>() {})
+            .toProvider(CommentLinkProvider.class).in(SINGLETON);
+        bind(String.class).annotatedWith(CanonicalWebUrl.class)
+            .toProvider(CanonicalWebUrlProvider.class);
+        bind(IdentifiedUser.class)
+          .toProvider(Providers. <IdentifiedUser>of(null));
+        bind(CurrentUser.class).to(IdentifiedUser.class);
+
+        bind(new TypeLiteral<Set<AccountGroup.UUID>>() {})
+            .annotatedWith(GitUploadPackGroups.class)
+            .toInstance(Collections.<AccountGroup.UUID> emptySet());
+        bind(new TypeLiteral<Set<AccountGroup.UUID>>() {})
+            .annotatedWith(GitReceivePackGroups.class)
+            .toInstance(Collections.<AccountGroup.UUID> emptySet());
+        factory(ChangeControl.AssistedFactory.class);
+        factory(ProjectControl.AssistedFactory.class);
+
+        install(new DefaultCacheFactory.Module());
+        install(new GroupModule());
+        install(new PrologModule());
+        install(AccountByEmailCacheImpl.module());
+        install(AccountCacheImpl.module());
+        install(GroupCacheImpl.module());
+        install(GroupIncludeCacheImpl.module());
+        install(ProjectCacheImpl.module());
+        install(SectionSortCache.module());
+        install(ChangeKindCacheImpl.module());
+        factory(CapabilityControl.Factory.class);
+        factory(ChangeData.Factory.class);
+        factory(ProjectState.Factory.class);
+
+        if (recheckMergeable) {
+          install(new MergeabilityModule());
+        } else {
+          bind(MergeabilityChecker.class)
+              .toProvider(Providers.<MergeabilityChecker> of(null));
+        }
+      }
+    });
+
+>>>>>>> BRANCH (18a62d Update 2.10 release notes with information from 2.9.2)
     return dbInjector.createChildInjector(modules);
   }
 
