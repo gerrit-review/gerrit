@@ -1,0 +1,9 @@
+Code-Review+2: Dave Borowitz <dborowitz@google.com>
+Code-Review+1: Jan Kundrát <jkt@flaska.net>
+Verified+1: Hugo Arès <hugo.ares@ericsson.com>
+Verified+1: Jan Kundrát <jkt@flaska.net>
+Submitted-by: David Pursehouse <david.pursehouse@sonymobile.com>
+Submitted-at: Wed, 26 Nov 2014 00:23:50 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/61742
+Project: gerrit
+Branch: refs/heads/stable-2.9
