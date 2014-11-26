@@ -66,6 +66,7 @@ import com.google.gerrit.reviewdb.client.PatchSetInfo;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.client.RefNames;
 import com.google.gerrit.reviewdb.client.RevId;
+import com.google.gerrit.reviewdb.client.SubmoduleSubscription;
 import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gerrit.server.ApprovalCopier;
 import com.google.gerrit.server.ApprovalsUtil;
@@ -634,10 +635,28 @@ public class ReceiveCommits {
                   c.getNewId(),
                   currentUser.getAccount());
             }
+<<<<<<< HEAD   (18a62d Update 2.10 release notes with information from 2.9.2)
           } catch (NoSuchChangeException e) {
             c.setResult(REJECTED_OTHER_REASON,
                 "No such change: " + e.getMessage());
           }
+=======
+            break;
+
+          case DELETE:
+            ResultSet<SubmoduleSubscription> submoduleSubscriptions = null;
+            Branch.NameKey projRef = new Branch.NameKey(project.getNameKey(),
+                c.getRefName());
+            try {
+              submoduleSubscriptions =
+                  db.submoduleSubscriptions().bySuperProject(projRef);
+              db.submoduleSubscriptions().delete(submoduleSubscriptions);
+            } catch (OrmException e) {
+              log.error("Cannot delete submodule subscription(s) of branch "
+                  + projRef + ": " + submoduleSubscriptions, e);
+            }
+            break;
+>>>>>>> BRANCH (26e5a8 Fix SubmoduleOp tests)
         }
     }
     closeProgress.end();
