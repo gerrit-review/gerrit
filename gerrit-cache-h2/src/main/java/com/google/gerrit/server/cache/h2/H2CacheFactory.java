@@ -163,7 +163,11 @@ class H2CacheFactory implements PersistentCacheFactory, LifecycleListener {
 
     SqlStore<K, V> store = newSqlStore(def.name(), def.keyType(), limit,
         def.expireAfterWrite(TimeUnit.SECONDS));
+<<<<<<< HEAD   (354475 Add eventCreatedOn timestamp to ChangeEvent)
     H2CacheImpl<K, V> cache = new H2CacheImpl<>(
+=======
+    H2CacheImpl<K, V> cache = new H2CacheImpl<K, V>(
+>>>>>>> BRANCH (074fd7 Don't show 'Add Me' button for change owner or existing revi)
         executor, store, def.keyType(),
         (Cache<K, ValueHolder<V>>) defaultFactory.create(def, true).build());
     synchronized (caches) {
