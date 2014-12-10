@@ -38,9 +38,6 @@ import org.bouncycastle.openpgp.PGPPublicKey;
 import org.bouncycastle.openpgp.PGPPublicKeyRing;
 import org.bouncycastle.openpgp.PGPPublicKeyRingCollection;
 import org.bouncycastle.openpgp.PGPUtil;
-import org.bouncycastle.openpgp.bc.BcPGPPublicKeyRingCollection;
-import org.bouncycastle.openpgp.operator.bc.BcPGPDataEncryptorBuilder;
-import org.bouncycastle.openpgp.operator.bc.BcPublicKeyKeyEncryptionMethodGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -109,7 +106,7 @@ class EncryptedContactStore implements ContactStore {
   private static PGPPublicKeyRingCollection readPubRing(final File pub) {
     try (InputStream fin = new FileInputStream(pub);
         InputStream in = PGPUtil.getDecoderStream(fin)) {
-        return new BcPGPPublicKeyRingCollection(in);
+        return new PGPPublicKeyRingCollection(in);
     } catch (IOException e) {
       throw new ProvisionException("Cannot read " + pub, e);
     } catch (PGPException e) {
@@ -160,15 +157,19 @@ class EncryptedContactStore implements ContactStore {
     }
   }
 
+<<<<<<< HEAD   (3435c5 Revert "Allow configuration of SSH rekey values")
   private final PGPEncryptedDataGenerator cpk() {
     final BcPGPDataEncryptorBuilder builder =
         new BcPGPDataEncryptorBuilder(PGPEncryptedData.CAST5)
             .setSecureRandom(prng);
+=======
+  @SuppressWarnings("deprecation")
+  private final PGPEncryptedDataGenerator cpk()
+      throws NoSuchProviderException, PGPException {
+>>>>>>> BRANCH (f20820 Remove now unused project parameter)
     PGPEncryptedDataGenerator cpk =
-        new PGPEncryptedDataGenerator(builder, true);
-    final BcPublicKeyKeyEncryptionMethodGenerator methodGenerator =
-        new BcPublicKeyKeyEncryptionMethodGenerator(dest);
-    cpk.addMethod(methodGenerator);
+        new PGPEncryptedDataGenerator(PGPEncryptedData.CAST5, true, prng, "BC");
+    cpk.addMethod(dest);
     return cpk;
   }
 
