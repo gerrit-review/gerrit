@@ -1,0 +1,8 @@
+Code-Review+2: Shawn Pearce <sop@google.com>
+Library-Compliance+1: Shawn Pearce <sop@google.com>
+Verified+1: Shawn Pearce <sop@google.com>
+Submitted-by: Shawn Pearce <sop@google.com>
+Submitted-at: Fri, 26 Dec 2014 22:17:08 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/62759
+Project: gerrit
+Branch: refs/heads/stable-2.9
