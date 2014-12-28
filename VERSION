@@ -2,4 +2,9 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (8047c4 Update JGit to 3.5.3.201412180710-r)
 GERRIT_VERSION = '2.10-SNAPSHOT'
+=======
+GERRIT_VERSION = '2.9.4'
+
+>>>>>>> BRANCH (f15ff1 Release notes for Gerrit 2.9.4)

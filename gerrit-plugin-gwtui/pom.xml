@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-plugin-gwtui</artifactId>
+<<<<<<< HEAD   (8047c4 Update JGit to 3.5.3.201412180710-r)
   <version>2.10-SNAPSHOT</version>
+=======
+  <version>2.9.4</version>
+>>>>>>> BRANCH (f15ff1 Release notes for Gerrit 2.9.4)
   <packaging>jar</packaging>
   <name>Gerrit Code Review - Plugin GWT UI</name>
   <description>Common Classes for Gerrit GWT UI Plugins</description>
