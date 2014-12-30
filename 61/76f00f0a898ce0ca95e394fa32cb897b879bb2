@@ -1,0 +1,10 @@
+Code-Review+1: Jonathan Nieder <jrn@google.com>
+Library-Compliance+1: Jonathan Nieder <jrn@google.com>
+Verified+1: Diffy Cuckoo (Automated Verifier)
+Verified+1: Jonathan Nieder <jrn@google.com>
+Code-Review+2: Shawn Pearce <sop@google.com>
+Submitted-by: Shawn Pearce <sop@google.com>
+Submitted-at: Tue, 30 Dec 2014 23:48:45 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/62821
+Project: gerrit
+Branch: refs/heads/master
