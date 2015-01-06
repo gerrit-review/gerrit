@@ -1,12 +1,21 @@
 include_defs('//lib/maven.defs')
 
+<<<<<<< HEAD   (0139d6 Merge "Stop creating the entire SchemaVersion chain at runti)
 VERS = '3.6.0.201412230720-r'
+=======
+VERS = '3.5.3.201412180710-r'
+>>>>>>> BRANCH (aebb49 Update 2.10 release notes)
 
 maven_jar(
   name = 'jgit',
   id = 'org.eclipse.jgit:org.eclipse.jgit:' + VERS,
+<<<<<<< HEAD   (0139d6 Merge "Stop creating the entire SchemaVersion chain at runti)
   bin_sha1 = 'b005b69d9f5b4dba636a95403d5cb62bad5c486d',
   src_sha1 = '9f8ced1e1f5c9ba6a3084e35004a19a24776478a',
+=======
+  bin_sha1 = '9f3781c7163ee6fa380a4518564a5abb097d9e27',
+  src_sha1 = 'e6d8548522624ffa3094e43130e5dc958f359187',
+>>>>>>> BRANCH (aebb49 Update 2.10 release notes)
   license = 'jgit',
   unsign = True,
   deps = [':ewah'],
@@ -20,7 +29,11 @@ maven_jar(
 maven_jar(
   name = 'jgit-servlet',
   id = 'org.eclipse.jgit:org.eclipse.jgit.http.server:' + VERS,
+<<<<<<< HEAD   (0139d6 Merge "Stop creating the entire SchemaVersion chain at runti)
   sha1 = '92cdf015b62c8a4f8fc1f6fd8b1835931bd4b4d6',
+=======
+  sha1 = 'f2678e1feefd8b90b3c47d40ebc2b9426e3b69f4',
+>>>>>>> BRANCH (aebb49 Update 2.10 release notes)
   license = 'jgit',
   deps = [':jgit'],
   unsign = True,
@@ -33,7 +46,11 @@ maven_jar(
 maven_jar(
   name = 'jgit-archive',
   id = 'org.eclipse.jgit:org.eclipse.jgit.archive:' + VERS,
+<<<<<<< HEAD   (0139d6 Merge "Stop creating the entire SchemaVersion chain at runti)
   sha1 = '359c1f666e4bdc2db795b6c60a7635f6be929a66',
+=======
+  sha1 = '66705b6630a89c9e6e7950798ea2d7f8a4a82cd7',
+>>>>>>> BRANCH (aebb49 Update 2.10 release notes)
   license = 'jgit',
   deps = [':jgit',
     '//lib/commons:compress',
@@ -49,7 +66,11 @@ maven_jar(
 maven_jar(
   name = 'junit',
   id = 'org.eclipse.jgit:org.eclipse.jgit.junit:' + VERS,
+<<<<<<< HEAD   (0139d6 Merge "Stop creating the entire SchemaVersion chain at runti)
   sha1 = 'cb029dba3fafb329078904028db171d9c460ada8',
+=======
+  sha1 = '47e821761059770dfd3f443dc7f14d5381fb6f4f',
+>>>>>>> BRANCH (aebb49 Update 2.10 release notes)
   license = 'DO_NOT_DISTRIBUTE',
   unsign = True,
   deps = [':jgit'],
