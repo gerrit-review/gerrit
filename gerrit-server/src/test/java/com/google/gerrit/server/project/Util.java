@@ -297,7 +297,11 @@ public class Util {
       injector.getInstance(ChangeControl.AssistedFactory.class);
   }
 
+<<<<<<< HEAD   (0a7abf Merge "Order SSH commands alphabetically in the documentatio)
   public InMemoryRepository add(ProjectConfig pc) {
+=======
+  public void add(ProjectConfig pc) {
+>>>>>>> BRANCH (7794b9 Update 2.10 release notes)
     PrologEnvironment.Factory envFactory = null;
     ProjectControl.AssistedFactory projectControlFactory = null;
     RulesCache rulesCache = null;
