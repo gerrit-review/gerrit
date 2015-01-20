@@ -25,7 +25,13 @@ import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.user.client.ui.Button;
+<<<<<<< HEAD   (3d0625 Update 2.11 release notes)
 import com.google.gwt.user.client.ui.PopupPanel;
+=======
+import com.google.gwt.user.client.ui.FocusWidget;
+import com.google.gwt.user.client.ui.PopupPanel;
+
+>>>>>>> BRANCH (ab7361 Update 2.10 release notes)
 
 class CherryPickAction {
   static void call(final Button b, final ChangeInfo info, final String revision,
