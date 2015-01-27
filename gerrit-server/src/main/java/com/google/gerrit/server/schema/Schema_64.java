@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (aa9af4 Merge "Actions: Respect enabled flag for core action buttons)
 // Copyright (C) 2012 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -108,3 +109,5 @@ public class Schema_64 extends SchemaVersion {
     }
   }
 }
+=======
+>>>>>>> BRANCH (8265bd Update version to 2.10)

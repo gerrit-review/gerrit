@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-war</artifactId>
+<<<<<<< HEAD   (aa9af4 Merge "Actions: Respect enabled flag for core action buttons)
   <version>2.11-SNAPSHOT</version>
+=======
+  <version>2.10</version>
+>>>>>>> BRANCH (8265bd Update version to 2.10)
   <packaging>war</packaging>
   <name>Gerrit Code Review - WAR</name>
   <description>Gerrit WAR</description>

@@ -2,4 +2,8 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (aa9af4 Merge "Actions: Respect enabled flag for core action buttons)
 GERRIT_VERSION = '2.11-SNAPSHOT'
+=======
+GERRIT_VERSION = '2.10'
+>>>>>>> BRANCH (8265bd Update version to 2.10)
