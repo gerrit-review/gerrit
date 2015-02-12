@@ -1,0 +1,7 @@
+Code-Review+2: David Pursehouse <david.pursehouse@sonymobile.com>
+Verified+1: Diffy Cuckoo (Automated Verifier)
+Submitted-by: Martin Fick <mfick@codeaurora.org>
+Submitted-at: Thu, 12 Feb 2015 17:52:30 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/62517
+Project: gerrit
+Branch: refs/heads/master
