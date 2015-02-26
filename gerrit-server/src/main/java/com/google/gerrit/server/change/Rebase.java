@@ -119,7 +119,11 @@ public class Rebase implements RestModifyView<RevisionResource, RebaseInput>,
 
     try {
       rebaseChange.get().rebase(rsrc.getChange(), rsrc.getPatchSet().getId(),
+<<<<<<< HEAD   (8e9c4c Update 2.11 release notes)
           rsrc.getUser(), baseRev);
+=======
+          rsrc.getUser());
+>>>>>>> BRANCH (2bb0f3 Fix NullPointerException when executing query with --comment)
     } catch (InvalidChangeOperationException e) {
       throw new ResourceConflictException(e.getMessage());
     } catch (IOException e) {

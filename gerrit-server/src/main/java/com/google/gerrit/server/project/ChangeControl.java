@@ -75,6 +75,7 @@ public class ChangeControl {
       }
     }
 
+<<<<<<< HEAD   (8e9c4c Update 2.11 release notes)
     public ChangeControl validateFor(Change.Id changeId, CurrentUser user)
         throws NoSuchChangeException, OrmException {
       Change change = db.get().changes().get(changeId);
@@ -84,6 +85,8 @@ public class ChangeControl {
       return validateFor(change, user);
     }
 
+=======
+>>>>>>> BRANCH (2bb0f3 Fix NullPointerException when executing query with --comment)
     public ChangeControl validateFor(Change change, CurrentUser user)
         throws NoSuchChangeException, OrmException {
       ChangeControl c = controlFor(change, user);
@@ -92,6 +95,62 @@ public class ChangeControl {
       }
       return c;
     }
+<<<<<<< HEAD   (8e9c4c Update 2.11 release notes)
+=======
+  }
+
+  public static class Factory {
+    private final ProjectControl.Factory projectControl;
+    private final Provider<ReviewDb> db;
+
+    @Inject
+    Factory(final ProjectControl.Factory p, final Provider<ReviewDb> d) {
+      projectControl = p;
+      db = d;
+    }
+
+    public ChangeControl controlFor(final Change.Id id)
+        throws NoSuchChangeException {
+      final Change change;
+      try {
+        change = db.get().changes().get(id);
+        if (change == null) {
+          throw new NoSuchChangeException(id);
+        }
+      } catch (OrmException e) {
+        throw new NoSuchChangeException(id, e);
+      }
+      return controlFor(change);
+    }
+
+    public ChangeControl controlFor(final Change change)
+        throws NoSuchChangeException {
+      try {
+        final Project.NameKey projectKey = change.getProject();
+        return projectControl.validateFor(projectKey).controlFor(change);
+      } catch (NoSuchProjectException e) {
+        throw new NoSuchChangeException(change.getId(), e);
+      }
+    }
+
+    public ChangeControl validateFor(final Change.Id id)
+        throws NoSuchChangeException, OrmException {
+      return validate(controlFor(id), db.get());
+    }
+
+    public ChangeControl validateFor(final Change change)
+        throws NoSuchChangeException, OrmException {
+      return validate(controlFor(change), db.get());
+    }
+
+    private static ChangeControl validate(final ChangeControl c, final ReviewDb db)
+        throws NoSuchChangeException, OrmException{
+      if (!c.isVisible(db)) {
+        throw new NoSuchChangeException(c.getChange().getId());
+      }
+      return c;
+    }
+>>>>>>> BRANCH (2bb0f3 Fix NullPointerException when executing query with --comment)
   }
 
   public interface AssistedFactory {

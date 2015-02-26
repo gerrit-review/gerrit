@@ -108,9 +108,15 @@ public class RebaseChange {
    * @throws IOException thrown if rebase is not possible or not needed
    * @throws InvalidChangeOperationException thrown if rebase is not allowed
    */
+<<<<<<< HEAD   (8e9c4c Update 2.11 release notes)
   public void rebase(Change change, PatchSet.Id patchSetId, final IdentifiedUser uploader,
       final String newBaseRev) throws NoSuchChangeException, EmailException, OrmException,
       IOException, InvalidChangeOperationException {
+=======
+  public void rebase(Change change, PatchSet.Id patchSetId, final IdentifiedUser uploader)
+      throws NoSuchChangeException, EmailException, OrmException, IOException,
+      InvalidChangeOperationException {
+>>>>>>> BRANCH (2bb0f3 Fix NullPointerException when executing query with --comment)
     final Change.Id changeId = patchSetId.getParentKey();
     final ChangeControl changeControl =
         changeControlFactory.validateFor(change, uploader);
