@@ -17,6 +17,7 @@ package com.google.gerrit.server.auth.ldap;
 import com.google.common.base.Throwables;
 import com.google.common.cache.Cache;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Maps;
 import com.google.gerrit.common.data.ParameterizedString;
 import com.google.gerrit.reviewdb.client.AccountGroup;
 import com.google.gerrit.server.account.AccountException;
@@ -37,6 +38,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -70,7 +72,10 @@ import javax.security.auth.login.LoginException;
   private final String readTimeoutMillis;
   private final String connectTimeoutMillis;
   private final boolean useConnectionPooling;
+<<<<<<< HEAD   (1b644e Merge "Fix LDAP authentication for the RFC2307 server type" )
   private final boolean groupsVisibleToAll;
+=======
+>>>>>>> BRANCH (3a6d64 Improve class naming of group inclusion cache loaders)
 
   @Inject
   Helper(@GerritServerConfig final Config config,
@@ -82,7 +87,10 @@ import javax.security.auth.login.LoginException;
     this.password = LdapRealm.optional(config, "password", "");
     this.referral = LdapRealm.optional(config, "referral", "ignore");
     this.sslVerify = config.getBoolean("ldap", "sslverify", true);
+<<<<<<< HEAD   (1b644e Merge "Fix LDAP authentication for the RFC2307 server type" )
     this.groupsVisibleToAll = config.getBoolean("ldap", "groupsVisibleToAll", false);
+=======
+>>>>>>> BRANCH (3a6d64 Improve class naming of group inclusion cache loaders)
     this.authentication =
         LdapRealm.optional(config, "authentication", "simple");
     String readTimeout = LdapRealm.optional(config, "readTimeout");

@@ -2548,6 +2548,47 @@ are specified in the link:#container[container section]:
   javaOptions = -Dcom.sun.jndi.ldap.connect.pool.timeout=300000
 ----
 
+[[ldap.useConnectionPooling]]ldap.useConnectionPooling::
++
+_(Optional)_ Enable the LDAP connection pooling or not.
++
+If it is true, the LDAP service provider maintains a pool of (possibly)
+previously used connections and assigns them to a Context instance as
+needed. When a Context instance is done with a connection (closed or
+garbage collected), the connection is returned to the pool for future use.
++
+For details, see link:http://docs.oracle.com/javase/tutorial/jndi/ldap/pool.html[
+LDAP connection management (Pool)] and link:http://docs.oracle.com/javase/tutorial/jndi/ldap/config.html[
+LDAP connection management (Configuration)]
++
+By default, false.
+
+[[ldap.connectTimeout]]ldap.connectTimeout::
++
+_(Optional)_ Timeout period for establishment of an LDAP connection.
++
+The value is in the usual time-unit format like "1 s", "100 ms",
+etc...
++
+By default there is no timeout and Gerrit will wait indefinitely.
+
+[[ldap-connection-pooling]]
+==== LDAP Connection Pooling
+Once LDAP connection pooling is enabled by setting the link:#ldap.useConnectionPooling[
+ldap.useConnectionPooling] configuration property to `true`, the connection pool
+can be configured using JVM system properties as explained in the
+link:http://docs.oracle.com/javase/7/docs/technotes/guides/jndi/jndi-ldap.html#POOL[
+Java SE Documentation].
+
+For standalone Gerrit (running with the embedded Jetty), JVM system properties
+are specified in the link:#container[container section]:
+
+----
+  javaOptions = -Dcom.sun.jndi.ldap.connect.pool.maxsize=20
+  javaOptions = -Dcom.sun.jndi.ldap.connect.pool.prefsize=10
+  javaOptions = -Dcom.sun.jndi.ldap.connect.pool.timeout=300000
+----
+
 [[mimetype]]
 === Section mimetype
 
