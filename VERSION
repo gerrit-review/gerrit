@@ -2,4 +2,8 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (b4ce06 Remove unused imports in Helper.java)
 GERRIT_VERSION = '2.11-SNAPSHOT'
+=======
+GERRIT_VERSION = '2.10.1'
+>>>>>>> BRANCH (24ec75 Set version to 2.10.1)

@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-war</artifactId>
+<<<<<<< HEAD   (b4ce06 Remove unused imports in Helper.java)
   <version>2.11-SNAPSHOT</version>
+=======
+  <version>2.10.1</version>
+>>>>>>> BRANCH (24ec75 Set version to 2.10.1)
   <packaging>war</packaging>
   <name>Gerrit Code Review - WAR</name>
   <description>Gerrit WAR</description>

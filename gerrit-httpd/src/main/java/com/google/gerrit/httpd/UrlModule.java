@@ -32,8 +32,14 @@ import com.google.gerrit.httpd.rpc.config.ConfigRestApiServlet;
 import com.google.gerrit.httpd.rpc.doc.QueryDocumentationFilter;
 import com.google.gerrit.httpd.rpc.group.GroupsRestApiServlet;
 import com.google.gerrit.httpd.rpc.project.ProjectsRestApiServlet;
+import com.google.gerrit.reviewdb.client.AuthType;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.Project;
+<<<<<<< HEAD   (b4ce06 Remove unused imports in Helper.java)
+=======
+import com.google.gerrit.server.config.AuthConfig;
+import com.google.gerrit.server.config.GerritServerConfig;
+>>>>>>> BRANCH (24ec75 Set version to 2.10.1)
 import com.google.gwtexpui.server.CacheControlFilter;
 import com.google.inject.Key;
 import com.google.inject.Provider;
@@ -51,8 +57,25 @@ import javax.servlet.http.HttpServletResponse;
 class UrlModule extends ServletModule {
   private GerritOptions options;
 
+<<<<<<< HEAD   (b4ce06 Remove unused imports in Helper.java)
   UrlModule(GerritOptions options) {
     this.options = options;
+=======
+    @Inject
+    UrlConfig(@GerritServerConfig Config cfg) {
+      deprecatedQuery = cfg.getBoolean("site", "enableDeprecatedQuery", true);
+    }
+  }
+
+  private final UrlConfig cfg;
+  private GerritUiOptions uiOptions;
+  private AuthConfig authConfig;
+
+  UrlModule(UrlConfig cfg, GerritUiOptions uiOptions, AuthConfig authConfig) {
+    this.cfg = cfg;
+    this.uiOptions = uiOptions;
+    this.authConfig = authConfig;
+>>>>>>> BRANCH (24ec75 Set version to 2.10.1)
   }
 
   @Override
@@ -66,8 +89,11 @@ class UrlModule extends ServletModule {
       serve("/Gerrit/*").with(legacyGerritScreen());
     }
     serve("/cat/*").with(CatServlet.class);
-    serve("/logout").with(HttpLogoutServlet.class);
-    serve("/signout").with(HttpLogoutServlet.class);
+
+    if (authConfig.getAuthType() != AuthType.OAUTH) {
+      serve("/logout").with(HttpLogoutServlet.class);
+      serve("/signout").with(HttpLogoutServlet.class);
+    }
     serve("/ssh_info").with(SshInfoServlet.class);
     serve("/static/*").with(StaticServlet.class);
 
