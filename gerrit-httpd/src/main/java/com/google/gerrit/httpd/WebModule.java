@@ -123,6 +123,8 @@ public class WebModule extends LifecycleModule {
         install(new BecomeAnyAccountModule());
         break;
 
+      case OAUTH:
+        // OAuth support is bound in WebAppInitializer and Daemon.
       case OPENID:
       case OPENID_SSO:
         // OpenID support is bound in WebAppInitializer and Daemon.
@@ -131,5 +133,31 @@ public class WebModule extends LifecycleModule {
       default:
         throw new ProvisionException("Unsupported loginType: " + authConfig.getAuthType());
     }
+<<<<<<< HEAD   (b4ce06 Remove unused imports in Helper.java)
+=======
+
+    install(new UrlModule(urlConfig, uiOptions, authConfig));
+    install(new UiRpcModule());
+    install(new GerritRequestModule());
+    install(new GitOverHttpServlet.Module());
+
+    bind(GitWebConfig.class).toInstance(gitWebConfig);
+    if (gitWebConfig.getGitwebCGI() != null) {
+      install(new GitWebModule());
+    }
+
+    bind(ContactStore.class).toProvider(ContactStoreProvider.class).in(
+        SINGLETON);
+    bind(GerritConfigProvider.class);
+    bind(GerritConfig.class).toProvider(GerritConfigProvider.class);
+    DynamicSet.setOf(binder(), WebUiPlugin.class);
+
+    install(new AsyncReceiveCommits.Module());
+
+    bind(SocketAddress.class).annotatedWith(RemotePeer.class).toProvider(
+        HttpRemotePeerProvider.class).in(RequestScoped.class);
+
+    listener().toInstance(registerInParentInjectors());
+>>>>>>> BRANCH (24ec75 Set version to 2.10.1)
   }
 }

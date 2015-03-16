@@ -62,6 +62,22 @@ java_library(
   srcs = glob([SRCS + 'util/*.java']),
   deps = DEPS + [
     '//gerrit-cache-h2:cache-h2',
+<<<<<<< HEAD   (b4ce06 Remove unused imports in Helper.java)
+=======
+    '//gerrit-common:server',
+    '//gerrit-extension-api:api',
+    '//gerrit-gwtexpui:linker_server',
+    '//gerrit-gwtexpui:server',
+    '//gerrit-httpd:httpd',
+    '//gerrit-lucene:lucene',
+    '//gerrit-oauth:oauth',
+    '//gerrit-openid:openid',
+    '//gerrit-reviewdb:server',
+    '//gerrit-server:server',
+    '//gerrit-server/src/main/prolog:common',
+    '//gerrit-solr:solr',
+    '//gerrit-sshd:sshd',
+>>>>>>> BRANCH (24ec75 Set version to 2.10.1)
     '//gerrit-util-cli:cli',
     '//lib:args4j',
     '//lib:gwtorm',
