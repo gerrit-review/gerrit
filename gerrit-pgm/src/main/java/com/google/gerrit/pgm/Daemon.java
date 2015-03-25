@@ -62,8 +62,12 @@ import com.google.gerrit.server.index.IndexModule;
 import com.google.gerrit.server.index.IndexModule.IndexType;
 import com.google.gerrit.server.mail.SignedTokenEmailTokenVerifier;
 import com.google.gerrit.server.mail.SmtpEmailSender;
+<<<<<<< HEAD   (c33a91 Update replication plugin)
 import com.google.gerrit.server.mime.MimeUtil2Module;
 import com.google.gerrit.server.patch.IntraLineWorkerPool;
+=======
+import com.google.gerrit.server.patch.DiffExecutorModule;
+>>>>>>> BRANCH (61074c Work around MyersDiff infinite loop in PatchListLoader)
 import com.google.gerrit.server.plugins.PluginGuiceEnvironment;
 import com.google.gerrit.server.plugins.PluginRestApiModule;
 import com.google.gerrit.server.schema.DataSourceProvider;
@@ -320,8 +324,13 @@ public class Daemon extends SiteProgram {
     modules.add(new WorkQueue.Module());
     modules.add(new ChangeHookRunner.Module());
     modules.add(new ReceiveCommitsExecutorModule());
+<<<<<<< HEAD   (c33a91 Update replication plugin)
     modules.add(new IntraLineWorkerPool.Module());
     modules.add(new MimeUtil2Module());
+=======
+    modules.add(new MergeabilityChecksExecutorModule());
+    modules.add(new DiffExecutorModule());
+>>>>>>> BRANCH (61074c Work around MyersDiff infinite loop in PatchListLoader)
     modules.add(cfgInjector.getInstance(GerritGlobalModule.class));
     modules.add(new InternalAccountDirectory.Module());
     modules.add(new DefaultCacheFactory.Module());

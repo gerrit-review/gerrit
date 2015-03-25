@@ -94,6 +94,12 @@ public class MergeUtil {
         : MergeStrategy.RESOLVE;
   }
 
+  public static ThreeWayMergeStrategy getMergeStrategy(Config cfg) {
+    return useRecursiveMerge(cfg)
+        ? MergeStrategy.RECURSIVE
+        : MergeStrategy.RESOLVE;
+  }
+
   public static interface Factory {
     MergeUtil create(ProjectState project);
     MergeUtil create(ProjectState project, boolean useContentMerge);

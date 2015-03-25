@@ -16,11 +16,16 @@
 package com.google.gerrit.server.patch;
 
 import com.google.common.base.Function;
+import com.google.common.base.Throwables;
 import com.google.common.cache.CacheLoader;
 import com.google.common.collect.FluentIterable;
 import com.google.gerrit.reviewdb.client.AccountDiffPreference.Whitespace;
 import com.google.gerrit.reviewdb.client.Patch;
 import com.google.gerrit.reviewdb.client.RefNames;
+<<<<<<< HEAD   (c33a91 Update replication plugin)
+=======
+import com.google.gerrit.server.config.ConfigUtil;
+>>>>>>> BRANCH (61074c Work around MyersDiff infinite loop in PatchListLoader)
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.gerrit.server.git.MergeUtil;
@@ -69,6 +74,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class PatchListLoader extends CacheLoader<PatchListKey, PatchList> {
   static final Logger log = LoggerFactory.getLogger(PatchListLoader.class);
@@ -76,13 +87,34 @@ public class PatchListLoader extends CacheLoader<PatchListKey, PatchList> {
   private final GitRepositoryManager repoManager;
   private final PatchListCache patchListCache;
   private final ThreeWayMergeStrategy mergeStrategy;
+<<<<<<< HEAD   (c33a91 Update replication plugin)
+=======
+  private final ExecutorService diffExecutor;
+  private final long timeoutMillis;
+
+>>>>>>> BRANCH (61074c Work around MyersDiff infinite loop in PatchListLoader)
 
   @Inject
+<<<<<<< HEAD   (c33a91 Update replication plugin)
   PatchListLoader(GitRepositoryManager mgr, PatchListCache plc,
       @GerritServerConfig Config cfg) {
+=======
+  PatchListLoader(GitRepositoryManager mgr,
+      PatchListCache plc,
+      @GerritServerConfig Config cfg,
+      @DiffExecutor ExecutorService de) {
+>>>>>>> BRANCH (61074c Work around MyersDiff infinite loop in PatchListLoader)
     repoManager = mgr;
     patchListCache = plc;
     mergeStrategy = MergeUtil.getMergeStrategy(cfg);
+<<<<<<< HEAD   (c33a91 Update replication plugin)
+=======
+    diffExecutor = de;
+    timeoutMillis =
+        ConfigUtil.getTimeUnit(cfg, "cache", PatchListCacheImpl.FILE_NAME,
+            "timeout", TimeUnit.MILLISECONDS.convert(5, TimeUnit.SECONDS),
+            TimeUnit.MILLISECONDS);
+>>>>>>> BRANCH (61074c Work around MyersDiff infinite loop in PatchListLoader)
   }
 
   @Override
@@ -164,7 +196,7 @@ public class PatchListLoader extends CacheLoader<PatchListKey, PatchList> {
         DiffEntry diffEntry = diffEntries.get(i);
         if (paths == null || paths.contains(diffEntry.getNewPath())
             || paths.contains(diffEntry.getOldPath())) {
-          FileHeader fh = df.toFileHeader(diffEntry);
+          FileHeader fh = toFileHeader(key, df, diffEntry);
           entries.add(newEntry(aTree, fh));
         }
       }
@@ -173,6 +205,44 @@ public class PatchListLoader extends CacheLoader<PatchListKey, PatchList> {
     } finally {
       reader.release();
     }
+  }
+
+  private FileHeader toFileHeader(PatchListKey key,
+      final DiffFormatter diffFormatter, final DiffEntry diffEntry)
+      throws IOException {
+
+    Future<FileHeader> result = diffExecutor.submit(new Callable<FileHeader>() {
+      @Override
+      public FileHeader call() throws IOException {
+        return diffFormatter.toFileHeader(diffEntry);
+      }
+    });
+
+    try {
+      return result.get(timeoutMillis, TimeUnit.MILLISECONDS);
+    } catch (InterruptedException | TimeoutException e) {
+      log.warn(timeoutMillis + " ms timeout reached for Diff loader"
+                      + " in project " + key.projectKey.get()
+                      + " on commit " + key.getNewId().name()
+                      + " on path " + diffEntry.getNewPath()
+                      + " comparing " + diffEntry.getOldId().name()
+                      + ".." + diffEntry.getNewId().name());
+      result.cancel(true);
+      return toFileHeaderWithoutMyersDiff(diffFormatter, diffEntry);
+    } catch (ExecutionException e) {
+      // If there was an error computing the result, carry it
+      // up to the caller so the cache knows this key is invalid.
+      Throwables.propagateIfInstanceOf(e.getCause(), IOException.class);
+      throw new IOException(e.getMessage(), e.getCause());
+    }
+  }
+
+  private FileHeader toFileHeaderWithoutMyersDiff(DiffFormatter diffFormatter,
+      DiffEntry diffEntry) throws IOException {
+    HistogramDiff histogramDiff = new HistogramDiff();
+    histogramDiff.setFallbackAlgorithm(null);
+    diffFormatter.setDiffAlgorithm(histogramDiff);
+    return diffFormatter.toFileHeader(diffEntry);
   }
 
   private PatchListEntry newCommitMessage(final RawTextComparator cmp,

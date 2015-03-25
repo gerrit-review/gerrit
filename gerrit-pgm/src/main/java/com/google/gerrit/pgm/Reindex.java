@@ -34,7 +34,24 @@ import com.google.gerrit.server.index.ChangeSchemas;
 import com.google.gerrit.server.index.IndexCollection;
 import com.google.gerrit.server.index.IndexModule;
 import com.google.gerrit.server.index.IndexModule.IndexType;
+<<<<<<< HEAD   (c33a91 Update replication plugin)
 import com.google.gerrit.server.index.SiteIndexer;
+=======
+import com.google.gerrit.server.mail.ReplacePatchSetSender;
+import com.google.gerrit.server.notedb.NoteDbModule;
+import com.google.gerrit.server.patch.DiffExecutorModule;
+import com.google.gerrit.server.patch.PatchListCacheImpl;
+import com.google.gerrit.server.project.ChangeControl;
+import com.google.gerrit.server.project.CommentLinkInfo;
+import com.google.gerrit.server.project.CommentLinkProvider;
+import com.google.gerrit.server.project.ProjectCacheImpl;
+import com.google.gerrit.server.project.ProjectControl;
+import com.google.gerrit.server.project.ProjectState;
+import com.google.gerrit.server.project.SectionSortCache;
+import com.google.gerrit.server.query.change.ChangeData;
+import com.google.gerrit.server.schema.DataSourceProvider;
+import com.google.gerrit.server.schema.DataSourceType;
+>>>>>>> BRANCH (61074c Work around MyersDiff infinite loop in PatchListLoader)
 import com.google.gerrit.solr.SolrIndexModule;
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -117,7 +134,13 @@ public class Reindex extends SiteProgram {
 
   private Injector createSysInjector() {
     List<Module> modules = Lists.newArrayList();
+<<<<<<< HEAD   (c33a91 Update replication plugin)
     Module changeIndexModule;
+=======
+    modules.add(new DiffExecutorModule());
+    modules.add(PatchListCacheImpl.module());
+    AbstractModule changeIndexModule;
+>>>>>>> BRANCH (61074c Work around MyersDiff infinite loop in PatchListLoader)
     switch (IndexModule.getIndexType(dbInjector)) {
       case LUCENE:
         changeIndexModule = new LuceneIndexModule(version, threads, outputBase);

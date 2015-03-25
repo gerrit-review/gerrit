@@ -18,6 +18,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.inject.Scopes.SINGLETON;
 
 import com.google.common.net.InetAddresses;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.google.gerrit.common.ChangeHooks;
 import com.google.gerrit.common.DisabledChangeHooks;
 import com.google.gerrit.reviewdb.client.AuthType;
@@ -48,6 +49,11 @@ import com.google.gerrit.server.index.ChangeSchemas;
 import com.google.gerrit.server.index.IndexModule.IndexType;
 import com.google.gerrit.server.mail.SignedTokenEmailTokenVerifier;
 import com.google.gerrit.server.mail.SmtpEmailSender;
+<<<<<<< HEAD   (c33a91 Update replication plugin)
+=======
+import com.google.gerrit.server.patch.DiffExecutor;
+import com.google.gerrit.server.schema.Current;
+>>>>>>> BRANCH (61074c Work around MyersDiff infinite loop in PatchListLoader)
 import com.google.gerrit.server.schema.DataSourceType;
 import com.google.gerrit.server.schema.SchemaCreator;
 import com.google.gerrit.server.securestore.DefaultSecureStore;
@@ -74,6 +80,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.util.concurrent.ExecutorService;
 
 public class InMemoryModule extends FactoryModule {
   public static Config newDefaultConfig() {
@@ -158,6 +165,18 @@ public class InMemoryModule extends FactoryModule {
       @Override
       protected Class<? extends Provider<String>> provider() {
         return CanonicalWebUrlProvider.class;
+      }
+    });
+    //Replacement of DiffExecutorModule to not use thread pool in the tests
+    install(new AbstractModule() {
+      @Override
+      protected void configure() {
+      }
+      @Provides
+      @Singleton
+      @DiffExecutor
+      public ExecutorService createDiffExecutor() {
+        return MoreExecutors.sameThreadExecutor();
       }
     });
     install(new DefaultCacheFactory.Module());

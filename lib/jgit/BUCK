@@ -1,13 +1,22 @@
 include_defs('//lib/maven.defs')
 
 REPO = GERRIT  # Leave here even if set to MAVEN_CENTRAL.
+<<<<<<< HEAD   (c33a91 Update replication plugin)
 VERS = '3.6.2.201501210735-r.40-g23ad3a3'
+=======
+VERS = '3.7.0.201502260915-r.58-g65c379e'
+>>>>>>> BRANCH (61074c Work around MyersDiff infinite loop in PatchListLoader)
 
 maven_jar(
   name = 'jgit',
   id = 'org.eclipse.jgit:org.eclipse.jgit:' + VERS,
+<<<<<<< HEAD   (c33a91 Update replication plugin)
   bin_sha1 = '849c10fec9a9af15f57651b99a5cf6de6bd3077c',
   src_sha1 = '6fa857df4b73bf2fa222d3ad272e99e3c929453f',
+=======
+  bin_sha1 = '8fc9620ec499169facad3355f7417eb6a8aff511',
+  src_sha1 = '40bd9ae8af8e0b03eb4e43f44f5feda8b7325221',
+>>>>>>> BRANCH (61074c Work around MyersDiff infinite loop in PatchListLoader)
   license = 'jgit',
   repository = REPO,
   unsign = True,
@@ -22,7 +31,11 @@ maven_jar(
 maven_jar(
   name = 'jgit-servlet',
   id = 'org.eclipse.jgit:org.eclipse.jgit.http.server:' + VERS,
+<<<<<<< HEAD   (c33a91 Update replication plugin)
   sha1 = 'f4a2252fac9258479394a3be3318f88fc8a538e8',
+=======
+  sha1 = 'cecc2b9c0b94455348c3a0c63eb83f72cc595757',
+>>>>>>> BRANCH (61074c Work around MyersDiff infinite loop in PatchListLoader)
   license = 'jgit',
   repository = REPO,
   deps = [':jgit'],
@@ -36,7 +49,11 @@ maven_jar(
 maven_jar(
   name = 'jgit-archive',
   id = 'org.eclipse.jgit:org.eclipse.jgit.archive:' + VERS,
+<<<<<<< HEAD   (c33a91 Update replication plugin)
   sha1 = 'bb1cf790a4ca6760f99b1d86ad5d25857bf69dc2',
+=======
+  sha1 = '7ccc7c78bf47566045ea7a3c08508ba18e4684ca',
+>>>>>>> BRANCH (61074c Work around MyersDiff infinite loop in PatchListLoader)
   license = 'jgit',
   repository = REPO,
   deps = [':jgit',
@@ -53,7 +70,11 @@ maven_jar(
 maven_jar(
   name = 'junit',
   id = 'org.eclipse.jgit:org.eclipse.jgit.junit:' + VERS,
+<<<<<<< HEAD   (c33a91 Update replication plugin)
   sha1 = '9b9f2da56aacde9e58f905becc4780b4d64ee79e',
+=======
+  sha1 = '87d64d722447dc3971ace30d2a72593c72a4d05f',
+>>>>>>> BRANCH (61074c Work around MyersDiff infinite loop in PatchListLoader)
   license = 'DO_NOT_DISTRIBUTE',
   repository = REPO,
   unsign = True,
