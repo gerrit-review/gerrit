@@ -251,6 +251,7 @@ public class CreateProjectIT extends AbstractDaemonTest {
         assertThat(tw.next()).isFalse();
         tw.reset();
       }
+<<<<<<< HEAD   (4ef152 Merge changes from topic 'api-tests')
     }
   }
 
@@ -261,6 +262,8 @@ public class CreateProjectIT extends AbstractDaemonTest {
       fail("Expected " + errType.getSimpleName());
     } catch (RestApiException expected) {
       assertThat(expected).isInstanceOf(errType);
+=======
+>>>>>>> BRANCH (123ae3 Remove unused imports)
     }
   }
 }

@@ -86,7 +86,10 @@ public class PatchListLoader extends CacheLoader<PatchListKey, PatchList> {
   private final ThreeWayMergeStrategy mergeStrategy;
   private final ExecutorService diffExecutor;
   private final long timeoutMillis;
+<<<<<<< HEAD   (4ef152 Merge changes from topic 'api-tests')
 
+=======
+>>>>>>> BRANCH (123ae3 Remove unused imports)
 
   @Inject
   PatchListLoader(GitRepositoryManager mgr,
@@ -206,10 +209,17 @@ public class PatchListLoader extends CacheLoader<PatchListKey, PatchList> {
     } catch (InterruptedException | TimeoutException e) {
       log.warn(timeoutMillis + " ms timeout reached for Diff loader"
                       + " in project " + key.projectKey.get()
+<<<<<<< HEAD   (4ef152 Merge changes from topic 'api-tests')
                       + " on commit " + key.getNewId()
                       + " on path " + diffEntry.getNewPath()
                       + " comparing " + diffEntry.getOldId()
                       + ".." + diffEntry.getNewId());
+=======
+                      + " on commit " + key.getNewId().name()
+                      + " on path " + diffEntry.getNewPath()
+                      + " comparing " + diffEntry.getOldId().name()
+                      + ".." + diffEntry.getNewId().name());
+>>>>>>> BRANCH (123ae3 Remove unused imports)
       result.cancel(true);
       return toFileHeaderWithoutMyersDiff(diffFormatter, diffEntry);
     } catch (ExecutionException e) {
