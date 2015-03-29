@@ -2,4 +2,8 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (123ae3 Remove unused imports)
 GERRIT_VERSION = '2.11-SNAPSHOT'
+=======
+GERRIT_VERSION = '2.10.2'
+>>>>>>> BRANCH (329c32 Update version to 2.10.2)
