@@ -1140,6 +1140,23 @@ public class ChangeScreen extends Screen {
     if (Gerrit.isSignedIn()) {
       replyAction = new ReplyAction(info, revision,
           style, commentLinkProcessor, reply, quickApprove);
+<<<<<<< HEAD   (c02898 Reuse running daemon in AbstractDaemonTest)
+=======
+      if (topic.canEdit()) {
+        keysAction.add(new KeyCommand(0, 't', Util.C.keyEditTopic()) {
+          @Override
+          public void onKeyPress(KeyPressEvent event) {
+            // In Firefox this event is mistakenly called when F5 is pressed so
+            // differentiate F5 from 't' by checking the charCode(F5=0, t=116).
+            if (event.getNativeEvent().getCharCode() == 0) {
+              Window.Location.reload();
+              return;
+            }
+            topic.onEdit();
+          }
+        });
+      }
+>>>>>>> BRANCH (75b519 Merge "Fix F5 shortcut being hijacked by edit topic in Firef)
     }
     history.set(commentLinkProcessor, replyAction, changeId, info);
 

@@ -86,7 +86,10 @@ public class PatchListLoader extends CacheLoader<PatchListKey, PatchList> {
   private final ThreeWayMergeStrategy mergeStrategy;
   private final ExecutorService diffExecutor;
   private final long timeoutMillis;
+<<<<<<< HEAD   (c02898 Reuse running daemon in AbstractDaemonTest)
 
+=======
+>>>>>>> BRANCH (75b519 Merge "Fix F5 shortcut being hijacked by edit topic in Firef)
 
   @Inject
   PatchListLoader(GitRepositoryManager mgr,
@@ -206,10 +209,17 @@ public class PatchListLoader extends CacheLoader<PatchListKey, PatchList> {
     } catch (InterruptedException | TimeoutException e) {
       log.warn(timeoutMillis + " ms timeout reached for Diff loader"
                       + " in project " + key.projectKey.get()
+<<<<<<< HEAD   (c02898 Reuse running daemon in AbstractDaemonTest)
                       + " on commit " + key.getNewId()
                       + " on path " + diffEntry.getNewPath()
                       + " comparing " + diffEntry.getOldId()
                       + ".." + diffEntry.getNewId());
+=======
+                      + " on commit " + key.getNewId().name()
+                      + " on path " + diffEntry.getNewPath()
+                      + " comparing " + diffEntry.getOldId().name()
+                      + ".." + diffEntry.getNewId().name());
+>>>>>>> BRANCH (75b519 Merge "Fix F5 shortcut being hijacked by edit topic in Firef)
       result.cancel(true);
       return toFileHeaderWithoutMyersDiff(diffFormatter, diffEntry);
     } catch (ExecutionException e) {

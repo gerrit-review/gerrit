@@ -251,6 +251,7 @@ public class CreateProjectIT extends AbstractDaemonTest {
         assertThat(tw.next()).isFalse();
         tw.reset();
       }
+<<<<<<< HEAD   (c02898 Reuse running daemon in AbstractDaemonTest)
     }
   }
 
@@ -261,6 +262,8 @@ public class CreateProjectIT extends AbstractDaemonTest {
       fail("Expected " + errType.getSimpleName());
     } catch (RestApiException expected) {
       assertThat(expected).isInstanceOf(errType);
+=======
+>>>>>>> BRANCH (75b519 Merge "Fix F5 shortcut being hijacked by edit topic in Firef)
     }
   }
 }
