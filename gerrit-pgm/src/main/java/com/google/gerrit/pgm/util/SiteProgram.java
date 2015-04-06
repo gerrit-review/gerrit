@@ -14,6 +14,7 @@
 
 package com.google.gerrit.pgm.util;
 
+import static com.google.gerrit.server.config.GerritServerConfigModule.getSecureStoreClassName;
 import static com.google.inject.Scopes.SINGLETON;
 import static com.google.inject.Stage.PRODUCTION;
 
@@ -24,7 +25,6 @@ import com.google.gerrit.lifecycle.LifecycleModule;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.config.GerritServerConfigModule;
 import com.google.gerrit.server.config.SitePath;
-import com.google.gerrit.server.config.SitePaths;
 import com.google.gerrit.server.git.LocalDiskRepositoryManager;
 import com.google.gerrit.server.schema.DataSourceModule;
 import com.google.gerrit.server.schema.DataSourceProvider;
@@ -41,20 +41,20 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Provider;
-import com.google.inject.ProvisionException;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.google.inject.spi.Message;
 import com.google.inject.util.Providers;
 
-import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.lib.Config;
-import org.eclipse.jgit.storage.file.FileBasedConfig;
-import org.eclipse.jgit.util.FS;
 import org.kohsuke.args4j.Option;
 
+<<<<<<< HEAD   (bf3756 Merge changes from topic 'one-test-server')
 import java.io.IOException;
+=======
+import java.io.File;
+>>>>>>> BRANCH (75b519 Merge "Fix F5 shortcut being hijacked by edit topic in Firef)
 import java.lang.annotation.Annotation;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -190,6 +190,7 @@ public abstract class SiteProgram extends AbstractProgram {
   }
 
   protected final String getConfiguredSecureStoreClass() {
+<<<<<<< HEAD   (bf3756 Merge changes from topic 'one-test-server')
     Module m = new AbstractModule() {
       @Override
       protected void configure() {
@@ -211,6 +212,9 @@ public abstract class SiteProgram extends AbstractProgram {
     } catch (IOException | ConfigInvalidException e) {
       throw new ProvisionException(e.getMessage(), e);
     }
+=======
+    return getSecureStoreClassName(sitePath);
+>>>>>>> BRANCH (75b519 Merge "Fix F5 shortcut being hijacked by edit topic in Firef)
   }
 
   private String getDbType(Provider<DataSource> dsProvider) {

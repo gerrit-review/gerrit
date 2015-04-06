@@ -398,7 +398,11 @@ public abstract class ChangeEmail extends NotificationEmail {
 
     int maxSize = args.settings.maximumDiffSize;
     TemporaryBuffer.Heap buf =
+<<<<<<< HEAD   (bf3756 Merge changes from topic 'one-test-server')
         new TemporaryBuffer.Heap(Math.min(HEAP_EST_SIZE, maxSize), maxSize);
+=======
+        new TemporaryBuffer.Heap(args.settings.maximumDiffSize);
+>>>>>>> BRANCH (75b519 Merge "Fix F5 shortcut being hijacked by edit topic in Firef)
     try (DiffFormatter fmt = new DiffFormatter(buf)) {
       Repository git;
       try {
