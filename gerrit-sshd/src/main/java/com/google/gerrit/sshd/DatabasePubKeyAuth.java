@@ -14,16 +14,19 @@
 
 package com.google.gerrit.sshd;
 
+<<<<<<< HEAD   (c02898 Reuse running daemon in AbstractDaemonTest)
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.google.gerrit.common.FileUtil;
+=======
+import com.google.common.base.Preconditions;
+>>>>>>> BRANCH (744e74 Merge branch 'stable-2.10' into stable-2.11)
 import com.google.gerrit.reviewdb.client.AccountSshKey;
 import com.google.gerrit.server.IdentifiedUser;
 import com.google.gerrit.server.PeerDaemonUser;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.config.SitePaths;
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.sshd.common.KeyPairProvider;
@@ -51,7 +54,6 @@ import java.util.Set;
 /**
  * Authenticates by public key through {@link AccountSshKey} entities.
  */
-@Singleton
 class DatabasePubKeyAuth implements PublickeyAuthenticator {
   private static final Logger log =
       LoggerFactory.getLogger(DatabasePubKeyAuth.class);
@@ -96,10 +98,10 @@ class DatabasePubKeyAuth implements PublickeyAuthenticator {
   }
 
   @Override
-  public boolean authenticate(String username,
-      final PublicKey suppliedKey, final ServerSession session) {
-    final SshSession sd = session.getAttribute(SshSession.KEY);
-
+  public boolean authenticate(String username, PublicKey suppliedKey,
+      ServerSession session) {
+    SshSession sd = session.getAttribute(SshSession.KEY);
+    Preconditions.checkState(sd.getCurrentUser() == null);
     if (PeerDaemonUser.USER_NAME.equals(username)) {
       if (myHostKeys.contains(suppliedKey)
           || getPeerKeys().contains(suppliedKey)) {
@@ -116,10 +118,10 @@ class DatabasePubKeyAuth implements PublickeyAuthenticator {
       username = username.toLowerCase(Locale.US);
     }
 
-    final Iterable<SshKeyCacheEntry> keyList = sshKeyCache.get(username);
-    final SshKeyCacheEntry key = find(keyList, suppliedKey);
+    Iterable<SshKeyCacheEntry> keyList = sshKeyCache.get(username);
+    SshKeyCacheEntry key = find(keyList, suppliedKey);
     if (key == null) {
-      final String err;
+      String err;
       if (keyList == SshKeyCacheImpl.NO_SUCH_USER) {
         err = "user-not-found";
       } else if (keyList == SshKeyCacheImpl.NO_KEYS) {
@@ -137,7 +139,7 @@ class DatabasePubKeyAuth implements PublickeyAuthenticator {
     // security check to ensure there aren't two users sharing the same
     // user name on the server.
     //
-    for (final SshKeyCacheEntry otherKey : keyList) {
+    for (SshKeyCacheEntry otherKey : keyList) {
       if (!key.getAccount().equals(otherKey.getAccount())) {
         sd.authenticationError(username, "keys-cross-accounts");
         return false;

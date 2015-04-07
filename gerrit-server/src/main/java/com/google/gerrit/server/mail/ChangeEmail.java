@@ -398,7 +398,11 @@ public abstract class ChangeEmail extends NotificationEmail {
 
     int maxSize = args.settings.maximumDiffSize;
     TemporaryBuffer.Heap buf =
+<<<<<<< HEAD   (c02898 Reuse running daemon in AbstractDaemonTest)
         new TemporaryBuffer.Heap(Math.min(HEAP_EST_SIZE, maxSize), maxSize);
+=======
+        new TemporaryBuffer.Heap(args.settings.maximumDiffSize);
+>>>>>>> BRANCH (744e74 Merge branch 'stable-2.10' into stable-2.11)
     try (DiffFormatter fmt = new DiffFormatter(buf)) {
       Repository git;
       try {
