@@ -27,8 +27,12 @@ import com.google.inject.Singleton;
 
 import java.io.IOException;
 import java.io.InputStream;
+<<<<<<< HEAD   (c14231 Update mailmap)
 import java.nio.file.Files;
 import java.nio.file.Path;
+=======
+import java.util.Collection;
+>>>>>>> BRANCH (059f3c Merge changes from topic 'tidy-up-plugin-init' into stable-2)
 import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
@@ -105,6 +109,7 @@ public class InitPlugins implements InitStep {
   }
 
   private void installPlugins() throws IOException {
+    ui.message("Installing plugins.\n");
     List<PluginData> plugins = listPlugins(site, pluginsDistribution);
     for (PluginData plugin : plugins) {
       String pluginName = plugin.name;
@@ -145,13 +150,19 @@ public class InitPlugins implements InitStep {
       }
     }
     if (plugins.isEmpty()) {
-      ui.message("No plugins found.");
+      ui.message("No plugins found to install.\n");
     }
   }
 
   private void initPlugins() throws Exception {
-    for (InitStep initStep : pluginLoader.getInitSteps()) {
-      initStep.run();
+    ui.message("Initializing plugins.\n");
+    Collection<InitStep> initSteps = pluginLoader.getInitSteps();
+    if (initSteps.isEmpty()) {
+      ui.message("No plugins found with init steps.\n");
+    } else {
+      for (InitStep initStep : initSteps) {
+        initStep.run();
+      }
     }
   }
 

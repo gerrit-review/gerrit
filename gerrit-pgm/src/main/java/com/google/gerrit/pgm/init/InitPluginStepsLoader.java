@@ -85,13 +85,23 @@ public class InitPluginStepsLoader {
         return getPluginInjector(jar).getInstance(initStepClass);
       } catch (ClassCastException e) {
         ui.message(
+<<<<<<< HEAD   (c14231 Update mailmap)
             "WARN: InitStep from plugin %s does not implement %s (Exception: %s)",
             jar.getFileName(), InitStep.class.getName(), e.getMessage());
+=======
+            "WARN: InitStep from plugin %s does not implement %s (Exception: %s)\n",
+            jar.getName(), InitStep.class.getName(), e.getMessage());
+        return null;
+      } catch (NoClassDefFoundError e) {
+        ui.message(
+            "WARN: Failed to run InitStep from plugin %s (Missing class: %s)\n",
+            jar.getName(), e.getMessage());
+>>>>>>> BRANCH (059f3c Merge changes from topic 'tidy-up-plugin-init' into stable-2)
         return null;
       }
     } catch (Exception e) {
       ui.message(
-          "WARN: Cannot load and get plugin init step for %s (Exception: %s)",
+          "WARN: Cannot load and get plugin init step for %s (Exception: %s)\n",
           jar, e.getMessage());
       return null;
     }
