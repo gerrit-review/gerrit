@@ -14,8 +14,7 @@
 
 package com.google.gerrit.server.project;
 
-import static org.eclipse.jgit.lib.RefDatabase.ALL;
-
+import com.google.common.collect.Iterables;
 import com.google.gerrit.common.ChangeHooks;
 import com.google.gerrit.common.errors.InvalidRevisionException;
 import com.google.gerrit.extensions.restapi.AuthException;
@@ -25,7 +24,11 @@ import com.google.gerrit.extensions.restapi.ResourceConflictException;
 import com.google.gerrit.extensions.restapi.RestModifyView;
 import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.reviewdb.client.Project;
+<<<<<<< HEAD   (b9a1e8 Move edit ref name methods from ChangeEditUtil to RefNames)
 import com.google.gerrit.reviewdb.server.ReviewDb;
+=======
+import com.google.gerrit.reviewdb.client.RefNames;
+>>>>>>> BRANCH (16d56c Update 2.10.3 release notes)
 import com.google.gerrit.server.IdentifiedUser;
 import com.google.gerrit.server.extensions.events.GitReferenceUpdated;
 import com.google.gerrit.server.git.GitRepositoryManager;
@@ -42,6 +45,7 @@ import org.eclipse.jgit.errors.RevisionSyntaxException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.RefDatabase;
 import org.eclipse.jgit.lib.RefUpdate;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.ObjectWalk;
@@ -51,6 +55,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Collections;
 
 public class CreateBranch implements RestModifyView<ProjectResource, Input> {
   private static final Logger log = LoggerFactory.getLogger(CreateBranch.class);
@@ -220,7 +225,15 @@ public class CreateBranch implements RestModifyView<ProjectResource, Input> {
       } catch (IncorrectObjectTypeException err) {
         throw new InvalidRevisionException();
       }
-      for (final Ref r : repo.getRefDatabase().getRefs(ALL).values()) {
+      RefDatabase refDb = repo.getRefDatabase();
+      Iterable<Ref> refs = Iterables.concat(
+          refDb.getRefs(Constants.R_HEADS).values(),
+          refDb.getRefs(Constants.R_TAGS).values());
+      Ref rc = refDb.getRef(RefNames.REFS_CONFIG);
+      if (rc != null) {
+        refs = Iterables.concat(refs, Collections.singleton(rc));
+      }
+      for (Ref r : refs) {
         try {
           rw.markUninteresting(rw.parseAny(r.getObjectId()));
         } catch (MissingObjectException err) {

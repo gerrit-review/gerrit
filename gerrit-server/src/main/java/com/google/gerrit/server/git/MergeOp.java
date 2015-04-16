@@ -758,12 +758,19 @@ public class MergeOp {
     return "";
   }
 
+<<<<<<< HEAD   (b9a1e8 Move edit ref name methods from ChangeEditUtil to RefNames)
   private void updateChangeStatus(List<Change> submitted, MergeTip mergeTip)
       throws NoSuchChangeException {
     logDebug("Updating change status for {} changes", submitted.size());
     for (Change c : submitted) {
       CodeReviewCommit commit = commits.get(c.getId());
       CommitMergeStatus s = commit != null ? commit.getStatusCode() : null;
+=======
+  private void updateChangeStatus(final List<Change> submitted) throws NoSuchChangeException {
+    for (final Change c : submitted) {
+      final CodeReviewCommit commit = commits.get(c.getId());
+      final CommitMergeStatus s = commit != null ? commit.getStatusCode() : null;
+>>>>>>> BRANCH (16d56c Update 2.10.3 release notes)
       if (s == null) {
         // Shouldn't ever happen, but leave the change alone. We'll pick
         // it up on the next pass.
@@ -782,14 +789,22 @@ public class MergeOp {
       try {
         switch (s) {
           case CLEAN_MERGE:
+<<<<<<< HEAD   (b9a1e8 Move edit ref name methods from ChangeEditUtil to RefNames)
             setMerged(c, message(c, txt + getByAccountName(commit)),
                 mergeResultRev);
+=======
+            setMerged(c, message(c, txt + getByAccountName(commit)));
+>>>>>>> BRANCH (16d56c Update 2.10.3 release notes)
             break;
 
           case CLEAN_REBASE:
           case CLEAN_PICK:
             setMerged(c, message(c, txt + " as " + commit.name()
+<<<<<<< HEAD   (b9a1e8 Move edit ref name methods from ChangeEditUtil to RefNames)
                 + getByAccountName(commit)), mergeResultRev);
+=======
+                + getByAccountName(commit)));
+>>>>>>> BRANCH (16d56c Update 2.10.3 release notes)
             break;
 
           case ALREADY_MERGED:
