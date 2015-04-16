@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-extension-api</artifactId>
+<<<<<<< HEAD   (009d0a Merge "Document that submit should for granted on refs/heads)
   <version>2.11</version>
+=======
+  <version>2.10.3</version>
+>>>>>>> BRANCH (3463af Update version to 2.10.3)
   <packaging>jar</packaging>
   <name>Gerrit Code Review - Extension API</name>
   <description>API for Gerrit Extensions</description>
