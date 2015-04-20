@@ -1,4 +1,3 @@
-<<<<<<< HEAD   (df8d31 Merge "Merge branch 'stable-2.11'")
 // Copyright (C) 2012 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,42 +12,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.google.gerrit.pgm.util;
+package com.google.gerrit.server.git;
 
-import com.google.gerrit.common.FileUtil;
+import com.google.gerrit.common.Die;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.server.config.SitePaths;
-import com.google.gerrit.server.git.GarbageCollection;
 import com.google.gerrit.server.util.SystemLog;
+import com.google.inject.Inject;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 
-import java.io.IOException;
-import java.nio.file.Path;
+import java.io.File;
 
-public class GarbageCollectionLogFile {
-  public static LifecycleListener start(Path sitePath) throws IOException {
-    Path logdir = FileUtil.mkdirsOrDie(new SitePaths(sitePath).logs_dir,
-        "Cannot create log directory");
+public class GarbageCollectionLogFile implements LifecycleListener {
+
+  @Inject
+  public GarbageCollectionLogFile(SitePaths sitePaths) {
+    File logdir = sitePaths.logs_dir;
+    if (!logdir.exists() && !logdir.mkdirs()) {
+      throw new Die("Cannot create log directory: " + logdir);
+    }
     if (SystemLog.shouldConfigure()) {
       initLogSystem(logdir);
     }
-
-    return new LifecycleListener() {
-      @Override
-      public void start() {
-      }
-
-      @Override
-      public void stop() {
-        LogManager.getLogger(GarbageCollection.LOG_NAME).removeAllAppenders();
-      }
-    };
   }
 
-  private static void initLogSystem(Path logdir) {
+  @Override
+  public void start() {
+  }
+
+  @Override
+  public void stop() {
+    LogManager.getLogger(GarbageCollection.LOG_NAME).removeAllAppenders();
+  }
+
+  private static void initLogSystem(File logdir) {
     Logger gcLogger = LogManager.getLogger(GarbageCollection.LOG_NAME);
     gcLogger.removeAllAppenders();
     gcLogger.addAppender(SystemLog.createAppender(logdir,
@@ -56,5 +56,3 @@ public class GarbageCollectionLogFile {
     gcLogger.setAdditivity(false);
   }
 }
-=======
->>>>>>> BRANCH (146afb Move all GarbageCollection bindings into the same module)
