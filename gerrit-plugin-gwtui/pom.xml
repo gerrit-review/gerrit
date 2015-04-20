@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-plugin-gwtui</artifactId>
+<<<<<<< HEAD   (023195 Merge changes from topic 'submodule-subscription-tests-and-f)
   <version>2.12-SNAPSHOT</version>
+=======
+  <version>2.11</version>
+>>>>>>> BRANCH (5f9115 Merge branch 'stable-2.10' into stable-2.11)
   <packaging>jar</packaging>
   <name>Gerrit Code Review - Plugin GWT UI</name>
   <description>Common Classes for Gerrit GWT UI Plugins</description>

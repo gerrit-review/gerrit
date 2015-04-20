@@ -42,7 +42,15 @@ import org.eclipse.jgit.transport.RefSpec;
 import org.eclipse.jgit.transport.SshSessionFactory;
 import org.eclipse.jgit.util.FS;
 
+<<<<<<< HEAD   (023195 Merge changes from topic 'submodule-subscription-tests-and-f)
+=======
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+>>>>>>> BRANCH (5f9115 Merge branch 'stable-2.10' into stable-2.11)
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -128,7 +136,41 @@ public class GitUtil {
     return cloneProject(project, sshSession.getUrl() + "/" + project.get());
   }
 
+<<<<<<< HEAD   (023195 Merge changes from topic 'submodule-subscription-tests-and-f)
   public static void fetch(TestRepository<?> testRepo, String spec)
+=======
+  public static Git cloneProject(String url, boolean checkout) throws GitAPIException, IOException {
+    final File gitDir = TempFileUtil.createTempDirectory();
+    final CloneCommand cloneCmd = Git.cloneRepository();
+    cloneCmd.setURI(url);
+    cloneCmd.setDirectory(gitDir);
+    cloneCmd.setNoCheckout(!checkout);
+    return cloneCmd.call();
+  }
+
+  public static void add(Git git, String path, String content)
+      throws GitAPIException, IOException {
+    File f = new File(git.getRepository().getDirectory().getParentFile(), path);
+    File p = f.getParentFile();
+    if (!p.exists() && !p.mkdirs()) {
+      throw new IOException("failed to create dir: " + p.getAbsolutePath());
+    }
+    FileOutputStream s = new FileOutputStream(f);
+    BufferedWriter out = new BufferedWriter(
+        new OutputStreamWriter(s, StandardCharsets.UTF_8));
+    try {
+      out.write(content);
+    } finally {
+      out.close();
+    }
+
+    final AddCommand addCmd = git.add();
+    addCmd.addFilepattern(path);
+    addCmd.call();
+  }
+
+  public static void rm(Git gApi, String path)
+>>>>>>> BRANCH (5f9115 Merge branch 'stable-2.10' into stable-2.11)
       throws GitAPIException {
     FetchCommand fetch = testRepo.git().fetch();
     fetch.setRefSpecs(new RefSpec(spec));

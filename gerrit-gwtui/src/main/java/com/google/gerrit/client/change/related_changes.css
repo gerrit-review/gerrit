@@ -68,8 +68,12 @@
 .current,
 .gitweb,
 .indirect,
+<<<<<<< HEAD   (023195 Merge changes from topic 'submodule-subscription-tests-and-f)
 .notCurrent,
 .submittable {
+=======
+.notCurrent {
+>>>>>>> BRANCH (5f9115 Merge branch 'stable-2.10' into stable-2.11)
   display: inline-block;
   text-align: center;
   vertical-align: top;

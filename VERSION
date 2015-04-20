@@ -2,4 +2,8 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (023195 Merge changes from topic 'submodule-subscription-tests-and-f)
 GERRIT_VERSION = '2.12-SNAPSHOT'
+=======
+GERRIT_VERSION = '2.11'
+>>>>>>> BRANCH (5f9115 Merge branch 'stable-2.10' into stable-2.11)

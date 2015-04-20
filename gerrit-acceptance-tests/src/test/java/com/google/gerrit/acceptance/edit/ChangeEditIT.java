@@ -72,6 +72,7 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -657,23 +658,41 @@ public class ChangeEditIT extends AbstractDaemonTest {
 
   private String newChange(PersonIdent ident) throws Exception {
     PushOneCommit push =
+<<<<<<< HEAD   (023195 Merge changes from topic 'submodule-subscription-tests-and-f)
         pushFactory.create(db, ident, testRepo, PushOneCommit.SUBJECT, FILE_NAME,
             new String(CONTENT_OLD));
     return push.to("refs/for/master").getChangeId();
+=======
+        pushFactory.create(db, ident, PushOneCommit.SUBJECT, FILE_NAME,
+            new String(CONTENT_OLD, StandardCharsets.UTF_8));
+    return push.to(git, "refs/for/master").getChangeId();
+>>>>>>> BRANCH (5f9115 Merge branch 'stable-2.10' into stable-2.11)
   }
 
   private String amendChange(PersonIdent ident, String changeId) throws Exception {
     PushOneCommit push =
+<<<<<<< HEAD   (023195 Merge changes from topic 'submodule-subscription-tests-and-f)
         pushFactory.create(db, ident, testRepo, PushOneCommit.SUBJECT, FILE_NAME2,
             new String(CONTENT_NEW2), changeId);
     return push.to("refs/for/master").getChangeId();
+=======
+        pushFactory.create(db, ident, PushOneCommit.SUBJECT, FILE_NAME2,
+            new String(CONTENT_NEW2, StandardCharsets.UTF_8), changeId);
+    return push.to(git, "refs/for/master").getChangeId();
+>>>>>>> BRANCH (5f9115 Merge branch 'stable-2.10' into stable-2.11)
   }
 
   private String newChange2(PersonIdent ident) throws Exception {
     PushOneCommit push =
+<<<<<<< HEAD   (023195 Merge changes from topic 'submodule-subscription-tests-and-f)
         pushFactory.create(db, ident, testRepo, PushOneCommit.SUBJECT, FILE_NAME,
             new String(CONTENT_OLD));
     return push.rm("refs/for/master").getChangeId();
+=======
+        pushFactory.create(db, ident, PushOneCommit.SUBJECT, FILE_NAME,
+            new String(CONTENT_OLD, StandardCharsets.UTF_8));
+    return push.rm(git, "refs/for/master").getChangeId();
+>>>>>>> BRANCH (5f9115 Merge branch 'stable-2.10' into stable-2.11)
   }
 
   private Change getChange(String changeId) throws Exception {

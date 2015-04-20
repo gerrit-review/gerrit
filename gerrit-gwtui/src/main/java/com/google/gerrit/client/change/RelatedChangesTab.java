@@ -314,11 +314,15 @@ class RelatedChangesTab implements IsWidget {
           && info._current_revision_number() != info._revision_number()) {
         sb.setStyleName(RelatedChanges.R.css().notCurrent());
         sb.setAttribute("title", Util.C.notCurrent());
+<<<<<<< HEAD   (023195 Merge changes from topic 'submodule-subscription-tests-and-f)
         sb.append('\u25CF'); // Unicode 'BLACK CIRCLE'
       } else if (showSubmittable && info.submittable()) {
         sb.setStyleName(RelatedChanges.R.css().submittable());
         sb.setAttribute("title", Util.C.submittable());
         sb.append('\u2713'); // Unicode 'CHECK MARK'
+=======
+        sb.append('\u25CF');
+>>>>>>> BRANCH (5f9115 Merge branch 'stable-2.10' into stable-2.11)
       } else {
         sb.setStyleName(RelatedChanges.R.css().current());
       }
