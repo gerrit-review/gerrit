@@ -14,7 +14,10 @@
 
 package com.google.gerrit.server.git;
 
+<<<<<<< HEAD   (c16ab0 Fix race condition in checking topic mergeability)
 import com.google.gerrit.common.FileUtil;
+=======
+>>>>>>> BRANCH (faa78b Disable gc_log file for in-memory acceptance tests)
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.server.config.SitePaths;
 import com.google.gerrit.server.util.SystemLog;
@@ -30,10 +33,13 @@ public class GarbageCollectionLogFile implements LifecycleListener {
 
   @Inject
   public GarbageCollectionLogFile(SitePaths sitePaths) {
+<<<<<<< HEAD   (c16ab0 Fix race condition in checking topic mergeability)
     Path logdir = FileUtil.mkdirsOrDie(sitePaths.logs_dir,
         "Cannot create log directory");
+=======
+>>>>>>> BRANCH (faa78b Disable gc_log file for in-memory acceptance tests)
     if (SystemLog.shouldConfigure()) {
-      initLogSystem(logdir);
+      initLogSystem(sitePaths.logs_dir);
     }
   }
 

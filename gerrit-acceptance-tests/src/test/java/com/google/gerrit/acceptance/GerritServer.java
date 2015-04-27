@@ -28,7 +28,11 @@ import com.google.gerrit.server.git.SubmoduleOp;
 import com.google.gerrit.server.index.ChangeSchemas;
 import com.google.gerrit.server.ssh.NoSshModule;
 import com.google.gerrit.server.util.SocketUtil;
+<<<<<<< HEAD   (c16ab0 Fix race condition in checking topic mergeability)
 import com.google.gerrit.testutil.FakeEmailSender;
+=======
+import com.google.gerrit.server.util.SystemLog;
+>>>>>>> BRANCH (faa78b Disable gc_log file for in-memory acceptance tests)
 import com.google.gerrit.testutil.TempFileUtil;
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -123,6 +127,9 @@ public class GerritServer {
     if (desc.memory()) {
       site = null;
       mergeTestConfig(cfg);
+      // Set the log4j configuration to an invalid one to prevent system logs
+      // from getting configured and creating log files.
+      System.setProperty(SystemLog.LOG4J_CONFIGURATION, "invalidConfiguration");
       cfg.setBoolean("httpd", null, "requestLog", false);
       cfg.setBoolean("sshd", null, "requestLog", false);
       cfg.setBoolean("index", "lucene", "testInmemory", true);
