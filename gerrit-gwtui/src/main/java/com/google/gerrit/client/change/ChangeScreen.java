@@ -1073,7 +1073,24 @@ public class ChangeScreen extends Screen {
   private void renderChangeInfo(ChangeInfo info) {
     changeInfo = info;
     lastDisplayedUpdate = info.updated();
+<<<<<<< HEAD   (2d726d Upgrade Truth to 0.26)
+=======
+    RevisionInfo revisionInfo = info.revision(revision);
+    boolean current = revision.equals(info.current_revision())
+        && !revisionInfo.is_edit();
+>>>>>>> BRANCH (089ced Merge "Log IOExceptions on update of project configuration" )
 
+<<<<<<< HEAD   (2d726d Upgrade Truth to 0.26)
+=======
+    if (revisionInfo.is_edit()) {
+      statusText.setInnerText(Util.C.changeEdit());
+    } else if (!current) {
+      statusText.setInnerText(Util.C.notCurrent());
+      labels.setVisible(false);
+    } else {
+      statusText.setInnerText(Util.toLongString(info.status()));
+    }
+>>>>>>> BRANCH (089ced Merge "Log IOExceptions on update of project configuration" )
     labels.set(info);
 
     renderOwner(info);
@@ -1149,7 +1166,7 @@ public class ChangeScreen extends Screen {
     }
     history.set(commentLinkProcessor, replyAction, changeId, info);
 
-    if (current) {
+    if (current && info.status().isOpen()) {
       quickApprove.set(info, revision, replyAction);
       loadSubmitType(info.status(), isSubmittable(info));
     } else {
