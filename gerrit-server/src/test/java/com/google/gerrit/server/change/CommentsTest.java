@@ -257,7 +257,12 @@ public class CommentsTest  {
     plc5 = newPatchLineComment(psId2, "Comment5", null, "FileOne.txt",
         Side.REVISION, 5, ownerId, timeBase + 4000, "Third Comment",
         new CommentRange(3, 4, 5, 6), Status.DRAFT);
+<<<<<<< HEAD   (c40c5c Merge changes from topic 'notedb-comments-map')
     plc5.setRevId(new RevId("bcdebcdebcdebcdebcdebcdebcdebcdebcdebcde"));
+=======
+    plc5.setRevId(new RevId("BCDEBCDEBCDEBCDEBCDEBCDEBCDEBCDEBCDEBCDE"));
+    plc5.setRevId(new RevId("BCDEBCDEBCDEBCDEBCDEBCDEBCDEBCDEBCDEBCDE"));
+>>>>>>> BRANCH (f38c1c Fix PatchLineCommentsUtil.draftByChangeAuthor)
     plc6 = newPatchLineComment(psId3, "Comment6", null, "FileOne.txt",
         Side.REVISION, 5, ownerId, timeBase + 5000, "Sixth Comment",
         new CommentRange(3, 4, 5, 6), Status.DRAFT);
@@ -422,7 +427,11 @@ public class CommentsTest  {
   private void assertCommentMap(Map<String, List<CommentInfo>> actual,
       Map<String, ? extends List<PatchLineComment>> expected,
       boolean isPublished) {
+<<<<<<< HEAD   (c40c5c Merge changes from topic 'notedb-comments-map')
     assertThat(actual.keySet()).containsExactlyElementsIn(expected.keySet());
+=======
+    assertThat((Iterable<?>)actual.keySet()).containsExactlyElementsIn(expected.keySet());
+>>>>>>> BRANCH (f38c1c Fix PatchLineCommentsUtil.draftByChangeAuthor)
     for (Map.Entry<String, List<CommentInfo>> entry : actual.entrySet()) {
       List<CommentInfo> actualList = entry.getValue();
       List<PatchLineComment> expectedList = expected.get(entry.getKey());

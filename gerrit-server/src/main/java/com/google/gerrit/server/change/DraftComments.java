@@ -56,7 +56,11 @@ public class DraftComments implements ChildCollection<RevisionResource, DraftCom
   }
 
   @Override
+<<<<<<< HEAD   (c40c5c Merge changes from topic 'notedb-comments-map')
   public ListRevisionDrafts list() throws AuthException {
+=======
+  public ListDraftComments list() throws AuthException {
+>>>>>>> BRANCH (f38c1c Fix PatchLineCommentsUtil.draftByChangeAuthor)
     checkIdentifiedUser();
     return list;
   }
