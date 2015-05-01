@@ -51,7 +51,11 @@ public class Comments implements ChildCollection<RevisionResource, CommentResour
   }
 
   @Override
+<<<<<<< HEAD   (c40c5c Merge changes from topic 'notedb-comments-map')
   public ListRevisionComments list() {
+=======
+  public ListComments list() {
+>>>>>>> BRANCH (f38c1c Fix PatchLineCommentsUtil.draftByChangeAuthor)
     return list;
   }
 

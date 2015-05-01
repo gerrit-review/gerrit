@@ -532,6 +532,7 @@ public class CommentsInNotesUtil {
    * @throws IOException if an error occurred.
    */
   public void writeCommentsToNoteMap(NoteMap noteMap,
+<<<<<<< HEAD   (c40c5c Merge changes from topic 'notedb-comments-map')
       Map<RevId, List<PatchLineComment>> allComments, ObjectInserter inserter)
       throws IOException {
     for (Map.Entry<RevId, List<PatchLineComment>> e : allComments.entrySet()) {
@@ -547,6 +548,16 @@ public class CommentsInNotesUtil {
       // a single patch set.
       noteMap.set(commit, inserter.insert(OBJ_BLOB, buildNote(comments)));
     }
+=======
+      List<PatchLineComment> allComments, ObjectInserter inserter)
+        throws IOException {
+    checkArgument(!allComments.isEmpty(),
+        "No comments to write; to delete, use removeNoteFromNoteMap().");
+    ObjectId commit =
+        ObjectId.fromString(allComments.get(0).getRevId().get());
+    Collections.sort(allComments, ChangeNotes.PLC_ORDER);
+    noteMap.set(commit, inserter.insert(OBJ_BLOB, buildNote(allComments)));
+>>>>>>> BRANCH (f38c1c Fix PatchLineCommentsUtil.draftByChangeAuthor)
   }
 
   static void addCommentToMap(Map<RevId, List<PatchLineComment>> map,
