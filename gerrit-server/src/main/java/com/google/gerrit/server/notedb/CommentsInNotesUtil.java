@@ -532,6 +532,7 @@ public class CommentsInNotesUtil {
    * @throws IOException if an error occurred.
    */
   public void writeCommentsToNoteMap(NoteMap noteMap,
+<<<<<<< HEAD   (4a1cb0 Allow public access to classes and methods)
       Map<RevId, List<PatchLineComment>> allComments, ObjectInserter inserter)
       throws IOException {
     for (Map.Entry<RevId, List<PatchLineComment>> e : allComments.entrySet()) {
@@ -547,6 +548,16 @@ public class CommentsInNotesUtil {
       // a single patch set.
       noteMap.set(commit, inserter.insert(OBJ_BLOB, buildNote(comments)));
     }
+=======
+      List<PatchLineComment> allComments, ObjectInserter inserter)
+        throws IOException {
+    checkArgument(!allComments.isEmpty(),
+        "No comments to write; to delete, use removeNoteFromNoteMap().");
+    ObjectId commit =
+        ObjectId.fromString(allComments.get(0).getRevId().get());
+    Collections.sort(allComments, ChangeNotes.PLC_ORDER);
+    noteMap.set(commit, inserter.insert(OBJ_BLOB, buildNote(allComments)));
+>>>>>>> BRANCH (924ddb Merge "Add user guide" into stable-2.11)
   }
 
   static void addCommentToMap(Map<RevId, List<PatchLineComment>> map,

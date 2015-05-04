@@ -56,7 +56,11 @@ public class DraftComments implements ChildCollection<RevisionResource, DraftCom
   }
 
   @Override
+<<<<<<< HEAD   (4a1cb0 Allow public access to classes and methods)
   public ListRevisionDrafts list() throws AuthException {
+=======
+  public ListDraftComments list() throws AuthException {
+>>>>>>> BRANCH (924ddb Merge "Add user guide" into stable-2.11)
     checkIdentifiedUser();
     return list;
   }

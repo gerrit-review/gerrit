@@ -51,7 +51,11 @@ public class Comments implements ChildCollection<RevisionResource, CommentResour
   }
 
   @Override
+<<<<<<< HEAD   (4a1cb0 Allow public access to classes and methods)
   public ListRevisionComments list() {
+=======
+  public ListComments list() {
+>>>>>>> BRANCH (924ddb Merge "Add user guide" into stable-2.11)
     return list;
   }
 
