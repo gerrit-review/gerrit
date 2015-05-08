@@ -2,4 +2,8 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (c93d40 Merge "Mention Gerrit IntelliJ Plugin in user guide")
 GERRIT_VERSION = '2.12-SNAPSHOT'
+=======
+GERRIT_VERSION = '2.11.1'
+>>>>>>> BRANCH (b11fb7 Merge "Fix Lucene indexing for the reviewer suggestion" into)

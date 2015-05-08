@@ -28,7 +28,10 @@ import com.google.gerrit.common.data.GroupDescription;
 import com.google.gerrit.common.data.GroupDescriptions;
 import com.google.gerrit.extensions.common.GroupInfo;
 import com.google.gerrit.extensions.common.SuggestedReviewerInfo;
+<<<<<<< HEAD   (c93d40 Merge "Mention Gerrit IntelliJ Plugin in user guide")
 import com.google.gerrit.extensions.restapi.TopLevelResource;
+=======
+>>>>>>> BRANCH (b11fb7 Merge "Fix Lucene indexing for the reviewer suggestion" into)
 import com.google.gerrit.extensions.restapi.Url;
 import com.google.gerrit.reviewdb.client.AccountGroup;
 import com.google.gerrit.server.group.CreateGroup;
@@ -62,9 +65,18 @@ public class SuggestReviewersIT extends AbstractDaemonTest {
     group2 = group("users2");
     group3 = group("users3");
 
+<<<<<<< HEAD   (c93d40 Merge "Mention Gerrit IntelliJ Plugin in user guide")
     user1 = user("user1", group1);
     user2 = user("user2", group2);
     user3 = user("user3", group1, group2);
+=======
+    user1 = accounts.create("user1", "user1@example.com", "First1 Last1",
+        "users1");
+    user2 = accounts.create("user2", "user2@example.com", "First2 Last2",
+        "users2");
+    user3 = accounts.create("user3", "user3@example.com", "First3 Last3",
+        "users1", "users2");
+>>>>>>> BRANCH (b11fb7 Merge "Fix Lucene indexing for the reviewer suggestion" into)
   }
 
   @Test
@@ -118,8 +130,13 @@ public class SuggestReviewersIT extends AbstractDaemonTest {
 
     reviewers = suggestReviewers(changeId, user2.fullName, 2);
     assertThat(reviewers).hasSize(1);
+<<<<<<< HEAD   (c93d40 Merge "Mention Gerrit IntelliJ Plugin in user guide")
     assertThat(Iterables.getOnlyElement(reviewers).account.name)
         .isEqualTo(user2.fullName);
+=======
+    assertThat(Iterables.getOnlyElement(reviewers).account.name).isEqualTo(
+        "First2 Last2");
+>>>>>>> BRANCH (b11fb7 Merge "Fix Lucene indexing for the reviewer suggestion" into)
 
     setApiUser(user1);
     reviewers = suggestReviewers(changeId, user2.fullName, 2);
@@ -128,14 +145,24 @@ public class SuggestReviewersIT extends AbstractDaemonTest {
     setApiUser(user2);
     reviewers = suggestReviewers(changeId, user2.fullName, 2);
     assertThat(reviewers).hasSize(1);
+<<<<<<< HEAD   (c93d40 Merge "Mention Gerrit IntelliJ Plugin in user guide")
     assertThat(Iterables.getOnlyElement(reviewers).account.name)
         .isEqualTo(user2.fullName);
+=======
+    assertThat(Iterables.getOnlyElement(reviewers).account.name).isEqualTo(
+        "First2 Last2");
+>>>>>>> BRANCH (b11fb7 Merge "Fix Lucene indexing for the reviewer suggestion" into)
 
     setApiUser(user3);
     reviewers = suggestReviewers(changeId, user2.fullName, 2);
     assertThat(reviewers).hasSize(1);
+<<<<<<< HEAD   (c93d40 Merge "Mention Gerrit IntelliJ Plugin in user guide")
     assertThat(Iterables.getOnlyElement(reviewers).account.name)
         .isEqualTo(user2.fullName);
+=======
+    assertThat(Iterables.getOnlyElement(reviewers).account.name).isEqualTo(
+        "First2 Last2");
+>>>>>>> BRANCH (b11fb7 Merge "Fix Lucene indexing for the reviewer suggestion" into)
   }
 
   @Test
@@ -153,8 +180,13 @@ public class SuggestReviewersIT extends AbstractDaemonTest {
         GlobalCapability.VIEW_ALL_ACCOUNTS);
     reviewers = suggestReviewers(changeId, user2.fullName, 2);
     assertThat(reviewers).hasSize(1);
+<<<<<<< HEAD   (c93d40 Merge "Mention Gerrit IntelliJ Plugin in user guide")
     assertThat(Iterables.getOnlyElement(reviewers).account.name)
         .isEqualTo(user2.fullName);
+=======
+    assertThat(Iterables.getOnlyElement(reviewers).account.name).isEqualTo(
+        "First2 Last2");
+>>>>>>> BRANCH (b11fb7 Merge "Fix Lucene indexing for the reviewer suggestion" into)
   }
 
   @Test
@@ -170,9 +202,49 @@ public class SuggestReviewersIT extends AbstractDaemonTest {
   @GerritConfig(name = "suggest.fullTextSearch", value = "true")
   public void suggestReviewersFullTextSearch() throws Exception {
     String changeId = createChange().getChangeId();
-    List<SuggestedReviewerInfo> reviewers =
-        suggestReviewers(changeId, "ser", 5);
-    assertThat(reviewers).hasSize(4);
+    List<SuggestedReviewerInfo> reviewers;
+
+    reviewers = suggestReviewers(changeId, "first", 4);
+    assertThat(reviewers).hasSize(3);
+
+    reviewers = suggestReviewers(changeId, "first1", 2);
+    assertThat(reviewers).hasSize(1);
+
+    reviewers = suggestReviewers(changeId, "last", 4);
+    assertThat(reviewers).hasSize(3);
+
+    reviewers = suggestReviewers(changeId, "last1", 2);
+    assertThat(reviewers).hasSize(1);
+
+    reviewers = suggestReviewers(changeId, "fi la", 4);
+    assertThat(reviewers).hasSize(3);
+
+    reviewers = suggestReviewers(changeId, "la fi", 4);
+    assertThat(reviewers).hasSize(3);
+
+    reviewers = suggestReviewers(changeId, "first1 la", 2);
+    assertThat(reviewers).hasSize(1);
+
+    reviewers = suggestReviewers(changeId, "fi last1", 2);
+    assertThat(reviewers).hasSize(1);
+
+    reviewers = suggestReviewers(changeId, "first1 last2", 1);
+    assertThat(reviewers).hasSize(0);
+
+    reviewers = suggestReviewers(changeId, "user", 8);
+    assertThat(reviewers).hasSize(7);
+
+    reviewers = suggestReviewers(changeId, "user1", 2);
+    assertThat(reviewers).hasSize(1);
+
+    reviewers = suggestReviewers(changeId, "example.com", 6);
+    assertThat(reviewers).hasSize(5);
+
+    reviewers = suggestReviewers(changeId, "user1@example.com", 2);
+    assertThat(reviewers).hasSize(1);
+
+    reviewers = suggestReviewers(changeId, "user1 example", 2);
+    assertThat(reviewers).hasSize(1);
   }
 
   @Test
@@ -183,8 +255,8 @@ public class SuggestReviewersIT extends AbstractDaemonTest {
   public void suggestReviewersFullTextSearchLimitMaxMatches() throws Exception {
     String changeId = createChange().getChangeId();
     List<SuggestedReviewerInfo> reviewers =
-        suggestReviewers(changeId, "ser", 3);
-    assertThat(reviewers).hasSize(2);
+        suggestReviewers(changeId, "user", 3);
+    assertThat(reviewers).hasSize(3);
   }
 
   @Test
@@ -198,6 +270,23 @@ public class SuggestReviewersIT extends AbstractDaemonTest {
     assertThat(suggestedReviewerInfos).hasSize(1);
   }
 
+<<<<<<< HEAD   (c93d40 Merge "Mention Gerrit IntelliJ Plugin in user guide")
+=======
+  private List<SuggestedReviewerInfo> suggestReviewers(RestSession session,
+      String changeId, String query, int n) throws IOException {
+    return newGson().fromJson(
+        session.get("/changes/"
+            + changeId
+            + "/suggest_reviewers?q="
+            + Url.encode(query)
+            + "&n="
+            + n)
+        .getReader(),
+        new TypeToken<List<SuggestedReviewerInfo>>() {}
+        .getType());
+  }
+
+>>>>>>> BRANCH (b11fb7 Merge "Fix Lucene indexing for the reviewer suggestion" into)
   private List<SuggestedReviewerInfo> suggestReviewers(String changeId,
       String query, int n) throws Exception {
     return gApi.changes()
