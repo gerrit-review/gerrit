@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-plugin-gwtui</artifactId>
+<<<<<<< HEAD   (040601 Merge "Use in-memory Lucene index for a better reviewer sugg)
   <version>2.11</version>
+=======
+  <version>2.10.4</version>
+>>>>>>> BRANCH (bde8cc Release notes for Gerrit 2.10.4)
   <packaging>jar</packaging>
   <name>Gerrit Code Review - Plugin GWT UI</name>
   <description>Common Classes for Gerrit GWT UI Plugins</description>
