@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-plugin-api</artifactId>
+<<<<<<< HEAD   (c93d40 Merge "Mention Gerrit IntelliJ Plugin in user guide")
   <version>2.12-SNAPSHOT</version>
+=======
+  <version>2.11.1</version>
+>>>>>>> BRANCH (b11fb7 Merge "Fix Lucene indexing for the reviewer suggestion" into)
   <packaging>jar</packaging>
   <name>Gerrit Code Review - Plugin API</name>
   <description>API for Gerrit Plugins</description>
