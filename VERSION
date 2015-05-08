@@ -2,4 +2,8 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (040601 Merge "Use in-memory Lucene index for a better reviewer sugg)
 GERRIT_VERSION = '2.11'
+=======
+GERRIT_VERSION = '2.10.4'
+>>>>>>> BRANCH (bd57a2 Set VERSION to 2.10.4)
