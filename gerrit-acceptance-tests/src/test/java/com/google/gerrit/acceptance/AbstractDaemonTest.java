@@ -239,11 +239,6 @@ public abstract class AbstractDaemonTest {
     testRepo = cloneProject(project, getCloneAsAccount(description));
   }
 
-  private TestAccount getCloneAsAccount(Description description) {
-    TestProjectInput ann = description.getAnnotation(TestProjectInput.class);
-    return accounts.get(ann != null ? ann.cloneAs() : "admin");
-  }
-
   private ProjectInput projectInput(Description description) {
     ProjectInput in = new ProjectInput();
     TestProjectInput ann = description.getAnnotation(TestProjectInput.class);
