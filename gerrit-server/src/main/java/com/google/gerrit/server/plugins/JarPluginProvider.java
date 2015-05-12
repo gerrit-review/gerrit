@@ -142,10 +142,18 @@ public class JarPluginProvider implements ServerPluginProvider {
           new URLClassLoader(urls.toArray(new URL[urls.size()]),
               PluginLoader.parentFor(type));
 
+<<<<<<< HEAD   (81fe59 Merge "Merge branch 'stable-2.11'")
       JarScanner jarScanner = createJarScanner(srcJar);
       ServerPlugin plugin = new ServerPlugin(name, description.canonicalUrl,
           description.user, srcJar, snapshot, jarScanner,
           description.dataDir, pluginLoader);
+=======
+      JarScanner jarScanner = createJarScanner(tmp);
+      ServerPlugin plugin =
+          new ServerPlugin(name, description.canonicalUrl, description.user,
+              srcJar, snapshot, jarScanner, description.dataDir,
+              pluginLoader);
+>>>>>>> BRANCH (08c0ac Update 2.11.1 release notes)
       plugin.setCleanupHandle(new CleanupHandle(tmp, jarFile));
       keep = true;
       return plugin;
