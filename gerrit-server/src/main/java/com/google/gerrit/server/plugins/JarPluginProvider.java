@@ -142,10 +142,18 @@ public class JarPluginProvider implements ServerPluginProvider {
           new URLClassLoader(urls.toArray(new URL[urls.size()]),
               PluginLoader.parentFor(type));
 
+<<<<<<< HEAD   (65202d Merge "Update commit-message-length-validator plugin to late)
       JarScanner jarScanner = createJarScanner(srcJar);
       ServerPlugin plugin = new ServerPlugin(name, description.canonicalUrl,
           description.user, srcJar, snapshot, jarScanner,
           description.dataDir, pluginLoader);
+=======
+      JarScanner jarScanner = createJarScanner(tmp);
+      ServerPlugin plugin =
+          new ServerPlugin(name, description.canonicalUrl, description.user,
+              srcJar, snapshot, jarScanner, description.dataDir,
+              pluginLoader);
+>>>>>>> BRANCH (5ac80f Position cursor on first column on diff chunk navigation)
       plugin.setCleanupHandle(new CleanupHandle(tmp, jarFile));
       keep = true;
       return plugin;

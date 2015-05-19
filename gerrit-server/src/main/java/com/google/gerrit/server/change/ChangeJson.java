@@ -427,7 +427,11 @@ public class ChangeJson {
     finish(out);
 
     if (needRevisions) {
+<<<<<<< HEAD   (65202d Merge "Update commit-message-length-validator plugin to late)
       out.revisions = revisions(ctl, src);
+=======
+      out.revisions = revisions(ctl, cd, src);
+>>>>>>> BRANCH (5ac80f Position cursor on first column on diff chunk navigation)
       if (out.revisions != null) {
         for (Map.Entry<String, RevisionInfo> entry : out.revisions.entrySet()) {
           if (entry.getValue().isCurrent) {
