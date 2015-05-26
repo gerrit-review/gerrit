@@ -379,7 +379,11 @@ public class ChangeScreen extends Screen {
     patchSetsText.setInnerText(Resources.M.patchSets(
         currentlyViewedPatchSet, currentPatchSet));
     patchSetsAction = new PatchSetsAction(
+<<<<<<< HEAD   (00a948 Merge "Initialize the branches list with the right size")
         info.legacyId(), revision,
+=======
+        info.legacy_id(), revision, edit,
+>>>>>>> BRANCH (258114 Pass edit info from ChangeScreen to PatchSetsBox)
         style, headerLine, patchSets);
 
     RevisionInfo revInfo = info.revision(revision);
