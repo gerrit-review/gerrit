@@ -241,6 +241,7 @@ public class SubmitOnPushIT extends AbstractDaemonTest {
   }
 
   private void assertCommit(Project.NameKey project, String branch) throws IOException {
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
     try (Repository r = repoManager.openRepository(project);
         RevWalk rw = new RevWalk(r)) {
       RevCommit c = rw.parseCommit(r.getRef(branch).getObjectId());
@@ -248,10 +249,26 @@ public class SubmitOnPushIT extends AbstractDaemonTest {
       assertThat(c.getAuthorIdent().getEmailAddress()).isEqualTo(admin.email);
       assertThat(c.getCommitterIdent().getEmailAddress()).isEqualTo(
           admin.email);
+=======
+    Repository r = repoManager.openRepository(project);
+    try {
+      RevWalk rw = new RevWalk(r);
+      try {
+        RevCommit c = rw.parseCommit(r.getRef(branch).getObjectId());
+        assertEquals(PushOneCommit.SUBJECT, c.getShortMessage());
+        assertEquals(admin.email, c.getAuthorIdent().getEmailAddress());
+        assertEquals(admin.email, c.getCommitterIdent().getEmailAddress());
+      } finally {
+        rw.close();
+      }
+    } finally {
+      r.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     }
   }
 
   private void assertMergeCommit(String branch, String subject) throws IOException {
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
     try (Repository r = repoManager.openRepository(project);
         RevWalk rw = new RevWalk(r)) {
       RevCommit c = rw.parseCommit(r.getRef(branch).getObjectId());
@@ -282,6 +299,19 @@ public class SubmitOnPushIT extends AbstractDaemonTest {
         }
       } else {
         taggedCommit = tagRef.getObjectId();
+=======
+    Repository r = repoManager.openRepository(project);
+    try {
+      RevWalk rw = new RevWalk(r);
+      try {
+        RevCommit c = rw.parseCommit(r.getRef(branch).getObjectId());
+        assertEquals(2, c.getParentCount());
+        assertEquals("Merge \"" + subject + "\"", c.getShortMessage());
+        assertEquals(admin.email, c.getAuthorIdent().getEmailAddress());
+        assertEquals(serverIdent.getEmailAddress(), c.getCommitterIdent().getEmailAddress());
+      } finally {
+        rw.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
       }
       ObjectId headCommit = repo.getRef(branch).getObjectId();
       assertThat(taggedCommit).isNotNull();

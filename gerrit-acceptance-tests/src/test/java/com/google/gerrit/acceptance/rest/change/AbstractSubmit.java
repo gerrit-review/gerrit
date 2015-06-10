@@ -343,17 +343,44 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
   }
 
   protected List<RevCommit> getRemoteLog() throws IOException {
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
     try (Repository repo = repoManager.openRepository(project);
         RevWalk rw = new RevWalk(repo)) {
       rw.markStart(rw.parseCommit(
           repo.getRef("refs/heads/master").getObjectId()));
       return Lists.newArrayList(rw);
+=======
+    Repository repo = repoManager.openRepository(project);
+    try {
+      RevWalk rw = new RevWalk(repo);
+      try {
+        rw.markStart(rw.parseCommit(
+            repo.getRef("refs/heads/master").getObjectId()));
+        return Lists.newArrayList(rw);
+      } finally {
+        rw.close();
+      }
+    } finally {
+      repo.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     }
   }
 
   private RevCommit getHead(Repository repo, String name) throws IOException {
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
     try (RevWalk rw = new RevWalk(repo)) {
       return rw.parseCommit(repo.getRef(name).getObjectId());
+=======
+    try {
+      RevWalk rw = new RevWalk(repo);
+      try {
+        return rw.parseCommit(repo.getRef(name).getObjectId());
+      } finally {
+        rw.close();
+      }
+    } finally {
+      repo.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     }
   }
 
@@ -364,11 +391,26 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
   }
 
   private String getLatestRemoteDiff() throws IOException {
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
     try (Repository repo = repoManager.openRepository(project);
         RevWalk rw = new RevWalk(repo)) {
       ObjectId oldTreeId = repo.resolve("refs/heads/master~1^{tree}");
       ObjectId newTreeId = repo.resolve("refs/heads/master^{tree}");
       return getLatestDiff(repo, oldTreeId, newTreeId);
+=======
+    Repository repo = repoManager.openRepository(project);
+    try {
+      RevWalk rw = new RevWalk(repo);
+      try {
+        ObjectId oldTreeId = repo.resolve("refs/heads/master~1^{tree}");
+        ObjectId newTreeId = repo.resolve("refs/heads/master^{tree}");
+        return getLatestDiff(repo, oldTreeId, newTreeId);
+      } finally {
+        rw.close();
+      }
+    } finally {
+      repo.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     }
   }
 

@@ -404,6 +404,7 @@ public abstract class ChangeEmail extends NotificationEmail {
         log.error("Cannot open repository to format patch", e);
         return "";
       }
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
       try {
         fmt.setRepository(git);
         fmt.setDetectRenames(true);
@@ -418,6 +419,13 @@ public abstract class ChangeEmail extends NotificationEmail {
       } finally {
         git.close();
       }
+=======
+      log.error("Cannot format patch", e);
+      return "";
+    } finally {
+      fmt.close();
+      git.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     }
   }
 }

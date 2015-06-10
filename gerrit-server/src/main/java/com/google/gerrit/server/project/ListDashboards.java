@@ -95,6 +95,26 @@ class ListDashboards implements RestReadView<ProjectResource> {
       return all;
     } catch (RepositoryNotFoundException e) {
       throw new ResourceNotFoundException();
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
+=======
+    }
+    try {
+      RevWalk rw = new RevWalk(git);
+      try {
+        List<DashboardInfo> all = Lists.newArrayList();
+        for (Ref ref : git.getRefDatabase().getRefs(REFS_DASHBOARDS).values()) {
+          if (ctl.controlForRef(ref.getName()).canRead()) {
+            all.addAll(scanDashboards(ctl.getProject(), git, rw, ref,
+                project, setDefault));
+          }
+        }
+        return all;
+      } finally {
+        rw.close();
+      }
+    } finally {
+      git.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     }
   }
 
@@ -123,6 +143,11 @@ class ListDashboards implements RestReadView<ProjectResource> {
           }
         }
       }
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
+=======
+    } finally {
+      tw.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     }
     return list;
   }

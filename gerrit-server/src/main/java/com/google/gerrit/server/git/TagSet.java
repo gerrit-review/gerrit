@@ -187,6 +187,11 @@ class TagSet {
       }
     } catch (IOException e) {
       log.warn("Error building tags for repository " + projectName, e);
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
+=======
+    } finally {
+      rw.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     }
   }
 

@@ -81,9 +81,22 @@ public class GetRelated implements RestReadView<RevisionResource> {
     try (Repository git = gitMgr.openRepository(rsrc.getChange().getProject());
         RevWalk rw = new RevWalk(git)) {
       Ref ref = git.getRef(rsrc.getChange().getDest().get());
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
       RelatedInfo info = new RelatedInfo();
       info.changes = walk(rsrc, rw, ref);
       return info;
+=======
+      RevWalk rw = new RevWalk(git);
+      try {
+        RelatedInfo info = new RelatedInfo();
+        info.changes = walk(rsrc, rw, ref);
+        return info;
+      } finally {
+        rw.close();
+      }
+    } finally {
+      git.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     }
   }
 

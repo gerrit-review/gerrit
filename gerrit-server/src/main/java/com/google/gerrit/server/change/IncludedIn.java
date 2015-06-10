@@ -62,11 +62,26 @@ class IncludedIn implements RestReadView<ChangeResource> {
       rw.setRetainBody(false);
       RevCommit rev;
       try {
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
         rev = rw.parseCommit(ObjectId.fromString(ps.getRevision().get()));
       } catch (IncorrectObjectTypeException err) {
         throw new BadRequestException(err.getMessage());
       } catch (MissingObjectException err) {
         throw new ResourceConflictException(err.getMessage());
+=======
+        rw.setRetainBody(false);
+        RevCommit rev;
+        try {
+          rev = rw.parseCommit(ObjectId.fromString(ps.getRevision().get()));
+        } catch (IncorrectObjectTypeException err) {
+          throw new BadRequestException(err.getMessage());
+        } catch (MissingObjectException err) {
+          throw new ResourceConflictException(err.getMessage());
+        }
+        return new IncludedInInfo(IncludedInResolver.resolve(r, rw, rev));
+      } finally {
+        rw.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
       }
       return new IncludedInInfo(IncludedInResolver.resolve(r, rw, rev));
     }

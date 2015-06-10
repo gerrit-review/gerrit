@@ -42,6 +42,7 @@ public class GetContent implements RestReadView<FileResource> {
 
   @Override
   public BinaryResult apply(FileResource rsrc)
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
       throws ResourceNotFoundException, IOException, NoSuchChangeException,
       OrmException {
     String path = rsrc.getPatchKey().get();
@@ -50,6 +51,46 @@ public class GetContent implements RestReadView<FileResource> {
       return BinaryResult.create(msg)
           .setContentType(FileContentUtil.TEXT_X_GERRIT_COMMIT_MESSAGE)
           .base64();
+=======
+      throws ResourceNotFoundException, IOException {
+    return apply(rsrc.getRevision().getControl().getProject().getNameKey(),
+        rsrc.getRevision().getPatchSet().getRevision().get(),
+        rsrc.getPatchKey().get());
+  }
+
+  public BinaryResult apply(Project.NameKey project, String revstr, String path)
+      throws ResourceNotFoundException, IOException {
+    Repository repo = repoManager.openRepository(project);
+    try {
+      RevWalk rw = new RevWalk(repo);
+      try {
+        RevCommit commit =
+            rw.parseCommit(repo.resolve(revstr));
+        TreeWalk tw =
+            TreeWalk.forPath(rw.getObjectReader(), path,
+                commit.getTree().getId());
+        if (tw == null) {
+          throw new ResourceNotFoundException();
+        }
+        try {
+          final ObjectLoader object = repo.open(tw.getObjectId(0));
+          @SuppressWarnings("resource")
+          BinaryResult result = new BinaryResult() {
+            @Override
+            public void writeTo(OutputStream os) throws IOException {
+              object.copyTo(os);
+            }
+          };
+          return result.setContentLength(object.getSize()).base64();
+        } finally {
+          tw.close();
+        }
+      } finally {
+        rw.close();
+      }
+    } finally {
+      repo.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     }
     return fileContentUtil.getContent(
         rsrc.getRevision().getControl().getProjectControl().getProjectState(),

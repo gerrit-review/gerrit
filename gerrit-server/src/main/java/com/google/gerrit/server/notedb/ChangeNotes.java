@@ -301,6 +301,14 @@ public class ChangeNotes extends AbstractChangeNotes<ChangeNotes> {
       this.allPastReviewers = ImmutableList.copyOf(parser.allPastReviewers);
 
       submitRecords = ImmutableList.copyOf(parser.submitRecords);
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
+=======
+    } catch (ParseException e1) {
+      // TODO(yyonas): figure out how to handle this exception
+      throw new IOException(e1);
+    } finally {
+      walk.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     }
   }
 

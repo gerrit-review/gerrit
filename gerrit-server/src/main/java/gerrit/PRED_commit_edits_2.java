@@ -128,6 +128,11 @@ public class PRED_commit_edits_2 extends Predicate.P2 {
       }
     } catch (IOException err) {
       throw new JavaException(this, 1, err);
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
+=======
+    } finally {
+      reader.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     }
 
     return engine.fail();

@@ -400,6 +400,11 @@ public class SubmoduleOp {
           pdb.newObjectReader(), rw.parseTree(branch.getObjectId()));
       b.finish();
       return dc;
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
+=======
+    } finally {
+      rw.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     }
   }
 

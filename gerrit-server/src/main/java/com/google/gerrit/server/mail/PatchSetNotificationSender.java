@@ -87,6 +87,11 @@ public class PatchSetNotificationSender {
       try (RevWalk revWalk = new RevWalk(git)) {
         commit = revWalk.parseCommit(ObjectId.fromString(
             updatedPatchSet.getRevision().get()));
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
+=======
+      } finally {
+        revWalk.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
       }
       final PatchSetInfo info = patchSetInfoFactory.get(commit, updatedPatchSet.getId());
       final List<FooterLine> footerLines = commit.getFooterLines();

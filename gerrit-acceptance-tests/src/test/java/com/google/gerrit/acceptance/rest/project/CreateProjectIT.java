@@ -249,6 +249,13 @@ public class CreateProjectIT extends AbstractDaemonTest {
         assertThat(tw.next()).isFalse();
         tw.reset();
       }
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
+=======
+    } finally {
+      tw.close();
+      rw.close();
+      repo.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     }
   }
 }

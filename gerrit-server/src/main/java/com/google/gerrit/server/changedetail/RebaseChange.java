@@ -146,6 +146,19 @@ public class RebaseChange {
           committerIdent, true, ValidatePolicy.GERRIT);
     } catch (MergeConflictException e) {
       throw new IOException(e.getMessage());
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
+=======
+    } finally {
+      if (inserter != null) {
+        inserter.close();
+      }
+      if (rw != null) {
+        rw.close();
+      }
+      if (git != null) {
+        git.close();
+      }
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     }
   }
 

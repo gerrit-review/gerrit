@@ -71,6 +71,11 @@ public class CommitsCollection implements
       rw.parseBody(commit);
       if (!parent.getControl().canReadCommit(db.get(), rw, commit)) {
         throw new ResourceNotFoundException(id);
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
+=======
+      } finally {
+        rw.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
       }
       for (int i = 0; i < commit.getParentCount(); i++) {
         rw.parseBody(rw.parseCommit(commit.getParent(i)));

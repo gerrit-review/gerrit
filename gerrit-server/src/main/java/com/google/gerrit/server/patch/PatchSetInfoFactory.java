@@ -85,12 +85,26 @@ public class PatchSetInfoFactory {
     } catch (IOException e) {
       throw new PatchSetInfoNotAvailableException(e);
     }
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
     try (RevWalk rw = new RevWalk(repo)) {
       final RevCommit src =
           rw.parseCommit(ObjectId.fromString(patchSet.getRevision().get()));
       PatchSetInfo info = get(src, patchSet.getId());
       info.setParents(toParentInfos(src.getParents(), rw));
       return info;
+=======
+    try {
+      final RevWalk rw = new RevWalk(repo);
+      try {
+        final RevCommit src =
+            rw.parseCommit(ObjectId.fromString(patchSet.getRevision().get()));
+        PatchSetInfo info = get(src, patchSet.getId());
+        info.setParents(toParentInfos(src.getParents(), rw));
+        return info;
+      } finally {
+        rw.close();
+      }
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     } catch (IOException e) {
       throw new PatchSetInfoNotAvailableException(e);
     } finally {

@@ -429,6 +429,11 @@ public class CommitMsgHookTest extends HookTestCase {
       e.setObjectId(oi.insert(Constants.OBJ_BLOB, Constants.encode(name)));
       oi.flush();
       return e;
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
+=======
+    } finally {
+      oi.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     }
   }
 
@@ -452,6 +457,11 @@ public class CommitMsgHookTest extends HookTestCase {
         default:
           fail(Constants.HEAD + " did not change: " + ref.getResult());
       }
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
+=======
+    } finally {
+      oi.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     }
   }
 }

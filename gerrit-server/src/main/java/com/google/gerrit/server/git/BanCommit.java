@@ -64,8 +64,18 @@ public class BanCommit {
         return NoteMap.newEmptyMap();
       }
 
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
       RevCommit map = walk.parseCommit(ref.getObjectId());
       return NoteMap.read(walk.getObjectReader(), map);
+=======
+      RevWalk rw = new RevWalk(repo);
+      try {
+        RevCommit map = rw.parseCommit(ref.getObjectId());
+        return NoteMap.read(rw.getObjectReader(), map);
+      } finally {
+        rw.close();
+      }
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     } catch (IOException badMap) {
       throw new IOException("Cannot load " + RefNames.REFS_REJECT_COMMITS,
           badMap);
@@ -117,7 +127,14 @@ public class BanCommit {
         if (noteId == null) {
           noteId = createNoteContent(reason, inserter);
         }
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
         banCommitNotes.set(commitToBan, noteId);
+=======
+        return result;
+      } finally {
+        revWalk.close();
+        inserter.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
       }
       NotesBranchUtil notesBranchUtil =
           notesBranchUtilFactory.create(project, repo, inserter);

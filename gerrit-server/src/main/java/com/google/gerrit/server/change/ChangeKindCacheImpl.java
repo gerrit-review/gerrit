@@ -231,6 +231,10 @@ public class ChangeKindCacheImpl implements ChangeKindCache {
         return ChangeKind.REWORK;
       } finally {
         key.repo = null;
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
+=======
+        walk.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
       }
     }
 

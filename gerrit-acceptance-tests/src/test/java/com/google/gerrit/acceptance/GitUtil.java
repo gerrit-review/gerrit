@@ -174,12 +174,29 @@ public class GitUtil {
 
     RevCommit c = commitCmd.call();
 
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
     List<String> ids = c.getFooterLines(FooterConstants.CHANGE_ID);
     checkState(ids.size() >= 1,
         "No Change-Id found in new commit:\n%s", c.getFullMessage());
     changeId = ids.get(ids.size() - 1);
 
     return new Commit(c, changeId);
+=======
+  private static ObjectId computeChangeId(Git git, PersonIdent i, String msg)
+      throws IOException {
+    RevWalk rw = new RevWalk(git.getRepository());
+    try {
+      Ref head = git.getRepository().getRef(Constants.HEAD);
+      if (head.getObjectId() != null) {
+        RevCommit parent = rw.lookupCommit(head.getObjectId());
+        return ChangeIdUtil.computeChangeId(parent.getTree(), parent.getId(), i, i, msg);
+      } else {
+        return ChangeIdUtil.computeChangeId(null, null, i, i, msg);
+      }
+    } finally {
+      rw.close();
+    }
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
   }
 
   public static void fetch(Git git, String spec) throws GitAPIException {

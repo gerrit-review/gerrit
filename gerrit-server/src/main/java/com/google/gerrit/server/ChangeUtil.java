@@ -329,6 +329,115 @@ public class ChangeUtil {
     } catch (RepositoryNotFoundException e) {
       throw new NoSuchChangeException(changeId, e);
     }
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
+=======
+    try {
+      RevWalk revWalk = new RevWalk(git);
+      try {
+        RevCommit commitToRevert =
+            revWalk.parseCommit(ObjectId.fromString(patch.getRevision().get()));
+
+        PersonIdent authorIdent =
+            user().newCommitterIdent(myIdent.getWhen(), myIdent.getTimeZone());
+
+        RevCommit parentToCommitToRevert = commitToRevert.getParent(0);
+        revWalk.parseHeaders(parentToCommitToRevert);
+
+        CommitBuilder revertCommitBuilder = new CommitBuilder();
+        revertCommitBuilder.addParentId(commitToRevert);
+        revertCommitBuilder.setTreeId(parentToCommitToRevert.getTree());
+        revertCommitBuilder.setAuthor(authorIdent);
+        revertCommitBuilder.setCommitter(authorIdent);
+
+        if (message == null) {
+          message = MessageFormat.format(
+              ChangeMessages.get().revertChangeDefaultMessage,
+              changeToRevert.getSubject(), patch.getRevision().get());
+        }
+
+        ObjectId computedChangeId =
+            ChangeIdUtil.computeChangeId(parentToCommitToRevert.getTree(),
+                commitToRevert, authorIdent, myIdent, message);
+        revertCommitBuilder.setMessage(
+            ChangeIdUtil.insertId(message, computedChangeId, true));
+
+        RevCommit revertCommit;
+        ObjectInserter oi = git.newObjectInserter();
+        try {
+          ObjectId id = oi.insert(revertCommitBuilder);
+          oi.flush();
+          revertCommit = revWalk.parseCommit(id);
+        } finally {
+          oi.close();
+        }
+
+        RefControl refControl = ctl.getRefControl();
+        Change change = new Change(
+            new Change.Key("I" + computedChangeId.name()),
+            new Change.Id(db.get().nextChangeId()),
+            user().getAccountId(),
+            changeToRevert.getDest(),
+            TimeUtil.nowTs());
+        change.setTopic(changeToRevert.getTopic());
+        ChangeInserter ins =
+            changeInserterFactory.create(refControl, change, revertCommit);
+        PatchSet ps = ins.getPatchSet();
+
+        String ref = refControl.getRefName();
+        String cmdRef = MagicBranch.NEW_PUBLISH_CHANGE
+            + ref.substring(ref.lastIndexOf('/') + 1);
+        CommitReceivedEvent commitReceivedEvent = new CommitReceivedEvent(
+            new ReceiveCommand(ObjectId.zeroId(), revertCommit.getId(), cmdRef),
+            refControl.getProjectControl().getProject(),
+            refControl.getRefName(), revertCommit, user());
+
+        try {
+          commitValidatorsFactory.create(refControl, sshInfo, git)
+              .validateForGerritCommits(commitReceivedEvent);
+        } catch (CommitValidationException e) {
+          throw new InvalidChangeOperationException(e.getMessage());
+        }
+
+        RefUpdate ru = git.updateRef(ps.getRefName());
+        ru.setExpectedOldObjectId(ObjectId.zeroId());
+        ru.setNewObjectId(revertCommit);
+        ru.disableRefLog();
+        if (ru.update(revWalk) != RefUpdate.Result.NEW) {
+          throw new IOException(String.format(
+              "Failed to create ref %s in %s: %s", ps.getRefName(),
+              change.getDest().getParentKey().get(), ru.getResult()));
+        }
+
+        ChangeMessage cmsg = new ChangeMessage(
+            new ChangeMessage.Key(changeId, messageUUID(db.get())),
+            user().getAccountId(), TimeUtil.nowTs(), patchSetId);
+        StringBuilder msgBuf = new StringBuilder();
+        msgBuf.append("Patch Set ").append(patchSetId.get()).append(": Reverted");
+        msgBuf.append("\n\n");
+        msgBuf.append("This patchset was reverted in change: ")
+              .append(change.getKey().get());
+        cmsg.setMessage(msgBuf.toString());
+
+        ins.setMessage(cmsg).insert();
+
+        try {
+          RevertedSender cm = revertedSenderFactory.create(change);
+          cm.setFrom(user().getAccountId());
+          cm.setChangeMessage(cmsg);
+          cm.send();
+        } catch (Exception err) {
+          log.error("Cannot send email for revert change " + change.getId(),
+              err);
+        }
+
+        return change.getId();
+      } finally {
+        revWalk.close();
+      }
+    } finally {
+      git.close();
+    }
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
   }
 
   public Change.Id editCommitMessage(ChangeControl ctl, PatchSet ps,
@@ -393,6 +502,67 @@ public class ChangeUtil {
     } catch (RepositoryNotFoundException e) {
       throw new NoSuchChangeException(changeId, e);
     }
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
+=======
+    try {
+      RevWalk revWalk = new RevWalk(git);
+      try {
+        RevCommit commit =
+            revWalk.parseCommit(ObjectId.fromString(originalPS.getRevision()
+                .get()));
+        if (commit.getFullMessage().equals(message)) {
+          throw new InvalidChangeOperationException(
+              "New commit message cannot be same as existing commit message");
+        }
+
+        Date now = myIdent.getWhen();
+        Change change = db.get().changes().get(changeId);
+        PersonIdent authorIdent =
+            user().newCommitterIdent(now, myIdent.getTimeZone());
+
+        CommitBuilder commitBuilder = new CommitBuilder();
+        commitBuilder.setTreeId(commit.getTree());
+        commitBuilder.setParentIds(commit.getParents());
+        commitBuilder.setAuthor(commit.getAuthorIdent());
+        commitBuilder.setCommitter(authorIdent);
+        commitBuilder.setMessage(message);
+
+        RevCommit newCommit;
+        ObjectInserter oi = git.newObjectInserter();
+        try {
+          ObjectId id = oi.insert(commitBuilder);
+          oi.flush();
+          newCommit = revWalk.parseCommit(id);
+        } finally {
+          oi.close();
+        }
+
+        PatchSet.Id id = nextPatchSetId(git, change.currentPatchSetId());
+        PatchSet newPatchSet = new PatchSet(id);
+        newPatchSet.setCreatedOn(new Timestamp(now.getTime()));
+        newPatchSet.setUploader(user().getAccountId());
+        newPatchSet.setRevision(new RevId(newCommit.name()));
+
+        String msg = "Patch Set " + newPatchSet.getPatchSetId()
+            + ": Commit message was updated";
+
+        change = patchSetInserterFactory
+            .create(git, revWalk, ctl, newCommit)
+            .setPatchSet(newPatchSet)
+            .setMessage(msg)
+            .setCopyLabels(true)
+            .setValidatePolicy(RECEIVE_COMMITS)
+            .setDraft(originalPS.isDraft())
+            .insert();
+
+        return change.getId();
+      } finally {
+        revWalk.close();
+      }
+    } finally {
+      git.close();
+    }
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
   }
 
   public String getMessage(Change change)

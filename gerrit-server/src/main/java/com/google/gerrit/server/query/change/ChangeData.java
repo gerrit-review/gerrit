@@ -523,11 +523,26 @@ public class ChangeData {
       return false;
     }
     String sha1 = ps.getRevision().get();
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
     try (Repository repo = repoManager.openRepository(change().getProject());
         RevWalk walk = new RevWalk(repo)) {
       RevCommit c = walk.parseCommit(ObjectId.fromString(sha1));
       commitMessage = c.getFullMessage();
       commitFooters = c.getFooterLines();
+=======
+    Repository repo = repoManager.openRepository(change().getProject());
+    try {
+      RevWalk walk = new RevWalk(repo);
+      try {
+        RevCommit c = walk.parseCommit(ObjectId.fromString(sha1));
+        commitMessage = c.getFullMessage();
+        commitFooters = c.getFooterLines();
+      } finally {
+        walk.close();
+      }
+    } finally {
+      repo.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     }
     return true;
   }

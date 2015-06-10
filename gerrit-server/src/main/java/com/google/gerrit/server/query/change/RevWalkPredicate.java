@@ -102,9 +102,24 @@ public abstract class RevWalkPredicate extends OperatorPredicate<ChangeData> {
 
     Arguments args = new Arguments(patchSet, revision, objectId, change, projectName);
 
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
     try (Repository repo = repoManager.openRepository(projectName);
         RevWalk rw = new RevWalk(repo)) {
       return match(repo, rw, args);
+=======
+    try {
+      final Repository repo = repoManager.openRepository(projectName);
+      try {
+        final RevWalk rw = new RevWalk(repo);
+        try {
+          return match(repo, rw, args);
+        } finally {
+          rw.close();
+        }
+      } finally {
+        repo.close();
+      }
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     } catch (RepositoryNotFoundException e) {
       log.error("Repository \"" + projectName.get() + "\" unknown.", e);
     } catch (IOException e) {

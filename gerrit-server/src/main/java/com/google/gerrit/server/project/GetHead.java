@@ -71,6 +71,11 @@ public class GetHead implements RestReadView<ProjectResource> {
             return head.getObjectId().name();
           }
           throw new AuthException("not allowed to see HEAD");
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
+=======
+        } finally {
+          rw.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
         }
       }
       throw new ResourceNotFoundException(Constants.HEAD);

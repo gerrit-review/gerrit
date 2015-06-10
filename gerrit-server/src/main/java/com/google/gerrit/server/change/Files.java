@@ -273,6 +273,7 @@ public class Files implements ChildCollection<RevisionResource, FileResource> {
         List<AccountPatchReview> inserts = Lists.newArrayListWithCapacity(sz);
         List<String> pathList = Lists.newArrayListWithCapacity(sz);
 
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
         tw.setFilter(PathFilterGroup.createFromStrings(paths));
         tw.setRecursive(true);
         int o = tw.addTree(rw.parseCommit(oldList.getNewId()).getTree());
@@ -281,6 +282,41 @@ public class Files implements ChildCollection<RevisionResource, FileResource> {
         int op = -1;
         if (oldList.getOldId() != null) {
           op = tw.addTree(rw.parseTree(oldList.getOldId()));
+=======
+          while (tw.next()) {
+            String path = tw.getPathString();
+            if (tw.getRawMode(o) != 0 && tw.getRawMode(c) != 0
+                && tw.idEqual(o, c)
+                && paths.contains(path)) {
+              // File exists in previously reviewed oldList and in curList.
+              // File content is identical.
+              inserts.add(new AccountPatchReview(
+                  new Patch.Key(
+                      resource.getPatchSet().getId(),
+                      path),
+                    userId));
+              pathList.add(path);
+            } else if (op >= 0 && cp >= 0
+                && tw.getRawMode(o) == 0 && tw.getRawMode(c) == 0
+                && tw.getRawMode(op) != 0 && tw.getRawMode(cp) != 0
+                && tw.idEqual(op, cp)
+                && paths.contains(path)) {
+              // File was deleted in previously reviewed oldList and curList.
+              // File exists in ancestor of oldList and curList.
+              // File content is identical in ancestors.
+              inserts.add(new AccountPatchReview(
+                  new Patch.Key(
+                      resource.getPatchSet().getId(),
+                      path),
+                    userId));
+              pathList.add(path);
+            }
+          }
+          db.get().accountPatchReviews().insert(inserts);
+          return pathList;
+        } finally {
+          reader.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
         }
 
         int cp = -1;

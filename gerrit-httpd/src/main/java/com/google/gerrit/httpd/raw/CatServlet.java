@@ -237,6 +237,11 @@ public class CatServlet extends HttpServlet {
           rsp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
           return;
         }
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
+=======
+      } finally {
+        reader.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
       }
     } catch (IOException e) {
       getServletContext().log("Cannot read repository", e);

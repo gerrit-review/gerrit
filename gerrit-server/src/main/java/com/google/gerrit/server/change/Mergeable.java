@@ -173,5 +173,85 @@ public class Mergeable implements RestReadView<RevisionResource> {
       indexer.index(db.get(), change);
     }
     return mergeable;
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
+=======
+  }
+
+  private boolean isMergeable(Change change,
+      final PatchSet ps,
+      SubmitType type,
+      Repository git,
+      Map<String, Ref> refs,
+      final Ref ref) throws IOException, OrmException {
+    RevWalk rw = new RevWalk(git) {
+      @Override
+      protected CodeReviewCommit createCommit(AnyObjectId id) {
+        return new CodeReviewCommit(id);
+      }
+    };
+    try {
+      ObjectId id;
+      try {
+        id = ObjectId.fromString(ps.getRevision().get());
+      } catch (IllegalArgumentException e) {
+        log.error(String.format(
+            "Invalid revision on patch set %d of %d",
+            ps.getId().get(),
+            change.getId().get()));
+        return false;
+      }
+
+      RevFlag canMerge = rw.newFlag("CAN_MERGE");
+      CodeReviewCommit rev = parse(rw, id);
+      rev.add(canMerge);
+
+      final boolean mergeable;
+      if (ref == null || ref.getObjectId() == null) {
+        mergeable = true; // Assume yes on new branch.
+      } else {
+        CodeReviewCommit tip = parse(rw, ref.getObjectId());
+        Set<RevCommit> accepted = alreadyAccepted(rw, refs.values());
+        accepted.add(tip);
+        accepted.addAll(Arrays.asList(rev.getParents()));
+        mergeable = submitStrategyFactory.create(
+            type,
+            db.get(),
+            git,
+            rw,
+            null /*inserter*/,
+            canMerge,
+            accepted,
+            change.getDest()).dryRun(tip, rev);
+      }
+      return mergeable;
+    } catch (MergeException | IOException | NoSuchProjectException e) {
+      log.error(String.format(
+          "Cannot merge test change %d", change.getId().get()), e);
+      return false;
+    } finally {
+      rw.close();
+    }
+  }
+
+  private static Set<RevCommit> alreadyAccepted(RevWalk rw, Collection<Ref> refs)
+      throws MissingObjectException, IOException {
+    Set<RevCommit> accepted = Sets.newHashSet();
+    for (Ref r : refs) {
+      if (r.getName().startsWith(Constants.R_HEADS)
+          || r.getName().startsWith(Constants.R_TAGS)) {
+        try {
+          accepted.add(rw.parseCommit(r.getObjectId()));
+        } catch (IncorrectObjectTypeException nonCommit) {
+          // Not a commit? Skip over it.
+        }
+      }
+    }
+    return accepted;
+  }
+
+  private static CodeReviewCommit parse(RevWalk rw, ObjectId id)
+      throws MissingObjectException, IncorrectObjectTypeException, IOException {
+    return (CodeReviewCommit) rw.parseCommit(id);
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
   }
 }

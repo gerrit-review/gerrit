@@ -109,6 +109,7 @@ class ConflictsPredicate extends OrPredicate<ChangeData> {
           }
           try (Repository repo =
                 args.repoManager.openRepository(otherChange.getProject());
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
               RevWalk rw = CodeReviewCommit.newRevWalk(repo)) {
             RevFlag canMergeFlag = rw.newFlag("CAN_MERGE");
             CodeReviewCommit commit =
@@ -125,6 +126,41 @@ class ConflictsPredicate extends OrPredicate<ChangeData> {
             args.conflictsCache.put(conflictsKey, conflicts);
             return conflicts;
           } catch (MergeException | NoSuchProjectException | IOException e) {
+=======
+            try {
+              RevWalk rw = new RevWalk(repo) {
+                @Override
+                protected RevCommit createCommit(AnyObjectId id) {
+                  return new CodeReviewCommit(id);
+                }
+              };
+              try {
+                RevFlag canMergeFlag = rw.newFlag("CAN_MERGE");
+                CodeReviewCommit commit =
+                    (CodeReviewCommit) rw.parseCommit(changeDataCache.getTestAgainst());
+                SubmitStrategy strategy =
+                    args.submitStrategyFactory.create(submitType,
+                        db.get(), repo, rw, null, canMergeFlag,
+                        getAlreadyAccepted(repo, rw, commit),
+                        otherChange.getDest());
+                CodeReviewCommit otherCommit =
+                    (CodeReviewCommit) rw.parseCommit(other);
+                otherCommit.add(canMergeFlag);
+                conflicts = !strategy.dryRun(commit, otherCommit);
+                args.conflictsCache.put(conflictsKey, conflicts);
+                return conflicts;
+              } catch (MergeException e) {
+                throw new IllegalStateException(e);
+              } catch (NoSuchProjectException e) {
+                throw new IllegalStateException(e);
+              } finally {
+                rw.close();
+              }
+            } finally {
+              repo.close();
+            }
+          } catch (IOException e) {
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
             throw new IllegalStateException(e);
           }
         }

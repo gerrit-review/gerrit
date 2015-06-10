@@ -182,7 +182,42 @@ public class CreateChange implements
           throw new UnprocessableEntityException(String.format(
               "Branch %s does not exist.", refName));
         }
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
         parentCommit = destRef.getObjectId();
+=======
+
+        Timestamp now = TimeUtil.nowTs();
+        IdentifiedUser me = (IdentifiedUser) userProvider.get();
+        PersonIdent author = me.newCommitterIdent(now, serverTimeZone);
+
+        RevCommit mergeTip = rw.parseCommit(destRef.getObjectId());
+        ObjectId id = ChangeIdUtil.computeChangeId(mergeTip.getTree(),
+            mergeTip, author, author, input.subject);
+        String commitMessage = ChangeIdUtil.insertId(input.subject, id);
+
+        RevCommit c = newCommit(git, rw, author, mergeTip, commitMessage);
+
+        Change change = new Change(
+            getChangeId(id, c),
+            new Change.Id(db.get().nextChangeId()),
+            me.getAccountId(),
+            new Branch.NameKey(project, destRef.getName()),
+            now);
+
+        ChangeInserter ins =
+            changeInserterFactory.create(refControl, change, c);
+
+        validateCommit(git, refControl, c, me, ins);
+        updateRef(git, rw, c, change, ins.getPatchSet());
+
+        change.setTopic(input.topic);
+        change.setStatus(ChangeInfoMapper.changeStatus2Status(input.status));
+        ins.insert();
+
+        return Response.created(json.format(change.getId()));
+      } finally {
+        rw.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
       }
       RevCommit mergeTip = rw.parseCommit(parentCommit);
 
@@ -275,6 +310,11 @@ public class CreateChange implements
       commit.setCommitter(authorIdent);
       commit.setMessage(commitMessage);
       emptyCommit = rw.parseCommit(insert(oi, commit));
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
+=======
+    } finally {
+      oi.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     }
     return emptyCommit;
   }

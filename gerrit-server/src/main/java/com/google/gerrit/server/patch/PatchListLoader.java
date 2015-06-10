@@ -186,6 +186,11 @@ public class PatchListLoader extends CacheLoader<PatchListKey, PatchList> {
       }
       return new PatchList(a, b, againstParent,
           entries.toArray(new PatchListEntry[entries.size()]));
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
+=======
+    } finally {
+      reader.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     }
   }
 
@@ -337,7 +342,7 @@ public class PatchListLoader extends CacheLoader<PatchListKey, PatchList> {
         }
 
         @Override
-        public void release() {
+        public void close() {
         }
       });
 
@@ -448,6 +453,11 @@ public class PatchListLoader extends CacheLoader<PatchListKey, PatchList> {
       }
 
       return rw.lookupTree(treeId);
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
+=======
+    } finally {
+      ins.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     }
   }
 
@@ -456,6 +466,11 @@ public class PatchListLoader extends CacheLoader<PatchListKey, PatchList> {
       ObjectId id = oi.insert(Constants.OBJ_TREE, new byte[] {});
       oi.flush();
       return id;
+<<<<<<< HEAD   (14422a Update reviewnotes plugin to latest revision)
+=======
+    } finally {
+      oi.close();
+>>>>>>> BRANCH (6b870d Bump JGit to v4.0.0.201506090130-r)
     }
   }
 }
