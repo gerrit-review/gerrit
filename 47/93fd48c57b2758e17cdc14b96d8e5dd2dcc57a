@@ -1,0 +1,9 @@
+Code-Review+2: Shawn Pearce <sop@google.com>
+Code-Review+1: David Pursehouse <david.pursehouse@sonymobile.com>
+Code-Review-1: Dave Borowitz <dborowitz@google.com>
+Verified+1: Jonathan Nieder <jrn@google.com>
+Submitted-by: Shawn Pearce <sop@google.com>
+Submitted-at: Mon, 22 Jun 2015 18:43:07 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/68821
+Project: gerrit
+Branch: refs/heads/master
