@@ -1,0 +1,13 @@
+Library-Compliance+1: Shawn Pearce <sop@google.com>
+Code-Review+2: David Pursehouse <david.pursehouse@sonymobile.com>
+Code-Review+2: Dave Borowitz <dborowitz@google.com>
+Library-Compliance+1: Dave Borowitz <dborowitz@google.com>
+Code-Review+1: Stefan Beller <sbeller@google.com>
+Library-Compliance+1: Stefan Beller <sbeller@google.com>
+Code-Review+1: David Ostrovsky <david.ostrovsky@gmail.com>
+Verified+1: Shawn Pearce <sop@google.com>
+Submitted-by: Shawn Pearce <sop@google.com>
+Submitted-at: Thu, 25 Jun 2015 17:24:17 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/69021
+Project: gerrit
+Branch: refs/heads/master
