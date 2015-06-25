@@ -1,0 +1,8 @@
+Library-Compliance+1: Shawn Pearce <sop@google.com>
+Verified+1: Shawn Pearce <sop@google.com>
+Code-Review+2: Dave Borowitz <dborowitz@google.com>
+Submitted-by: Dave Borowitz <dborowitz@google.com>
+Submitted-at: Thu, 25 Jun 2015 22:04:58 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/69020
+Project: gerrit
+Branch: refs/heads/master
