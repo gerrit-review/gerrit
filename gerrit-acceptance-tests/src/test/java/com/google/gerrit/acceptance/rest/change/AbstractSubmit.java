@@ -51,15 +51,23 @@ import com.google.gerrit.server.IdentifiedUser;
 import com.google.gerrit.server.events.ChangeMergedEvent;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.notedb.ChangeNotes;
+<<<<<<< HEAD   (f3a188 Update replication and cookbook plugin revisions)
 import com.google.gerrit.testutil.ConfigSuite;
+=======
+import com.google.gerrit.server.project.ListBranches.BranchInfo;
+import com.google.gerrit.server.project.PutConfig;
+>>>>>>> BRANCH (9b8240 Merge branch 'stable-2.10')
 import com.google.gson.reflect.TypeToken;
 import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
 
 import org.apache.http.HttpStatus;
 import org.eclipse.jgit.diff.DiffFormatter;
+<<<<<<< HEAD   (f3a188 Update replication and cookbook plugin revisions)
 import org.eclipse.jgit.junit.TestRepository;
 import org.eclipse.jgit.lib.Config;
+=======
+>>>>>>> BRANCH (9b8240 Merge branch 'stable-2.10')
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
@@ -77,11 +85,6 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractSubmit extends AbstractDaemonTest {
-  @ConfigSuite.Config
-  public static Config submitWholeTopicEnabled() {
-    return submitWholeTopicEnabledConfig();
-  }
-
   private Map<String, String> mergeResults;
 
   @Inject

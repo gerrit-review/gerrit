@@ -1,13 +1,23 @@
 include_defs('//lib/maven.defs')
 
+<<<<<<< HEAD   (f3a188 Update replication and cookbook plugin revisions)
 REPO = GERRIT # Leave here even if set to MAVEN_CENTRAL.
 VERS = '4.0.0.201506090130-r.62-gd2fbbc9'
+=======
+REPO = MAVEN_CENTRAL # Leave here even if set to MAVEN_CENTRAL.
+VERS = '4.0.1.201506240215-r'
+>>>>>>> BRANCH (9b8240 Merge branch 'stable-2.10')
 
 maven_jar(
   name = 'jgit',
   id = 'org.eclipse.jgit:org.eclipse.jgit:' + VERS,
+<<<<<<< HEAD   (f3a188 Update replication and cookbook plugin revisions)
   bin_sha1 = '4d9b4a89e899f331f698f4d8cdc5d81e66d9aa50',
   src_sha1 = '5a781b3aa509ee53ade902f7cd778cdeddd9a677',
+=======
+  bin_sha1 = '3bdf2d666df1a5373f7ad291c075ab1329560afd',
+  src_sha1 = 'c8ab3011612a4680791df394e2ef1ab8debeaed6',
+>>>>>>> BRANCH (9b8240 Merge branch 'stable-2.10')
   license = 'jgit',
   repository = REPO,
   unsign = True,
@@ -22,7 +32,11 @@ maven_jar(
 maven_jar(
   name = 'jgit-servlet',
   id = 'org.eclipse.jgit:org.eclipse.jgit.http.server:' + VERS,
+<<<<<<< HEAD   (f3a188 Update replication and cookbook plugin revisions)
   sha1 = '2d1804f817305adea38d9572328be70c4427f4c7',
+=======
+  sha1 = '8c73719477224802eda2a2da65bce8946d0fac6f',
+>>>>>>> BRANCH (9b8240 Merge branch 'stable-2.10')
   license = 'jgit',
   repository = REPO,
   deps = [':jgit'],
@@ -36,7 +50,11 @@ maven_jar(
 maven_jar(
   name = 'jgit-archive',
   id = 'org.eclipse.jgit:org.eclipse.jgit.archive:' + VERS,
+<<<<<<< HEAD   (f3a188 Update replication and cookbook plugin revisions)
   sha1 = 'f7ca802228c590a66bd04ab1908d109a2679c269',
+=======
+  sha1 = '124e353f51adbbc1af12b143012cc1ebfa2c1012',
+>>>>>>> BRANCH (9b8240 Merge branch 'stable-2.10')
   license = 'jgit',
   repository = REPO,
   deps = [':jgit',
@@ -53,7 +71,11 @@ maven_jar(
 maven_jar(
   name = 'junit',
   id = 'org.eclipse.jgit:org.eclipse.jgit.junit:' + VERS,
+<<<<<<< HEAD   (f3a188 Update replication and cookbook plugin revisions)
   sha1 = 'f23a24b21f7a77c56a7bce0b5ffd3f584a2d73be',
+=======
+  sha1 = 'bddb62b8f532b6d46ac832d909fa46b73c40a126',
+>>>>>>> BRANCH (9b8240 Merge branch 'stable-2.10')
   license = 'DO_NOT_DISTRIBUTE',
   repository = REPO,
   unsign = True,

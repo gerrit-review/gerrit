@@ -173,7 +173,11 @@ public class Submit implements RestModifyView<RevisionResource, SubmitInput>,
     this.titlePattern = new ParameterizedString(MoreObjects.firstNonNull(
         cfg.getString("change", null, "submitTooltip"),
         DEFAULT_TOOLTIP));
+<<<<<<< HEAD   (f3a188 Update replication and cookbook plugin revisions)
     submitWholeTopic = wholeTopicEnabled(cfg);
+=======
+    submitWholeTopic = false;
+>>>>>>> BRANCH (9b8240 Merge branch 'stable-2.10')
     this.submitTopicLabel = MoreObjects.firstNonNull(
         Strings.emptyToNull(cfg.getString("change", null, "submitTopicLabel")),
         "Submit whole topic");
