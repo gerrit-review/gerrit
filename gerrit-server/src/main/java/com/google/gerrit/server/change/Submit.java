@@ -173,7 +173,11 @@ public class Submit implements RestModifyView<RevisionResource, SubmitInput>,
     this.titlePattern = new ParameterizedString(MoreObjects.firstNonNull(
         cfg.getString("change", null, "submitTooltip"),
         DEFAULT_TOOLTIP));
+<<<<<<< HEAD   (511ebe Update JGit to 4.0.1.201506240215-r.65-g3c33d09)
     submitWholeTopic = wholeTopicEnabled(cfg);
+=======
+    submitWholeTopic = false;
+>>>>>>> BRANCH (5115b4 Merge branch 'stable-2.10' into stable-2.11)
     this.submitTopicLabel = MoreObjects.firstNonNull(
         Strings.emptyToNull(cfg.getString("change", null, "submitTopicLabel")),
         "Submit whole topic");
