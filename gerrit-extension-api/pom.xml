@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-extension-api</artifactId>
+<<<<<<< HEAD   (511ebe Update JGit to 4.0.1.201506240215-r.65-g3c33d09)
   <version>2.12-SNAPSHOT</version>
+=======
+  <version>2.11.2</version>
+>>>>>>> BRANCH (5115b4 Merge branch 'stable-2.10' into stable-2.11)
   <packaging>jar</packaging>
   <name>Gerrit Code Review - Extension API</name>
   <description>API for Gerrit Extensions</description>

@@ -16,7 +16,6 @@ package com.google.gerrit.client;
 
 import com.google.gerrit.client.changes.QueryScreen;
 import com.google.gerrit.client.ui.HintTextBox;
-import com.google.gerrit.client.ui.RemoteSuggestOracle;
 import com.google.gerrit.common.PageLinks;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -55,10 +54,16 @@ class SearchPanel extends Composite {
       }
     });
 
+<<<<<<< HEAD   (511ebe Update JGit to 4.0.1.201506240215-r.65-g3c33d09)
     final SuggestBox suggestBox = new SuggestBox(
         new RemoteSuggestOracle(new SearchSuggestOracle()),
         searchBox, suggestionDisplay);
     searchBox.setStyleName("searchTextBox");
+=======
+    final SuggestBox suggestBox =
+        new SuggestBox(new SearchSuggestOracle(), searchBox, suggestionDisplay);
+    searchBox.setStyleName("gwt-TextBox");
+>>>>>>> BRANCH (5115b4 Merge branch 'stable-2.10' into stable-2.11)
     searchBox.setVisibleLength(70);
     searchBox.setHintText(Gerrit.C.searchHint());
 

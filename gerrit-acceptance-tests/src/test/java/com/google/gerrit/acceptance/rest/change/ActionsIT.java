@@ -20,21 +20,25 @@ import com.google.gerrit.acceptance.AbstractDaemonTest;
 import com.google.gerrit.acceptance.PushOneCommit;
 import com.google.gerrit.extensions.api.changes.ReviewInput;
 import com.google.gerrit.extensions.common.ActionInfo;
+<<<<<<< HEAD   (511ebe Update JGit to 4.0.1.201506240215-r.65-g3c33d09)
 import com.google.gerrit.testutil.ConfigSuite;
+=======
+import com.google.gson.reflect.TypeToken;
+>>>>>>> BRANCH (5115b4 Merge branch 'stable-2.10' into stable-2.11)
 
+<<<<<<< HEAD   (511ebe Update JGit to 4.0.1.201506240215-r.65-g3c33d09)
 import org.eclipse.jgit.internal.storage.dfs.InMemoryRepository;
 import org.eclipse.jgit.junit.TestRepository;
 import org.eclipse.jgit.lib.Config;
+=======
+import org.apache.http.HttpStatus;
+import org.eclipse.jgit.api.errors.GitAPIException;
+>>>>>>> BRANCH (5115b4 Merge branch 'stable-2.10' into stable-2.11)
 import org.junit.Test;
 
 import java.util.Map;
 
 public class ActionsIT extends AbstractDaemonTest {
-  @ConfigSuite.Config
-  public static Config submitWholeTopicEnabled() {
-    return submitWholeTopicEnabledConfig();
-  }
-
   @Test
   public void revisionActionsOneChangePerTopicUnapproved() throws Exception {
     String changeId = createChangeWithTopic().getChangeId();

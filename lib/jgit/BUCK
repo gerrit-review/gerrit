@@ -1,13 +1,23 @@
 include_defs('//lib/maven.defs')
 
+<<<<<<< HEAD   (511ebe Update JGit to 4.0.1.201506240215-r.65-g3c33d09)
 REPO = GERRIT # Leave here even if set to MAVEN_CENTRAL.
 VERS = '4.0.1.201506240215-r.65-g3c33d09'
+=======
+REPO = MAVEN_CENTRAL # Leave here even if set to MAVEN_CENTRAL.
+VERS = '4.0.1.201506240215-r'
+>>>>>>> BRANCH (5115b4 Merge branch 'stable-2.10' into stable-2.11)
 
 maven_jar(
   name = 'jgit',
   id = 'org.eclipse.jgit:org.eclipse.jgit:' + VERS,
+<<<<<<< HEAD   (511ebe Update JGit to 4.0.1.201506240215-r.65-g3c33d09)
   bin_sha1 = '44b6233933768ed82ccab7dddf620b1c57c0af75',
   src_sha1 = '1b50482ca2cf525592e4c5bd4024c58ddaf9e56f',
+=======
+  bin_sha1 = '3bdf2d666df1a5373f7ad291c075ab1329560afd',
+  src_sha1 = 'c8ab3011612a4680791df394e2ef1ab8debeaed6',
+>>>>>>> BRANCH (5115b4 Merge branch 'stable-2.10' into stable-2.11)
   license = 'jgit',
   repository = REPO,
   unsign = True,
@@ -22,7 +32,11 @@ maven_jar(
 maven_jar(
   name = 'jgit-servlet',
   id = 'org.eclipse.jgit:org.eclipse.jgit.http.server:' + VERS,
+<<<<<<< HEAD   (511ebe Update JGit to 4.0.1.201506240215-r.65-g3c33d09)
   sha1 = '44efd7bc2c4bf9054bd37a28d28f20f15fa32e6a',
+=======
+  sha1 = '8c73719477224802eda2a2da65bce8946d0fac6f',
+>>>>>>> BRANCH (5115b4 Merge branch 'stable-2.10' into stable-2.11)
   license = 'jgit',
   repository = REPO,
   deps = [':jgit'],
@@ -36,7 +50,11 @@ maven_jar(
 maven_jar(
   name = 'jgit-archive',
   id = 'org.eclipse.jgit:org.eclipse.jgit.archive:' + VERS,
+<<<<<<< HEAD   (511ebe Update JGit to 4.0.1.201506240215-r.65-g3c33d09)
   sha1 = '8096326e060578bfa74435e9d758ca0b1f1e384b',
+=======
+  sha1 = '124e353f51adbbc1af12b143012cc1ebfa2c1012',
+>>>>>>> BRANCH (5115b4 Merge branch 'stable-2.10' into stable-2.11)
   license = 'jgit',
   repository = REPO,
   deps = [':jgit',
@@ -53,7 +71,11 @@ maven_jar(
 maven_jar(
   name = 'junit',
   id = 'org.eclipse.jgit:org.eclipse.jgit.junit:' + VERS,
+<<<<<<< HEAD   (511ebe Update JGit to 4.0.1.201506240215-r.65-g3c33d09)
   sha1 = 'e4442bdcc60672257a825d326bfe457218014ec3',
+=======
+  sha1 = 'bddb62b8f532b6d46ac832d909fa46b73c40a126',
+>>>>>>> BRANCH (5115b4 Merge branch 'stable-2.10' into stable-2.11)
   license = 'DO_NOT_DISTRIBUTE',
   repository = REPO,
   unsign = True,

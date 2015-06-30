@@ -2,4 +2,8 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (511ebe Update JGit to 4.0.1.201506240215-r.65-g3c33d09)
 GERRIT_VERSION = '2.12-SNAPSHOT'
+=======
+GERRIT_VERSION = '2.11.2'
+>>>>>>> BRANCH (5115b4 Merge branch 'stable-2.10' into stable-2.11)

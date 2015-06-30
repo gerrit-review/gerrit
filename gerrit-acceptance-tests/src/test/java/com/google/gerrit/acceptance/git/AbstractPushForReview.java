@@ -22,6 +22,8 @@ import com.google.gerrit.acceptance.AbstractDaemonTest;
 import com.google.gerrit.acceptance.GitUtil;
 import com.google.gerrit.acceptance.PushOneCommit;
 import com.google.gerrit.acceptance.TestAccount;
+import com.google.gerrit.common.data.Permission;
+import com.google.gerrit.extensions.api.projects.BranchInput;
 import com.google.gerrit.extensions.common.ChangeInfo;
 import com.google.gerrit.extensions.common.EditInfo;
 import com.google.gerrit.extensions.common.LabelInfo;
@@ -31,9 +33,15 @@ import com.google.gerrit.testutil.ConfigSuite;
 import com.google.inject.Inject;
 
 import org.eclipse.jgit.lib.Config;
+import org.eclipse.jgit.transport.PushResult;
 import org.junit.Before;
 import org.junit.Test;
 
+<<<<<<< HEAD   (511ebe Update JGit to 4.0.1.201506240215-r.65-g3c33d09)
+=======
+import java.io.IOException;
+import java.util.List;
+>>>>>>> BRANCH (5115b4 Merge branch 'stable-2.10' into stable-2.11)
 import java.util.Set;
 
 public abstract class AbstractPushForReview extends AbstractDaemonTest {
@@ -284,5 +292,38 @@ public abstract class AbstractPushForReview extends AbstractDaemonTest {
     assume().that(notesMigration.enabled()).isFalse();
     PushOneCommit.Result r = pushTo("refs/for/master%hashtag=tag1");
     r.assertErrorStatus("cannot add hashtags; noteDb is disabled");
+  }
+
+  @Test
+  public void testPushSameCommitTwiceUsingMagicBranchBaseOption()
+      throws Exception {
+    grant(Permission.PUSH, project, "refs/heads/master");
+    PushOneCommit.Result rBase = pushTo("refs/heads/master");
+    rBase.assertOkStatus();
+
+    gApi.projects()
+        .name(project.get())
+        .branch("foo")
+        .create(new BranchInput());
+
+    PushOneCommit push =
+        pushFactory.create(db, admin.getIdent(), PushOneCommit.SUBJECT,
+            "b.txt", "anotherContent");
+
+    PushOneCommit.Result r = push.to(git, "refs/for/master");
+    r.assertOkStatus();
+
+    PushResult pr = GitUtil.pushHead(
+        git, "refs/for/foo%base=" + rBase.getCommitId().name(), false, false);
+    assertThat(pr.getMessages()).contains("changes: new: 1, refs: 1, done");
+
+    List<ChangeInfo> changes = query(r.getCommitId().name());
+    assertThat(changes).hasSize(2);
+    ChangeInfo c1 = get(changes.get(0).id);
+    ChangeInfo c2 = get(changes.get(1).id);
+    assertThat(c1.project).isEqualTo(c2.project);
+    assertThat(c1.branch).isNotEqualTo(c2.branch);
+    assertThat(c1.changeId).isEqualTo(c2.changeId);
+    assertThat(c1.currentRevision).isEqualTo(c2.currentRevision);
   }
 }
