@@ -36,7 +36,11 @@ plugin project.
 ----
 mvn archetype:generate -DarchetypeGroupId=com.google.gerrit \
     -DarchetypeArtifactId=gerrit-plugin-archetype \
+<<<<<<< HEAD   (c2e8d0 Merge "Fix formatting of example email address for sendemail)
     -DarchetypeVersion=2.12-SNAPSHOT \
+=======
+    -DarchetypeVersion=2.11 \
+>>>>>>> BRANCH (4318e6 Merge "Avoid NPE in get related changes" into stable-2.11)
     -DgroupId=com.googlesource.gerrit.plugins.testplugin \
     -DartifactId=testplugin
 ----

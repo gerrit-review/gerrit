@@ -126,10 +126,33 @@ public class GetRelated implements RestReadView<RevisionResource> {
       result.add(new ChangeAndCommit(d.data().change(), ps, commit));
     }
 
+<<<<<<< HEAD   (c2e8d0 Merge "Fix formatting of example email address for sendemail)
     if (result.size() == 1) {
       ChangeAndCommit r = result.get(0);
       if (r.commit != null
           && r.commit.commit.equals(rsrc.getPatchSet().getRevision().get())) {
+=======
+    Set<Change.Id> added = Sets.newHashSet();
+    List<ChangeAndCommit> parents = Lists.newArrayList();
+    for (RevCommit c; (c = rw.next()) != null;) {
+      PatchSet p = commits.get(c.name());
+      Change g = null;
+      if (p != null) {
+        ChangeData cd = changes.get(p.getId().getParentKey());
+        if (cd != null) {
+          g = cd.change();
+        }
+        added.add(p.getId().getParentKey());
+      }
+      parents.add(new ChangeAndCommit(g, p, c));
+    }
+    List<ChangeAndCommit> list = children(rsrc, rw, changes, patchSets, added);
+    list.addAll(parents);
+
+    if (list.size() == 1) {
+      ChangeAndCommit r = list.get(0);
+      if (r.commit != null && r.commit.commit.equals(rsrc.getPatchSet().getRevision().get())) {
+>>>>>>> BRANCH (4318e6 Merge "Avoid NPE in get related changes" into stable-2.11)
         return Collections.emptyList();
       }
     }
