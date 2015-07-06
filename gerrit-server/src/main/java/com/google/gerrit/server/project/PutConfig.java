@@ -78,8 +78,12 @@ public class PutConfig implements RestModifyView<ProjectResource, Input> {
     public Map<String, Map<String, ConfigValue>> pluginConfigValues;
   }
 
+<<<<<<< HEAD   (fe99c8 Merge "Do not use deprecated waitForMerge option")
   private final Config gerritConfig;
   private final MetaDataUpdate.User metaDataUpdateFactory;
+=======
+  private final Provider<MetaDataUpdate.User> metaDataUpdateFactory;
+>>>>>>> BRANCH (c04812 Merge "Fix disabling of git ssh 'download' scheme within Def)
   private final ProjectCache projectCache;
   private final GitRepositoryManager gitMgr;
   private final ProjectState.Factory projectStateFactory;
@@ -92,8 +96,12 @@ public class PutConfig implements RestModifyView<ProjectResource, Input> {
   private final ChangeHooks hooks;
 
   @Inject
+<<<<<<< HEAD   (fe99c8 Merge "Do not use deprecated waitForMerge option")
   PutConfig(@GerritServerConfig Config gerritConfig,
       MetaDataUpdate.User metaDataUpdateFactory,
+=======
+  PutConfig(Provider<MetaDataUpdate.User> metaDataUpdateFactory,
+>>>>>>> BRANCH (c04812 Merge "Fix disabling of git ssh 'download' scheme within Def)
       ProjectCache projectCache,
       GitRepositoryManager gitMgr,
       ProjectState.Factory projectStateFactory,
@@ -138,7 +146,7 @@ public class PutConfig implements RestModifyView<ProjectResource, Input> {
 
     final MetaDataUpdate md;
     try {
-      md = metaDataUpdateFactory.create(projectName);
+      md = metaDataUpdateFactory.get().create(projectName);
     } catch (RepositoryNotFoundException notFound) {
       throw new ResourceNotFoundException(projectName.get());
     } catch (IOException e) {
