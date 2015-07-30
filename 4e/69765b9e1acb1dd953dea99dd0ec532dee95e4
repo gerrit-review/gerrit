@@ -1,0 +1,11 @@
+Code-Review+2: Edwin Kempin <edwin.kempin@gmail.com>
+Verified+1: Edwin Kempin <edwin.kempin@gmail.com>
+Code-Review+1: David Ostrovsky <david.ostrovsky@gmail.com>
+Verified+1: David Ostrovsky <david.ostrovsky@gmail.com>
+Verified+1: David Pursehouse <david.pursehouse@sonymobile.com>
+Library-Compliance+1: Jonathan Nieder <jrn@google.com>
+Submitted-by: David Pursehouse <david.pursehouse@sonymobile.com>
+Submitted-at: Thu, 30 Jul 2015 11:53:03 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/69870
+Project: gerrit
+Branch: refs/heads/stable-2.11
