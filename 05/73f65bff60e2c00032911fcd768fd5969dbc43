@@ -1,0 +1,8 @@
+Code-Review+1: Stefan Beller <sbeller@google.com>
+Code-Review+2: David Pursehouse <david.pursehouse@sonymobile.com>
+Verified+1: Janice A <janice.agustin@ericsson.com>
+Submitted-by: David Pursehouse <david.pursehouse@sonymobile.com>
+Submitted-at: Thu, 30 Jul 2015 14:38:15 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/69891
+Project: gerrit
+Branch: refs/heads/stable-2.11
