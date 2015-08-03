@@ -211,6 +211,10 @@ java_test(
     '//gerrit-server/src/main/prolog:common',
     '//lib:args4j',
     '//lib:grappa',
+<<<<<<< HEAD   (55adf1 Merge "Revision API: Add method to get patch")
+=======
+    '//lib:guava',
+>>>>>>> BRANCH (89caa4 Merge "Add "Uploaded patch set 1" message for the UI changes)
     '//lib:gwtorm',
     '//lib:truth',
     '//lib/bouncycastle:bcprov',
@@ -221,7 +225,11 @@ java_test(
     '//lib/jgit:jgit',
     '//lib/jgit:junit',
     '//lib/joda:joda-time',
+<<<<<<< HEAD   (55adf1 Merge "Revision API: Add method to get patch")
     '//lib/prolog:runtime',
+=======
+    '//lib/prolog:prolog-cafe',
+>>>>>>> BRANCH (89caa4 Merge "Add "Uploaded patch set 1" message for the UI changes)
   ],
   source_under_test = [':server'],
   visibility = ['//tools/eclipse:classpath'],
