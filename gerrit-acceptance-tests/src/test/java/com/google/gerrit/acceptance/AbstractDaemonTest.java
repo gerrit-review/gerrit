@@ -29,7 +29,11 @@ import com.google.gerrit.common.data.PermissionRule;
 import com.google.gerrit.extensions.api.GerritApi;
 import com.google.gerrit.extensions.api.changes.ReviewInput;
 import com.google.gerrit.extensions.api.changes.RevisionApi;
+<<<<<<< HEAD   (55adf1 Merge "Revision API: Add method to get patch")
 import com.google.gerrit.extensions.api.projects.ProjectInput;
+=======
+import com.google.gerrit.extensions.client.InheritableBoolean;
+>>>>>>> BRANCH (89caa4 Merge "Add "Uploaded patch set 1" message for the UI changes)
 import com.google.gerrit.extensions.client.ListChangesOption;
 import com.google.gerrit.extensions.common.ActionInfo;
 import com.google.gerrit.extensions.common.ChangeInfo;
@@ -488,6 +492,15 @@ public abstract class AbstractDaemonTest {
       Util.remove(cfg, capabilityName, id);
     }
     saveProjectConfig(allProjects, cfg);
+  }
+
+  protected void setUseContributorAgreements(InheritableBoolean value)
+      throws Exception {
+    MetaDataUpdate md = metaDataUpdateFactory.create(project);
+    ProjectConfig config = ProjectConfig.read(md);
+    config.getProject().setUseContributorAgreements(value);
+    config.commit(md);
+    projectCache.evict(config.getProject());
   }
 
   protected void deny(String permission, AccountGroup.UUID id, String ref)
