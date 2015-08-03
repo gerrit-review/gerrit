@@ -15,6 +15,7 @@
 package com.google.gerrit.server.change;
 
 import com.google.common.base.Optional;
+import com.google.gerrit.common.data.Capable;
 import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.extensions.restapi.AcceptsPost;
 import com.google.gerrit.extensions.restapi.AuthException;
@@ -83,7 +84,17 @@ public class PublishChangeEdit implements
     @Override
     public Response<?> apply(ChangeResource rsrc, Publish.Input in)
         throws AuthException, ResourceConflictException, NoSuchChangeException,
+<<<<<<< HEAD   (55adf1 Merge "Revision API: Add method to get patch")
         IOException, OrmException {
+=======
+        IOException, InvalidChangeOperationException, OrmException {
+      Capable r =
+          rsrc.getControl().getProjectControl().canPushToAtLeastOneRef();
+      if (r != Capable.OK) {
+        throw new AuthException(r.getMessage());
+      }
+
+>>>>>>> BRANCH (89caa4 Merge "Add "Uploaded patch set 1" message for the UI changes)
       Optional<ChangeEdit> edit = editUtil.byChange(rsrc.getChange());
       if (!edit.isPresent()) {
         throw new ResourceConflictException(String.format(
