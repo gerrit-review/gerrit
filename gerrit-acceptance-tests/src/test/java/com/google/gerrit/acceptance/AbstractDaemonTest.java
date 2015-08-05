@@ -500,6 +500,15 @@ public abstract class AbstractDaemonTest {
     projectCache.evict(config.getProject());
   }
 
+  protected void setUseSignedOffBy(InheritableBoolean value)
+      throws Exception {
+    MetaDataUpdate md = metaDataUpdateFactory.create(project);
+    ProjectConfig config = ProjectConfig.read(md);
+    config.getProject().setUseSignedOffBy(value);
+    config.commit(md);
+    projectCache.evict(config.getProject());
+  }
+
   protected void deny(String permission, AccountGroup.UUID id, String ref)
       throws Exception {
     ProjectConfig cfg = projectCache.checkedGet(project).getConfig();
@@ -545,6 +554,7 @@ public abstract class AbstractDaemonTest {
     saveProjectConfig(project, cfg);
   }
 
+<<<<<<< HEAD   (13f92c Remove unused method from FormatUtil)
   protected PushOneCommit.Result pushTo(String ref) throws Exception {
     PushOneCommit push = pushFactory.create(db, admin.getIdent(), testRepo);
     return push.to(ref);
@@ -562,5 +572,18 @@ public abstract class AbstractDaemonTest {
       .id(id)
       .revision(1)
       .actions();
+=======
+  protected void blockForgeCommitter(Project.NameKey project, String ref)
+      throws Exception {
+    ProjectConfig cfg = projectCache.checkedGet(project).getConfig();
+    block(cfg, Permission.FORGE_COMMITTER, REGISTERED_USERS, ref);
+    saveProjectConfig(project, cfg);
+  }
+
+  protected PushOneCommit.Result pushTo(String ref) throws GitAPIException,
+      IOException {
+    PushOneCommit push = pushFactory.create(db, admin.getIdent());
+    return push.to(git, ref);
+>>>>>>> BRANCH (4bc067 Show correct change status for draft patch sets)
   }
 }

@@ -22,6 +22,12 @@ import com.google.gerrit.acceptance.AbstractDaemonTest;
 import com.google.gerrit.acceptance.GitUtil;
 import com.google.gerrit.acceptance.PushOneCommit;
 import com.google.gerrit.acceptance.TestAccount;
+<<<<<<< HEAD   (13f92c Remove unused method from FormatUtil)
+=======
+import com.google.gerrit.common.data.Permission;
+import com.google.gerrit.extensions.api.projects.BranchInput;
+import com.google.gerrit.extensions.client.InheritableBoolean;
+>>>>>>> BRANCH (4bc067 Show correct change status for draft patch sets)
 import com.google.gerrit.extensions.common.ChangeInfo;
 import com.google.gerrit.extensions.common.EditInfo;
 import com.google.gerrit.extensions.common.LabelInfo;
@@ -284,5 +290,30 @@ public abstract class AbstractPushForReview extends AbstractDaemonTest {
     assume().that(notesMigration.enabled()).isFalse();
     PushOneCommit.Result r = pushTo("refs/for/master%hashtag=tag1");
     r.assertErrorStatus("cannot add hashtags; noteDb is disabled");
+  }
+
+  @Test
+  public void testPushCommitUsingSignedOffBy() throws Exception {
+    PushOneCommit push =
+        pushFactory.create(db, admin.getIdent(), PushOneCommit.SUBJECT,
+            "b.txt", "anotherContent");
+    PushOneCommit.Result r = push.to(git, "refs/for/master");
+    r.assertOkStatus();
+
+    setUseSignedOffBy(InheritableBoolean.TRUE);
+    blockForgeCommitter(project, "refs/heads/master");
+
+    push = pushFactory.create(db, admin.getIdent(),
+        PushOneCommit.SUBJECT + String.format(
+            "\n\nSigned-off-by: %s <%s>", admin.fullName, admin.email),
+        "b.txt", "anotherContent");
+    r = push.to(git, "refs/for/master");
+    r.assertOkStatus();
+
+    push = pushFactory.create(db, admin.getIdent(), PushOneCommit.SUBJECT,
+        "b.txt", "anotherContent");
+    r = push.to(git, "refs/for/master");
+    r.assertErrorStatus(
+        "not Signed-off-by author/committer/uploader in commit message footer");
   }
 }

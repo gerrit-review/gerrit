@@ -243,10 +243,16 @@ public class SideBySide extends Screen {
           info.setEdit(edit);
           info.revisions().put(edit.name(), RevisionInfo.fromEdit(edit));
         }
+<<<<<<< HEAD   (13f92c Remove unused method from FormatUtil)
         int currentPatchSet = info.revision(info.currentRevision())._number();
+=======
+        String currentRevision = info.current_revision();
+        boolean current = currentRevision != null &&
+            revision.get() == info.revision(currentRevision)._number();
+>>>>>>> BRANCH (4bc067 Show correct change status for draft patch sets)
         JsArray<RevisionInfo> list = info.revisions().values();
         RevisionInfo.sortRevisionInfoByNumber(list);
-        diffTable.set(prefs, list, diff, edit != null, currentPatchSet,
+        diffTable.set(prefs, list, diff, edit != null, current,
             changeStatus.isOpen(), diff.binary());
         header.setChangeInfo(info);
       }
