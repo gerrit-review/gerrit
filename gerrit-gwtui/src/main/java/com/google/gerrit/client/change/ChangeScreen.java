@@ -1111,7 +1111,10 @@ public class ChangeScreen extends Screen {
   }
 
   private boolean isSubmittable(ChangeInfo info) {
-    boolean canSubmit = info.status().isOpen();
+    boolean canSubmit =
+        info.status().isOpen() &&
+        revision.equals(info.current_revision()) &&
+        !info.revision(revision).draft();
     if (canSubmit && info.status() == Change.Status.NEW) {
       for (String name : info.labels()) {
         LabelInfo label = info.label(name);
@@ -1139,6 +1142,18 @@ public class ChangeScreen extends Screen {
     changeInfo = info;
     lastDisplayedUpdate = info.updated();
 
+<<<<<<< HEAD   (ec436a Merge "Fix updating of username from AccountManager")
+=======
+    if (revisionInfo.is_edit()) {
+      statusText.setInnerText(Util.C.changeEdit());
+    } else if (!current) {
+      statusText.setInnerText(Util.C.notCurrent());
+      labels.setVisible(false);
+    } else {
+      Status s = info.revision(revision).draft() ? Status.DRAFT : info.status();
+      statusText.setInnerText(Util.toLongString(s));
+    }
+>>>>>>> BRANCH (4bc067 Show correct change status for draft patch sets)
     labels.set(info);
 
     renderOwner(info);
