@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-plugin-api</artifactId>
+<<<<<<< HEAD   (107b0a Merge "Organize imports")
   <version>2.12-SNAPSHOT</version>
+=======
+  <version>2.11.3</version>
+>>>>>>> BRANCH (b507b4 Update replication plugin to latest revision)
   <packaging>jar</packaging>
   <name>Gerrit Code Review - Plugin API</name>
   <description>API for Gerrit Plugins</description>
