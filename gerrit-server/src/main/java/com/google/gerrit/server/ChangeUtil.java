@@ -14,6 +14,10 @@
 
 package com.google.gerrit.server;
 
+<<<<<<< HEAD   (04faea Merge "Buck: Avoid unnecessary zip over all API artifacts")
+=======
+import static com.google.gerrit.server.change.PatchSetInserter.ValidatePolicy.GERRIT;
+>>>>>>> BRANCH (f4ceec Use the correct ValidatePolicy for commits created by Gerrit)
 import static com.google.gerrit.server.query.change.ChangeData.asChanges;
 
 import com.google.common.base.Function;
@@ -332,6 +336,73 @@ public class ChangeUtil {
         log.error("Cannot send email for revert change " + change.getId(),
             err);
       }
+<<<<<<< HEAD   (04faea Merge "Buck: Avoid unnecessary zip over all API artifacts")
+=======
+
+      return change.getId();
+    } catch (RepositoryNotFoundException e) {
+      throw new NoSuchChangeException(changeId, e);
+    }
+  }
+
+  public Change.Id editCommitMessage(ChangeControl ctl, PatchSet ps,
+      String message, PersonIdent myIdent) throws NoSuchChangeException,
+      OrmException, MissingObjectException, IncorrectObjectTypeException,
+      IOException, InvalidChangeOperationException {
+    Change change = ctl.getChange();
+    Change.Id changeId = change.getId();
+
+    if (Strings.isNullOrEmpty(message)) {
+      throw new InvalidChangeOperationException(
+          "The commit message cannot be empty");
+    }
+
+    Project.NameKey project = ctl.getChange().getProject();
+    try (Repository git = gitManager.openRepository(project);
+        RevWalk revWalk = new RevWalk(git)) {
+      RevCommit commit =
+          revWalk.parseCommit(ObjectId.fromString(ps.getRevision()
+              .get()));
+      if (commit.getFullMessage().equals(message)) {
+        throw new InvalidChangeOperationException(
+            "New commit message cannot be same as existing commit message");
+      }
+
+      Date now = myIdent.getWhen();
+      PersonIdent authorIdent =
+          user().newCommitterIdent(now, myIdent.getTimeZone());
+
+      CommitBuilder commitBuilder = new CommitBuilder();
+      commitBuilder.setTreeId(commit.getTree());
+      commitBuilder.setParentIds(commit.getParents());
+      commitBuilder.setAuthor(commit.getAuthorIdent());
+      commitBuilder.setCommitter(authorIdent);
+      commitBuilder.setMessage(message);
+
+      RevCommit newCommit;
+      try (ObjectInserter oi = git.newObjectInserter()) {
+        ObjectId id = oi.insert(commitBuilder);
+        oi.flush();
+        newCommit = revWalk.parseCommit(id);
+      }
+
+      PatchSet.Id id = nextPatchSetId(git, change.currentPatchSetId());
+      PatchSet newPatchSet = new PatchSet(id);
+      newPatchSet.setCreatedOn(new Timestamp(now.getTime()));
+      newPatchSet.setUploader(user().getAccountId());
+      newPatchSet.setRevision(new RevId(newCommit.name()));
+
+      String msg = "Patch Set " + newPatchSet.getPatchSetId()
+          + ": Commit message was updated";
+
+      change = patchSetInserterFactory
+          .create(git, revWalk, ctl, newCommit)
+          .setPatchSet(newPatchSet)
+          .setMessage(msg)
+          .setValidatePolicy(GERRIT)
+          .setDraft(ps.isDraft())
+          .insert();
+>>>>>>> BRANCH (f4ceec Use the correct ValidatePolicy for commits created by Gerrit)
 
       return change.getId();
     } catch (RepositoryNotFoundException e) {
