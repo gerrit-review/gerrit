@@ -2479,6 +2479,7 @@ public class ReceiveCommits {
     walk.reset();
     walk.sort(RevSort.NONE);
     try {
+<<<<<<< HEAD   (9eedd1 Merge "Merge branch 'stable-2.11'")
       RevObject parsedObject = walk.parseAny(cmd.getNewId());
       if (!(parsedObject instanceof RevCommit)) {
         return;
@@ -2487,6 +2488,18 @@ public class ReceiveCommits {
       markHeadsAsUninteresting(walk, cmd.getRefName());
       Set<ObjectId> existing = changeRefsById().keySet();
       for (RevCommit c; (c = walk.next()) != null;) {
+=======
+      Set<ObjectId> existing = Sets.newHashSet();
+      RevObject parsedObject = walk.parseAny(cmd.getNewId());
+      if (!(parsedObject instanceof RevCommit)) {
+        return;
+      }
+      walk.markStart((RevCommit)parsedObject);
+      markHeadsAsUninteresting(walk, existing, cmd.getRefName());
+
+      RevCommit c;
+      while ((c = walk.next()) != null) {
+>>>>>>> BRANCH (318953 Allow to push a tag that points to a non-commit object)
         if (existing.contains(c)) {
           continue;
         } else if (!validCommit(ctl, cmd, c)) {

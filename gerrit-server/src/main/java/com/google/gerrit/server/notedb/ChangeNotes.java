@@ -71,6 +71,23 @@ public class ChangeNotes extends AbstractChangeNotes<ChangeNotes> {
             return input.getWrittenOn();
           }
         });
+<<<<<<< HEAD   (9eedd1 Merge "Merge branch 'stable-2.11'")
+=======
+
+  public static final Comparator<PatchLineComment> PLC_ORDER =
+      new Comparator<PatchLineComment>() {
+    @Override
+    public int compare(PatchLineComment c1, PatchLineComment c2) {
+      String filename1 = c1.getKey().getParentKey().get();
+      String filename2 = c2.getKey().getParentKey().get();
+      return ComparisonChain.start()
+          .compare(filename1, filename2)
+          .compare(c1.getLine(), c2.getLine())
+          .compare(c1.getWrittenOn(), c2.getWrittenOn())
+          .result();
+    }
+  };
+>>>>>>> BRANCH (318953 Allow to push a tag that points to a non-commit object)
 
   public static ConfigInvalidException parseException(Change.Id changeId,
       String fmt, Object... args) {
