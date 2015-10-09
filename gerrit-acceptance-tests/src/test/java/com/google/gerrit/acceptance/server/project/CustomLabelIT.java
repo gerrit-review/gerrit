@@ -24,6 +24,7 @@ import com.google.gerrit.acceptance.NoHttpd;
 import com.google.gerrit.acceptance.PushOneCommit;
 import com.google.gerrit.common.data.LabelType;
 import com.google.gerrit.common.data.Permission;
+import com.google.gerrit.extensions.api.changes.AddReviewerInput;
 import com.google.gerrit.extensions.api.changes.ReviewInput;
 import com.google.gerrit.extensions.common.ChangeInfo;
 import com.google.gerrit.extensions.common.LabelInfo;
@@ -43,12 +44,22 @@ public class CustomLabelIT extends AbstractDaemonTest {
       value(0, "No score"),
       value(-1, "Negative"));
 
+  private final LabelType P = category("CustomLabel2",
+      value(1, "Positive"),
+      value(0, "No score"));
+
   @Before
   public void setUp() throws Exception {
     ProjectConfig cfg = projectCache.checkedGet(project).getConfig();
     AccountGroup.UUID anonymousUsers =
         SystemGroupBackend.getGroup(ANONYMOUS_USERS).getUUID();
+<<<<<<< HEAD   (fda7f7 Merge "Fix broken JSON syntax in documentation")
     Util.allow(cfg, Permission.forLabel(label.getName()), -1, 1, anonymousUsers,
+=======
+    Util.allow(cfg, Permission.forLabel(Q.getName()), -1, 1, anonymousUsers,
+        "refs/heads/*");
+    Util.allow(cfg, Permission.forLabel(P.getName()), 0, 1, anonymousUsers,
+>>>>>>> BRANCH (9e221d PatchListLoader: Synchronize MyersDiff and HistogramDiff inv)
         "refs/heads/*");
     saveProjectConfig(project, cfg);
   }
@@ -107,6 +118,26 @@ public class CustomLabelIT extends AbstractDaemonTest {
   }
 
   @Test
+  public void customLabelAnyWithBlock_Addreviewer_ZeroVote() throws Exception {
+    P.setFunctionName("AnyWithBlock");
+    saveLabelConfig();
+    PushOneCommit.Result r = createChange();
+    AddReviewerInput in = new AddReviewerInput();
+    in.reviewer = user.email;
+    gApi.changes()
+        .id(r.getChangeId())
+        .addReviewer(in);
+
+    revision(r).review(new ReviewInput().label(P.getName(), 0));
+    ChangeInfo c = get(r.getChangeId());
+    LabelInfo q = c.labels.get(P.getName());
+    assertThat(q.all).hasSize(2);
+    assertThat(q.disliked).isNull();
+    assertThat(q.rejected).isNull();
+    assertThat(q.blocking).isNull();
+  }
+
+  @Test
   public void customLabelMaxWithBlock_NegativeVoteBlock() throws Exception {
     saveLabelConfig();
     PushOneCommit.Result r = createChange();
@@ -120,8 +151,25 @@ public class CustomLabelIT extends AbstractDaemonTest {
   }
 
   private void saveLabelConfig() throws Exception {
+<<<<<<< HEAD   (fda7f7 Merge "Fix broken JSON syntax in documentation")
     ProjectConfig cfg = projectCache.checkedGet(project).getConfig();
     cfg.getLabelSections().put(label.getName(), label);
     saveProjectConfig(project, cfg);
+=======
+    ProjectConfig cfg = projectCache.checkedGet(allProjects).getConfig();
+    cfg.getLabelSections().put(Q.getName(), Q);
+    cfg.getLabelSections().put(P.getName(), P);
+    saveProjectConfig(cfg);
+  }
+
+  private void saveProjectConfig(ProjectConfig cfg) throws Exception {
+    MetaDataUpdate md = metaDataUpdateFactory.create(allProjects);
+    try {
+      cfg.commit(md);
+    } finally {
+      md.close();
+    }
+    projectCache.evict(allProjects);
+>>>>>>> BRANCH (9e221d PatchListLoader: Synchronize MyersDiff and HistogramDiff inv)
   }
 }

@@ -93,6 +93,7 @@ public class PatchListLoader implements Callable<PatchList> {
   private final PatchListKey key;
   private final Project.NameKey project;
   private final long timeoutMillis;
+  private final Object lock;
 
   @AssistedInject
   PatchListLoader(GitRepositoryManager mgr,
@@ -105,8 +106,12 @@ public class PatchListLoader implements Callable<PatchList> {
     patchListCache = plc;
     mergeStrategy = MergeUtil.getMergeStrategy(cfg);
     diffExecutor = de;
+<<<<<<< HEAD   (fda7f7 Merge "Fix broken JSON syntax in documentation")
     key = k;
     project = p;
+=======
+    lock = new Object();
+>>>>>>> BRANCH (9e221d PatchListLoader: Synchronize MyersDiff and HistogramDiff inv)
     timeoutMillis =
         ConfigUtil.getTimeUnit(cfg, "cache", PatchListCacheImpl.FILE_NAME,
             "timeout", TimeUnit.MILLISECONDS.convert(5, TimeUnit.SECONDS),
@@ -210,7 +215,9 @@ public class PatchListLoader implements Callable<PatchList> {
     Future<FileHeader> result = diffExecutor.submit(new Callable<FileHeader>() {
       @Override
       public FileHeader call() throws IOException {
-        return diffFormatter.toFileHeader(diffEntry);
+        synchronized (lock) {
+          return diffFormatter.toFileHeader(diffEntry);
+        }
       }
     });
 
@@ -224,7 +231,9 @@ public class PatchListLoader implements Callable<PatchList> {
                       + " comparing " + diffEntry.getOldId().name()
                       + ".." + diffEntry.getNewId().name());
       result.cancel(true);
-      return toFileHeaderWithoutMyersDiff(diffFormatter, diffEntry);
+      synchronized (lock) {
+        return toFileHeaderWithoutMyersDiff(diffFormatter, diffEntry);
+      }
     } catch (ExecutionException e) {
       // If there was an error computing the result, carry it
       // up to the caller so the cache knows this key is invalid.
