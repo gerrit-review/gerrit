@@ -88,6 +88,10 @@ public class PatchListLoader extends CacheLoader<PatchListKey, PatchList> {
   private final ExecutorService diffExecutor;
   private final long timeoutMillis;
   private final Object lock;
+<<<<<<< HEAD   (cc0485 Update no-new-change error message documentation)
+=======
+
+>>>>>>> BRANCH (fcb17f Release notes for Gerrit 2.10.7)
 
   @Inject
   PatchListLoader(GitRepositoryManager mgr,

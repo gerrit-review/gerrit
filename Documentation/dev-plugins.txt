@@ -36,7 +36,11 @@ plugin project.
 ----
 mvn archetype:generate -DarchetypeGroupId=com.google.gerrit \
     -DarchetypeArtifactId=gerrit-plugin-archetype \
+<<<<<<< HEAD   (cc0485 Update no-new-change error message documentation)
     -DarchetypeVersion=2.11.3 \
+=======
+    -DarchetypeVersion=2.10.7 \
+>>>>>>> BRANCH (fcb17f Release notes for Gerrit 2.10.7)
     -DgroupId=com.googlesource.gerrit.plugins.testplugin \
     -DartifactId=testplugin
 ----

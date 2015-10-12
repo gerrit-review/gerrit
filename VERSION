@@ -2,4 +2,8 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (cc0485 Update no-new-change error message documentation)
 GERRIT_VERSION = '2.11.3'
+=======
+GERRIT_VERSION = '2.10.7'
+>>>>>>> BRANCH (fcb17f Release notes for Gerrit 2.10.7)

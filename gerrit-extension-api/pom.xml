@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-extension-api</artifactId>
+<<<<<<< HEAD   (cc0485 Update no-new-change error message documentation)
   <version>2.11.3</version>
+=======
+  <version>2.10.7</version>
+>>>>>>> BRANCH (fcb17f Release notes for Gerrit 2.10.7)
   <packaging>jar</packaging>
   <name>Gerrit Code Review - Extension API</name>
   <description>API for Gerrit Extensions</description>
