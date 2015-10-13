@@ -71,6 +71,7 @@ import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.ChangeMessage;
 import com.google.gerrit.reviewdb.client.PatchSet;
+import com.google.gerrit.reviewdb.client.PatchSetApproval;
 import com.google.gerrit.reviewdb.client.PatchSetInfo;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.client.RefNames;
@@ -1761,6 +1762,7 @@ public class ReceiveCommits {
       }
       recipients.add(getRecipientsFromFooters(accountResolver, ps, footerLines));
       recipients.remove(me);
+<<<<<<< HEAD   (6dce51 Merge "Add uploader to change screen if different from chang)
       try (ObjectInserter oi = repo.newObjectInserter();
           BatchUpdate bu = batchUpdateFactory.create(
             db, change.getProject(), currentUser, change.getCreatedOn())) {
@@ -1775,6 +1777,24 @@ public class ReceiveCommits {
             .setUpdateRef(false));
         bu.execute();
       }
+=======
+
+      ChangeMessage msg =
+          new ChangeMessage(new ChangeMessage.Key(change.getId(),
+              ChangeUtil.messageUUID(db)), me, ps.getCreatedOn(), ps.getId());
+      StringBuilder msgs = renderMessageWithApprovals(ps.getPatchSetId(),
+          approvals, Collections.<String, PatchSetApproval>emptyMap());
+      msg.setMessage(msgs.toString() + ".");
+
+      ins
+        .setReviewers(recipients.getReviewers())
+        .setExtraCC(recipients.getCcOnly())
+        .setApprovals(approvals)
+        .setMessage(msg)
+        .setRequestScopePropagator(requestScopePropagator)
+        .setSendMail(true)
+        .insert();
+>>>>>>> BRANCH (b9b539 Release notes for Gerrit 2.11.4)
       created = true;
 
       if (magicBranch != null && magicBranch.submit) {
@@ -1879,6 +1899,27 @@ public class ReceiveCommits {
         replaceByChange.get(c.getId()).change = c;
       }
     }
+  }
+
+  private StringBuilder renderMessageWithApprovals(int patchSetId,
+      Map<String, Short> n, Map<String, PatchSetApproval> c) {
+    StringBuilder msgs = new StringBuilder("Uploaded patch set " + patchSetId);
+    if (!n.isEmpty()) {
+      boolean first = true;
+      for (Map.Entry<String, Short> e : n.entrySet()) {
+        if (c.containsKey(e.getKey())
+            && c.get(e.getKey()).getValue() == e.getValue()) {
+          continue;
+        }
+        if (first) {
+          msgs.append(":");
+          first = false;
+        }
+        msgs.append(" ")
+            .append(LabelVote.create(e.getKey(), e.getValue()).format());
+      }
+    }
+    return msgs;
   }
 
   private class ReplaceRequest {
@@ -2118,27 +2159,50 @@ public class ReceiveCommits {
       return Futures.makeChecked(future, INSERT_EXCEPTION);
     }
 
-    private ChangeMessage newChangeMessage(ReviewDb db, ChangeKind changeKind)
+    private ChangeMessage newChangeMessage(ReviewDb db, ChangeKind changeKind,
+        Map<String, Short> approvals)
         throws OrmException {
       msg =
           new ChangeMessage(new ChangeMessage.Key(change.getId(), ChangeUtil
               .messageUUID(db)), currentUser.getAccountId(), newPatchSet.getCreatedOn(),
               newPatchSet.getId());
-      String message = "Uploaded patch set " + newPatchSet.getPatchSetId();
+      StringBuilder msgs = renderMessageWithApprovals(
+          newPatchSet.getPatchSetId(), approvals, scanLabels(db, approvals));
       switch (changeKind) {
         case TRIVIAL_REBASE:
         case NO_CHANGE:
-          message += ": Patch Set " + priorPatchSet.get() + " was rebased";
+          msgs.append(": Patch Set " + priorPatchSet.get() + " was rebased");
           break;
         case NO_CODE_CHANGE:
-          message += ": Commit message was updated";
+          msgs.append(": Commit message was updated");
           break;
         case REWORK:
         default:
           break;
       }
-      msg.setMessage(message + ".");
+      msg.setMessage(msgs.toString() + ".");
       return msg;
+    }
+
+    private Map<String, PatchSetApproval> scanLabels(ReviewDb db,
+        Map<String, Short> approvals)
+        throws OrmException {
+      Map<String, PatchSetApproval> current = new HashMap<>();
+      // We optimize here and only retrieve current when approvals provided
+      if (!approvals.isEmpty()) {
+        for (PatchSetApproval a : approvalsUtil.byPatchSetUser(
+            db, changeCtl, priorPatchSet, currentUser.getAccountId())) {
+          if (a.isSubmit()) {
+            continue;
+          }
+
+          LabelType lt = labelTypes.byLabel(a.getLabelId());
+          if (lt != null) {
+            current.put(lt.getName(), a);
+          }
+        }
+      }
+      return current;
     }
 
     PatchSet.Id upsertEdit() {
@@ -2205,7 +2269,8 @@ public class ReceiveCommits {
         changeKind = changeKindCache.getChangeKind(
             projectControl.getProjectState(), repo, priorCommit, newCommit);
 
-        cmUtil.addChangeMessage(db, update, newChangeMessage(db, changeKind));
+        cmUtil.addChangeMessage(db, update, newChangeMessage(db, changeKind,
+            approvals));
 
         if (mergedIntoRef == null) {
           // Change should be new, so it can go through review again.
@@ -2302,6 +2367,11 @@ public class ReceiveCommits {
       if (mergedIntoRef != null) {
         hooks.doChangeMergedHook(
             change, currentUser.getAccount(), newPatchSet, db, newCommit.getName());
+      }
+
+      if (!approvals.isEmpty()) {
+        hooks.doCommentAddedHook(change, currentUser.getAccount(), newPatchSet,
+            null, approvals, db);
       }
 
       if (magicBranch != null && magicBranch.submit) {
