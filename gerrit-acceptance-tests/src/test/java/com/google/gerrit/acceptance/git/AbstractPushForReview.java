@@ -17,8 +17,6 @@ package com.google.gerrit.acceptance.git;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.TruthJUnit.assume;
 import static com.google.gerrit.acceptance.GitUtil.pushHead;
-import static com.google.gerrit.server.project.Util.category;
-import static com.google.gerrit.server.project.Util.value;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -28,14 +26,17 @@ import com.google.gerrit.acceptance.AbstractDaemonTest;
 import com.google.gerrit.acceptance.GitUtil;
 import com.google.gerrit.acceptance.PushOneCommit;
 import com.google.gerrit.acceptance.TestAccount;
+<<<<<<< HEAD   (235a7d AbstractPushForReview: Adapt to master branch)
 import com.google.gerrit.common.data.LabelType;
+=======
+import com.google.gerrit.common.data.Permission;
+import com.google.gerrit.extensions.api.projects.BranchInput;
+>>>>>>> BRANCH (3dcf53 Fix flaky test that relied on non-stable order of approvals)
 import com.google.gerrit.extensions.client.InheritableBoolean;
 import com.google.gerrit.extensions.common.ChangeInfo;
 import com.google.gerrit.extensions.common.EditInfo;
 import com.google.gerrit.extensions.common.LabelInfo;
 import com.google.gerrit.reviewdb.client.Change;
-import com.google.gerrit.server.git.MetaDataUpdate;
-import com.google.gerrit.server.git.ProjectConfig;
 import com.google.gerrit.server.notedb.NotesMigration;
 import com.google.gerrit.testutil.ConfigSuite;
 import com.google.inject.Inject;
@@ -241,19 +242,15 @@ public abstract class AbstractPushForReview extends AbstractDaemonTest {
    * There was a bug that allowed a user with Forge Committer Identity access
    * right to upload a commit and put *votes on behalf of another user* on it.
    * This test checks that this is not possible, but that the votes that are
-   * specified on push are applied only in the name of the uploader.
+   * specified on push are applied only on behalf of the uploader.
    *
    * This particular bug only occurred when there was more than one label
-   * defined. Hence the test defines a custom label.
-   *
-   * When on upload the committer is forged he is automatically added as
-   * reviewer to the change. This results in a dummy 0 vote. If there was only
-   * one label this dummy 0 vote collided with any vote for the same label that
-   * was specified in the push specification and hence the upload failed, which
-   * means in this case it was not possible to forge a vote.
+   * defined. However to test that the votes that are specified on push are
+   * applied on behalf of the uploader a single label is sufficient.
    */
   @Test
   public void testPushForMasterWithApprovalsForgeCommitterButNoForgeVote()
+<<<<<<< HEAD   (235a7d AbstractPushForReview: Adapt to master branch)
       throws Exception {
     // add custom label because the bug only allowed to forge a vote when there
     // were at least two labels
@@ -271,6 +268,9 @@ public abstract class AbstractPushForReview extends AbstractDaemonTest {
     }
     projectCache.evict(allProjects);
 
+=======
+      throws GitAPIException, RestApiException {
+>>>>>>> BRANCH (3dcf53 Fix flaky test that relied on non-stable order of approvals)
     // Create a commit with "User" as author and committer
     RevCommit c = commitBuilder()
         .author(user.getIdent())
@@ -292,10 +292,19 @@ public abstract class AbstractPushForReview extends AbstractDaemonTest {
     ChangeInfo ci = get(GitUtil.getChangeId(testRepo, c).get());
     LabelInfo cr = ci.labels.get("Code-Review");
     assertThat(cr.all).hasSize(2);
+<<<<<<< HEAD   (235a7d AbstractPushForReview: Adapt to master branch)
     assertThat(cr.all.get(0).name).isEqualTo("Administrator");
     assertThat(cr.all.get(0).value.intValue()).isEqualTo(1);
     assertThat(cr.all.get(1).name).isEqualTo("User");
     assertThat(cr.all.get(1).value.intValue()).isEqualTo(0);
+=======
+    int indexAdmin = admin.fullName.equals(cr.all.get(0).name) ? 0 : 1;
+    int indexUser = indexAdmin == 0 ? 1 : 0;
+    assertThat(cr.all.get(indexAdmin).name).isEqualTo(admin.fullName);
+    assertThat(cr.all.get(indexAdmin).value.intValue()).is(1);
+    assertThat(cr.all.get(indexUser).name).isEqualTo(user.fullName);
+    assertThat(cr.all.get(indexUser).value.intValue()).is(0);
+>>>>>>> BRANCH (3dcf53 Fix flaky test that relied on non-stable order of approvals)
     assertThat(Iterables.getLast(ci.messages).message).isEqualTo(
         "Uploaded patch set 1: Code-Review+1.");
   }
