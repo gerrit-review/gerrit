@@ -244,9 +244,34 @@ public class ChangeInserter extends BatchUpdate.InsertChangeOp {
     return patchSetInfo;
   }
 
+<<<<<<< HEAD   (970f7f Update replication plugin to latest revision)
   public ChangeMessage getChangeMessage() {
     if (message == null) {
       return null;
+=======
+  public Change insert() throws OrmException, IOException {
+    ReviewDb db = dbProvider.get();
+    ChangeControl ctl = projectControl.controlFor(change);
+    ChangeUpdate update = updateFactory.create(
+        ctl,
+        change.getCreatedOn());
+    db.changes().beginTransaction(change.getId());
+    try {
+      ChangeUtil.insertAncestors(db, patchSet.getId(), commit);
+      db.patchSets().insert(Collections.singleton(patchSet));
+      db.changes().insert(Collections.singleton(change));
+      LabelTypes labelTypes = projectControl.getLabelTypes();
+      approvalsUtil.addReviewers(db, update, labelTypes, change,
+          patchSet, patchSetInfo, reviewers, Collections.<Account.Id> emptySet());
+      approvalsUtil.addApprovals(db, update, labelTypes, patchSet, ctl,
+          approvals);
+      if (messageIsForChange()) {
+        cmUtil.addChangeMessage(db, update, changeMessage);
+      }
+      db.commit();
+    } finally {
+      db.rollback();
+>>>>>>> BRANCH (3dcf53 Fix flaky test that relied on non-stable order of approvals)
     }
     checkState(changeMessage != null,
         "getChangeMessage() only valid after inserting change");
