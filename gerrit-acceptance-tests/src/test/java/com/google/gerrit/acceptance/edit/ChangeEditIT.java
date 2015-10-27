@@ -318,7 +318,7 @@ public class ChangeEditIT extends AbstractDaemonTest {
     Optional<ChangeEdit> edit = editUtil.byChange(change);
     assertThat(edit.get().getEditCommit().getParentCount()).isEqualTo(0);
 
-    String msg = String.format("New commit message\n\nChange-Id: %s",
+    String msg = String.format("New commit message\n\nChange-Id: %s\n",
         change.getKey());
     assertThat(modifier.modifyMessage(edit.get(), msg))
         .isEqualTo(RefUpdate.Result.FORCED);
@@ -332,6 +332,7 @@ public class ChangeEditIT extends AbstractDaemonTest {
         .isEqualTo(RefUpdate.Result.NEW);
     Optional<ChangeEdit> edit = editUtil.byChange(change);
 
+<<<<<<< HEAD   (39db6c Allow to enable note DB for all integration tests)
     exception.expect(UnchangedCommitMessageException.class);
     exception.expectMessage(
         "New commit message cannot be same as existing commit message");
@@ -345,8 +346,12 @@ public class ChangeEditIT extends AbstractDaemonTest {
     assertThat(modifier.createEdit(change, getCurrentPatchSet(changeId)))
         .isEqualTo(RefUpdate.Result.NEW);
     Optional<ChangeEdit> edit = editUtil.byChange(change);
+=======
+    assertUnchangedMessage(edit, edit.get().getEditCommit().getFullMessage());
+    assertUnchangedMessage(edit, edit.get().getEditCommit().getFullMessage() + "\n\n");
+>>>>>>> BRANCH (171382 Inline edit: Strip trailing blank lines from commit messages)
 
-    String msg = String.format("New commit message\n\nChange-Id: %s",
+    String msg = String.format("New commit message\n\nChange-Id: %s\n",
         change.getKey());
     assertThat(modifier.modifyMessage(edit.get(), msg)).isEqualTo(
         RefUpdate.Result.FORCED);
@@ -373,7 +378,7 @@ public class ChangeEditIT extends AbstractDaemonTest {
         .isEqualTo(SC_NOT_FOUND);
     EditMessage.Input in = new EditMessage.Input();
     in.message = String.format("New commit message\n\n" +
-        CONTENT_NEW2_STR + "\n\nChange-Id: %s",
+        CONTENT_NEW2_STR + "\n\nChange-Id: %s\n",
         change.getKey());
     assertThat(adminSession.put(urlEditMessage(), in).getStatusCode())
         .isEqualTo(SC_NO_CONTENT);
@@ -383,7 +388,7 @@ public class ChangeEditIT extends AbstractDaemonTest {
     Optional<ChangeEdit> edit = editUtil.byChange(change);
     assertThat(edit.get().getEditCommit().getFullMessage())
         .isEqualTo(in.message);
-    in.message = String.format("New commit message2\n\nChange-Id: %s",
+    in.message = String.format("New commit message2\n\nChange-Id: %s\n",
         change.getKey());
     assertThat(adminSession.put(urlEditMessage(), in).getStatusCode())
         .isEqualTo(SC_NO_CONTENT);
@@ -712,6 +717,7 @@ public class ChangeEditIT extends AbstractDaemonTest {
     assertThat(approvals.get(0).value).isEqualTo(1);
   }
 
+<<<<<<< HEAD   (39db6c Allow to enable note DB for all integration tests)
   @Test
   public void testHasEditPredicate() throws Exception {
     assertThat(modifier.createEdit(change, ps)).isEqualTo(RefUpdate.Result.NEW);
@@ -739,6 +745,26 @@ public class ChangeEditIT extends AbstractDaemonTest {
 
     setApiUser(admin);
     assertThat(queryEdits()).hasSize(0);
+=======
+  private void assertUnchangedMessage(Optional<ChangeEdit> edit, String message)
+      throws Exception {
+    try {
+      modifier.modifyMessage(
+          edit.get(),
+          message);
+      fail("UnchangedCommitMessageException expected");
+    } catch (UnchangedCommitMessageException ex) {
+      assertThat(ex.getMessage()).isEqualTo(
+          "New commit message cannot be same as existing commit message");
+    }
+  }
+
+  private String newChange(Git git, PersonIdent ident) throws Exception {
+    PushOneCommit push =
+        pushFactory.create(db, ident, PushOneCommit.SUBJECT, FILE_NAME,
+            new String(CONTENT_OLD, StandardCharsets.UTF_8));
+    return push.to(git, "refs/for/master").getChangeId();
+>>>>>>> BRANCH (171382 Inline edit: Strip trailing blank lines from commit messages)
   }
 
   private List<ChangeInfo> queryEdits() throws Exception {
