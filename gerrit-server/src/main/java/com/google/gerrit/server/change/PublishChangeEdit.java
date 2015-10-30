@@ -29,8 +29,12 @@ import com.google.gerrit.extensions.restapi.RestModifyView;
 import com.google.gerrit.extensions.restapi.RestView;
 import com.google.gerrit.server.edit.ChangeEdit;
 import com.google.gerrit.server.edit.ChangeEditUtil;
+<<<<<<< HEAD   (dc53a1 Update cookbook plugin revision)
 import com.google.gerrit.server.git.UpdateException;
 import com.google.gerrit.server.project.NoSuchProjectException;
+=======
+import com.google.gerrit.server.project.NoSuchChangeException;
+>>>>>>> BRANCH (ca1e88 Set correct revision of cookbook plugin)
 import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -84,8 +88,13 @@ public class PublishChangeEdit implements
 
     @Override
     public Response<?> apply(ChangeResource rsrc, Publish.Input in)
+<<<<<<< HEAD   (dc53a1 Update cookbook plugin revision)
         throws NoSuchProjectException, IOException, OrmException,
         RestApiException, UpdateException {
+=======
+        throws AuthException, ResourceConflictException, NoSuchChangeException,
+        IOException, OrmException {
+>>>>>>> BRANCH (ca1e88 Set correct revision of cookbook plugin)
       Capable r =
           rsrc.getControl().getProjectControl().canPushToAtLeastOneRef();
       if (r != Capable.OK) {

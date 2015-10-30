@@ -149,14 +149,23 @@ public class ChangeEditUtil {
    * its parent.
    *
    * @param edit change edit to publish
+<<<<<<< HEAD   (dc53a1 Update cookbook plugin revision)
    * @throws NoSuchProjectException
+=======
+   * @throws NoSuchChangeException
+>>>>>>> BRANCH (ca1e88 Set correct revision of cookbook plugin)
    * @throws IOException
    * @throws OrmException
    * @throws UpdateException
    * @throws RestApiException
    */
+<<<<<<< HEAD   (dc53a1 Update cookbook plugin revision)
   public void publish(ChangeEdit edit) throws NoSuchProjectException,
       IOException, OrmException, RestApiException, UpdateException {
+=======
+  public void publish(ChangeEdit edit) throws NoSuchChangeException,
+      IOException, OrmException, ResourceConflictException {
+>>>>>>> BRANCH (ca1e88 Set correct revision of cookbook plugin)
     Change change = edit.getChange();
     try (Repository repo = gitManager.openRepository(change.getProject());
         RevWalk rw = new RevWalk(repo);
@@ -167,12 +176,23 @@ public class ChangeEditUtil {
             "only edit for current patch set can be published");
       }
 
+<<<<<<< HEAD   (dc53a1 Update cookbook plugin revision)
       Change updatedChange =
           insertPatchSet(edit, change, repo, rw, inserter, basePatchSet,
               squashEdit(rw, inserter, edit.getEditCommit(), basePatchSet));
       // TODO(davido): This should happen in the same BatchRefUpdate.
       deleteRef(repo, edit);
       indexer.index(db.get(), updatedChange);
+=======
+      try {
+        insertPatchSet(edit, change, repo, rw, basePatchSet,
+            squashEdit(rw, inserter, edit.getEditCommit(), basePatchSet));
+        // TODO(davido): This should happen in the same BatchRefUpdate.
+        deleteRef(repo, edit);
+      } catch (InvalidChangeOperationException e) {
+        throw new ResourceConflictException(e.getMessage());
+      }
+>>>>>>> BRANCH (ca1e88 Set correct revision of cookbook plugin)
     }
   }
 
