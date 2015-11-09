@@ -29,8 +29,12 @@ import com.google.gerrit.extensions.restapi.RestModifyView;
 import com.google.gerrit.extensions.restapi.RestView;
 import com.google.gerrit.server.edit.ChangeEdit;
 import com.google.gerrit.server.edit.ChangeEditUtil;
+<<<<<<< HEAD   (dec158 Merge "Update the 2.12 release notes")
 import com.google.gerrit.server.git.UpdateException;
 import com.google.gerrit.server.project.NoSuchProjectException;
+=======
+import com.google.gerrit.server.project.NoSuchChangeException;
+>>>>>>> BRANCH (4d9777 Update buck to ba9f239f69287a553ca93af76a27484d83693563)
 import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -84,8 +88,13 @@ public class PublishChangeEdit implements
 
     @Override
     public Response<?> apply(ChangeResource rsrc, Publish.Input in)
+<<<<<<< HEAD   (dec158 Merge "Update the 2.12 release notes")
         throws NoSuchProjectException, IOException, OrmException,
         RestApiException, UpdateException {
+=======
+        throws AuthException, ResourceConflictException, NoSuchChangeException,
+        IOException, OrmException {
+>>>>>>> BRANCH (4d9777 Update buck to ba9f239f69287a553ca93af76a27484d83693563)
       Capable r =
           rsrc.getControl().getProjectControl().canPushToAtLeastOneRef();
       if (r != Capable.OK) {

@@ -149,14 +149,23 @@ public class ChangeEditUtil {
    * its parent.
    *
    * @param edit change edit to publish
+<<<<<<< HEAD   (dec158 Merge "Update the 2.12 release notes")
    * @throws NoSuchProjectException
+=======
+   * @throws NoSuchChangeException
+>>>>>>> BRANCH (4d9777 Update buck to ba9f239f69287a553ca93af76a27484d83693563)
    * @throws IOException
    * @throws OrmException
    * @throws UpdateException
    * @throws RestApiException
    */
+<<<<<<< HEAD   (dec158 Merge "Update the 2.12 release notes")
   public void publish(ChangeEdit edit) throws NoSuchProjectException,
       IOException, OrmException, RestApiException, UpdateException {
+=======
+  public void publish(ChangeEdit edit) throws NoSuchChangeException,
+      IOException, OrmException, ResourceConflictException {
+>>>>>>> BRANCH (4d9777 Update buck to ba9f239f69287a553ca93af76a27484d83693563)
     Change change = edit.getChange();
     try (Repository repo = gitManager.openRepository(change.getProject());
         RevWalk rw = new RevWalk(repo);
@@ -167,12 +176,23 @@ public class ChangeEditUtil {
             "only edit for current patch set can be published");
       }
 
+<<<<<<< HEAD   (dec158 Merge "Update the 2.12 release notes")
       Change updatedChange =
           insertPatchSet(edit, change, repo, rw, inserter, basePatchSet,
               squashEdit(rw, inserter, edit.getEditCommit(), basePatchSet));
       // TODO(davido): This should happen in the same BatchRefUpdate.
       deleteRef(repo, edit);
       indexer.index(db.get(), updatedChange);
+=======
+      try {
+        insertPatchSet(edit, change, repo, rw, basePatchSet,
+            squashEdit(rw, inserter, edit.getEditCommit(), basePatchSet));
+        // TODO(davido): This should happen in the same BatchRefUpdate.
+        deleteRef(repo, edit);
+      } catch (InvalidChangeOperationException e) {
+        throw new ResourceConflictException(e.getMessage());
+      }
+>>>>>>> BRANCH (4d9777 Update buck to ba9f239f69287a553ca93af76a27484d83693563)
     }
   }
 

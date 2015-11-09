@@ -24,6 +24,11 @@ import com.google.gerrit.extensions.common.ChangeInfo;
 import com.google.gerrit.extensions.restapi.AuthException;
 import com.google.gerrit.extensions.restapi.BadRequestException;
 import com.google.gerrit.extensions.restapi.MethodNotAllowedException;
+<<<<<<< HEAD   (dec158 Merge "Update the 2.12 release notes")
+=======
+import com.google.gerrit.extensions.restapi.ResourceConflictException;
+import com.google.gerrit.extensions.restapi.ResourceNotFoundException;
+>>>>>>> BRANCH (4d9777 Update buck to ba9f239f69287a553ca93af76a27484d83693563)
 import com.google.gerrit.extensions.restapi.Response;
 import com.google.gerrit.extensions.restapi.RestApiException;
 import com.google.gerrit.extensions.restapi.RestModifyView;
@@ -109,9 +114,17 @@ public class CreateChange implements
   }
 
   @Override
+<<<<<<< HEAD   (dec158 Merge "Update the 2.12 release notes")
   public Response<ChangeInfo> apply(TopLevelResource parent, ChangeInfo input)
       throws OrmException, IOException, InvalidChangeOperationException,
       RestApiException, UpdateException {
+=======
+  public Response<ChangeInfo> apply(TopLevelResource parent,
+      ChangeInfo input) throws AuthException, OrmException,
+      BadRequestException, UnprocessableEntityException, IOException,
+      InvalidChangeOperationException, ResourceNotFoundException,
+      MethodNotAllowedException, ResourceConflictException {
+>>>>>>> BRANCH (4d9777 Update buck to ba9f239f69287a553ca93af76a27484d83693563)
     if (Strings.isNullOrEmpty(input.project)) {
       throw new BadRequestException("project must be non-empty");
     }
@@ -220,6 +233,62 @@ public class CreateChange implements
         return Response.created(json.format(change.getId()));
       }
 
+<<<<<<< HEAD   (dec158 Merge "Update the 2.12 release notes")
+=======
+      ChangeMessage msg = new ChangeMessage(new ChangeMessage.Key(change.getId(),
+          ChangeUtil.messageUUID(db.get())),
+          me.getAccountId(),
+          ins.getPatchSet().getCreatedOn(),
+          ins.getPatchSet().getId());
+      msg.setMessage(String.format("Uploaded patch set %s.",
+          ins.getPatchSet().getPatchSetId()));
+
+      ins.setMessage(msg);
+      validateCommit(git, refControl, c, me, ins);
+      updateRef(git, rw, c, change, ins.getPatchSet());
+
+      change.setTopic(input.topic);
+      ins.setDraft(input.status != null && input.status == ChangeStatus.DRAFT);
+      ins.insert();
+
+      return Response.created(json.format(change.getId()));
+    }
+  }
+
+  private void validateCommit(Repository git, RefControl refControl,
+      RevCommit c, IdentifiedUser me, ChangeInserter ins)
+      throws ResourceConflictException {
+    PatchSet newPatchSet = ins.getPatchSet();
+    CommitValidators commitValidators =
+        commitValidatorsFactory.create(refControl, new NoSshInfo(), git);
+    CommitReceivedEvent commitReceivedEvent =
+        new CommitReceivedEvent(new ReceiveCommand(
+            ObjectId.zeroId(),
+            c.getId(),
+            newPatchSet.getRefName()),
+            refControl.getProjectControl().getProject(),
+            refControl.getRefName(),
+            c,
+            me);
+
+    try {
+      commitValidators.validateForGerritCommits(commitReceivedEvent);
+    } catch (CommitValidationException e) {
+      throw new ResourceConflictException(e.getMessage());
+    }
+  }
+
+  private static void updateRef(Repository git, RevWalk rw, RevCommit c,
+      Change change, PatchSet newPatchSet) throws IOException {
+    RefUpdate ru = git.updateRef(newPatchSet.getRefName());
+    ru.setExpectedOldObjectId(ObjectId.zeroId());
+    ru.setNewObjectId(c);
+    ru.disableRefLog();
+    if (ru.update(rw) != RefUpdate.Result.NEW) {
+      throw new IOException(String.format(
+          "Failed to create ref %s in %s: %s", newPatchSet.getRefName(),
+          change.getDest().getParentKey().get(), ru.getResult()));
+>>>>>>> BRANCH (4d9777 Update buck to ba9f239f69287a553ca93af76a27484d83693563)
     }
   }
 
