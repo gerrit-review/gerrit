@@ -1,0 +1,8 @@
+Code-Review+2: Shawn Pearce <sop@google.com>
+Library-Compliance+1: Shawn Pearce <sop@google.com>
+Verified+1: Sangmoon Hwang <simon.hwang@ericsson.com>
+Submitted-by: David Pursehouse <david.pursehouse@sonymobile.com>
+Submitted-at: Mon, 09 Nov 2015 20:54:05 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/71820
+Project: gerrit
+Branch: refs/heads/stable-2.11
