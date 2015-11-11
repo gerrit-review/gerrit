@@ -50,11 +50,19 @@ public class UserPopupPanel extends PopupPanel {
       userEmail.setText(account.email());
     }
     if (showSettingsLink) {
+<<<<<<< HEAD   (be1c40 Add hmac-sha2-256 and hmac-sha2-512 as MACs for sshd)
       if (Gerrit.info().auth().switchAccountUrl() != null) {
         switchAccount.setHref(Gerrit.info().auth().switchAccountUrl());
       } else if (Gerrit.info().auth().isDev()
           || Gerrit.info().auth().isOpenId()) {
         switchAccount.setHref(Gerrit.selfRedirect("/login/"));
+=======
+      if (Gerrit.getConfig().getSwitchAccountUrl() != null) {
+        switchAccount.setHref(Gerrit.getConfig().getSwitchAccountUrl());
+      } else if (Gerrit.getConfig().getAuthType() == AuthType.DEVELOPMENT_BECOME_ANY_ACCOUNT
+          || Gerrit.getConfig().getAuthType() == AuthType.OPENID) {
+        switchAccount.setHref(Gerrit.selfRedirect("/login"));
+>>>>>>> BRANCH (08f1cf Fix double slash on URL when switching account.)
       } else {
         switchAccount.removeFromParent();
         switchAccount = null;
