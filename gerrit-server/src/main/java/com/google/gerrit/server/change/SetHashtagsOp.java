@@ -30,11 +30,13 @@ import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.ChangeMessage;
 import com.google.gerrit.server.ChangeMessagesUtil;
 import com.google.gerrit.server.ChangeUtil;
+import com.google.gerrit.server.extensions.events.HashtagsEdited;
 import com.google.gerrit.server.git.BatchUpdate;
 import com.google.gerrit.server.git.BatchUpdate.ChangeContext;
 import com.google.gerrit.server.git.BatchUpdate.Context;
 import com.google.gerrit.server.notedb.ChangeNotes;
 import com.google.gerrit.server.notedb.ChangeUpdate;
+import com.google.gerrit.server.project.ChangeControl;
 import com.google.gerrit.server.validators.HashtagValidationListener;
 import com.google.gerrit.server.validators.ValidationException;
 import com.google.gwtorm.server.OrmException;
@@ -54,11 +56,13 @@ public class SetHashtagsOp extends BatchUpdate.Op {
   private final ChangeMessagesUtil cmUtil;
   private final ChangeHooks hooks;
   private final DynamicSet<HashtagValidationListener> validationListeners;
+  private final HashtagsEdited hashtagsEdited;
   private final HashtagsInput input;
 
   private boolean runHooks = true;
 
   private Change change;
+  private ChangeControl ctl;
   private Set<String> toAdd;
   private Set<String> toRemove;
   private ImmutableSortedSet<String> updatedHashtags;
@@ -68,10 +72,12 @@ public class SetHashtagsOp extends BatchUpdate.Op {
       ChangeMessagesUtil cmUtil,
       ChangeHooks hooks,
       DynamicSet<HashtagValidationListener> validationListeners,
+      HashtagsEdited hashtagsEdited,
       @Assisted @Nullable HashtagsInput input) {
     this.cmUtil = cmUtil;
     this.hooks = hooks;
     this.validationListeners = validationListeners;
+    this.hashtagsEdited = hashtagsEdited;
     this.input = input;
   }
 
@@ -92,6 +98,7 @@ public class SetHashtagsOp extends BatchUpdate.Op {
       throw new AuthException("Editing hashtags not permitted");
     }
     change = ctx.getChange();
+    ctl = ctx.getControl();
     ChangeUpdate update = ctx.getUpdate(change.currentPatchSetId());
     ChangeNotes notes = update.getNotes().load();
 
@@ -159,6 +166,8 @@ public class SetHashtagsOp extends BatchUpdate.Op {
   @Override
   public void postUpdate(Context ctx) throws OrmException {
     if (updated() && runHooks) {
+      hashtagsEdited.fire(ctl, ctx.getUser().getAccountId(), updatedHashtags,
+          toAdd, toRemove);
       hooks.doHashtagsChangedHook(
           change, ctx.getUser().asIdentifiedUser().getAccount(),
           toAdd, toRemove, updatedHashtags,

@@ -219,6 +219,10 @@ public class ChangeJson {
     return format(changeDataFactory.create(db.get(), rsrc.getControl()));
   }
 
+  public ChangeInfo format(ChangeControl change) throws OrmException {
+    return format(changeDataFactory.create(db.get(), change));
+  }
+
   public ChangeInfo format(Change change) throws OrmException {
     return format(changeDataFactory.create(db.get(), change));
   }
