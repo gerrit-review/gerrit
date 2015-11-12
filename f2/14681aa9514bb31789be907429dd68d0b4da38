@@ -1,0 +1,9 @@
+Code-Review+1: Hector Oswaldo Caballero <hector.caballero@ericsson.com>
+Verified+1: Sangmoon Hwang <simon.hwang@ericsson.com>
+Verified+1: GerritForge CI <gerritforge@gmail.com>
+Code-Review+2: David Pursehouse <david.pursehouse@sonymobile.com>
+Submitted-by: David Pursehouse <david.pursehouse@sonymobile.com>
+Submitted-at: Thu, 12 Nov 2015 22:59:24 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/72254
+Project: gerrit
+Branch: refs/heads/stable-2.11
