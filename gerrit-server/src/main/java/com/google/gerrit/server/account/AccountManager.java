@@ -14,6 +14,7 @@
 
 package com.google.gerrit.server.account;
 
+import com.google.common.base.Strings;
 import com.google.gerrit.audit.AuditService;
 import com.google.gerrit.common.TimeUtil;
 import com.google.gerrit.common.data.AccessSection;
@@ -175,7 +176,11 @@ public class AccountManager {
     }
 
     if (!realm.allowsEdit(Account.FieldName.FULL_NAME)
+<<<<<<< HEAD   (4ba1c2 Update 2.12 release notes)
         && who.getDisplayName() != null
+=======
+        && !Strings.isNullOrEmpty(who.getDisplayName())
+>>>>>>> BRANCH (1e329a Merge "AccountManager: Update display name only if it is not)
         && !eq(user.getAccount().getFullName(), who.getDisplayName())) {
       toUpdate = load(toUpdate, user.getAccountId(), db);
       toUpdate.setFullName(who.getDisplayName());

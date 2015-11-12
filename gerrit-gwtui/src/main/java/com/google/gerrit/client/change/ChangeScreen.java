@@ -880,8 +880,18 @@ public class ChangeScreen extends Screen {
 
     CallbackGroup group = new CallbackGroup();
     Timestamp lastReply = myLastReply(info);
+<<<<<<< HEAD   (4ba1c2 Update 2.12 release notes)
     if (rev.isEdit()) {
       loadFileList(b, rev, lastReply, group, null, null);
+=======
+    if (rev.is_edit()) {
+      // Comments are filtered for the current revision. Use parent
+      // patch set for edits, as edits themself can never have comments.
+      RevisionInfo p = RevisionInfo.findEditParentRevision(
+          info.revisions().values());
+      List<NativeMap<JsArray<CommentInfo>>> comments = loadComments(p, group);
+      loadFileList(b, rev, lastReply, group, comments, null);
+>>>>>>> BRANCH (1e329a Merge "AccountManager: Update display name only if it is not)
     } else {
       loadDiff(b, rev, lastReply, group);
     }
