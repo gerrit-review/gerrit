@@ -1,0 +1,9 @@
+Verified+1: David Pursehouse <david.pursehouse@sonymobile.com>
+Library-Compliance+1: Jonathan Nieder <jrn@google.com>
+Code-Review+1: Jonathan Nieder <jrn@google.com>
+Code-Review+2: David Pursehouse <david.pursehouse@sonymobile.com>
+Submitted-by: David Pursehouse <david.pursehouse@sonymobile.com>
+Submitted-at: Thu, 12 Nov 2015 18:55:38 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/72391
+Project: gerrit
+Branch: refs/heads/stable-2.12
