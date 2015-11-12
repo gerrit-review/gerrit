@@ -20,8 +20,11 @@ java_library(
     '//lib:jsch',
     '//lib/auto:auto-value',
     '//lib/commons:codec',
+<<<<<<< HEAD   (0cdfd0 Merge branch 'stable-2.12')
     '//lib/commons:collections',
     '//lib/dropwizard:dropwizard-core',
+=======
+>>>>>>> BRANCH (e7eeac Merge branch 'stable-2.11' into stable-2.12)
     '//lib/guice:guice',
     '//lib/guice:guice-assistedinject',
     '//lib/guice:guice-servlet',  # SSH should not depend on servlet
