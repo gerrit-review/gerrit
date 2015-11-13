@@ -1,0 +1,8 @@
+Code-Review+1: Nasser Grainawi <nasser@codeaurora.org>
+Verified+1: David Ostrovsky <david.ostrovsky@gmail.com>
+Code-Review+2: David Pursehouse <david.pursehouse@sonymobile.com>
+Submitted-by: David Pursehouse <david.pursehouse@sonymobile.com>
+Submitted-at: Fri, 13 Nov 2015 17:30:37 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/72493
+Project: gerrit
+Branch: refs/heads/stable-2.12
