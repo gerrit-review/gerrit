@@ -2,4 +2,8 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (291fcd Update replication plugin with merge from stable-2.11)
 GERRIT_VERSION = '2.12-rc0'
+=======
+GERRIT_VERSION = '2.11.5'
+>>>>>>> BRANCH (4a3b5b Set version to 2.11.5)
