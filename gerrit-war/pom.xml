@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-war</artifactId>
+<<<<<<< HEAD   (e9c490 ReindexAfterUpdate: Trigger on fewer ref updates)
   <version>2.13-SNAPSHOT</version>
+=======
+  <version>2.12</version>
+>>>>>>> BRANCH (c05d8a ResourceServlet: Fix refreshing stale resources)
   <packaging>war</packaging>
   <name>Gerrit Code Review - WAR</name>
   <description>Gerrit WAR</description>

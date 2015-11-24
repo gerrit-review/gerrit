@@ -36,7 +36,11 @@ plugin project.
 ----
 mvn archetype:generate -DarchetypeGroupId=com.google.gerrit \
     -DarchetypeArtifactId=gerrit-plugin-archetype \
+<<<<<<< HEAD   (e9c490 ReindexAfterUpdate: Trigger on fewer ref updates)
     -DarchetypeVersion=2.13-SNAPSHOT \
+=======
+    -DarchetypeVersion=2.12 \
+>>>>>>> BRANCH (c05d8a ResourceServlet: Fix refreshing stale resources)
     -DgroupId=com.googlesource.gerrit.plugins.testplugin \
     -DartifactId=testplugin
 ----
@@ -283,6 +287,7 @@ can get `com.google.gerrit.pgm.init.api.AllProjectsConfig` injected:
     private final ConsoleUI ui;
     private final AllProjectsConfig allProjectsConfig;
 
+    @Inject
     public MyInitStep(@PluginName String pluginName, ConsoleUI ui,
         AllProjectsConfig allProjectsConfig) {
       this.pluginName = pluginName;
