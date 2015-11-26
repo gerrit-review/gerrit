@@ -641,11 +641,15 @@ class HttpPluginServlet extends HttpServlet
 
   private static byte[] readWholeEntry(PluginContentScanner scanner, PluginEntry entry)
       throws IOException {
+<<<<<<< HEAD   (c4dc9d StaticModule: Remove unused import)
     byte[] data = new byte[entry.getSize().get().intValue()];
     try (InputStream in = scanner.getInputStream(entry)) {
       IO.readFully(in, data, 0, data.length);
+=======
+    try (InputStream in = scanner.getInputStream(entry)) {
+      return IO.readWholeStream(in, entry.getSize().get().intValue()).array();
+>>>>>>> BRANCH (713551 Fix query for changes using a label with a group operator.)
     }
-    return data;
   }
 
   private static class PluginHolder {
