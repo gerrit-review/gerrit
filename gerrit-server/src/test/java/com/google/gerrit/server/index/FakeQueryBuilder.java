@@ -25,9 +25,16 @@ public class FakeQueryBuilder extends ChangeQueryBuilder {
     super(
         new FakeQueryBuilder.Definition<>(
           FakeQueryBuilder.class),
+<<<<<<< HEAD   (c4dc9d StaticModule: Remove unused import)
         new ChangeQueryBuilder.Arguments(null, null, null, null, null, null,
           null, null, null, null, null, null, null, null, null, null, null,
           null, indexes, null, null, null, null));
+=======
+        new ChangeQueryBuilder.Arguments(null, null, null, null,
+          null, null, null, null, null, null, null, null, null,
+          null, null, null, null, null, null, indexes, null, null,
+          null, null, null));
+>>>>>>> BRANCH (713551 Fix query for changes using a label with a group operator.)
   }
 
   @Operator

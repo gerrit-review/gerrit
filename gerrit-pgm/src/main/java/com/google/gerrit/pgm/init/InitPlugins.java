@@ -111,18 +111,28 @@ public class InitPlugins implements InitStep {
     for (PluginData plugin : plugins) {
       String pluginName = plugin.name;
       try {
+<<<<<<< HEAD   (c4dc9d StaticModule: Remove unused import)
         final Path tmpPlugin = plugin.pluginPath;
+=======
+        final File tmpPlugin = plugin.pluginFile;
+	File p = new File(site.plugins_dir, plugin.name + ".jar");
+        boolean upgrade = p.exists();
+>>>>>>> BRANCH (713551 Fix query for changes using a label with a group operator.)
 
-        if (!(initFlags.installPlugins.contains(pluginName) || ui.yesno(false,
+        if (!(initFlags.installPlugins.contains(pluginName) || ui.yesno(upgrade,
             "Install plugin %s version %s", pluginName, plugin.version))) {
           Files.deleteIfExists(tmpPlugin);
           continue;
         }
 
+<<<<<<< HEAD   (c4dc9d StaticModule: Remove unused import)
         final Path p = site.plugins_dir.resolve(plugin.name + ".jar");
         if (Files.exists(p)) {
+=======
+        if (upgrade) {
+>>>>>>> BRANCH (713551 Fix query for changes using a label with a group operator.)
           final String installedPluginVersion = getVersion(p);
-          if (!ui.yesno(false,
+          if (!ui.yesno(upgrade,
               "version %s is already installed, overwrite it",
               installedPluginVersion)) {
             Files.deleteIfExists(tmpPlugin);

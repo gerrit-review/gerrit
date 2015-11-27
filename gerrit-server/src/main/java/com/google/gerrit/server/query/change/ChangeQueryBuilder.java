@@ -18,11 +18,21 @@ import static com.google.gerrit.server.query.change.ChangeData.asChanges;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+<<<<<<< HEAD   (c4dc9d StaticModule: Remove unused import)
+=======
+import com.google.gerrit.common.Nullable;
+import com.google.gerrit.common.data.GroupDetail;
+>>>>>>> BRANCH (713551 Fix query for changes using a label with a group operator.)
 import com.google.gerrit.common.data.GroupReference;
+import com.google.gerrit.common.errors.NoSuchGroupException;
 import com.google.gerrit.common.errors.NotSignedInException;
 import com.google.gerrit.reviewdb.client.Account;
 import com.google.gerrit.reviewdb.client.AccountGroup;
+import com.google.gerrit.reviewdb.client.AccountGroupById;
+import com.google.gerrit.reviewdb.client.AccountGroupMember;
 import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.RefNames;
@@ -34,8 +44,13 @@ import com.google.gerrit.server.account.AccountResolver;
 import com.google.gerrit.server.account.CapabilityControl;
 import com.google.gerrit.server.account.GroupBackend;
 import com.google.gerrit.server.account.GroupBackends;
+<<<<<<< HEAD   (c4dc9d StaticModule: Remove unused import)
 import com.google.gerrit.server.account.VersionedAccountDestinations;
 import com.google.gerrit.server.account.VersionedAccountQueries;
+=======
+import com.google.gerrit.server.account.GroupCache;
+import com.google.gerrit.server.account.GroupDetailFactory;
+>>>>>>> BRANCH (713551 Fix query for changes using a label with a group operator.)
 import com.google.gerrit.server.change.ChangeTriplet;
 import com.google.gerrit.server.config.AllProjectsName;
 import com.google.gerrit.server.config.AllUsersName;
@@ -47,7 +62,11 @@ import com.google.gerrit.server.git.strategy.SubmitStrategyFactory;
 import com.google.gerrit.server.index.ChangeIndex;
 import com.google.gerrit.server.index.FieldDef;
 import com.google.gerrit.server.index.IndexCollection;
+<<<<<<< HEAD   (c4dc9d StaticModule: Remove unused import)
 import com.google.gerrit.server.index.IndexRewriter;
+=======
+import com.google.gerrit.server.index.IndexConfig;
+>>>>>>> BRANCH (713551 Fix query for changes using a label with a group operator.)
 import com.google.gerrit.server.index.Schema;
 import com.google.gerrit.server.patch.PatchListCache;
 import com.google.gerrit.server.project.ChangeControl;
@@ -146,6 +165,7 @@ public class ChangeQueryBuilder extends QueryBuilder<ChangeData> {
     final Provider<InternalChangeQuery> queryProvider;
     final IndexRewriter rewriter;
     final IdentifiedUser.GenericFactory userFactory;
+    final GroupDetailFactory.Factory groupDetailFactory;
     final CapabilityControl.Factory capabilityControlFactory;
     final ChangeControl.GenericFactory changeControlGenericFactory;
     final ChangeData.Factory changeDataFactory;
@@ -158,12 +178,17 @@ public class ChangeQueryBuilder extends QueryBuilder<ChangeData> {
     final PatchListCache patchListCache;
     final GitRepositoryManager repoManager;
     final ProjectCache projectCache;
+    final GroupCache groupCache;
     final Provider<ListChildProjects> listChildProjects;
     final SubmitStrategyFactory submitStrategyFactory;
     final ConflictsCache conflictsCache;
     final TrackingFooters trackingFooters;
     final boolean allowsDrafts;
+<<<<<<< HEAD   (c4dc9d StaticModule: Remove unused import)
     final ChangeIndex index;
+=======
+    final IndexConfig indexConfig;
+>>>>>>> BRANCH (713551 Fix query for changes using a label with a group operator.)
 
     private final Provider<CurrentUser> self;
 
@@ -175,6 +200,7 @@ public class ChangeQueryBuilder extends QueryBuilder<ChangeData> {
         IdentifiedUser.GenericFactory userFactory,
         Provider<CurrentUser> self,
         CapabilityControl.Factory capabilityControlFactory,
+        GroupDetailFactory.Factory groupDetailFactory,
         ChangeControl.GenericFactory changeControlGenericFactory,
         ChangeData.Factory changeDataFactory,
         FieldDef.FillArgs fillArgs,
@@ -186,20 +212,29 @@ public class ChangeQueryBuilder extends QueryBuilder<ChangeData> {
         PatchListCache patchListCache,
         GitRepositoryManager repoManager,
         ProjectCache projectCache,
+        GroupCache groupCache,
         Provider<ListChildProjects> listChildProjects,
         IndexCollection indexes,
         SubmitStrategyFactory submitStrategyFactory,
         ConflictsCache conflictsCache,
         TrackingFooters trackingFooters,
+        IndexConfig indexConfig,
         @GerritServerConfig Config cfg) {
       this(db, queryProvider, rewriter, userFactory, self,
-          capabilityControlFactory, changeControlGenericFactory,
+          capabilityControlFactory, groupDetailFactory, changeControlGenericFactory,
           changeDataFactory, fillArgs, plcUtil, accountResolver, groupBackend,
+<<<<<<< HEAD   (c4dc9d StaticModule: Remove unused import)
           allProjectsName, allUsersName, patchListCache, repoManager,
           projectCache, listChildProjects, submitStrategyFactory,
           conflictsCache, trackingFooters,
           cfg == null ? true : cfg.getBoolean("change", "allowDrafts", true),
           indexes != null ? indexes.getSearchIndex() : null);
+=======
+          allProjectsName, patchListCache, repoManager, projectCache,
+          groupCache, listChildProjects, indexes, submitStrategyFactory,
+          conflictsCache, trackingFooters, indexConfig,
+          cfg == null ? true : cfg.getBoolean("change", "allowDrafts", true));
+>>>>>>> BRANCH (713551 Fix query for changes using a label with a group operator.)
     }
 
     private Arguments(
@@ -209,6 +244,7 @@ public class ChangeQueryBuilder extends QueryBuilder<ChangeData> {
         IdentifiedUser.GenericFactory userFactory,
         Provider<CurrentUser> self,
         CapabilityControl.Factory capabilityControlFactory,
+        GroupDetailFactory.Factory groupDetailFactory,
         ChangeControl.GenericFactory changeControlGenericFactory,
         ChangeData.Factory changeDataFactory,
         FieldDef.FillArgs fillArgs,
@@ -220,18 +256,25 @@ public class ChangeQueryBuilder extends QueryBuilder<ChangeData> {
         PatchListCache patchListCache,
         GitRepositoryManager repoManager,
         ProjectCache projectCache,
+        GroupCache groupCache,
         Provider<ListChildProjects> listChildProjects,
         SubmitStrategyFactory submitStrategyFactory,
         ConflictsCache conflictsCache,
         TrackingFooters trackingFooters,
+<<<<<<< HEAD   (c4dc9d StaticModule: Remove unused import)
         boolean allowsDrafts,
         ChangeIndex index) {
+=======
+        IndexConfig indexConfig,
+        boolean allowsDrafts) {
+>>>>>>> BRANCH (713551 Fix query for changes using a label with a group operator.)
      this.db = db;
      this.queryProvider = queryProvider;
      this.rewriter = rewriter;
      this.userFactory = userFactory;
      this.self = self;
      this.capabilityControlFactory = capabilityControlFactory;
+     this.groupDetailFactory = groupDetailFactory;
      this.changeControlGenericFactory = changeControlGenericFactory;
      this.changeDataFactory = changeDataFactory;
      this.fillArgs = fillArgs;
@@ -243,22 +286,33 @@ public class ChangeQueryBuilder extends QueryBuilder<ChangeData> {
      this.patchListCache = patchListCache;
      this.repoManager = repoManager;
      this.projectCache = projectCache;
+     this.groupCache = groupCache;
      this.listChildProjects = listChildProjects;
      this.submitStrategyFactory = submitStrategyFactory;
      this.conflictsCache = conflictsCache;
      this.trackingFooters = trackingFooters;
      this.allowsDrafts = allowsDrafts;
+<<<<<<< HEAD   (c4dc9d StaticModule: Remove unused import)
      this.index = index;
+=======
+     this.indexConfig = indexConfig;
+>>>>>>> BRANCH (713551 Fix query for changes using a label with a group operator.)
     }
 
     Arguments asUser(CurrentUser otherUser) {
       return new Arguments(db, queryProvider, rewriter, userFactory,
           Providers.of(otherUser),
-          capabilityControlFactory, changeControlGenericFactory,
+          capabilityControlFactory, groupDetailFactory, changeControlGenericFactory,
           changeDataFactory, fillArgs, plcUtil, accountResolver, groupBackend,
+<<<<<<< HEAD   (c4dc9d StaticModule: Remove unused import)
           allProjectsName, allUsersName, patchListCache, repoManager,
           projectCache, listChildProjects, submitStrategyFactory,
           conflictsCache, trackingFooters, allowsDrafts, index);
+=======
+          allProjectsName, patchListCache, repoManager, projectCache,
+          groupCache, listChildProjects, indexes, submitStrategyFactory, conflictsCache,
+          trackingFooters, indexConfig, allowsDrafts);
+>>>>>>> BRANCH (713551 Fix query for changes using a label with a group operator.)
     }
 
     Arguments asUser(Account.Id otherId) {
@@ -576,6 +630,19 @@ public class ChangeQueryBuilder extends QueryBuilder<ChangeData> {
             throw error("Neither user nor group " + value + " found");
           }
         }
+      }
+    }
+
+    // expand a group predicate into multiple user predicates
+    if (group != null) {
+      Set<Account.Id> allMembers = getMemberIds(
+          group, new HashSet<AccountGroup.UUID>());
+      int maxTerms = args.indexConfig.maxLimit();
+      if (allMembers.size() > maxTerms) {
+        // limit the number of query terms otherwise Gerrit will barf
+        accounts = ImmutableSet.copyOf(Iterables.limit(allMembers, maxTerms));
+      } else {
+        accounts = allMembers;
       }
     }
 
@@ -914,6 +981,39 @@ public class ChangeQueryBuilder extends QueryBuilder<ChangeData> {
       throw error("Group " + group + " not found");
     }
     return g;
+  }
+
+  private Set<Account.Id> getMemberIds(AccountGroup.UUID groupUUID,
+      Set<AccountGroup.UUID> seenGroups) throws OrmException {
+    seenGroups.add(groupUUID);
+
+    Set<Account.Id> members = new HashSet<>();
+    AccountGroup group = args.groupCache.get(groupUUID);
+    if (group != null) {
+      try {
+        GroupDetail groupDetail =
+            args.groupDetailFactory.create(group.getId()).call();
+        if (groupDetail.members != null) {
+          for (AccountGroupMember m : groupDetail.members) {
+            if (!members.contains(m.getAccountId())) {
+              members.add(m.getAccountId());
+            }
+          }
+        }
+        // Get members of subgroups
+        if (groupDetail.includes != null) {
+          for (AccountGroupById includedGroup : groupDetail.includes) {
+            if (!seenGroups.contains(includedGroup.getIncludeUUID())) {
+              members.addAll(
+                  getMemberIds(includedGroup.getIncludeUUID(), seenGroups));
+            }
+          }
+        }
+      } catch (NoSuchGroupException e) {
+        // The included group is not visible
+      }
+    }
+    return members;
   }
 
   private List<Change> parseChange(String value) throws OrmException,
