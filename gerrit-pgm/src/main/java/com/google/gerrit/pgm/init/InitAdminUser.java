@@ -25,7 +25,11 @@ import com.google.gerrit.reviewdb.client.Account;
 import com.google.gerrit.reviewdb.client.AccountExternalId;
 import com.google.gerrit.reviewdb.client.AccountGroup;
 import com.google.gerrit.reviewdb.client.AccountGroupMember;
+<<<<<<< HEAD   (9af3b9 Fix wrong date/time for commits in refs/users/default branch)
 import com.google.gerrit.reviewdb.client.AccountSshKey;
+=======
+import com.google.gerrit.reviewdb.client.AccountGroupName;
+>>>>>>> BRANCH (9bf41e CurrentSchemaVersion: Allow to use it in plugins)
 import com.google.gerrit.reviewdb.client.AuthType;
 import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gwtorm.server.SchemaFactory;
@@ -101,9 +105,11 @@ public class InitAdminUser implements InitStep {
           a.setPreferredEmail(email);
           db.accounts().insert(Collections.singleton(a));
 
+          AccountGroupName adminGroup = db.accountGroupNames().get(
+              new AccountGroup.NameKey("Administrators"));
           AccountGroupMember m =
               new AccountGroupMember(new AccountGroupMember.Key(id,
-                  new AccountGroup.Id(1)));
+                  adminGroup.getId()));
           db.accountGroupMembers().insert(Collections.singleton(m));
 
           if (sshKey != null) {

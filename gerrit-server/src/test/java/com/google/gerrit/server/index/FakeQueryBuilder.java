@@ -26,9 +26,15 @@ public class FakeQueryBuilder extends ChangeQueryBuilder {
         new FakeQueryBuilder.Definition<>(
           FakeQueryBuilder.class),
         new ChangeQueryBuilder.Arguments(null, null, null, null,
+<<<<<<< HEAD   (9af3b9 Fix wrong date/time for commits in refs/users/default branch)
             null, null, null, null, null, null, null, null, null,
             null, null, null, null, null, null, null, indexes, null,
             null, null, null, null));
+=======
+          null, null, null, null, null, null, null, null, null,
+          null, null, null, null, indexes, null, null, null, null,
+          null, null));
+>>>>>>> BRANCH (9bf41e CurrentSchemaVersion: Allow to use it in plugins)
   }
 
   @Operator
