@@ -26,8 +26,13 @@ public class FakeQueryBuilder extends ChangeQueryBuilder {
         new FakeQueryBuilder.Definition<>(
           FakeQueryBuilder.class),
         new ChangeQueryBuilder.Arguments(null, null, null, null, null, null,
+<<<<<<< HEAD   (004bf2 Eclipse: List GWT deps after non-GWT deps)
           null, null, null, null, null, null, null, null, null, null, null,
           null, null, indexes, null, null, null, null));
+=======
+            null, null, null, null, null, null, null, null, null, null, null,
+            null, indexes, null, null, null, null, null, null));
+>>>>>>> BRANCH (455ed9 Buck: Remove non working local_jar rule and documentation)
   }
 
   @Operator

@@ -61,6 +61,11 @@ public class StaticModule extends ServletModule {
 
   private static final String GWT_UI_SERVLET = "GwtUiServlet";
   private static final String DOC_SERVLET = "DocServlet";
+<<<<<<< HEAD   (004bf2 Eclipse: List GWT deps after non-GWT deps)
+=======
+
+  static final String CACHE = "static_content";
+>>>>>>> BRANCH (455ed9 Buck: Remove non working local_jar rule and documentation)
 
   private final GerritOptions options;
   private Paths paths;
@@ -101,9 +106,34 @@ public class StaticModule extends ServletModule {
   @Singleton
   @Named(DOC_SERVLET)
   HttpServlet getDocServlet(@Named(CACHE) Cache<Path, Resource> cache) {
+<<<<<<< HEAD   (004bf2 Eclipse: List GWT deps after non-GWT deps)
     Paths p = getPaths();
     if (p.warFs != null) {
       return new WarDocServlet(cache, p.warFs);
+=======
+    if (warFs != null) {
+      return new WarDocServlet(cache, warFs);
+    } else {
+      return new HttpServlet() {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        protected void service(HttpServletRequest req,
+            HttpServletResponse resp) throws IOException {
+          resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
+      };
+    }
+  }
+
+  @Provides
+  @Singleton
+  @Named(GWT_UI_SERVLET)
+  HttpServlet getGwtUiServlet(@Named(CACHE) Cache<Path, Resource> cache)
+      throws IOException {
+    if (warFs != null) {
+      return new WarGwtUiServlet(cache, warFs);
+>>>>>>> BRANCH (455ed9 Buck: Remove non working local_jar rule and documentation)
     } else {
       return new HttpServlet() {
         private static final long serialVersionUID = 1L;
