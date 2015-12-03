@@ -1,0 +1,9 @@
+Verified+1: Dave Borowitz <dborowitz@google.com>
+Code-Review+1: David Ostrovsky <david.ostrovsky@gmail.com>
+Verified+1: GerritForge CI <gerritforge@gmail.com>
+Code-Review+2: Edwin Kempin <ekempin@google.com>
+Submitted-by: Edwin Kempin <ekempin@google.com>
+Submitted-at: Thu, 03 Dec 2015 16:35:16 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/72915
+Project: gerrit
+Branch: refs/heads/stable-2.12
