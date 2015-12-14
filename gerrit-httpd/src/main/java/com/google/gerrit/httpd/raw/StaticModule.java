@@ -14,7 +14,12 @@
 
 package com.google.gerrit.httpd.raw;
 
+<<<<<<< HEAD   (6c05d5 Transmitting OAuth2 access tokens as HTTP cookies)
 import static com.google.common.base.Preconditions.checkArgument;
+=======
+import static java.nio.file.Files.exists;
+import static java.nio.file.Files.isReadable;
+>>>>>>> BRANCH (4a68a0 Serve /robots.txt and /favicon.ico with StaticModule)
 
 import com.google.common.cache.Cache;
 import com.google.common.collect.ImmutableList;
@@ -23,7 +28,12 @@ import com.google.gerrit.httpd.XsrfCookieFilter;
 import com.google.gerrit.httpd.raw.ResourceServlet.Resource;
 import com.google.gerrit.launcher.GerritLauncher;
 import com.google.gerrit.server.cache.CacheModule;
+<<<<<<< HEAD   (6c05d5 Transmitting OAuth2 access tokens as HTTP cookies)
 import com.google.inject.Inject;
+=======
+import com.google.gerrit.server.config.GerritServerConfig;
+import com.google.gerrit.server.config.SitePaths;
+>>>>>>> BRANCH (4a68a0 Serve /robots.txt and /favicon.ico with StaticModule)
 import com.google.inject.Key;
 import com.google.inject.Provides;
 import com.google.inject.ProvisionException;
@@ -31,6 +41,10 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.google.inject.servlet.ServletModule;
+
+import org.eclipse.jgit.lib.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,6 +57,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class StaticModule extends ServletModule {
+<<<<<<< HEAD   (6c05d5 Transmitting OAuth2 access tokens as HTTP cookies)
   public static final String CACHE = "static_content";
 
   public static final ImmutableList<String> POLYGERRIT_INDEX_PATHS =
@@ -60,7 +75,15 @@ public class StaticModule extends ServletModule {
         "/projects/*");
 
   private static final String GWT_UI_SERVLET = "GwtUiServlet";
+=======
+  private static final Logger log =
+      LoggerFactory.getLogger(StaticModule.class);
+
+>>>>>>> BRANCH (4a68a0 Serve /robots.txt and /favicon.ico with StaticModule)
   private static final String DOC_SERVLET = "DocServlet";
+  private static final String FAVICON_SERVLET = "FaviconServlet";
+  private static final String GWT_UI_SERVLET = "GwtUiServlet";
+  private static final String ROBOTS_TXT_SERVLET = "RobotsTxtServlet";
 
   private final GerritOptions options;
   private Paths paths;
@@ -79,9 +102,14 @@ public class StaticModule extends ServletModule {
 
   @Override
   protected void configureServlets() {
-    serveRegex("^/Documentation/(.+)$").with(
-        Key.get(HttpServlet.class, Names.named(DOC_SERVLET)));
+    serveRegex("^/Documentation/(.+)$").with(named(DOC_SERVLET));
     serve("/static/*").with(SiteStaticDirectoryServlet.class);
+<<<<<<< HEAD   (6c05d5 Transmitting OAuth2 access tokens as HTTP cookies)
+=======
+    serve("/robots.txt").with(named(ROBOTS_TXT_SERVLET));
+    serve("/favicon.ico").with(named(FAVICON_SERVLET));
+    serveGwtUi();
+>>>>>>> BRANCH (4a68a0 Serve /robots.txt and /favicon.ico with StaticModule)
     install(new CacheModule() {
       @Override
       protected void configure() {
@@ -142,6 +170,7 @@ public class StaticModule extends ServletModule {
     }
   }
 
+<<<<<<< HEAD   (6c05d5 Transmitting OAuth2 access tokens as HTTP cookies)
   private class PolyGerritUiModule extends ServletModule {
     @Override
     public void configureServlets() {
@@ -157,6 +186,57 @@ public class StaticModule extends ServletModule {
           filter(p).through(rebuildFilter);
         }
         serve("/bower_components/*").with(BowerComponentsServlet.class);
+=======
+  @Provides
+  @Singleton
+  @Named(ROBOTS_TXT_SERVLET)
+  HttpServlet getRobotsTxtServlet(@GerritServerConfig Config cfg,
+      SitePaths sitePaths, @Named(CACHE) Cache<Path, Resource> cache) {
+    Path configPath = sitePaths.resolve(
+        cfg.getString("httpd", null, "robotsFile"));
+    if (configPath != null) {
+      if (exists(configPath) && isReadable(configPath)) {
+        return new SingleFileServlet(cache, configPath, true);
+      } else {
+        log.warn("Cannot read httpd.robotsFile, using default");
+      }
+    }
+    if (warFs != null) {
+      return new SingleFileServlet(cache, warFs.getPath("/robots.txt"), false);
+    } else {
+      return new SingleFileServlet(cache, webappSourcePath("robots.txt"), true);
+    }
+  }
+
+  @Provides
+  @Singleton
+  @Named(FAVICON_SERVLET)
+  HttpServlet getFaviconServlet(@Named(CACHE) Cache<Path, Resource> cache) {
+    if (warFs != null) {
+      return new SingleFileServlet(cache, warFs.getPath("/favicon.ico"), false);
+    } else {
+      return new SingleFileServlet(
+          cache, webappSourcePath("favicon.ico"), true);
+    }
+  }
+
+  private Path webappSourcePath(String name) {
+    return buckOut.resolveSibling("gerrit-war").resolve("src").resolve("main")
+        .resolve("webapp").resolve(name);
+  }
+
+  private static Key<HttpServlet> named(String name) {
+    return Key.get(HttpServlet.class, Names.named(name));
+  }
+
+  private static FileSystem getDistributionArchive() {
+    try {
+      return GerritLauncher.getDistributionArchiveFileSystem();
+    } catch (IOException e) {
+      if ((e instanceof FileNotFoundException)
+          && GerritLauncher.NOT_ARCHIVED.equals(e.getMessage())) {
+        return null;
+>>>>>>> BRANCH (4a68a0 Serve /robots.txt and /favicon.ico with StaticModule)
       } else {
         // In the war case, bower_components are either inlined by vulcanize, or
         // live under /polygerrit_ui in the war file, so we don't need a
