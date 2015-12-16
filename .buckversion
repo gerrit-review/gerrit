@@ -1,1 +1,5 @@
+<<<<<<< HEAD   (11fb1f Merge "Put Change-Id after Test: footers in commit messages.)
 1b03b4313b91b634bd604fc3487a05f877e59dee
+=======
+79d36de9f5284f6e833cca81867d6088a25685fb
+>>>>>>> BRANCH (82d556 Document that ldap.groupBase and ldap.accountBase are repeat)
