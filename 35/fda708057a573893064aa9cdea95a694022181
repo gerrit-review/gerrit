@@ -1,0 +1,9 @@
+Verified+1: GerritForge CI <gerritforge@gmail.com>
+Code-Review+1: Sven Selberg <sven.selberg@sonymobile.com>
+Code-Review+1: Sangmoon Hwang <simon.hwang@ericsson.com>
+Code-Review+2: David Pursehouse <david.pursehouse@sonymobile.com>
+Submitted-by: David Pursehouse <david.pursehouse@sonymobile.com>
+Submitted-at: Thu, 17 Dec 2015 05:45:19 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/73262
+Project: gerrit
+Branch: refs/heads/stable-2.12
