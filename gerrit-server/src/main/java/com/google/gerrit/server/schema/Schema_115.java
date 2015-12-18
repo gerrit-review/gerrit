@@ -131,7 +131,12 @@ public class Schema_115 extends SchemaVersion {
     try (Repository git = mgr.openRepository(allUsersName);
         RevWalk rw = new RevWalk(git)) {
       BatchRefUpdate bru = git.getRefDatabase().newBatchUpdate();
+<<<<<<< HEAD   (f06399 Merge "Fix the running of plugin acceptance tests in eclipse)
+=======
+
+>>>>>>> BRANCH (fbb18e Fix sending of inline comments on commit message for initial)
       for (Map.Entry<Account.Id, DiffPreferencesInfo> e : imports.entrySet()) {
+<<<<<<< HEAD   (f06399 Merge "Fix the running of plugin acceptance tests in eclipse)
         try(MetaDataUpdate md = new MetaDataUpdate(GitReferenceUpdated.DISABLED,
             allUsersName, git, bru)) {
           md.getCommitBuilder().setAuthor(serverUser);
@@ -142,6 +147,22 @@ public class Schema_115 extends SchemaVersion {
           storeSection(p.getConfig(), UserConfigSections.DIFF, null,
               e.getValue(), DiffPreferencesInfo.defaults());
           p.commit(md);
+=======
+        MetaDataUpdate md = new MetaDataUpdate(GitReferenceUpdated.DISABLED,
+            allUsersName, git, bru);
+        try {
+          md.getCommitBuilder().setAuthor(serverUser);
+          md.getCommitBuilder().setCommitter(serverUser);
+
+          VersionedAccountPreferences p =
+              VersionedAccountPreferences.forUser(e.getKey());
+          p.load(md);
+          storeSection(p.getConfig(), UserConfigSections.DIFF, null,
+              e.getValue(), DiffPreferencesInfo.defaults());
+          p.commit(md);
+        } finally {
+          md.close();
+>>>>>>> BRANCH (fbb18e Fix sending of inline comments on commit message for initial)
         }
       }
 
