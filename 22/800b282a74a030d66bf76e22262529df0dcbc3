@@ -1,0 +1,9 @@
+Code-Review+1: Sven Selberg <sven.selberg@sonymobile.com>
+Verified+1: GerritForge CI <gerritforge@gmail.com>
+Code-Review+2: Edwin Kempin <ekempin@google.com>
+Verified+1: Edwin Kempin <ekempin@google.com>
+Submitted-by: Edwin Kempin <ekempin@google.com>
+Submitted-at: Mon, 21 Dec 2015 13:20:23 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/73456
+Project: gerrit
+Branch: refs/heads/stable-2.12
