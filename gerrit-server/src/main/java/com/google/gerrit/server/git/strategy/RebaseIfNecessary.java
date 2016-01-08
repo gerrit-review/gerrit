@@ -53,6 +53,12 @@ public class RebaseIfNecessary extends SubmitStrategy {
     this.newCommits = new HashMap<>();
   }
 
+  private PersonIdent getSubmitterIdent() {
+    PersonIdent serverIdent = args.serverIdent.get();
+    return args.caller.newCommitterIdent(
+        serverIdent.getWhen(), serverIdent.getTimeZone());
+  }
+
   @Override
   public MergeTip run(final CodeReviewCommit branchTip,
       final Collection<CodeReviewCommit> toMerge) throws IntegrationException {
@@ -74,7 +80,34 @@ public class RebaseIfNecessary extends SubmitStrategy {
         } else {
           u.addOp(cid, new RebaseMultipleParentsOp(mergeTip, n));
         }
+<<<<<<< HEAD   (9f2398 Merge "Bump Closure Compiler version to v20151216")
         first = false;
+=======
+
+      } else if (n.getParentCount() > 1) {
+        // There are multiple parents, so this is a merge commit. We
+        // don't want to rebase the merge as clients can't easily
+        // rebase their history with that merge present and replaced
+        // by an equivalent merge with a different first parent. So
+        // instead behave as though MERGE_IF_NECESSARY was configured.
+        //
+        try {
+          if (args.rw.isMergedInto(mergeTip.getCurrentTip(), n)) {
+            mergeTip.moveTipTo(n, n);
+          } else {
+            PersonIdent myIdent = getSubmitterIdent();
+            mergeTip.moveTipTo(
+                args.mergeUtil.mergeOneCommit(myIdent, myIdent,
+                    args.repo, args.rw, args.inserter, args.canMergeFlag,
+                    args.destBranch, mergeTip.getCurrentTip(), n), n);
+          }
+          args.mergeUtil.markCleanMerges(args.rw, args.canMergeFlag,
+              mergeTip.getCurrentTip(), args.alreadyAccepted);
+          setRefLogIdent();
+        } catch (IOException e) {
+          throw new IntegrationException("Cannot merge " + n.name(), e);
+        }
+>>>>>>> BRANCH (97d4da Update cookbook submodule)
       }
       u.execute();
     } catch (UpdateException e) {
@@ -264,6 +297,25 @@ public class RebaseIfNecessary extends SubmitStrategy {
     }
   }
 
+<<<<<<< HEAD   (9f2398 Merge "Bump Closure Compiler version to v20151216")
+=======
+  private PatchSet rebase(CodeReviewCommit n, MergeTip mergeTip)
+      throws RestApiException, UpdateException, OrmException {
+    RebaseChangeOp op = rebaseFactory.create(
+          n.getControl(),
+          args.db.patchSets().get(n.getPatchsetId()),
+          mergeTip.getCurrentTip().name())
+        .setCommitterIdent(getSubmitterIdent())
+        .setRunHooks(false)
+        .setValidatePolicy(CommitValidators.Policy.NONE);
+    try (BatchUpdate bu = args.newBatchUpdate(TimeUtil.nowTs())) {
+      bu.addOp(n.change().getId(), op);
+      bu.execute();
+    }
+    return op.getPatchSet();
+  }
+
+>>>>>>> BRANCH (97d4da Update cookbook submodule)
   @Override
   public Map<Change.Id, CodeReviewCommit> getNewCommits() {
     return newCommits;

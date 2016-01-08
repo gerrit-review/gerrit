@@ -492,9 +492,35 @@ public class MergeOp implements AutoCloseable {
     try {
       Multimap<Project.NameKey, Branch.NameKey> br = cs.branchesByProject();
       Multimap<Branch.NameKey, ChangeData> cbb = cs.changesByBranch();
+<<<<<<< HEAD   (9f2398 Merge "Bump Closure Compiler version to v20151216")
       for (Branch.NameKey branch : cbb.keySet()) {
         OpenRepo or = openRepo(branch.getParentKey());
         toSubmit.put(branch, validateChangeList(or, cbb.get(branch)));
+=======
+      for (Project.NameKey project : br.keySet()) {
+        openRepository(project);
+        for (Branch.NameKey branch : br.get(project)) {
+          setDestProject(branch);
+
+          ListMultimap<SubmitType, ChangeData> submitting =
+              validateChangeList(cbb.get(branch), caller);
+          toSubmit.put(branch, submitting);
+
+          Set<SubmitType> submitTypes = new HashSet<>(submitting.keySet());
+          for (SubmitType submitType : submitTypes) {
+            SubmitStrategy strategy = createStrategy(branch, submitType,
+                getBranchTip(branch), caller);
+
+            MergeTip mergeTip = preMerge(strategy, submitting.get(submitType),
+                getBranchTip(branch));
+            mergeTips.put(branch, mergeTip);
+            updateChangeStatus(submitting.get(submitType), branch,
+                true, caller);
+          }
+          inserter.flush();
+        }
+        closeRepository();
+>>>>>>> BRANCH (97d4da Update cookbook submodule)
       }
       failFast(cs); // Done checks that don't involve running submit strategies.
 
@@ -598,6 +624,7 @@ public class MergeOp implements AutoCloseable {
     return alreadyAccepted;
   }
 
+<<<<<<< HEAD   (9f2398 Merge "Bump Closure Compiler version to v20151216")
   @AutoValue
   static abstract class BranchBatch {
     abstract SubmitType submitType();
@@ -617,6 +644,11 @@ public class MergeOp implements AutoCloseable {
 
   private BranchBatch validateChangeList(OpenRepo or,
       Collection<ChangeData> submitted) throws IntegrationException {
+=======
+  private ListMultimap<SubmitType, ChangeData> validateChangeList(
+      Collection<ChangeData> submitted, IdentifiedUser caller)
+    throws IntegrationException {
+>>>>>>> BRANCH (97d4da Update cookbook submodule)
     logDebug("Validating {} changes", submitted.size());
     List<ChangeData> toSubmit = new ArrayList<>(submitted.size());
     Multimap<ObjectId, PatchSet.Id> revisions = getRevisions(or, submitted);
@@ -691,7 +723,11 @@ public class MergeOp implements AutoCloseable {
       MergeValidators mergeValidators = mergeValidatorsFactory.create();
       try {
         mergeValidators.validatePreMerge(
+<<<<<<< HEAD   (9f2398 Merge "Bump Closure Compiler version to v20151216")
             or.repo, commit, or.project, destBranch, ps.getId());
+=======
+            repo, commit, destProject, destBranch, ps.getId(), caller);
+>>>>>>> BRANCH (97d4da Update cookbook submodule)
       } catch (MergeValidationException mve) {
         problems.put(changeId, mve.getMessage());
         continue;
