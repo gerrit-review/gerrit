@@ -202,8 +202,68 @@ public class OutputStreamQuery {
           for (ChangeData d : results.changes()) {
             show(buildChangeAttribute(d, repos, revWalks));
           }
+<<<<<<< HEAD   (790d33 Fix exploded war deployment in application container)
         } finally {
           closeAll(revWalks.values(), repos.values());
+=======
+
+          if (includeAllReviewers) {
+            eventFactory.addAllReviewers(c, d.notes());
+          }
+
+          if (includeSubmitRecords) {
+            eventFactory.addSubmitRecords(c, new SubmitRuleEvaluator(d)
+                .setAllowClosed(true)
+                .setAllowDraft(true)
+                .evaluate());
+          }
+
+          if (includeCommitMessage) {
+            eventFactory.addCommitMessage(c, d.commitMessage());
+          }
+
+          if (includePatchSets) {
+            if (includeFiles) {
+              eventFactory.addPatchSets(c, d.patches(),
+                  includeApprovals ? d.approvals().asMap() : null,
+                  includeFiles, d.change(), labelTypes);
+            } else {
+              eventFactory.addPatchSets(c, d.patches(),
+                  includeApprovals ? d.approvals().asMap() : null,
+                  labelTypes);
+            }
+          }
+
+          if (includeCurrentPatchSet) {
+            PatchSet current = d.currentPatchSet();
+            if (current != null) {
+              c.currentPatchSet = eventFactory.asPatchSetAttribute(current);
+              eventFactory.addApprovals(c.currentPatchSet,
+                  d.currentApprovals(), labelTypes);
+
+              if (includeFiles) {
+                eventFactory.addPatchSetFileNames(c.currentPatchSet,
+                    d.change(), d.currentPatchSet());
+              }
+            }
+          }
+
+          if (includeComments) {
+            eventFactory.addComments(c, d.messages());
+            if (includePatchSets) {
+              eventFactory.addPatchSets(c, d.patches(), labelTypes);
+              for (PatchSetAttribute attribute : c.patchSets) {
+                eventFactory.addPatchSetComments(attribute,  d.publishedComments());
+              }
+            }
+          }
+
+          if (includeDependencies) {
+            eventFactory.addDependencies(c, d.change());
+          }
+
+          show(c);
+>>>>>>> BRANCH (e406ea OutputStreamQuery: Properly initialize c.patchSets)
         }
 
         stats.rowCount = results.changes().size();
