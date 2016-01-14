@@ -80,14 +80,53 @@ public class StaticModule extends ServletModule {
   private final GerritOptions options;
   private Paths paths;
 
+<<<<<<< HEAD   (8afc54 Merge "Get project,ref,changekey without calling supplier")
   @Inject
   public StaticModule(GerritOptions options) {
     this.options = options;
   }
+=======
+  private final FileSystem warFs;
+  private final Path buckOut;
+  private final Path unpackedWar;
+  private final boolean development;
+>>>>>>> BRANCH (f5eb71 Merge changes I11e46f48,I051dff5e into stable-2.12)
 
+<<<<<<< HEAD   (8afc54 Merge "Get project,ref,changekey without calling supplier")
   private Paths getPaths() {
     if (paths == null) {
       paths = new Paths();
+=======
+  public StaticModule() {
+    File launcherLoadedFrom = getLauncherLoadedFrom();
+    if (launcherLoadedFrom != null
+        && launcherLoadedFrom.getName().endsWith(".jar")) {
+      // Special case: unpacked war archive deployed in container.
+      // The path is something like:
+      // <container>/<gerrit>/WEB-INF/lib/launcher.jar
+      // Switch to exploded war case with <container>/webapp>/<gerrit>
+      // root directory
+      warFs = null;
+      unpackedWar = java.nio.file.Paths.get(launcherLoadedFrom
+          .getParentFile()
+          .getParentFile()
+          .getParentFile()
+          .toURI());
+      buckOut = null;
+      development = false;
+      return;
+    }
+
+    warFs = getDistributionArchive();
+    if (warFs == null) {
+      buckOut = getDeveloperBuckOut();
+      unpackedWar = makeWarTempDir();
+      development = true;
+    } else {
+      buckOut = null;
+      unpackedWar = null;
+      development = false;
+>>>>>>> BRANCH (f5eb71 Merge changes I11e46f48,I051dff5e into stable-2.12)
     }
     return paths;
   }
@@ -104,12 +143,22 @@ public class StaticModule extends ServletModule {
             .weigher(ResourceServlet.Weigher.class);
       }
     });
+<<<<<<< HEAD   (8afc54 Merge "Get project,ref,changekey without calling supplier")
     if (options.enablePolyGerrit()) {
       install(new CoreStaticModule());
       install(new PolyGerritUiModule());
     } else if (options.enableDefaultUi()) {
       install(new CoreStaticModule());
       install(new GwtUiModule());
+=======
+  }
+
+  private void serveGwtUi() {
+    serveRegex("^/gerrit_ui/(?!rpc/)(.*)$")
+        .with(Key.get(HttpServlet.class, Names.named(GWT_UI_SERVLET)));
+    if (development) {
+      filter("/").through(new RecompileGwtUiFilter(buckOut, unpackedWar));
+>>>>>>> BRANCH (f5eb71 Merge changes I11e46f48,I051dff5e into stable-2.12)
     }
   }
 
@@ -133,11 +182,23 @@ public class StaticModule extends ServletModule {
     }
   }
 
+<<<<<<< HEAD   (8afc54 Merge "Get project,ref,changekey without calling supplier")
   private class CoreStaticModule extends ServletModule {
     @Override
     public void configureServlets() {
       serve("/robots.txt").with(named(ROBOTS_TXT_SERVLET));
       serve("/favicon.ico").with(named(FAVICON_SERVLET));
+=======
+  @Provides
+  @Singleton
+  @Named(GWT_UI_SERVLET)
+  HttpServlet getGwtUiServlet(@Named(CACHE) Cache<Path, Resource> cache)
+      throws IOException {
+    if (warFs != null) {
+      return new WarGwtUiServlet(cache, warFs);
+    } else {
+      return new DirectoryGwtUiServlet(cache, unpackedWar, development);
+>>>>>>> BRANCH (f5eb71 Merge changes I11e46f48,I051dff5e into stable-2.12)
     }
 
     @Provides
@@ -164,6 +225,7 @@ public class StaticModule extends ServletModule {
       }
     }
 
+<<<<<<< HEAD   (8afc54 Merge "Get project,ref,changekey without calling supplier")
     @Provides
     @Singleton
     @Named(FAVICON_SERVLET)
@@ -172,6 +234,39 @@ public class StaticModule extends ServletModule {
       if (p.warFs != null) {
         return new SingleFileServlet(
             cache, p.warFs.getPath("/favicon.ico"), false);
+=======
+  @Provides
+  @Singleton
+  @Named(FAVICON_SERVLET)
+  HttpServlet getFaviconServlet(@Named(CACHE) Cache<Path, Resource> cache) {
+    if (warFs != null) {
+      return new SingleFileServlet(cache, warFs.getPath("/favicon.ico"), false);
+    } else {
+      return new SingleFileServlet(
+          cache, webappSourcePath("favicon.ico"), true);
+    }
+  }
+
+  private Path webappSourcePath(String name) {
+    if (unpackedWar != null) {
+      return unpackedWar.resolve(name);
+    }
+    return buckOut.resolveSibling("gerrit-war").resolve("src").resolve("main")
+        .resolve("webapp").resolve(name);
+  }
+
+  private static Key<HttpServlet> named(String name) {
+    return Key.get(HttpServlet.class, Names.named(name));
+  }
+
+  private static FileSystem getDistributionArchive() {
+    try {
+      return GerritLauncher.getDistributionArchiveFileSystem();
+    } catch (IOException e) {
+      if ((e instanceof FileNotFoundException)
+          && GerritLauncher.NOT_ARCHIVED.equals(e.getMessage())) {
+        return null;
+>>>>>>> BRANCH (f5eb71 Merge changes I11e46f48,I051dff5e into stable-2.12)
       } else {
         return new SingleFileServlet(
             cache, webappSourcePath("favicon.ico"), true);
@@ -354,7 +449,58 @@ public class StaticModule extends ServletModule {
     }
   }
 
+<<<<<<< HEAD   (8afc54 Merge "Get project,ref,changekey without calling supplier")
   private static Key<HttpServlet> named(String name) {
     return Key.get(HttpServlet.class, Names.named(name));
+=======
+  private static File getLauncherLoadedFrom() {
+    try {
+      return GerritLauncher.getDistributionArchive();
+    } catch (IOException e) {
+      if ((e instanceof FileNotFoundException)
+          && GerritLauncher.NOT_ARCHIVED.equals(e.getMessage())) {
+        return null;
+      } else {
+        ProvisionException pe =
+            new ProvisionException("Error reading gerrit.war");
+        pe.initCause(e);
+        throw pe;
+      }
+    }
+  }
+
+  private static Path getDeveloperBuckOut() {
+    try {
+      return GerritLauncher.getDeveloperBuckOut();
+    } catch (FileNotFoundException e) {
+      return null;
+    }
+  }
+
+  private static Path makeWarTempDir() {
+    // Obtain our local temporary directory, but it comes back as a file
+    // so we have to switch it to be a directory post creation.
+    //
+    try {
+      File dstwar = GerritLauncher.createTempFile("gerrit_", "war");
+      if (!dstwar.delete() || !dstwar.mkdir()) {
+        throw new IOException("Cannot mkdir " + dstwar.getAbsolutePath());
+      }
+
+      // Jetty normally refuses to serve out of a symlinked directory, as
+      // a security feature. Try to resolve out any symlinks in the path.
+      //
+      try {
+        return dstwar.getCanonicalFile().toPath();
+      } catch (IOException e) {
+        return dstwar.getAbsoluteFile().toPath();
+      }
+    } catch (IOException e) {
+      ProvisionException pe =
+          new ProvisionException("Cannot create war tempdir");
+      pe.initCause(e);
+      throw pe;
+    }
+>>>>>>> BRANCH (f5eb71 Merge changes I11e46f48,I051dff5e into stable-2.12)
   }
 }
