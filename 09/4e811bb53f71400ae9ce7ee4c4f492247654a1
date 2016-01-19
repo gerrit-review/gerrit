@@ -1,0 +1,9 @@
+Code-Review+1: David Ostrovsky <david.ostrovsky@gmail.com>
+Verified+1: GerritForge CI <gerritforge@gmail.com>
+Verified+1: David Pursehouse <david.pursehouse@sonymobile.com>
+Code-Review+2: Edwin Kempin <ekempin@google.com>
+Submitted-by: Edwin Kempin <ekempin@google.com>
+Submitted-at: Tue, 19 Jan 2016 08:10:33 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/73896
+Project: gerrit
+Branch: refs/heads/stable-2.12
