@@ -1,0 +1,9 @@
+Verified+1: GerritForge CI <gerritforge@gmail.com>
+Verified+1: David Ostrovsky <david.ostrovsky@gmail.com>
+Code-Review+1: Henrik Laban Sköllermark <laban@kryo.se>
+Code-Review+2: David Pursehouse <david.pursehouse@sonymobile.com>
+Submitted-by: David Pursehouse <david.pursehouse@sonymobile.com>
+Submitted-at: Thu, 21 Jan 2016 08:43:55 +0000
+Reviewed-on: https://gerrit-review.googlesource.com/73879
+Project: gerrit
+Branch: refs/heads/stable-2.12
