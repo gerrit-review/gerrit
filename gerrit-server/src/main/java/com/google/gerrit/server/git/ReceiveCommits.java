@@ -114,7 +114,6 @@ import com.google.gerrit.server.notedb.ChangeUpdate;
 import com.google.gerrit.server.notedb.NotesMigration;
 import com.google.gerrit.server.patch.PatchSetInfoFactory;
 import com.google.gerrit.server.project.ChangeControl;
-import com.google.gerrit.server.project.NoSuchChangeException;
 import com.google.gerrit.server.project.ProjectCache;
 import com.google.gerrit.server.project.ProjectControl;
 import com.google.gerrit.server.project.ProjectState;
@@ -2145,8 +2144,12 @@ public class ReceiveCommits {
       ListenableFuture<PatchSet.Id> future = changeUpdateExector.submit(
           requestScopePropagator.wrap(new Callable<PatchSet.Id>() {
         @Override
+<<<<<<< HEAD   (6822c9 Update replication plugin to latest revision)
         public PatchSet.Id call() throws OrmException, IOException,
             NoSuchChangeException, ResourceConflictException {
+=======
+        public PatchSet.Id call() throws OrmException, IOException {
+>>>>>>> BRANCH (a5f203 Expose IndexCollection in plugin guice injector)
           try {
             if (magicBranch != null && magicBranch.edit) {
               return upsertEdit();
@@ -2157,6 +2160,9 @@ public class ReceiveCommits {
                 return insertPatchSet(db);
               }
             }
+          } catch (OrmException | IOException  e) {
+            log.error("Failed to insert patch set", e);
+            throw e;
           } finally {
             synchronized (replaceProgress) {
               replaceProgress.update(1);

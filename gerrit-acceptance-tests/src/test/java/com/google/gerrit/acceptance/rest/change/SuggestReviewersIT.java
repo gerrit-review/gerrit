@@ -62,9 +62,18 @@ public class SuggestReviewersIT extends AbstractDaemonTest {
     group2 = group("users2");
     group3 = group("users3");
 
+<<<<<<< HEAD   (6822c9 Update replication plugin to latest revision)
     user1 = user("user1", "First1 Last1", group1);
     user2 = user("user2", "First2 Last2", group2);
     user3 = user("user3", "First3 Last3", group1, group2);
+=======
+    user1 = accounts.create("user1", "user1@example.com", "First1 Last1",
+        "users1");
+    user2 = accounts.create("user2", "user2@example.com", "First2 Last2",
+        "users2");
+    user3 = accounts.create("user3", "USER3@example.com", "First3 Last3",
+        "users1", "users2");
+>>>>>>> BRANCH (a5f203 Expose IndexCollection in plugin guice injector)
   }
 
   @Test
@@ -213,6 +222,10 @@ public class SuggestReviewersIT extends AbstractDaemonTest {
 
     reviewers = suggestReviewers(changeId, user1.username + " example", 2);
     assertThat(reviewers).hasSize(1);
+
+    reviewers = suggestReviewers(changeId, "user3@example.com", 2);
+    assertThat(reviewers).hasSize(1);
+    assertThat(reviewers.get(0).account.email).isEqualTo("USER3@example.com");
   }
 
   @Test

@@ -193,9 +193,15 @@ public class RebaseIfNecessary extends SubmitStrategy {
 
   @Override
   public boolean dryRun(CodeReviewCommit mergeTip, CodeReviewCommit toMerge)
+<<<<<<< HEAD   (6822c9 Update replication plugin to latest revision)
       throws IntegrationException {
+=======
+      throws MergeException {
+    // Test for merge instead of cherry pick to avoid false negatives
+    // on commit chains.
+>>>>>>> BRANCH (a5f203 Expose IndexCollection in plugin guice injector)
     return !args.mergeUtil.hasMissingDependencies(args.mergeSorter, toMerge)
-        && args.mergeUtil.canCherryPick(args.mergeSorter, args.repo, mergeTip,
-            args.rw, toMerge);
+        && args.mergeUtil.canMerge(args.mergeSorter, args.repo, mergeTip,
+             toMerge);
   }
 }
