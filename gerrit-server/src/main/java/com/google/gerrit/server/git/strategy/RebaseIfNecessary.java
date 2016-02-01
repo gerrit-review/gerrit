@@ -193,9 +193,15 @@ public class RebaseIfNecessary extends SubmitStrategy {
 
   @Override
   public boolean dryRun(CodeReviewCommit mergeTip, CodeReviewCommit toMerge)
+<<<<<<< HEAD   (7506b9 Update replication plugin to latest revision)
       throws IntegrationException {
+=======
+      throws MergeException {
+    // Test for merge instead of cherry pick to avoid false negatives
+    // on commit chains.
+>>>>>>> BRANCH (5617f9 Release notes for Gerrit 2.11.6)
     return !args.mergeUtil.hasMissingDependencies(args.mergeSorter, toMerge)
-        && args.mergeUtil.canCherryPick(args.mergeSorter, args.repo, mergeTip,
-            args.rw, toMerge);
+        && args.mergeUtil.canMerge(args.mergeSorter, args.repo, mergeTip,
+             toMerge);
   }
 }
