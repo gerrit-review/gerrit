@@ -2,4 +2,8 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (d50dac Merge branch 'stable-2.11' into stable-2.12)
 GERRIT_VERSION = '2.12'
+=======
+GERRIT_VERSION = '2.11.6'
+>>>>>>> BRANCH (747850 Set version to 2.11.6)
