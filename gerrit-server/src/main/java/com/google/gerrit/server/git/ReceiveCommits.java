@@ -760,10 +760,17 @@ public class ReceiveCommits {
           if (replace.insertPatchSet().checkedGet() != null) {
             replace.inputCommand.setResult(OK);
           }
+<<<<<<< HEAD   (7f31a6 ChangeData: Throw exception when failing to reload change)
         } catch (IOException | RestApiException err) {
           reject(replace.inputCommand, "internal server error");
           log.error(String.format(
               "Cannot add patch set to %d of %s",
+=======
+        } catch (IOException | InsertException err) {
+          reject(replace.inputCommand, "internal server error");
+          log.error(String.format(
+              "Cannot add patch set to change %d in project %s",
+>>>>>>> BRANCH (955c87 ReceiveCommits: Improve error message when failing to insert)
               e.getKey().get(), project.getName()), err);
         }
       } else if (replace.inputCommand.getResult() == NOT_ATTEMPTED) {

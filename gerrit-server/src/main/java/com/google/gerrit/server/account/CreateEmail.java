@@ -126,7 +126,11 @@ public class CreateEmail implements RestModifyView<AccountResource, EmailInput> 
       }
     } else {
       try {
-        registerNewEmailFactory.create(email).send();
+        RegisterNewEmailSender sender = registerNewEmailFactory.create(email);
+        if (!sender.isAllowed()) {
+          throw new MethodNotAllowedException("Not allowed to add email address " + email);
+        }
+        sender.send();
         info.pendingConfirmation = true;
       } catch (EmailException | RuntimeException e) {
         log.error("Cannot send email verification message to " + email, e);
