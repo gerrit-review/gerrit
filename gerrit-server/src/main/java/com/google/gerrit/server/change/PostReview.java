@@ -163,6 +163,26 @@ public class PostReview implements RestModifyView<RevisionResource, ReviewInput>
           new Op(revision.getPatchSet().getId(), input));
       bu.execute();
     }
+<<<<<<< HEAD   (6da228 Remove index defaultMaxClauseCount config setting while reus)
+=======
+
+    CheckedFuture<?, IOException> indexWrite;
+    if (dirty) {
+      indexWrite = indexer.indexAsync(change.getId());
+    } else {
+      indexWrite = Futures.<Void, IOException> immediateCheckedFuture(null);
+    }
+    if (message != null && input.notify.compareTo(NotifyHandling.NONE) > 0) {
+      email.create(
+          input.notify,
+          change,
+          revision.getPatchSet(),
+          revision.getUser(),
+          message,
+          comments).sendAsync();
+    }
+
+>>>>>>> BRANCH (e39cb5 EmailReviewComments: Provide the current user instead of exc)
     Output output = new Output();
     output.labels = input.labels;
     return output;
