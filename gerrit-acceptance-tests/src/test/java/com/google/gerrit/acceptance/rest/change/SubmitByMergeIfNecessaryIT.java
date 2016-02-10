@@ -296,11 +296,17 @@ public class SubmitByMergeIfNecessaryIT extends AbstractSubmitByMerge {
         "a.txt", "1", "a-topic-here");
     approve(change3b.getChangeId());
 
+<<<<<<< HEAD   (685b5b Merge changes from topic 'no-changes-made')
     String cnt = isSubmitWholeTopicEnabled() ? "2 changes" : "1 change";
     submitWithConflict(change3a.getChangeId(),
         "Failed to submit " + cnt + " due to the following problems:\n"
         + "Change " + change3a.getChange().getId() + ": depends on change that"
         + " was not submitted");
+=======
+    submitWithConflict(change3a.getChangeId(), "Cannot merge " +
+        change3a.getCommit().name() +
+        "\nMissing dependency");
+>>>>>>> BRANCH (a3f22a EmailMerge: provide user when available)
 
     RevCommit tipbranch = getRemoteLog(project, "branch").get(0);
     assertThat(tipbranch.getShortMessage()).isEqualTo(

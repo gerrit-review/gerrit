@@ -29,7 +29,12 @@ import org.eclipse.jgit.lib.Config;
  */
 @AutoValue
 public abstract class IndexConfig {
+<<<<<<< HEAD   (685b5b Merge changes from topic 'no-changes-made')
   private static final int DEFAULT_MAX_TERMS = 500;
+=======
+  private static final int DEFAULT_MAX_TERMS = 1024;
+  private static final int DEFAULT_MAX_PREFIX_TERMS = 100;
+>>>>>>> BRANCH (a3f22a EmailMerge: provide user when available)
 
   public static IndexConfig createDefault() {
     return create(0, 0, DEFAULT_MAX_TERMS);
@@ -47,7 +52,12 @@ public abstract class IndexConfig {
     return new AutoValue_IndexConfig(
         checkLimit(maxLimit, "maxLimit", Integer.MAX_VALUE),
         checkLimit(maxPages, "maxPages", Integer.MAX_VALUE),
+<<<<<<< HEAD   (685b5b Merge changes from topic 'no-changes-made')
         checkLimit(maxTerms, "maxTerms", Integer.MAX_VALUE));
+=======
+        checkLimit(maxTerms, "maxTerms", DEFAULT_MAX_TERMS),
+        checkLimit(maxPrefixTerms, "maxPrefixTerms", DEFAULT_MAX_PREFIX_TERMS));
+>>>>>>> BRANCH (a3f22a EmailMerge: provide user when available)
   }
 
   private static int checkLimit(int limit, String name, int defaultValue) {

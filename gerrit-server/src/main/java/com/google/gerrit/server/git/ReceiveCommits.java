@@ -184,7 +184,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
+<<<<<<< HEAD   (685b5b Merge changes from topic 'no-changes-made')
 import java.util.concurrent.ExecutionException;
+=======
+>>>>>>> BRANCH (a3f22a EmailMerge: provide user when available)
 import java.util.concurrent.ExecutorService;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -798,7 +801,7 @@ public class ReceiveCommits {
         } catch (RestApiException err) {
           reject(replace.inputCommand, "internal server error");
           log.error(String.format(
-              "Cannot add patch set to %d of %s",
+              "Cannot add patch set to change %d in project %s",
               e.getKey().get(), project.getName()), err);
         }
       } else if (replace.inputCommand.getResult() == NOT_ATTEMPTED) {
@@ -1752,7 +1755,11 @@ public class ReceiveCommits {
           // Changes already validated in validateNewCommits.
           .setValidatePolicy(CommitValidators.Policy.NONE);
       cmd = new ReceiveCommand(ObjectId.zeroId(), c,
+<<<<<<< HEAD   (685b5b Merge changes from topic 'no-changes-made')
           ins.getPatchSetId().toRefName());
+=======
+          ins.getPatchSet().getRefName());
+>>>>>>> BRANCH (a3f22a EmailMerge: provide user when available)
       ins.setUpdateRefCommand(cmd);
     }
 
@@ -2161,7 +2168,11 @@ public class ReceiveCommits {
           requestScopePropagator.wrap(new Callable<PatchSet.Id>() {
         @Override
         public PatchSet.Id call() throws OrmException, IOException,
+<<<<<<< HEAD   (685b5b Merge changes from topic 'no-changes-made')
             RestApiException {
+=======
+            ResourceConflictException {
+>>>>>>> BRANCH (a3f22a EmailMerge: provide user when available)
           try {
             if (magicBranch != null && magicBranch.edit) {
               return upsertEdit();
@@ -2169,6 +2180,9 @@ public class ReceiveCommits {
             try (RequestState state = requestState(caller)) {
               return insertPatchSet(state);
             }
+          } catch (OrmException | IOException  e) {
+            log.error("Failed to insert patch set", e);
+            throw e;
           } finally {
             synchronizedIncrement(replaceProgress);
           }
@@ -2812,7 +2826,12 @@ public class ReceiveCommits {
     update.commit();
   }
 
+<<<<<<< HEAD   (685b5b Merge changes from topic 'no-changes-made')
   private void sendMergedEmail(final PatchSet ps, final PatchSetInfo info) {
+=======
+  private void sendMergedEmail(final ReplaceRequest result) {
+    final Change.Id id = result.change.getId();
+>>>>>>> BRANCH (a3f22a EmailMerge: provide user when available)
     sendEmailExecutor.submit(requestScopePropagator.wrap(new Runnable() {
       @Override
       public void run() {

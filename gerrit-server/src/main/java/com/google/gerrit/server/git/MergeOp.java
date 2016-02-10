@@ -572,7 +572,7 @@ public class MergeOp implements AutoCloseable {
         integrateIntoHistory(cs);
       } catch (IntegrationException e) {
         logError("Merge Conflict", e);
-        throw new ResourceConflictException("Merge Conflict", e);
+        throw new ResourceConflictException(e.getMessage());
       }
     } catch (IOException e) {
       // Anything before the merge attempt is an error
@@ -700,6 +700,7 @@ public class MergeOp implements AutoCloseable {
     return alreadyAccepted;
   }
 
+<<<<<<< HEAD   (685b5b Merge changes from topic 'no-changes-made')
   @AutoValue
   static abstract class BranchBatch {
     abstract SubmitType submitType();
@@ -708,6 +709,12 @@ public class MergeOp implements AutoCloseable {
 
   private BranchBatch validateChangeList(OpenRepo or,
       Collection<ChangeData> submitted) throws IntegrationException {
+=======
+  private ListMultimap<SubmitType, ChangeData> validateChangeList(
+      Collection<ChangeData> submitted, IdentifiedUser caller)
+      throws IntegrationException, ResourceConflictException,
+      NoSuchChangeException, OrmException {
+>>>>>>> BRANCH (a3f22a EmailMerge: provide user when available)
     logDebug("Validating {} changes", submitted.size());
     List<ChangeData> toSubmit = new ArrayList<>(submitted.size());
     Multimap<ObjectId, PatchSet.Id> revisions = getRevisions(or, submitted);
@@ -806,6 +813,11 @@ public class MergeOp implements AutoCloseable {
       commit.add(or.canMergeFlag);
       toSubmit.add(cd);
     }
+
+    List<ChangeData> notSubmittable = new ArrayList<>(submitted);
+    notSubmittable.removeAll(toSubmit.values());
+    updateChangeStatus(notSubmittable, null, false, caller);
+
     logDebug("Submitting on this run: {}", toSubmit);
     return new AutoValue_MergeOp_BranchBatch(submitType, toSubmit);
   }
@@ -843,9 +855,222 @@ public class MergeOp implements AutoCloseable {
     }
   }
 
+<<<<<<< HEAD   (685b5b Merge changes from topic 'no-changes-made')
   private void updateSubmoduleSubscriptions(OpenBranch ob, SubmoduleOp subOp) {
     CodeReviewCommit branchTip = ob.oldTip;
     MergeTip mergeTip = ob.mergeTip;
+=======
+  private RefUpdate updateBranch(Branch.NameKey destBranch)
+      throws IntegrationException {
+    RefUpdate branchUpdate = getPendingRefUpdate(destBranch);
+    CodeReviewCommit branchTip = getBranchTip(destBranch);
+
+    MergeTip mergeTip = mergeTips.get(destBranch);
+
+    CodeReviewCommit currentTip =
+        mergeTip != null ? mergeTip.getCurrentTip() : null;
+    if (Objects.equals(branchTip, currentTip)) {
+      if (currentTip != null) {
+        logDebug("Branch already at merge tip {}, no update to perform",
+            currentTip.name());
+      } else {
+        logDebug("Both branch and merge tip are nonexistent, no update");
+      }
+      return null;
+    } else if (currentTip == null) {
+      logDebug("No merge tip, no update to perform");
+      return null;
+    }
+
+    if (RefNames.REFS_CONFIG.equals(branchUpdate.getName())) {
+      logDebug("Loading new configuration from {}", RefNames.REFS_CONFIG);
+      try {
+        ProjectConfig cfg =
+            new ProjectConfig(destProject.getProject().getNameKey());
+        cfg.load(repo, currentTip);
+      } catch (Exception e) {
+        throw new IntegrationException("Submit would store invalid"
+            + " project configuration " + currentTip.name() + " for "
+            + destProject.getProject().getName(), e);
+      }
+    }
+
+    branchUpdate.setRefLogIdent(refLogIdent);
+    branchUpdate.setForceUpdate(false);
+    branchUpdate.setNewObjectId(currentTip);
+    branchUpdate.setRefLogMessage("merged", true);
+    try {
+      RefUpdate.Result result = branchUpdate.update(rw);
+      logDebug("Update of {}: {}..{} returned status {}",
+          branchUpdate.getName(), branchUpdate.getOldObjectId(),
+          branchUpdate.getNewObjectId(), result);
+      switch (result) {
+        case NEW:
+        case FAST_FORWARD:
+          if (branchUpdate.getResult() == RefUpdate.Result.FAST_FORWARD) {
+            tagCache.updateFastForward(destBranch.getParentKey(),
+                branchUpdate.getName(),
+                branchUpdate.getOldObjectId(),
+                currentTip);
+          }
+
+          if (RefNames.REFS_CONFIG.equals(branchUpdate.getName())) {
+            Project p = destProject.getProject();
+            projectCache.evict(p);
+            destProject = projectCache.get(p.getNameKey());
+            repoManager.setProjectDescription(
+                p.getNameKey(), p.getDescription());
+          }
+
+          return branchUpdate;
+
+        case LOCK_FAILURE:
+          throw new IntegrationException("Failed to lock " + branchUpdate.getName());
+        default:
+          throw new IOException(branchUpdate.getResult().name()
+              + '\n' + branchUpdate);
+      }
+    } catch (IOException e) {
+      throw new IntegrationException("Cannot update " + branchUpdate.getName(), e);
+    }
+  }
+
+  private void fireRefUpdated(Branch.NameKey destBranch,
+      RefUpdate branchUpdate) {
+    logDebug("Firing ref updated hooks for {}", branchUpdate.getName());
+    gitRefUpdated.fire(destBranch.getParentKey(), branchUpdate);
+    hooks.doRefUpdatedHook(destBranch, branchUpdate,
+        getAccount(mergeTips.get(destBranch).getCurrentTip()));
+  }
+
+  private Account getAccount(CodeReviewCommit codeReviewCommit) {
+    Account account = null;
+    PatchSetApproval submitter = approvalsUtil.getSubmitter(
+        db, codeReviewCommit.notes(), codeReviewCommit.getPatchsetId());
+    if (submitter != null) {
+      account = accountCache.get(submitter.getAccountId()).getAccount();
+    }
+    return account;
+  }
+
+  private String getByAccountName(CodeReviewCommit codeReviewCommit) {
+    Account account = getAccount(codeReviewCommit);
+    if (account != null && account.getFullName() != null) {
+      return " by " + account.getFullName();
+    }
+    return "";
+  }
+
+  private void updateChangeStatus(List<ChangeData> changes,
+      Branch.NameKey destBranch, boolean dryRun, IdentifiedUser caller)
+      throws NoSuchChangeException, IntegrationException, ResourceConflictException,
+      OrmException {
+    if (!dryRun) {
+      logDebug("Updating change status for {} changes", changes.size());
+    } else {
+      logDebug("Checking change state for {} changes in a dry run",
+          changes.size());
+    }
+    MergeTip mergeTip = destBranch != null ? mergeTips.get(destBranch) : null;
+    for (ChangeData cd : changes) {
+      Change c = cd.change();
+      CodeReviewCommit commit = commits.get(c.getId());
+      CommitMergeStatus s = commit != null ? commit.getStatusCode() : null;
+      if (s == null) {
+        // Shouldn't ever happen, but leave the change alone. We'll pick
+        // it up on the next pass.
+        //
+        logDebug("Submitted change {} did not appear in set of new commits"
+            + " produced by merge strategy", c.getId());
+        continue;
+      }
+
+      if (!dryRun) {
+        try {
+          setApproval(cd, caller);
+        } catch (IOException e) {
+          throw new OrmException(e);
+        }
+      }
+
+      String txt = s.getMessage();
+      logDebug("Status of change {} ({}) on {}: {}", c.getId(), commit.name(),
+          c.getDest(), s);
+      // If mergeTip is null merge failed and mergeResultRev will not be read.
+      ObjectId mergeResultRev =
+          mergeTip != null ? mergeTip.getMergeResults().get(commit) : null;
+      try {
+        ChangeMessage msg;
+        switch (s) {
+          case CLEAN_MERGE:
+            if (!dryRun) {
+              setMerged(c, message(c, txt + getByAccountName(commit)),
+                  mergeResultRev);
+            }
+            break;
+
+          case CLEAN_REBASE:
+          case CLEAN_PICK:
+            if (!dryRun) {
+              setMerged(c, message(c, txt + " as " + commit.name()
+                  + getByAccountName(commit)), mergeResultRev);
+            }
+            break;
+
+          case ALREADY_MERGED:
+            if (!dryRun) {
+              setMerged(c, null, mergeResultRev);
+            }
+            break;
+
+          case PATH_CONFLICT:
+          case REBASE_MERGE_CONFLICT:
+          case MANUAL_RECURSIVE_MERGE:
+          case CANNOT_CHERRY_PICK_ROOT:
+          case NOT_FAST_FORWARD:
+          case INVALID_PROJECT_CONFIGURATION:
+          case INVALID_PROJECT_CONFIGURATION_PLUGIN_VALUE_NOT_PERMITTED:
+          case INVALID_PROJECT_CONFIGURATION_PLUGIN_VALUE_NOT_EDITABLE:
+          case INVALID_PROJECT_CONFIGURATION_PARENT_PROJECT_NOT_FOUND:
+          case INVALID_PROJECT_CONFIGURATION_ROOT_PROJECT_CANNOT_HAVE_PARENT:
+          case SETTING_PARENT_PROJECT_ONLY_ALLOWED_BY_ADMIN:
+            setNew(commit.notes(), message(c, txt));
+            throw new ResourceConflictException("Cannot merge " + commit.name()
+                + "\n" + s.getMessage());
+
+          case MISSING_DEPENDENCY:
+            logDebug("Change {} is missing dependency", c.getId());
+            throw new IntegrationException(
+                "Cannot merge " + commit.name() + "\n" + s.getMessage());
+
+          case REVISION_GONE:
+            logDebug("Commit not found for change {}", c.getId());
+            msg = new ChangeMessage(
+                new ChangeMessage.Key(
+                    c.getId(),
+                    ChangeUtil.messageUUID(db)),
+                null,
+                TimeUtil.nowTs(),
+                c.currentPatchSetId());
+            msg.setMessage("Failed to read commit for this patch set");
+            setNew(commit.notes(), msg);
+            throw new IntegrationException(msg.getMessage());
+
+          default:
+            msg = message(c, "Unspecified merge failure: " + s.name());
+            setNew(commit.notes(), msg);
+            throw new IntegrationException(msg.getMessage());
+        }
+      } catch (OrmException | IOException err) {
+        logWarn("Error updating change status for " + c.getId(), err);
+      }
+    }
+  }
+
+  private void updateSubmoduleSubscriptions(SubmoduleOp subOp,
+      Branch.NameKey destBranch, CodeReviewCommit branchTip) {
+    MergeTip mergeTip = mergeTips.get(destBranch);
+>>>>>>> BRANCH (a3f22a EmailMerge: provide user when available)
     if (mergeTip != null
         && (branchTip == null || branchTip != mergeTip.getCurrentTip())) {
       logDebug("Updating submodule subscriptions for branch {}", ob.name);

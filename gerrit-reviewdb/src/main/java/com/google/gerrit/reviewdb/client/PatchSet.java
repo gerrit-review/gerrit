@@ -191,8 +191,13 @@ public final class PatchSet {
   //DELETED id = 7 (pushCertficate)
 
   /** Certificate sent with a push that created this patch set. */
+<<<<<<< HEAD   (685b5b Merge changes from topic 'no-changes-made')
   @Column(id = 8, notNull = false, length = Integer.MAX_VALUE)
   protected String pushCertificate;
+=======
+  @Column(id = 7, notNull = false, length = Integer.MAX_VALUE)
+  protected String pushCertficate;
+>>>>>>> BRANCH (a3f22a EmailMerge: provide user when available)
 
   protected PatchSet() {
   }

@@ -117,9 +117,16 @@ public class StaticModule extends ServletModule {
   @Singleton
   @Named(DOC_SERVLET)
   HttpServlet getDocServlet(@Named(CACHE) Cache<Path, Resource> cache) {
+<<<<<<< HEAD   (685b5b Merge changes from topic 'no-changes-made')
     Paths p = getPaths();
     if (p.warFs != null) {
       return new WarDocServlet(cache, p.warFs);
+=======
+    if (warFs != null) {
+      return new WarDocServlet(cache, warFs);
+    } else if (unpackedWar != null && !development) {
+      return new DirectoryDocServlet(cache, unpackedWar);
+>>>>>>> BRANCH (a3f22a EmailMerge: provide user when available)
     } else {
       return new HttpServlet() {
         private static final long serialVersionUID = 1L;

@@ -605,8 +605,12 @@ public class ChangeData {
   }
 
   public Change reloadChange() throws OrmException {
+<<<<<<< HEAD   (685b5b Merge changes from topic 'no-changes-made')
     notes = notesFactory.create(db, project, legacyId);
     change = notes.getChange();
+=======
+    change = db.changes().get(legacyId);
+>>>>>>> BRANCH (a3f22a EmailMerge: provide user when available)
     if (change == null) {
       throw new OrmException("Unable to load change " + legacyId);
     }
