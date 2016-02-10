@@ -299,7 +299,11 @@ public class ChangeInserter extends BatchUpdate.InsertChangeOp {
     }
     if (updateRefCommand == null) {
       ctx.addRefUpdate(
+<<<<<<< HEAD   (685b5b Merge changes from topic 'no-changes-made')
           new ReceiveCommand(ObjectId.zeroId(), commit, psId.toRefName()));
+=======
+          new ReceiveCommand(ObjectId.zeroId(), commit, patchSet.getRefName()));
+>>>>>>> BRANCH (a3f22a EmailMerge: provide user when available)
     } else {
       ctx.addRefUpdate(updateRefCommand);
     }

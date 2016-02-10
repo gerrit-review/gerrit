@@ -73,7 +73,11 @@ public class ModeInfo extends JavaScriptObject {
       Modes.I.soy(),
       Modes.I.sql(),
       Modes.I.stex(),
+<<<<<<< HEAD   (685b5b Merge changes from topic 'no-changes-made')
       Modes.I.swift(),
+=======
+      Modes.I.tcl(),
+>>>>>>> BRANCH (a3f22a EmailMerge: provide user when available)
       Modes.I.velocity(),
       Modes.I.verilog(),
       Modes.I.vhdl(),
