@@ -163,6 +163,26 @@ public class PostReview implements RestModifyView<RevisionResource, ReviewInput>
           new Op(revision.getPatchSet().getId(), input));
       bu.execute();
     }
+<<<<<<< HEAD   (c844bc EqualsFilePredicate: Make it work in project watches)
+=======
+
+    CheckedFuture<?, IOException> indexWrite;
+    if (dirty) {
+      indexWrite = indexer.indexAsync(change.getId());
+    } else {
+      indexWrite = Futures.<Void, IOException> immediateCheckedFuture(null);
+    }
+    if (message != null && input.notify.compareTo(NotifyHandling.NONE) > 0) {
+      email.create(
+          input.notify,
+          change,
+          revision.getPatchSet(),
+          revision.getUser(),
+          message,
+          comments).sendAsync();
+    }
+
+>>>>>>> BRANCH (0bb680 Set version to 2.11.7)
     Output output = new Output();
     output.labels = input.labels;
     return output;

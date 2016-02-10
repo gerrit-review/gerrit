@@ -2,4 +2,8 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (c844bc EqualsFilePredicate: Make it work in project watches)
 GERRIT_VERSION = '2.12'
+=======
+GERRIT_VERSION = '2.11.7'
+>>>>>>> BRANCH (0bb680 Set version to 2.11.7)

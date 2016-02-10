@@ -17,14 +17,19 @@ package com.google.gerrit.server.change;
 import static com.google.gerrit.server.PatchLineCommentsUtil.PLC_ORDER;
 
 import com.google.gerrit.extensions.api.changes.ReviewInput.NotifyHandling;
-import com.google.gerrit.reviewdb.client.Account;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.ChangeMessage;
 import com.google.gerrit.reviewdb.client.PatchLineComment;
 import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gerrit.server.CurrentUser;
+<<<<<<< HEAD   (c844bc EqualsFilePredicate: Make it work in project watches)
 import com.google.gerrit.server.git.SendEmailExecutor;
+=======
+import com.google.gerrit.server.IdentifiedUser;
+import com.google.gerrit.server.git.EmailReviewCommentsExecutor;
+import com.google.gerrit.server.git.WorkQueue.Executor;
+>>>>>>> BRANCH (0bb680 Set version to 2.11.7)
 import com.google.gerrit.server.mail.CommentSender;
 import com.google.gerrit.server.patch.PatchSetInfoFactory;
 import com.google.gerrit.server.util.RequestContext;
@@ -32,7 +37,6 @@ import com.google.gerrit.server.util.ThreadLocalRequestContext;
 import com.google.gwtorm.server.OrmException;
 import com.google.gwtorm.server.SchemaFactory;
 import com.google.inject.Inject;
-import com.google.inject.OutOfScopeException;
 import com.google.inject.Provider;
 import com.google.inject.ProvisionException;
 import com.google.inject.assistedinject.Assisted;
@@ -51,7 +55,7 @@ public class EmailReviewComments implements Runnable, RequestContext {
         NotifyHandling notify,
         Change change,
         PatchSet patchSet,
-        Account.Id authorId,
+        IdentifiedUser user,
         ChangeMessage message,
         List<PatchLineComment> comments);
   }
@@ -65,14 +69,19 @@ public class EmailReviewComments implements Runnable, RequestContext {
   private final NotifyHandling notify;
   private final Change change;
   private final PatchSet patchSet;
-  private final Account.Id authorId;
+  private final IdentifiedUser user;
   private final ChangeMessage message;
   private List<PatchLineComment> comments;
   private ReviewDb db;
 
   @Inject
+<<<<<<< HEAD   (c844bc EqualsFilePredicate: Make it work in project watches)
   EmailReviewComments (
       @SendEmailExecutor ExecutorService executor,
+=======
+  EmailReviewComments(
+      @EmailReviewCommentsExecutor final Executor executor,
+>>>>>>> BRANCH (0bb680 Set version to 2.11.7)
       PatchSetInfoFactory patchSetInfoFactory,
       CommentSender.Factory commentSenderFactory,
       SchemaFactory<ReviewDb> schemaFactory,
@@ -80,7 +89,7 @@ public class EmailReviewComments implements Runnable, RequestContext {
       @Assisted NotifyHandling notify,
       @Assisted Change change,
       @Assisted PatchSet patchSet,
-      @Assisted Account.Id authorId,
+      @Assisted IdentifiedUser user,
       @Assisted ChangeMessage message,
       @Assisted List<PatchLineComment> comments) {
     this.sendEmailsExecutor = executor;
@@ -91,7 +100,7 @@ public class EmailReviewComments implements Runnable, RequestContext {
     this.notify = notify;
     this.change = change;
     this.patchSet = patchSet;
-    this.authorId = authorId;
+    this.user = user;
     this.message = message;
     this.comments = PLC_ORDER.sortedCopy(comments);
   }
@@ -105,8 +114,36 @@ public class EmailReviewComments implements Runnable, RequestContext {
     RequestContext old = requestContext.setContext(this);
     try {
 
+<<<<<<< HEAD   (c844bc EqualsFilePredicate: Make it work in project watches)
       CommentSender cm = commentSenderFactory.create(notify, change.getId());
       cm.setFrom(authorId);
+=======
+      comments = Lists.newArrayList(comments);
+      Collections.sort(comments, new Comparator<PatchLineComment>() {
+        @Override
+        public int compare(PatchLineComment a, PatchLineComment b) {
+          int cmp = path(a).compareTo(path(b));
+          if (cmp != 0) {
+            return cmp;
+          }
+
+          // 0 is ancestor, 1 is revision. Sort ancestor first.
+          cmp = a.getSide() - b.getSide();
+          if (cmp != 0) {
+            return cmp;
+          }
+
+          return a.getLine() - b.getLine();
+        }
+
+        private String path(PatchLineComment c) {
+          return c.getKey().getParentKey().getFileName();
+        }
+      });
+
+      CommentSender cm = commentSenderFactory.create(notify, change);
+      cm.setFrom(user.getAccountId());
+>>>>>>> BRANCH (0bb680 Set version to 2.11.7)
       cm.setPatchSet(patchSet, patchSetInfoFactory.get(change, patchSet));
       cm.setChangeMessage(message);
       cm.setPatchLineComments(comments);
@@ -128,8 +165,13 @@ public class EmailReviewComments implements Runnable, RequestContext {
   }
 
   @Override
+<<<<<<< HEAD   (c844bc EqualsFilePredicate: Make it work in project watches)
   public CurrentUser getUser() {
     throw new OutOfScopeException("No user on email thread");
+=======
+  public CurrentUser getCurrentUser() {
+    return user.getRealUser();
+>>>>>>> BRANCH (0bb680 Set version to 2.11.7)
   }
 
   @Override

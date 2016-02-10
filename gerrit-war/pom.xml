@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-war</artifactId>
+<<<<<<< HEAD   (c844bc EqualsFilePredicate: Make it work in project watches)
   <version>2.12</version>
+=======
+  <version>2.11.7</version>
+>>>>>>> BRANCH (0bb680 Set version to 2.11.7)
   <packaging>war</packaging>
   <name>Gerrit Code Review - WAR</name>
   <description>Gerrit WAR</description>

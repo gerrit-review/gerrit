@@ -202,8 +202,74 @@ public class OutputStreamQuery {
           for (ChangeData d : results.changes()) {
             show(buildChangeAttribute(d, repos, revWalks));
           }
+<<<<<<< HEAD   (c844bc EqualsFilePredicate: Make it work in project watches)
         } finally {
           closeAll(revWalks.values(), repos.values());
+=======
+
+          if (includeAllReviewers) {
+            eventFactory.addAllReviewers(c, d.notes());
+          }
+
+          if (includeSubmitRecords) {
+            eventFactory.addSubmitRecords(c, new SubmitRuleEvaluator(d)
+                .setAllowClosed(true)
+                .setAllowDraft(true)
+                .evaluate());
+          }
+
+          if (includeCommitMessage) {
+            eventFactory.addCommitMessage(c, d.commitMessage());
+          }
+
+          if (includePatchSets) {
+            if (includeFiles) {
+              eventFactory.addPatchSets(c, d.patches(),
+                  includeApprovals ? d.approvals().asMap() : null,
+                  includeFiles, d.change(), labelTypes);
+            } else {
+              eventFactory.addPatchSets(c, d.patches(),
+                  includeApprovals ? d.approvals().asMap() : null,
+                  labelTypes);
+            }
+          }
+
+          if (includeCurrentPatchSet) {
+            PatchSet current = d.currentPatchSet();
+            if (current != null) {
+              c.currentPatchSet = eventFactory.asPatchSetAttribute(current);
+              eventFactory.addApprovals(c.currentPatchSet,
+                  d.currentApprovals(), labelTypes);
+
+              if (includeFiles) {
+                eventFactory.addPatchSetFileNames(c.currentPatchSet,
+                    d.change(), d.currentPatchSet());
+              }
+              if (includeComments) {
+                eventFactory.addPatchSetComments(c.currentPatchSet,
+                    d.publishedComments());
+              }
+            }
+          }
+
+          if (includeComments) {
+            eventFactory.addComments(c, d.messages());
+            if (includePatchSets) {
+              eventFactory.addPatchSets(c, d.patches(),
+                  includeApprovals ? d.approvals().asMap() : null,
+                  includeFiles, d.change(), labelTypes);
+              for (PatchSetAttribute attribute : c.patchSets) {
+                eventFactory.addPatchSetComments(attribute,  d.publishedComments());
+              }
+            }
+          }
+
+          if (includeDependencies) {
+            eventFactory.addDependencies(c, d.change());
+          }
+
+          show(c);
+>>>>>>> BRANCH (0bb680 Set version to 2.11.7)
         }
 
         stats.rowCount = results.changes().size();
