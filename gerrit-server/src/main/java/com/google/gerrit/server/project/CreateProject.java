@@ -42,6 +42,7 @@ import com.google.gerrit.reviewdb.client.AccountGroup;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.client.RefNames;
 import com.google.gerrit.server.CurrentUser;
+<<<<<<< HEAD   (ead6f1 Organize imports)
 import com.google.gerrit.server.GerritPersonIdent;
 import com.google.gerrit.server.account.GroupBackend;
 import com.google.gerrit.server.config.ProjectOwnerGroupsProvider;
@@ -49,6 +50,9 @@ import com.google.gerrit.server.config.RepositoryConfig;
 import com.google.gerrit.server.extensions.events.GitReferenceUpdated;
 import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.gerrit.server.git.MetaDataUpdate;
+=======
+import com.google.gerrit.server.config.AllProjectsName;
+>>>>>>> BRANCH (c335b6 SetParent: Explicitly set to All-Projects when not specified)
 import com.google.gerrit.server.git.ProjectConfig;
 import com.google.gerrit.server.git.RepositoryCaseMismatchException;
 import com.google.gerrit.server.group.GroupsCollection;
@@ -102,13 +106,22 @@ public class CreateProject implements RestModifyView<TopLevelResource, ProjectIn
   private final PersonIdent serverIdent;
   private final Provider<CurrentUser> currentUser;
   private final Provider<PutConfig> putConfig;
+  private final AllProjectsName allProjects;
   private final String name;
 
   @Inject
+<<<<<<< HEAD   (ead6f1 Organize imports)
   CreateProject(Provider<ProjectsCollection> projectsCollection,
       Provider<GroupsCollection> groupsCollection, ProjectJson json,
+=======
+  CreateProject(PerformCreateProject.Factory performCreateProjectFactory,
+      Provider<ProjectsCollection> projectsCollection,
+      Provider<GroupsCollection> groupsCollection,
+      ProjectJson json,
+>>>>>>> BRANCH (c335b6 SetParent: Explicitly set to All-Projects when not specified)
       DynamicSet<ProjectCreationValidationListener> projectCreationValidationListeners,
       ProjectControl.GenericFactory projectControlFactory,
+<<<<<<< HEAD   (ead6f1 Organize imports)
       GitRepositoryManager repoManager,
       DynamicSet<NewProjectCreatedListener> createdListener,
       ProjectCache projectCache,
@@ -120,6 +133,11 @@ public class CreateProject implements RestModifyView<TopLevelResource, ProjectIn
       @GerritPersonIdent PersonIdent serverIdent,
       Provider<CurrentUser> currentUser,
       Provider<PutConfig> putConfig,
+=======
+      Provider<CurrentUser> currentUser,
+      Provider<PutConfig> putConfig,
+      AllProjectsName allProjects,
+>>>>>>> BRANCH (c335b6 SetParent: Explicitly set to All-Projects when not specified)
       @Assisted String name) {
     this.projectsCollection = projectsCollection;
     this.groupsCollection = groupsCollection;
@@ -137,6 +155,7 @@ public class CreateProject implements RestModifyView<TopLevelResource, ProjectIn
     this.serverIdent = serverIdent;
     this.currentUser = currentUser;
     this.putConfig = putConfig;
+    this.allProjects = allProjects;
     this.name = name;
   }
 
@@ -152,12 +171,20 @@ public class CreateProject implements RestModifyView<TopLevelResource, ProjectIn
       throw new BadRequestException("name must match URL");
     }
 
+<<<<<<< HEAD   (ead6f1 Organize imports)
     CreateProjectArgs args = new CreateProjectArgs();
     args.setProjectName(ProjectUtil.stripGitSuffix(name));
 
     if (!Strings.isNullOrEmpty(input.parent)) {
       args.newParent = projectsCollection.get().parse(input.parent).getControl();
     }
+=======
+    final CreateProjectArgs args = new CreateProjectArgs();
+    args.setProjectName(name);
+    String parentName = MoreObjects.firstNonNull(
+        Strings.emptyToNull(input.parent), allProjects.get());
+    args.newParent = projectsCollection.get().parse(parentName).getControl();
+>>>>>>> BRANCH (c335b6 SetParent: Explicitly set to All-Projects when not specified)
     args.createEmptyCommit = input.createEmptyCommit;
     args.permissionsOnly = input.permissionsOnly;
     args.projectDescription = Strings.emptyToNull(input.description);
