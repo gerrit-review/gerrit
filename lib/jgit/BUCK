@@ -1,0 +1,92 @@
+<<<<<<< HEAD   (eb4f5d Upgrade JGit to 4.2.0.201601211800-r.136-g8efdaaf)
+=======
+include_defs('//lib/maven.defs')
+
+REPO = MAVEN_CENTRAL # Leave here even if set to MAVEN_CENTRAL.
+VERS = '4.1.2.201602141800-r'
+
+maven_jar(
+  name = 'jgit',
+  id = 'org.eclipse.jgit:org.eclipse.jgit:' + VERS,
+  bin_sha1 = '123620d124bbea23b7ee2d8ec3eccbb59c7be921',
+  src_sha1 = '6d3b5c60170d6df3dd74cf4948d7f16feb390333',
+  license = 'jgit',
+  repository = REPO,
+  unsign = True,
+  deps = [':ewah'],
+  exclude = [
+    'META-INF/eclipse.inf',
+    'about.html',
+    'plugin.properties',
+  ],
+)
+
+maven_jar(
+  name = 'jgit-servlet',
+  id = 'org.eclipse.jgit:org.eclipse.jgit.http.server:' + VERS,
+  sha1 = '76bf6924f0668abc65f9c4aa88492ee0a9d59544',
+  license = 'jgit',
+  repository = REPO,
+  deps = [':jgit'],
+  unsign = True,
+  exclude = [
+    'about.html',
+    'plugin.properties',
+  ],
+)
+
+maven_jar(
+  name = 'jgit-archive',
+  id = 'org.eclipse.jgit:org.eclipse.jgit.archive:' + VERS,
+  sha1 = '94a29ae139c9965ad95d3e14f5fd3a6ff28a7910',
+  license = 'jgit',
+  repository = REPO,
+  deps = [':jgit',
+    '//lib/commons:compress',
+    '//lib:tukaani-xz',
+  ],
+  unsign = True,
+  exclude = [
+    'about.html',
+    'plugin.properties',
+  ],
+)
+
+maven_jar(
+  name = 'junit',
+  id = 'org.eclipse.jgit:org.eclipse.jgit.junit:' + VERS,
+  sha1 = '9ee5941c42e3991b1a90f35e9de63854c4b5c474',
+  license = 'DO_NOT_DISTRIBUTE',
+  repository = REPO,
+  unsign = True,
+  deps = [':jgit'],
+)
+
+maven_jar(
+  name = 'ewah',
+  id = 'com.googlecode.javaewah:JavaEWAH:0.7.9',
+  sha1 = 'eceaf316a8faf0e794296ebe158ae110c7d72a5a',
+  license = 'Apache2.0',
+)
+
+gwt_module(
+  name = 'Edit',
+  srcs = [':jgit_edit_src'],
+  deps = [':edit_src'],
+  visibility = ['PUBLIC'],
+)
+
+prebuilt_jar(
+  name = 'edit_src',
+  binary_jar = ':jgit_edit_src',
+)
+
+genrule(
+  name = 'jgit_edit_src',
+  cmd = 'unzip -qd $TMP $(location :jgit_src) ' +
+    'org/eclipse/jgit/diff/Edit.java;' +
+    'cd $TMP;' +
+    'zip -Dq $OUT org/eclipse/jgit/diff/Edit.java',
+  out = 'edit.src.zip',
+)
+>>>>>>> BRANCH (6b6bdb Merge changes I25afc720,I30f2f8a8 into stable-2.12)
