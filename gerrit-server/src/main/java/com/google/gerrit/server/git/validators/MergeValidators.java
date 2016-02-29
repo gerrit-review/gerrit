@@ -20,11 +20,8 @@ import com.google.gerrit.extensions.registration.DynamicMap.Entry;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.reviewdb.client.PatchSet;
-import com.google.gerrit.reviewdb.client.PatchSetApproval;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.client.RefNames;
-import com.google.gerrit.reviewdb.server.ReviewDb;
-import com.google.gerrit.server.ApprovalsUtil;
 import com.google.gerrit.server.IdentifiedUser;
 import com.google.gerrit.server.config.AllProjectsName;
 import com.google.gerrit.server.config.PluginConfig;
@@ -97,9 +94,11 @@ public class MergeValidators {
         + "The change must be submitted by a Gerrit administrator.";
 
     private final AllProjectsName allProjectsName;
-    private final ReviewDb db;
     private final ProjectCache projectCache;
+<<<<<<< HEAD   (eb4f5d Upgrade JGit to 4.2.0.201601211800-r.136-g8efdaaf)
     private final ApprovalsUtil approvalsUtil;
+=======
+>>>>>>> BRANCH (6b6bdb Merge changes I25afc720,I30f2f8a8 into stable-2.12)
     private final DynamicMap<ProjectConfigEntry> pluginConfigEntries;
 
     public interface Factory {
@@ -108,13 +107,19 @@ public class MergeValidators {
 
     @Inject
     public ProjectConfigValidator(AllProjectsName allProjectsName,
+<<<<<<< HEAD   (eb4f5d Upgrade JGit to 4.2.0.201601211800-r.136-g8efdaaf)
         ReviewDb db, ProjectCache projectCache,
         ApprovalsUtil approvalsUtil,
+=======
+        ProjectCache projectCache,
+>>>>>>> BRANCH (6b6bdb Merge changes I25afc720,I30f2f8a8 into stable-2.12)
         DynamicMap<ProjectConfigEntry> pluginConfigEntries) {
       this.allProjectsName = allProjectsName;
-      this.db = db;
       this.projectCache = projectCache;
+<<<<<<< HEAD   (eb4f5d Upgrade JGit to 4.2.0.201601211800-r.136-g8efdaaf)
       this.approvalsUtil = approvalsUtil;
+=======
+>>>>>>> BRANCH (6b6bdb Merge changes I25afc720,I30f2f8a8 into stable-2.12)
       this.pluginConfigEntries = pluginConfigEntries;
     }
 
@@ -142,6 +147,7 @@ public class MergeValidators {
             }
           } else {
             if (!oldParent.equals(newParent)) {
+<<<<<<< HEAD   (eb4f5d Upgrade JGit to 4.2.0.201601211800-r.136-g8efdaaf)
               PatchSetApproval psa =
                   approvalsUtil.getSubmitter(db, commit.notes(), patchSetId);
               if (psa == null) {
@@ -149,6 +155,11 @@ public class MergeValidators {
               }
               if (!caller.getCapabilities().canAdministrateServer()) {
                 throw new MergeValidationException(SET_BY_ADMIN);
+=======
+              if (!caller.getCapabilities().canAdministrateServer()) {
+                throw new MergeValidationException(CommitMergeStatus.
+                    SETTING_PARENT_PROJECT_ONLY_ALLOWED_BY_ADMIN);
+>>>>>>> BRANCH (6b6bdb Merge changes I25afc720,I30f2f8a8 into stable-2.12)
               }
 
               if (projectCache.get(newParent) == null) {

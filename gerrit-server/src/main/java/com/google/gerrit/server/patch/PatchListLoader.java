@@ -311,6 +311,7 @@ public class PatchListLoader implements Callable<PatchList> {
   }
 
   private PatchListEntry newEntry(RevTree aTree, FileHeader fileHeader,
+<<<<<<< HEAD   (eb4f5d Upgrade JGit to 4.2.0.201601211800-r.136-g8efdaaf)
       long size, long sizeDelta) {
     final FileMode oldMode = fileHeader.getOldMode();
     final FileMode newMode = fileHeader.getNewMode();
@@ -320,6 +321,9 @@ public class PatchListLoader implements Callable<PatchList> {
           size, sizeDelta);
     }
 
+=======
+      long sizeDelta) {
+>>>>>>> BRANCH (6b6bdb Merge changes I25afc720,I30f2f8a8 into stable-2.12)
     if (aTree == null // want combined diff
         || fileHeader.getPatchType() != PatchType.UNIFIED
         || fileHeader.getHunks().isEmpty()) {
