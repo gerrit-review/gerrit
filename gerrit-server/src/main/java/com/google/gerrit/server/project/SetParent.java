@@ -14,6 +14,8 @@
 
 package com.google.gerrit.server.project;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
@@ -70,12 +72,25 @@ public class SetParent implements RestModifyView<ProjectResource, Input> {
       throws AuthException, ResourceConflictException,
       ResourceNotFoundException, UnprocessableEntityException, IOException {
     ProjectControl ctl = rsrc.getControl();
+<<<<<<< HEAD   (eb4f5d Upgrade JGit to 4.2.0.201601211800-r.136-g8efdaaf)
     validateParentUpdate(ctl, input.parent, checkIfAdmin);
     try (MetaDataUpdate md = updateFactory.create(rsrc.getNameKey())) {
       ProjectConfig config = ProjectConfig.read(md);
       Project project = config.getProject();
       project.setParentName(Strings.emptyToNull(input.parent));
+=======
+    String parentName = MoreObjects.firstNonNull(
+        Strings.emptyToNull(input.parent), allProjects.get());
+    validateParentUpdate(ctl, parentName, checkIfAdmin);
+    try {
+      MetaDataUpdate md = updateFactory.create(rsrc.getNameKey());
+      try {
+        ProjectConfig config = ProjectConfig.read(md);
+        Project project = config.getProject();
+        project.setParentName(parentName);
+>>>>>>> BRANCH (6b6bdb Merge changes I25afc720,I30f2f8a8 into stable-2.12)
 
+<<<<<<< HEAD   (eb4f5d Upgrade JGit to 4.2.0.201601211800-r.136-g8efdaaf)
       String msg = Strings.emptyToNull(input.commitMessage);
       if (msg == null) {
         msg = String.format(
@@ -84,6 +99,25 @@ public class SetParent implements RestModifyView<ProjectResource, Input> {
                 allProjects.get()));
       } else if (!msg.endsWith("\n")) {
         msg += "\n";
+=======
+        String msg = Strings.emptyToNull(input.commitMessage);
+        if (msg == null) {
+          msg = String.format(
+              "Changed parent to %s.\n", parentName);
+        } else if (!msg.endsWith("\n")) {
+          msg += "\n";
+        }
+        md.setAuthor(ctl.getUser().asIdentifiedUser());
+        md.setMessage(msg);
+        config.commit(md);
+        cache.evict(ctl.getProject());
+
+        Project.NameKey parent = project.getParent(allProjects);
+        checkNotNull(parent);
+        return parent.get();
+      } finally {
+        md.close();
+>>>>>>> BRANCH (6b6bdb Merge changes I25afc720,I30f2f8a8 into stable-2.12)
       }
       md.setAuthor(ctl.getUser().asIdentifiedUser());
       md.setMessage(msg);
