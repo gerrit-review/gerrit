@@ -2,4 +2,8 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (7b836f Correct schema migration instructions for MySQL in 2.12.1 re)
 GERRIT_VERSION = '2.12.1'
+=======
+GERRIT_VERSION = '2.11.8'
+>>>>>>> BRANCH (57ed10 Update 2.11.8 release notes)
