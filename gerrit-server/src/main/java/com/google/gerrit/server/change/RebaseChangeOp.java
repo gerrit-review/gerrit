@@ -135,11 +135,28 @@ public class RebaseChangeOp extends BatchUpdate.Op {
 
     rebasedCommit = rebaseCommit(ctx, original, baseCommit);
 
+<<<<<<< HEAD   (b66272 Merge changes from topic 'Issue 3894')
     RevId baseRevId = new RevId((baseCommitish != null) ? baseCommitish
+=======
+    List<String> baseCommitPatchSetGroups = new ArrayList<>();
+    List<String> groups;
+    RevId patchSetByRev = new RevId((baseCommitish != null) ? baseCommitish
+>>>>>>> BRANCH (79d75c Add tests for reviewing and submitting refs/meta/config chan)
         : ObjectId.toString(baseCommit.getId()));
+<<<<<<< HEAD   (b66272 Merge changes from topic 'Issue 3894')
     Base base = rebaseUtil.parseBase(
         new RevisionResource(new ChangeResource(ctl), originalPatchSet),
         baseRevId.get());
+=======
+    ResultSet<PatchSet> relatedPatchSets =
+        ctx.getDb().patchSets().byRevision(patchSetByRev);
+    for (PatchSet ps : relatedPatchSets) {
+      groups = ps.getGroups();
+      if (groups != null) {
+        baseCommitPatchSetGroups.addAll(groups);
+      }
+    }
+>>>>>>> BRANCH (79d75c Add tests for reviewing and submitting refs/meta/config chan)
 
     rebasedPatchSetId = ChangeUtil.nextPatchSetId(
         ctx.getRepository(), ctl.getChange().currentPatchSetId());

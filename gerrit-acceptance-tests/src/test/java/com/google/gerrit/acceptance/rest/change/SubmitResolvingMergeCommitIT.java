@@ -289,12 +289,24 @@ public class SubmitResolvingMergeCommitIT extends AbstractDaemonTest {
         .submit();
   }
 
+<<<<<<< HEAD   (b66272 Merge changes from topic 'Issue 3894')
   private void assertChangeSetMergeable(ChangeData change, boolean expected)
       throws MissingObjectException, IncorrectObjectTypeException, IOException,
       OrmException {
     ChangeSet cs =
         mergeSuperSet.completeChangeSet(db, change.change(), user(admin));
     assertThat(submit.isPatchSetMergeable(cs)).isEqualTo(expected);
+=======
+  private void assertChangeSetMergeable(ChangeData change,
+      boolean expected) throws MissingObjectException,
+          IncorrectObjectTypeException, IOException, OrmException {
+    ChangeSet cs = mergeSuperSet.completeChangeSet(db, change.change());
+    if (expected) {
+      assertThat(submit.unmergeableChanges(cs)).isEmpty();
+    } else {
+      assertThat(submit.unmergeableChanges(cs)).isNotEmpty();
+    }
+>>>>>>> BRANCH (79d75c Add tests for reviewing and submitting refs/meta/config chan)
   }
 
   private void assertMergeable(ChangeData change, boolean expected)
