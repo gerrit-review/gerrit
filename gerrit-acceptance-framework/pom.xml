@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-acceptance-framework</artifactId>
+<<<<<<< HEAD   (4e321a Merge changes Ifeda55ae,Ib735a4ef)
   <version>2.13-SNAPSHOT</version>
+=======
+  <version>2.12.2</version>
+>>>>>>> BRANCH (f41062 Set version to 2.12.2)
   <packaging>jar</packaging>
   <name>Gerrit Code Review - Acceptance Test Framework</name>
   <description>API for Gerrit Plugins</description>
