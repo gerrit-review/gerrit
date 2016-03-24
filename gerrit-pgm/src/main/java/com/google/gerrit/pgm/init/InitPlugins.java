@@ -111,9 +111,15 @@ public class InitPlugins implements InitStep {
     for (PluginData plugin : plugins) {
       String pluginName = plugin.name;
       try {
+<<<<<<< HEAD   (cd0a90 Add schema upgrade information in 2.12.2 release notes)
         final Path tmpPlugin = plugin.pluginPath;
         Path p = site.plugins_dir.resolve(plugin.name + ".jar");
         boolean upgrade = Files.exists(p);
+=======
+        final File tmpPlugin = plugin.pluginFile;
+        File p = new File(site.plugins_dir, plugin.name + ".jar");
+        boolean upgrade = p.exists();
+>>>>>>> BRANCH (96c268 Fix keyboard shortcuts for special processing of CTRL and ME)
 
         if (!(initFlags.installPlugins.contains(pluginName) || ui.yesno(upgrade,
             "Install plugin %s version %s", pluginName, plugin.version))) {
