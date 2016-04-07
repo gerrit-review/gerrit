@@ -34,6 +34,10 @@ import com.google.gwtorm.server.OrmException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+<<<<<<< HEAD   (51b4c0 Update replication plugin to latest revision)
+=======
+import java.util.HashMap;
+>>>>>>> BRANCH (537773 RebaseIfNecessary: Remove unused import)
 import java.util.List;
 
 public class RebaseIfNecessary extends SubmitStrategy {
