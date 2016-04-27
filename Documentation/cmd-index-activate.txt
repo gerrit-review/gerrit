@@ -5,7 +5,11 @@ gerrit index activate - Activate the latest index version available
 
 == SYNOPSIS
 --
+<<<<<<< HEAD   (414aa2 Merge "Add schema and index definitions for accounts index")
 'ssh' -p @SSH_PORT@ @SSH_HOST@ 'gerrit index activate <index>'
+=======
+'ssh' -p <port> <host> 'gerrit index activate'
+>>>>>>> BRANCH (d57655 Merge branch 'stable-2.11' into stable-2.12)
 --
 
 == DESCRIPTION

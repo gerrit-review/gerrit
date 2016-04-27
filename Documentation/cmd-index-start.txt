@@ -5,7 +5,11 @@ gerrit index start - Start the online indexer
 
 == SYNOPSIS
 --
+<<<<<<< HEAD   (414aa2 Merge "Add schema and index definitions for accounts index")
 'ssh' -p @SSH_PORT@ @SSH_HOST@ 'gerrit index start <index>'
+=======
+'ssh' -p <port> <host> 'gerrit index start'
+>>>>>>> BRANCH (d57655 Merge branch 'stable-2.11' into stable-2.12)
 --
 
 == DESCRIPTION

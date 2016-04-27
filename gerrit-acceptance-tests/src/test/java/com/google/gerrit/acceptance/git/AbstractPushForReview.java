@@ -28,10 +28,15 @@ import com.google.gerrit.acceptance.AbstractDaemonTest;
 import com.google.gerrit.acceptance.GitUtil;
 import com.google.gerrit.acceptance.PushOneCommit;
 import com.google.gerrit.acceptance.TestAccount;
+<<<<<<< HEAD   (414aa2 Merge "Add schema and index definitions for accounts index")
 import com.google.gerrit.common.data.LabelType;
 import com.google.gerrit.common.data.Permission;
 import com.google.gerrit.extensions.api.changes.ReviewInput;
 import com.google.gerrit.extensions.api.changes.ReviewInput.NotifyHandling;
+=======
+import com.google.gerrit.common.data.Permission;
+import com.google.gerrit.extensions.api.projects.BranchInput;
+>>>>>>> BRANCH (d57655 Merge branch 'stable-2.11' into stable-2.12)
 import com.google.gerrit.extensions.client.InheritableBoolean;
 import com.google.gerrit.extensions.common.ChangeInfo;
 import com.google.gerrit.extensions.common.ChangeMessageInfo;
@@ -46,12 +51,23 @@ import com.google.gerrit.testutil.FakeEmailSender.Message;
 import com.google.gerrit.testutil.TestTimeUtil;
 
 import org.eclipse.jgit.revwalk.RevCommit;
+<<<<<<< HEAD   (414aa2 Merge "Add schema and index definitions for accounts index")
+=======
+import org.eclipse.jgit.transport.PushResult;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeUtils;
+import org.joda.time.DateTimeUtils.MillisProvider;
+>>>>>>> BRANCH (d57655 Merge branch 'stable-2.11' into stable-2.12)
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+<<<<<<< HEAD   (414aa2 Merge "Add schema and index definitions for accounts index")
 import java.util.Collection;
+=======
+import java.util.List;
+>>>>>>> BRANCH (d57655 Merge branch 'stable-2.11' into stable-2.12)
 import java.util.Set;
 
 public abstract class AbstractPushForReview extends AbstractDaemonTest {
@@ -487,5 +503,38 @@ public abstract class AbstractPushForReview extends AbstractDaemonTest {
     r = push.to("refs/for/master");
     r.assertErrorStatus(
         "not Signed-off-by author/committer/uploader in commit message footer");
+  }
+
+  @Test
+  public void testPushSameCommitTwiceUsingMagicBranchBaseOption()
+      throws Exception {
+    grant(Permission.PUSH, project, "refs/heads/master");
+    PushOneCommit.Result rBase = pushTo("refs/heads/master");
+    rBase.assertOkStatus();
+
+    gApi.projects()
+        .name(project.get())
+        .branch("foo")
+        .create(new BranchInput());
+
+    PushOneCommit push =
+        pushFactory.create(db, admin.getIdent(), testRepo, PushOneCommit.SUBJECT,
+            "b.txt", "anotherContent");
+
+    PushOneCommit.Result r = push.to("refs/for/master");
+    r.assertOkStatus();
+
+    PushResult pr = GitUtil.pushHead(
+        testRepo, "refs/for/foo%base=" + rBase.getCommitId().name(), false, false);
+    assertThat(pr.getMessages()).contains("changes: new: 1, refs: 1, done");
+
+    List<ChangeInfo> changes = query(r.getCommitId().name());
+    assertThat(changes).hasSize(2);
+    ChangeInfo c1 = get(changes.get(0).id);
+    ChangeInfo c2 = get(changes.get(1).id);
+    assertThat(c1.project).isEqualTo(c2.project);
+    assertThat(c1.branch).isNotEqualTo(c2.branch);
+    assertThat(c1.changeId).isEqualTo(c2.changeId);
+    assertThat(c1.currentRevision).isEqualTo(c2.currentRevision);
   }
 }

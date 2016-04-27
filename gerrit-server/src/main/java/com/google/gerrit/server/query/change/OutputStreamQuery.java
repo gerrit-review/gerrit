@@ -275,14 +275,18 @@ public class OutputStreamQuery {
     }
 
     if (includePatchSets) {
+<<<<<<< HEAD   (414aa2 Merge "Add schema and index definitions for accounts index")
       eventFactory.addPatchSets(db, rw, c, d.patchSets(),
+=======
+      eventFactory.addPatchSets(db.get(), rw, c, d.visiblePatchSets(),
+>>>>>>> BRANCH (d57655 Merge branch 'stable-2.11' into stable-2.12)
           includeApprovals ? d.approvals().asMap() : null,
           includeFiles, d.change(), labelTypes);
     }
 
     if (includeCurrentPatchSet) {
       PatchSet current = d.currentPatchSet();
-      if (current != null) {
+      if (current != null && cc.isPatchVisible(current, d.db())) {
         c.currentPatchSet =
             eventFactory.asPatchSetAttribute(db, rw, d.change(), current);
         eventFactory.addApprovals(c.currentPatchSet,
@@ -302,7 +306,11 @@ public class OutputStreamQuery {
     if (includeComments) {
       eventFactory.addComments(c, d.messages());
       if (includePatchSets) {
+<<<<<<< HEAD   (414aa2 Merge "Add schema and index definitions for accounts index")
         eventFactory.addPatchSets(db, rw, c, d.patchSets(),
+=======
+        eventFactory.addPatchSets(db.get(), rw, c, d.visiblePatchSets(),
+>>>>>>> BRANCH (d57655 Merge branch 'stable-2.11' into stable-2.12)
             includeApprovals ? d.approvals().asMap() : null,
             includeFiles, d.change(), labelTypes);
         for (PatchSetAttribute attribute : c.patchSets) {
