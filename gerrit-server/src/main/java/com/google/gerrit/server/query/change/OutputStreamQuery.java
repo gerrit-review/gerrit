@@ -202,8 +202,74 @@ public class OutputStreamQuery {
           for (ChangeData d : results.changes()) {
             show(buildChangeAttribute(d, repos, revWalks));
           }
+<<<<<<< HEAD   (f78ed2 Fix missing query results when label=0 and related relationa)
         } finally {
           closeAll(revWalks.values(), repos.values());
+=======
+
+          if (includeAllReviewers) {
+            eventFactory.addAllReviewers(c, d.notes());
+          }
+
+          if (includeSubmitRecords) {
+            eventFactory.addSubmitRecords(c, new SubmitRuleEvaluator(d)
+                .setAllowClosed(true)
+                .setAllowDraft(true)
+                .evaluate());
+          }
+
+          if (includeCommitMessage) {
+            eventFactory.addCommitMessage(c, d.commitMessage());
+          }
+
+          if (includePatchSets) {
+            if (includeFiles) {
+              eventFactory.addPatchSets(c, d.visiblePatches(),
+                  includeApprovals ? d.approvals().asMap() : null,
+                  includeFiles, d.change(), labelTypes);
+            } else {
+              eventFactory.addPatchSets(c, d.visiblePatches(),
+                  includeApprovals ? d.approvals().asMap() : null,
+                  labelTypes);
+            }
+          }
+
+          if (includeCurrentPatchSet) {
+            PatchSet current = d.currentPatchSet();
+            if (current != null && cc.isPatchVisible(current, d.db())) {
+              c.currentPatchSet = eventFactory.asPatchSetAttribute(current);
+              eventFactory.addApprovals(c.currentPatchSet,
+                  d.currentApprovals(), labelTypes);
+
+              if (includeFiles) {
+                eventFactory.addPatchSetFileNames(c.currentPatchSet,
+                    d.change(), d.currentPatchSet());
+              }
+              if (includeComments) {
+                eventFactory.addPatchSetComments(c.currentPatchSet,
+                    d.publishedComments());
+              }
+            }
+          }
+
+          if (includeComments) {
+            eventFactory.addComments(c, d.messages());
+            if (includePatchSets) {
+              eventFactory.addPatchSets(c, d.visiblePatches(),
+                  includeApprovals ? d.approvals().asMap() : null,
+                  includeFiles, d.change(), labelTypes);
+              for (PatchSetAttribute attribute : c.patchSets) {
+                eventFactory.addPatchSetComments(attribute,  d.publishedComments());
+              }
+            }
+          }
+
+          if (includeDependencies) {
+            eventFactory.addDependencies(c, d.change());
+          }
+
+          show(c);
+>>>>>>> BRANCH (e2f4c2 OutputStreamQuery: Only return current patch set when visibl)
         }
 
         stats.rowCount = results.changes().size();
