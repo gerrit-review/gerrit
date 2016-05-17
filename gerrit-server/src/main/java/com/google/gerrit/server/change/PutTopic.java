@@ -97,7 +97,10 @@ public class PutTopic implements RestModifyView<ChangeResource, Input>,
     @Override
     public boolean updateChange(ChangeContext ctx) throws OrmException {
       change = ctx.getChange();
+<<<<<<< HEAD   (3f7c75 Merge "Preliminary work for supporting keyboard-shortcut dif)
       ChangeUpdate update = ctx.getUpdate(change.currentPatchSetId());
+=======
+>>>>>>> BRANCH (deab5c Merge "SubmoduleSubscriptionsIT: Add config with 'submit who)
       newTopicName = Strings.nullToEmpty(input.topic);
       oldTopicName = Strings.nullToEmpty(change.getTopic());
       if (oldTopicName.equals(newTopicName)) {
