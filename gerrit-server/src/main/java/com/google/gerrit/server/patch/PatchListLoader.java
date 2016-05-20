@@ -97,7 +97,6 @@ public class PatchListLoader implements Callable<PatchList> {
   private final PatchListKey key;
   private final Project.NameKey project;
   private final long timeoutMillis;
-  private final Object lock;
 
   @AssistedInject
   PatchListLoader(GitRepositoryManager mgr,
@@ -110,9 +109,12 @@ public class PatchListLoader implements Callable<PatchList> {
     patchListCache = plc;
     mergeStrategy = MergeUtil.getMergeStrategy(cfg);
     diffExecutor = de;
+<<<<<<< HEAD   (7c795f Remove non working Reindex --dry-run option)
     key = k;
     project = p;
     lock = new Object();
+=======
+>>>>>>> BRANCH (776e00 Synchronize MyersDiff and HistogramDiff invocations on local)
     timeoutMillis =
         ConfigUtil.getTimeUnit(cfg, "cache", PatchListCacheImpl.FILE_NAME,
             "timeout", TimeUnit.MILLISECONDS.convert(5, TimeUnit.SECONDS),
@@ -238,7 +240,7 @@ public class PatchListLoader implements Callable<PatchList> {
     Future<FileHeader> result = diffExecutor.submit(new Callable<FileHeader>() {
       @Override
       public FileHeader call() throws IOException {
-        synchronized (lock) {
+        synchronized (diffEntry) {
           return diffFormatter.toFileHeader(diffEntry);
         }
       }
@@ -254,7 +256,7 @@ public class PatchListLoader implements Callable<PatchList> {
                       + " comparing " + diffEntry.getOldId().name()
                       + ".." + diffEntry.getNewId().name());
       result.cancel(true);
-      synchronized (lock) {
+      synchronized (diffEntry) {
         return toFileHeaderWithoutMyersDiff(diffFormatter, diffEntry);
       }
     } catch (ExecutionException e) {
