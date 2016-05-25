@@ -41,11 +41,15 @@ import com.google.gerrit.extensions.client.SubmitType;
 import com.google.gerrit.extensions.common.ChangeInfo;
 import com.google.gerrit.extensions.common.ChangeMessageInfo;
 import com.google.gerrit.extensions.common.LabelInfo;
+<<<<<<< HEAD   (39176b Merge changes I3dd5812f,Ib2c6e777,Ie6f32619,I5d2e4d03)
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.extensions.registration.RegistrationHandle;
 import com.google.gerrit.extensions.restapi.ResourceConflictException;
 import com.google.gerrit.extensions.restapi.RestApiException;
 import com.google.gerrit.extensions.webui.UiAction;
+=======
+import com.google.gerrit.extensions.restapi.RestApiException;
+>>>>>>> BRANCH (bc06d8 Merge "RebaseSorter: leave commit /merge candidate as intere)
 import com.google.gerrit.reviewdb.client.Account;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
@@ -336,6 +340,13 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
     assertThat(cr.all).hasSize(1);
     assertThat(cr.all.get(0).value).isEqualTo(2);
     assertThat(new Account.Id(cr.all.get(0)._accountId)).isEqualTo(admin.getId());
+  }
+
+  protected void assertMerged(PushOneCommit.Result change)
+      throws RestApiException {
+    String changeId = change.getChangeId();
+    ChangeStatus status = gApi.changes().id(changeId).info().status;
+    assertThat(status).isEqualTo(ChangeStatus.MERGED);
   }
 
   protected void assertPersonEquals(PersonIdent expected,
