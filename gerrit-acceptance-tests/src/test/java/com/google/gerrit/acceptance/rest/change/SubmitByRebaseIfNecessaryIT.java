@@ -25,11 +25,16 @@ import com.google.gerrit.extensions.api.changes.SubmitInput;
 import com.google.gerrit.extensions.client.ChangeStatus;
 import com.google.gerrit.extensions.client.InheritableBoolean;
 import com.google.gerrit.extensions.client.SubmitType;
+<<<<<<< HEAD   (39176b Merge changes I3dd5812f,Ib2c6e777,Ie6f32619,I5d2e4d03)
 import com.google.gerrit.extensions.common.ChangeInfo;
 import com.google.gerrit.extensions.restapi.ResourceConflictException;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.server.change.Submit.TestSubmitInput;
+=======
+import com.google.gerrit.reviewdb.client.Branch;
+import com.google.gerrit.reviewdb.client.Project;
+>>>>>>> BRANCH (24c163 Merge "AbstractSubmit: Extend tests to check for ref-updated)
 
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
@@ -260,5 +265,20 @@ public class SubmitByRebaseIfNecessaryIT extends AbstractSubmit {
     approve(id1);
     approve(id2);
     submit(id1);
+  }
+
+  @Test
+  public void submitChangesAfterBranchOnSecond() throws Exception {
+    PushOneCommit.Result change = createChange();
+    approve(change.getChangeId());
+
+    PushOneCommit.Result change2nd = createChange();
+    approve(change2nd.getChangeId());
+    Project.NameKey project = change2nd.getChange().change().getProject();
+    Branch.NameKey branch = new Branch.NameKey(project, "branch");
+    createBranchWithRevision(branch, change2nd.getCommit().getName());
+    gApi.changes().id(change2nd.getChangeId()).current().submit();
+    assertMerged(change2nd);
+    assertMerged(change);
   }
 }

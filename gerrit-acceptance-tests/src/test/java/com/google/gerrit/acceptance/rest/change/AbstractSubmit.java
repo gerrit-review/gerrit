@@ -41,11 +41,15 @@ import com.google.gerrit.extensions.client.SubmitType;
 import com.google.gerrit.extensions.common.ChangeInfo;
 import com.google.gerrit.extensions.common.ChangeMessageInfo;
 import com.google.gerrit.extensions.common.LabelInfo;
+<<<<<<< HEAD   (39176b Merge changes I3dd5812f,Ib2c6e777,Ie6f32619,I5d2e4d03)
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.extensions.registration.RegistrationHandle;
 import com.google.gerrit.extensions.restapi.ResourceConflictException;
 import com.google.gerrit.extensions.restapi.RestApiException;
 import com.google.gerrit.extensions.webui.UiAction;
+=======
+import com.google.gerrit.extensions.restapi.RestApiException;
+>>>>>>> BRANCH (24c163 Merge "AbstractSubmit: Extend tests to check for ref-updated)
 import com.google.gerrit.reviewdb.client.Account;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
@@ -54,12 +58,17 @@ import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.ApprovalsUtil;
 import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.IdentifiedUser;
+<<<<<<< HEAD   (39176b Merge changes I3dd5812f,Ib2c6e777,Ie6f32619,I5d2e4d03)
 import com.google.gerrit.server.change.RevisionResource;
 import com.google.gerrit.server.change.Submit;
 import com.google.gerrit.server.data.ChangeAttribute;
 import com.google.gerrit.server.data.PatchSetAttribute;
+=======
+import com.google.gerrit.server.data.RefUpdateAttribute;
+>>>>>>> BRANCH (24c163 Merge "AbstractSubmit: Extend tests to check for ref-updated)
 import com.google.gerrit.server.events.ChangeMergedEvent;
 import com.google.gerrit.server.events.Event;
+import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.gerrit.server.notedb.ChangeNotes;
 import com.google.gerrit.testutil.ConfigSuite;
 import com.google.gerrit.testutil.TestTimeUtil;
@@ -95,7 +104,15 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
     return submitWholeTopicEnabledConfig();
   }
 
+<<<<<<< HEAD   (39176b Merge changes I3dd5812f,Ib2c6e777,Ie6f32619,I5d2e4d03)
   private Map<String, String> changeMergedEvents;
+=======
+  private Map<String, String> mergeResults;
+  private Map<String, String> refUpdatedEvents;
+
+  @Inject
+  private ChangeNotes.Factory notesFactory;
+>>>>>>> BRANCH (24c163 Merge "AbstractSubmit: Extend tests to check for ref-updated)
 
   @Inject
   private ApprovalsUtil approvalsUtil;
@@ -127,6 +144,7 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
 
   @Before
   public void setUp() throws Exception {
+<<<<<<< HEAD   (39176b Merge changes I3dd5812f,Ib2c6e777,Ie6f32619,I5d2e4d03)
     changeMergedEvents = new HashMap<>();
     eventListenerRegistration =
         eventListeners.add(new UserScopedEventListener() {
@@ -141,12 +159,35 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
             log.debug("Merged {},{} as {}", ps.number, c.number, e.newRev);
             changeMergedEvents.put(e.change.get().number, e.newRev);
           }
+=======
+    mergeResults = Maps.newHashMap();
+    refUpdatedEvents = Maps.newHashMap();
+    CurrentUser listenerUser = factory.create(user.id);
+    source.addEventListener(new EventListener() {
+>>>>>>> BRANCH (24c163 Merge "AbstractSubmit: Extend tests to check for ref-updated)
 
+<<<<<<< HEAD   (39176b Merge changes I3dd5812f,Ib2c6e777,Ie6f32619,I5d2e4d03)
           @Override
           public CurrentUser getUser() {
             return factory.create(user.id);
           }
         });
+=======
+      @Override
+      public void onEvent(Event event) {
+        if (event instanceof ChangeMergedEvent) {
+          ChangeMergedEvent changeMergedEvent = (ChangeMergedEvent) event;
+          mergeResults.put(changeMergedEvent.change.number,
+              changeMergedEvent.newRev);
+        } else if (event instanceof RefUpdatedEvent) {
+          RefUpdatedEvent e = (RefUpdatedEvent) event;
+          RefUpdateAttribute r = e.refUpdate;
+          refUpdatedEvents.put(r.project + "-" + r.refName, r.newRev);
+        }
+      }
+
+    }, listenerUser);
+>>>>>>> BRANCH (24c163 Merge "AbstractSubmit: Extend tests to check for ref-updated)
   }
 
   @After
@@ -302,6 +343,7 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
 
   private void checkMergeResult(ChangeInfo change) throws Exception {
     // Get the revision of the branch after the submit to compare with the
+<<<<<<< HEAD   (39176b Merge changes I3dd5812f,Ib2c6e777,Ie6f32619,I5d2e4d03)
     // newRev of the ChangeMergedEvent.
     BranchInfo branch = gApi.projects().name(change.project)
         .branch(change.branch).get();
@@ -309,6 +351,26 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
     String newRev = changeMergedEvents.get(Integer.toString(change._number));
     assertThat(newRev).isNotNull();
     assertThat(branch.revision).isEqualTo(newRev);
+=======
+    // newRev of the ChangeMergedEvent and RefUpdatedEvent.
+    RestResponse b =
+        adminSession.get("/projects/" + change.project + "/branches/"
+            + change.branch);
+    if (b.getStatusCode() == HttpStatus.SC_OK) {
+      BranchInfo branch =
+          newGson().fromJson(b.getReader(),
+              new TypeToken<BranchInfo>() {}.getType());
+      assertThat(mergeResults).isNotEmpty();
+      assertThat(refUpdatedEvents).isNotEmpty();
+      String newRev = mergeResults.get(Integer.toString(change._number));
+      assertThat(newRev).isNotNull();
+      assertThat(branch.revision).isEqualTo(newRev);
+      newRev = refUpdatedEvents.get(change.project + "-" + branch.ref);
+      assertThat(newRev).isNotNull();
+      assertThat(branch.revision).isEqualTo(newRev);
+    }
+    b.consume();
+>>>>>>> BRANCH (24c163 Merge "AbstractSubmit: Extend tests to check for ref-updated)
   }
 
   protected void assertCurrentRevision(String changeId, int expectedNum,
@@ -336,6 +398,13 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
     assertThat(cr.all).hasSize(1);
     assertThat(cr.all.get(0).value).isEqualTo(2);
     assertThat(new Account.Id(cr.all.get(0)._accountId)).isEqualTo(admin.getId());
+  }
+
+  protected void assertMerged(PushOneCommit.Result change)
+      throws RestApiException {
+    String changeId = change.getChangeId();
+    ChangeStatus status = gApi.changes().id(changeId).info().status;
+    assertThat(status).isEqualTo(ChangeStatus.MERGED);
   }
 
   protected void assertPersonEquals(PersonIdent expected,

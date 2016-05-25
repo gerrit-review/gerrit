@@ -14,7 +14,11 @@
 
 package com.google.gerrit.server.git;
 
+<<<<<<< HEAD   (39176b Merge changes I3dd5812f,Ib2c6e777,Ie6f32619,I5d2e4d03)
 import com.google.common.util.concurrent.ListenableFutureTask;
+=======
+import com.google.common.collect.Lists;
+>>>>>>> BRANCH (24c163 Merge "AbstractSubmit: Extend tests to check for ref-updated)
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.lifecycle.LifecycleModule;
 import com.google.gerrit.reviewdb.client.Project;
@@ -387,24 +391,29 @@ public class WorkQueue {
     @Override
     public String toString() {
       //This is a workaround to be able to print a proper name when the task
-      //is wrapped into a ListenableFutureTask.
-      if (runnable instanceof ListenableFutureTask<?>) {
-        String errorMessage;
-        try {
-          for (Field field : ListenableFutureTask.class.getSuperclass()
-              .getDeclaredFields()) {
-            if (field.getType().isAssignableFrom(Callable.class)) {
+      //is wrapped into a TrustedListenableFutureTask.
+      try {
+        if (runnable.getClass().isAssignableFrom(Class.forName(
+            "com.google.common.util.concurrent.TrustedListenableFutureTask"))) {
+          Class<?> trustedFutureInterruptibleTask = Class.forName(
+              "com.google.common.util.concurrent.TrustedListenableFutureTask$TrustedFutureInterruptibleTask");
+          for (Field field : runnable.getClass().getDeclaredFields()) {
+            if (field.getType().isAssignableFrom(trustedFutureInterruptibleTask)) {
               field.setAccessible(true);
-              return ((Callable<?>) field.get(runnable)).toString();
+              Object innerObj = field.get(runnable);
+              for (Field innerField : innerObj.getClass().getDeclaredFields()) {
+                if (innerField.getType().isAssignableFrom(Callable.class)) {
+                  innerField.setAccessible(true);
+                  return ((Callable<?>) innerField.get(innerObj)).toString();
+                }
+              }
             }
           }
-          errorMessage = "Cannot find wrapped Callable field";
-        } catch (SecurityException | IllegalArgumentException
-            | IllegalAccessException e) {
-          errorMessage = "Cannot call toString on Callable field";
         }
-        log.debug("Cannot get a proper name for ListenableFutureTask: {}",
-            errorMessage);
+      } catch (ClassNotFoundException | IllegalArgumentException
+          | IllegalAccessException e) {
+        log.debug("Cannot get a proper name for TrustedListenableFutureTask: {}",
+            e.getMessage());
       }
       return runnable.toString();
     }

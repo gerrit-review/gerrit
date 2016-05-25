@@ -31,7 +31,10 @@ import com.google.gerrit.common.data.PermissionRule;
 import com.google.gerrit.extensions.api.GerritApi;
 import com.google.gerrit.extensions.api.changes.ReviewInput;
 import com.google.gerrit.extensions.api.changes.RevisionApi;
+<<<<<<< HEAD   (39176b Merge changes I3dd5812f,Ib2c6e777,Ie6f32619,I5d2e4d03)
 import com.google.gerrit.extensions.api.groups.GroupInput;
+=======
+>>>>>>> BRANCH (24c163 Merge "AbstractSubmit: Extend tests to check for ref-updated)
 import com.google.gerrit.extensions.api.projects.BranchApi;
 import com.google.gerrit.extensions.api.projects.BranchInput;
 import com.google.gerrit.extensions.api.projects.ProjectInput;
@@ -44,7 +47,10 @@ import com.google.gerrit.extensions.restapi.IdString;
 import com.google.gerrit.extensions.restapi.RestApiException;
 import com.google.gerrit.reviewdb.client.AccountGroup;
 import com.google.gerrit.reviewdb.client.Branch;
+<<<<<<< HEAD   (39176b Merge changes I3dd5812f,Ib2c6e777,Ie6f32619,I5d2e4d03)
 import com.google.gerrit.reviewdb.client.PatchSet;
+=======
+>>>>>>> BRANCH (24c163 Merge "AbstractSubmit: Extend tests to check for ref-updated)
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gerrit.server.AnonymousUser;
@@ -476,6 +482,16 @@ public abstract class AbstractDaemonTest {
         .name(branch.getParentKey().get())
         .branch(branch.get())
         .create(new BranchInput());
+  }
+
+  protected BranchApi createBranchWithRevision(Branch.NameKey branch,
+      String revision) throws Exception {
+    BranchInput in = new BranchInput();
+    in.revision = revision;
+    return gApi.projects()
+        .name(branch.getParentKey().get())
+        .branch(branch.get())
+        .create(in);
   }
 
   private static final List<Character> RANDOM =
