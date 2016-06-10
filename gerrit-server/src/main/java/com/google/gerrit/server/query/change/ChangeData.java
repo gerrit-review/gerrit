@@ -15,7 +15,10 @@
 package com.google.gerrit.server.query.change;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+<<<<<<< HEAD   (270e10 Ensure reply dialog comments are properly sorted)
 import static com.google.common.base.Preconditions.checkState;
+=======
+>>>>>>> BRANCH (5d592e Documentation: Fix anchor for gitweb.urlEncode)
 import static com.google.gerrit.server.ApprovalsUtil.sortApprovals;
 
 import com.google.auto.value.AutoValue;
@@ -997,11 +1000,16 @@ public void setPatchSets(Collection<PatchSet> patchSets) {
         return Collections.emptySet();
       }
       editsByUser = new HashSet<>();
+<<<<<<< HEAD   (270e10 Ensure reply dialog comments are properly sorted)
       Change.Id id = change.getId();
       try (Repository repo = repoManager.openRepository(project())) {
+=======
+      Change.Id id = checkNotNull(change.getId());
+      try (Repository repo = repoManager.openRepository(change.getProject())) {
+>>>>>>> BRANCH (5d592e Documentation: Fix anchor for gitweb.urlEncode)
         for (String ref
             : repo.getRefDatabase().getRefs(RefNames.REFS_USERS).keySet()) {
-          if (Change.Id.fromEditRefPart(ref).equals(id)) {
+          if (id.equals(Change.Id.fromEditRefPart(ref))) {
             editsByUser.add(Account.Id.fromRefPart(ref));
           }
         }

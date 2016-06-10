@@ -23,9 +23,19 @@ import static com.google.gerrit.extensions.client.ListChangesOption.DETAILED_LAB
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.Assert.fail;
 
+<<<<<<< HEAD   (270e10 Ensure reply dialog comments are properly sorted)
 import com.google.common.base.Function;
+=======
+import com.google.common.base.Strings;
+import com.google.common.collect.HashMultimap;
+>>>>>>> BRANCH (5d592e Documentation: Fix anchor for gitweb.urlEncode)
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+<<<<<<< HEAD   (270e10 Ensure reply dialog comments are properly sorted)
+=======
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
+>>>>>>> BRANCH (5d592e Documentation: Fix anchor for gitweb.urlEncode)
 import com.google.gerrit.acceptance.AbstractDaemonTest;
 import com.google.gerrit.acceptance.NoHttpd;
 import com.google.gerrit.acceptance.PushOneCommit;
@@ -81,7 +91,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
+<<<<<<< HEAD   (270e10 Ensure reply dialog comments are properly sorted)
 import java.util.HashMap;
+=======
+import java.io.IOException;
+import java.util.Collection;
+>>>>>>> BRANCH (5d592e Documentation: Fix anchor for gitweb.urlEncode)
 import java.util.List;
 import java.util.Map;
 
@@ -95,7 +110,15 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
     return submitWholeTopicEnabledConfig();
   }
 
+<<<<<<< HEAD   (270e10 Ensure reply dialog comments are properly sorted)
   private Map<String, String> changeMergedEvents;
+=======
+  private Map<String, String> mergeResults;
+  protected Multimap<String, RefUpdateAttribute> refUpdatedEvents;
+
+  @Inject
+  private ChangeNotes.Factory notesFactory;
+>>>>>>> BRANCH (5d592e Documentation: Fix anchor for gitweb.urlEncode)
 
   @Inject
   private ApprovalsUtil approvalsUtil;
@@ -127,6 +150,7 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
 
   @Before
   public void setUp() throws Exception {
+<<<<<<< HEAD   (270e10 Ensure reply dialog comments are properly sorted)
     changeMergedEvents = new HashMap<>();
     eventListenerRegistration =
         eventListeners.add(new UserScopedEventListener() {
@@ -141,12 +165,35 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
             log.debug("Merged {},{} as {}", ps.number, c.number, e.newRev);
             changeMergedEvents.put(e.change.get().number, e.newRev);
           }
+=======
+    mergeResults = Maps.newHashMap();
+    refUpdatedEvents = HashMultimap.create();
+    CurrentUser listenerUser = factory.create(user.id);
+    source.addEventListener(new EventListener() {
+>>>>>>> BRANCH (5d592e Documentation: Fix anchor for gitweb.urlEncode)
 
+<<<<<<< HEAD   (270e10 Ensure reply dialog comments are properly sorted)
           @Override
           public CurrentUser getUser() {
             return factory.create(user.id);
           }
         });
+=======
+      @Override
+      public void onEvent(Event event) {
+        if (event instanceof ChangeMergedEvent) {
+          ChangeMergedEvent changeMergedEvent = (ChangeMergedEvent) event;
+          mergeResults.put(changeMergedEvent.change.number,
+              changeMergedEvent.newRev);
+        } else if (event instanceof RefUpdatedEvent) {
+          RefUpdatedEvent e = (RefUpdatedEvent) event;
+          RefUpdateAttribute r = e.refUpdate;
+          refUpdatedEvents.put(r.project + "-" + r.refName, r);
+        }
+      }
+
+    }, listenerUser);
+>>>>>>> BRANCH (5d592e Documentation: Fix anchor for gitweb.urlEncode)
   }
 
   @After
@@ -303,12 +350,28 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
   private void checkMergeResult(ChangeInfo change) throws Exception {
     // Get the revision of the branch after the submit to compare with the
     // newRev of the ChangeMergedEvent.
+<<<<<<< HEAD   (270e10 Ensure reply dialog comments are properly sorted)
     BranchInfo branch = gApi.projects().name(change.project)
         .branch(change.branch).get();
     assertThat(changeMergedEvents).isNotEmpty();
     String newRev = changeMergedEvents.get(Integer.toString(change._number));
     assertThat(newRev).isNotNull();
     assertThat(branch.revision).isEqualTo(newRev);
+=======
+    RestResponse b =
+        adminSession.get("/projects/" + change.project + "/branches/"
+            + change.branch);
+    if (b.getStatusCode() == HttpStatus.SC_OK) {
+      BranchInfo branch =
+          newGson().fromJson(b.getReader(),
+              new TypeToken<BranchInfo>() {}.getType());
+      assertThat(mergeResults).isNotEmpty();
+      String newRev = mergeResults.get(Integer.toString(change._number));
+      assertThat(newRev).isNotNull();
+      assertThat(branch.revision).isEqualTo(newRev);
+    }
+    b.consume();
+>>>>>>> BRANCH (5d592e Documentation: Fix anchor for gitweb.urlEncode)
   }
 
   protected void assertCurrentRevision(String changeId, int expectedNum,
@@ -429,7 +492,17 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
     return getRemoteLog(project, "master");
   }
 
+<<<<<<< HEAD   (270e10 Ensure reply dialog comments are properly sorted)
   private RevCommit getHead(Repository repo, String name) throws Exception {
+=======
+  protected RefUpdateAttribute getOneRefUpdate(String key) {
+    Collection<RefUpdateAttribute> refUpdates = refUpdatedEvents.get(key);
+    assertThat(refUpdates).hasSize(1);
+    return refUpdates.iterator().next();
+  }
+
+  private RevCommit getHead(Repository repo, String name) throws IOException {
+>>>>>>> BRANCH (5d592e Documentation: Fix anchor for gitweb.urlEncode)
     try (RevWalk rw = new RevWalk(repo)) {
       return rw.parseCommit(repo.exactRef(name).getObjectId());
     }

@@ -28,8 +28,12 @@ import com.google.gerrit.extensions.common.ActionInfo;
 import com.google.gerrit.extensions.common.ChangeInfo;
 import com.google.gerrit.extensions.restapi.ResourceConflictException;
 import com.google.gerrit.reviewdb.client.Change;
+<<<<<<< HEAD   (270e10 Ensure reply dialog comments are properly sorted)
 import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.server.change.Submit.TestSubmitInput;
+=======
+import com.google.gerrit.server.data.RefUpdateAttribute;
+>>>>>>> BRANCH (5d592e Documentation: Fix anchor for gitweb.urlEncode)
 
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
@@ -60,6 +64,8 @@ public class SubmitByFastForwardIT extends AbstractSubmit {
 
   @Test
   public void submitTwoChangesWithFastForward() throws Exception {
+    RevCommit originalHead = getRemoteHead();
+
     PushOneCommit.Result change = createChange();
     PushOneCommit.Result change2 = createChange();
 
@@ -68,15 +74,27 @@ public class SubmitByFastForwardIT extends AbstractSubmit {
     approve(id1);
     submit(id2);
 
+<<<<<<< HEAD   (270e10 Ensure reply dialog comments are properly sorted)
     RevCommit head = getRemoteHead();
     assertThat(head.getId()).isEqualTo(change2.getCommit());
     assertThat(head.getParent(0).getId()).isEqualTo(change.getCommit());
+=======
+    RevCommit updatedHead = getRemoteHead();
+    assertThat(updatedHead.getId()).isEqualTo(change2.getCommit());
+    assertThat(updatedHead.getParent(0).getId()).isEqualTo(change.getCommit());
+>>>>>>> BRANCH (5d592e Documentation: Fix anchor for gitweb.urlEncode)
     assertSubmitter(change.getChangeId(), 1);
     assertSubmitter(change2.getChangeId(), 1);
-    assertPersonEquals(admin.getIdent(), head.getAuthorIdent());
-    assertPersonEquals(admin.getIdent(), head.getCommitterIdent());
+    assertPersonEquals(admin.getIdent(), updatedHead.getAuthorIdent());
+    assertPersonEquals(admin.getIdent(), updatedHead.getCommitterIdent());
     assertSubmittedTogether(id1, id2, id1);
     assertSubmittedTogether(id2, id2, id1);
+
+    RefUpdateAttribute refUpdate = getOneRefUpdate(
+        project.get() + "-refs/heads/master");
+    assertThat(refUpdate).isNotNull();
+    assertThat(refUpdate.oldRev).isEqualTo(originalHead.name());
+    assertThat(refUpdate.newRev).isEqualTo(updatedHead.name());
   }
 
   @Test
