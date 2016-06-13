@@ -2385,10 +2385,18 @@ By default, `LUCENE`.
 
 [[index.threads]]index.threads::
 +
-Number of threads to use for indexing in normal interactive operations.
+Number of threads to use for indexing in normal interactive operations. Setting
+it to 0 disables the dedicated thread pool and indexing will be done in the same
+thread as the operation.
 +
+<<<<<<< HEAD   (fa8fea SubmitByRebaseIfNecessaryIT: Test ref-updated event for mult)
 If not set or set to a negative value, defaults to 1 plus half of the number of
 logical CPUs as returned by the JVM.
+=======
+Defaults to 0 if not set, or set to a negative value (unless
+link:#changeMerge.interactiveThreadPoolSize[changeMerge.interactiveThreadPoolSize]
+is iset).
+>>>>>>> BRANCH (fab067 Fix documented index.threads default value)
 
 [[index.batchThreads]]index.batchThreads::
 +
