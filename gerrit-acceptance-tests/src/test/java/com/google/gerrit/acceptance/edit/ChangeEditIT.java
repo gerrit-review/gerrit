@@ -55,7 +55,10 @@ import com.google.gerrit.server.git.ProjectConfig;
 import com.google.gerrit.server.project.InvalidChangeOperationException;
 import com.google.gerrit.server.project.Util;
 import com.google.gerrit.testutil.TestTimeUtil;
+<<<<<<< HEAD   (e7c036 Merge changes I7aeb7d2e,Ie93003f9,I16cdc920)
 import com.google.gson.reflect.TypeToken;
+=======
+>>>>>>> BRANCH (5da67b ChangeIT: Assert that submitting a change doesn't remove non)
 import com.google.gson.stream.JsonReader;
 import com.google.gwtorm.server.SchemaFactory;
 import com.google.inject.Inject;
@@ -64,9 +67,12 @@ import org.apache.commons.codec.binary.StringUtils;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.RefUpdate;
+<<<<<<< HEAD   (e7c036 Merge changes I7aeb7d2e,Ie93003f9,I16cdc920)
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
+=======
+>>>>>>> BRANCH (5da67b ChangeIT: Assert that submitting a change doesn't remove non)
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -78,7 +84,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+<<<<<<< HEAD   (e7c036 Merge changes I7aeb7d2e,Ie93003f9,I16cdc920)
 import java.util.Map;
+=======
+>>>>>>> BRANCH (5da67b ChangeIT: Assert that submitting a change doesn't remove non)
 
 public class ChangeEditIT extends AbstractDaemonTest {
 

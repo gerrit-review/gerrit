@@ -99,8 +99,13 @@ TESTUTIL_DEPS = [
   '//lib:truth',
   '//lib/guice:guice',
   '//lib/guice:guice-servlet',
+<<<<<<< HEAD   (e7c036 Merge changes I7aeb7d2e,Ie93003f9,I16cdc920)
   '//lib/jgit/org.eclipse.jgit:jgit',
   '//lib/jgit/org.eclipse.jgit.junit:junit',
+=======
+  '//lib/jgit:jgit',
+  '//lib/jgit:junit',
+>>>>>>> BRANCH (5da67b ChangeIT: Assert that submitting a change doesn't remove non)
   '//lib/joda:joda-time',
   '//lib/log:api',
   '//lib/log:impl_log4j',
