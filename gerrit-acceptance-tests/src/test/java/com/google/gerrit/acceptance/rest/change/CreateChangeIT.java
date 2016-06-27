@@ -16,9 +16,13 @@ package com.google.gerrit.acceptance.rest.change;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.TruthJUnit.assume;
+<<<<<<< HEAD   (8f9efa ChangeIT: Assert that submitting a change doesn't remove non)
 import static com.google.gerrit.reviewdb.client.RefNames.changeMetaRef;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.eclipse.jgit.lib.Constants.SIGNED_OFF_BY_TAG;
+=======
+import static java.util.concurrent.TimeUnit.SECONDS;
+>>>>>>> BRANCH (5da67b ChangeIT: Assert that submitting a change doesn't remove non)
 
 import com.google.common.collect.Iterables;
 import com.google.gerrit.acceptance.AbstractDaemonTest;
@@ -36,10 +40,13 @@ import com.google.gerrit.testutil.ConfigSuite;
 import com.google.gerrit.testutil.TestTimeUtil;
 
 import org.eclipse.jgit.lib.Config;
+<<<<<<< HEAD   (8f9efa ChangeIT: Assert that submitting a change doesn't remove non)
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
+=======
+>>>>>>> BRANCH (5da67b ChangeIT: Assert that submitting a change doesn't remove non)
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -60,6 +67,10 @@ public class CreateChangeIT extends AbstractDaemonTest {
     TestTimeUtil.useSystemTime();
   }
 
+<<<<<<< HEAD   (8f9efa ChangeIT: Assert that submitting a change doesn't remove non)
+=======
+
+>>>>>>> BRANCH (5da67b ChangeIT: Assert that submitting a change doesn't remove non)
   @Test
   public void createEmptyChange_MissingBranch() throws Exception {
     ChangeInput ci = new ChangeInput();

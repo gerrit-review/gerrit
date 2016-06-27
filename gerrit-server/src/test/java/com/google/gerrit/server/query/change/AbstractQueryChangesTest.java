@@ -88,7 +88,10 @@ import org.eclipse.jgit.junit.TestRepository;
 import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.ObjectInserter;
 import org.eclipse.jgit.revwalk.RevCommit;
+<<<<<<< HEAD   (8f9efa ChangeIT: Assert that submitting a change doesn't remove non)
 import org.eclipse.jgit.util.SystemReader;
+=======
+>>>>>>> BRANCH (5da67b ChangeIT: Assert that submitting a change doesn't remove non)
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -101,7 +104,10 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+<<<<<<< HEAD   (8f9efa ChangeIT: Assert that submitting a change doesn't remove non)
 import java.util.concurrent.TimeUnit;
+=======
+>>>>>>> BRANCH (5da67b ChangeIT: Assert that submitting a change doesn't remove non)
 
 @Ignore
 public abstract class AbstractQueryChangesTest extends GerritServerTests {
@@ -189,6 +195,7 @@ public abstract class AbstractQueryChangesTest extends GerritServerTests {
 
   @Before
   public void setTimeForTesting() {
+<<<<<<< HEAD   (8f9efa ChangeIT: Assert that submitting a change doesn't remove non)
     resetTimeWithClockStep(1, MILLISECONDS);
   }
 
@@ -198,6 +205,10 @@ public abstract class AbstractQueryChangesTest extends GerritServerTests {
     // SystemReader.
     TestTimeUtil.resetWithClockStep(clockStep, clockStepUnit);
     SystemReader.setInstance(null);
+=======
+    systemTimeZone = System.setProperty("user.timezone", "US/Eastern");
+    TestTimeUtil.resetWithClockStep(1, MILLISECONDS);
+>>>>>>> BRANCH (5da67b ChangeIT: Assert that submitting a change doesn't remove non)
   }
 
   @After
@@ -749,7 +760,11 @@ public abstract class AbstractQueryChangesTest extends GerritServerTests {
 
   @Test
   public void updateOrder() throws Exception {
+<<<<<<< HEAD   (8f9efa ChangeIT: Assert that submitting a change doesn't remove non)
     resetTimeWithClockStep(2, MINUTES);
+=======
+    TestTimeUtil.resetWithClockStep(2, MINUTES);
+>>>>>>> BRANCH (5da67b ChangeIT: Assert that submitting a change doesn't remove non)
     TestRepository<Repo> repo = createProject("repo");
     List<ChangeInserter> inserters = new ArrayList<>();
     List<Change> changes = new ArrayList<>();
@@ -774,7 +789,11 @@ public abstract class AbstractQueryChangesTest extends GerritServerTests {
 
   @Test
   public void updatedOrderWithMinuteResolution() throws Exception {
+<<<<<<< HEAD   (8f9efa ChangeIT: Assert that submitting a change doesn't remove non)
     resetTimeWithClockStep(2, MINUTES);
+=======
+    TestTimeUtil.resetWithClockStep(2, MINUTES);
+>>>>>>> BRANCH (5da67b ChangeIT: Assert that submitting a change doesn't remove non)
     TestRepository<Repo> repo = createProject("repo");
     ChangeInserter ins1 = newChange(repo);
     Change change1 = insert(repo, ins1);
@@ -943,10 +962,19 @@ public abstract class AbstractQueryChangesTest extends GerritServerTests {
   @Test
   public void byAge() throws Exception {
     long thirtyHoursInMs = MILLISECONDS.convert(30, HOURS);
+<<<<<<< HEAD   (8f9efa ChangeIT: Assert that submitting a change doesn't remove non)
     resetTimeWithClockStep(thirtyHoursInMs, MILLISECONDS);
+=======
+    TestTimeUtil.resetWithClockStep(thirtyHoursInMs, MILLISECONDS);
+>>>>>>> BRANCH (5da67b ChangeIT: Assert that submitting a change doesn't remove non)
     TestRepository<Repo> repo = createProject("repo");
+<<<<<<< HEAD   (8f9efa ChangeIT: Assert that submitting a change doesn't remove non)
     Change change1 = insert(repo, newChange(repo));
     Change change2 = insert(repo, newChange(repo));
+=======
+    Change change1 = insert(newChange(repo, null, null, null, null));
+    Change change2 = insert(newChange(repo, null, null, null, null));
+>>>>>>> BRANCH (5da67b ChangeIT: Assert that submitting a change doesn't remove non)
     // Queried by AgePredicate constructor.
     TestTimeUtil.setClockStep(0, MILLISECONDS);
     long now = TimeUtil.nowMs();
@@ -966,10 +994,19 @@ public abstract class AbstractQueryChangesTest extends GerritServerTests {
 
   @Test
   public void byBefore() throws Exception {
+<<<<<<< HEAD   (8f9efa ChangeIT: Assert that submitting a change doesn't remove non)
     resetTimeWithClockStep(30, HOURS);
+=======
+    TestTimeUtil.resetWithClockStep(30, HOURS);
+>>>>>>> BRANCH (5da67b ChangeIT: Assert that submitting a change doesn't remove non)
     TestRepository<Repo> repo = createProject("repo");
+<<<<<<< HEAD   (8f9efa ChangeIT: Assert that submitting a change doesn't remove non)
     Change change1 = insert(repo, newChange(repo));
     Change change2 = insert(repo, newChange(repo));
+=======
+    Change change1 = insert(newChange(repo, null, null, null, null));
+    Change change2 = insert(newChange(repo, null, null, null, null));
+>>>>>>> BRANCH (5da67b ChangeIT: Assert that submitting a change doesn't remove non)
     TestTimeUtil.setClockStep(0, MILLISECONDS);
 
     assertQuery("before:2009-09-29");
@@ -986,10 +1023,19 @@ public abstract class AbstractQueryChangesTest extends GerritServerTests {
 
   @Test
   public void byAfter() throws Exception {
+<<<<<<< HEAD   (8f9efa ChangeIT: Assert that submitting a change doesn't remove non)
     resetTimeWithClockStep(30, HOURS);
+=======
+    TestTimeUtil.resetWithClockStep(30, HOURS);
+>>>>>>> BRANCH (5da67b ChangeIT: Assert that submitting a change doesn't remove non)
     TestRepository<Repo> repo = createProject("repo");
+<<<<<<< HEAD   (8f9efa ChangeIT: Assert that submitting a change doesn't remove non)
     Change change1 = insert(repo, newChange(repo));
     Change change2 = insert(repo, newChange(repo));
+=======
+    Change change1 = insert(newChange(repo, null, null, null, null));
+    Change change2 = insert(newChange(repo, null, null, null, null));
+>>>>>>> BRANCH (5da67b ChangeIT: Assert that submitting a change doesn't remove non)
     TestTimeUtil.setClockStep(0, MILLISECONDS);
 
     assertQuery("after:2009-10-03");
@@ -1345,7 +1391,11 @@ public abstract class AbstractQueryChangesTest extends GerritServerTests {
 
   @Test
   public void reviewedBy() throws Exception {
+<<<<<<< HEAD   (8f9efa ChangeIT: Assert that submitting a change doesn't remove non)
     resetTimeWithClockStep(2, MINUTES);
+=======
+    TestTimeUtil.resetWithClockStep(2, MINUTES);
+>>>>>>> BRANCH (5da67b ChangeIT: Assert that submitting a change doesn't remove non)
     TestRepository<Repo> repo = createProject("repo");
     Change change1 = insert(repo, newChange(repo));
     Change change2 = insert(repo, newChange(repo));

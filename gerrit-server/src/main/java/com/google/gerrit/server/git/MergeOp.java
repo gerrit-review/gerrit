@@ -18,9 +18,13 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
+<<<<<<< HEAD   (8f9efa ChangeIT: Assert that submitting a change doesn't remove non)
 import com.google.auto.value.AutoValue;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+=======
+import com.google.common.base.Function;
+>>>>>>> BRANCH (5da67b ChangeIT: Assert that submitting a change doesn't remove non)
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.HashMultimap;
@@ -765,8 +769,234 @@ public class MergeOp implements AutoCloseable {
     }
   }
 
+<<<<<<< HEAD   (8f9efa ChangeIT: Assert that submitting a change doesn't remove non)
   private void abandonAllOpenChangeForDeletedProject(
       Project.NameKey destProject) {
+=======
+  private Change setMergedPatchSet(Change.Id changeId, final PatchSet.Id merged)
+      throws OrmException {
+    return db.changes().atomicUpdate(changeId, new AtomicUpdate<Change>() {
+      @Override
+      public Change update(Change c) {
+        c.setStatus(Change.Status.MERGED);
+        c.setSubmissionId(submissionId);
+        if (!merged.equals(c.currentPatchSetId())) {
+          // Uncool; the patch set changed after we merged it.
+          // Go back to the patch set that was actually merged.
+          //
+          try {
+            c.setCurrentPatchSet(patchSetInfoFactory.get(db, merged));
+          } catch (PatchSetInfoNotAvailableException e1) {
+            logError("Cannot read merged patch set " + merged, e1);
+          }
+        }
+        ChangeUtil.updated(c);
+        return c;
+      }
+    });
+  }
+
+  private void setApproval(ChangeData cd, IdentifiedUser user)
+      throws OrmException, IOException {
+    Timestamp timestamp = TimeUtil.nowTs();
+    ChangeControl control = cd.changeControl();
+    PatchSet.Id psId = cd.currentPatchSet().getId();
+    PatchSet.Id psIdNewRev = commits.get(cd.change().getId())
+        .change().currentPatchSetId();
+
+    logDebug("Add approval for " + cd + " from user " + user);
+    ChangeUpdate update = updateFactory.create(control, timestamp);
+    List<SubmitRecord> record = records.get(cd.change().getId());
+    if (record != null) {
+      update.merge(record);
+    }
+    db.changes().beginTransaction(cd.change().getId());
+    try {
+      BatchMetaDataUpdate batch = approve(control, psId, user,
+          update, timestamp);
+      batch.write(update, new CommitBuilder());
+
+      // If the submit strategy created a new revision (rebase, cherry-pick)
+      // approve that as well
+      if (!psIdNewRev.equals(psId)) {
+        batch = approve(control, psIdNewRev, user,
+            update, timestamp);
+        // Write update commit after all normalized label commits.
+        batch.write(update, new CommitBuilder());
+      }
+      db.commit();
+    } finally {
+      db.rollback();
+    }
+    indexer.index(db, cd.change());
+  }
+
+  private BatchMetaDataUpdate approve(ChangeControl control, PatchSet.Id psId,
+      IdentifiedUser user, ChangeUpdate update, Timestamp timestamp)
+          throws OrmException {
+    Map<PatchSetApproval.Key, PatchSetApproval> byKey = Maps.newHashMap();
+    for (PatchSetApproval psa :
+      approvalsUtil.byPatchSet(db, control, psId)) {
+      if (!byKey.containsKey(psa.getKey())) {
+        byKey.put(psa.getKey(), psa);
+      }
+    }
+
+    PatchSetApproval submit = new PatchSetApproval(
+          new PatchSetApproval.Key(
+              psId,
+              user.getAccountId(),
+              LabelId.SUBMIT),
+              (short) 1, TimeUtil.nowTs());
+    byKey.put(submit.getKey(), submit);
+    submit.setValue((short) 1);
+    submit.setGranted(timestamp);
+
+    // Flatten out existing approvals for this patch set based upon the current
+    // permissions. Once the change is closed the approvals are not updated at
+    // presentation view time, except for zero votes used to indicate a reviewer
+    // was added. So we need to make sure votes are accurate now. This way if
+    // permissions get modified in the future, historical records stay accurate.
+    LabelNormalizer.Result normalized =
+        labelNormalizer.normalize(control, byKey.values());
+
+    // TODO(dborowitz): Don't use a label in notedb; just check when status
+    // change happened.
+    update.putApproval(submit.getLabel(), submit.getValue());
+    logDebug("Adding submit label " + submit);
+
+    db.patchSetApprovals().upsert(normalized.getNormalized());
+    db.patchSetApprovals().update(zero(normalized.deleted()));
+
+    try {
+      return saveToBatch(control, update, normalized, timestamp);
+    } catch (IOException e) {
+      throw new OrmException(e);
+    }
+  }
+
+  private static Iterable<PatchSetApproval> zero(
+      Iterable<PatchSetApproval> approvals) {
+    return Iterables.transform(approvals,
+        new Function<PatchSetApproval, PatchSetApproval>() {
+          @Override
+          public PatchSetApproval apply(PatchSetApproval in) {
+            PatchSetApproval copy = new PatchSetApproval(in.getPatchSetId(), in);
+            copy.setValue((short) 0);
+            return copy;
+          }
+        });
+  }
+
+
+  private BatchMetaDataUpdate saveToBatch(ChangeControl ctl,
+      ChangeUpdate callerUpdate, LabelNormalizer.Result normalized,
+      Timestamp timestamp) throws IOException {
+    Table<Account.Id, String, Optional<Short>> byUser = HashBasedTable.create();
+    for (PatchSetApproval psa : normalized.updated()) {
+      byUser.put(psa.getAccountId(), psa.getLabel(),
+          Optional.of(psa.getValue()));
+    }
+    for (PatchSetApproval psa : normalized.deleted()) {
+      byUser.put(psa.getAccountId(), psa.getLabel(), Optional.<Short> absent());
+    }
+
+    BatchMetaDataUpdate batch = callerUpdate.openUpdate();
+    for (Account.Id accountId : byUser.rowKeySet()) {
+      if (!accountId.equals(callerUpdate.getUser().getAccountId())) {
+        ChangeUpdate update = updateFactory.create(
+            ctl.forUser(identifiedUserFactory.create(accountId)), timestamp);
+        update.setSubject("Finalize approvals at submit");
+        putApprovals(update, byUser.row(accountId));
+
+        CommitBuilder commit = new CommitBuilder();
+        commit.setCommitter(new PersonIdent(serverIdent, timestamp));
+        batch.write(update, commit);
+      }
+    }
+
+    putApprovals(callerUpdate,
+        byUser.row(callerUpdate.getUser().getAccountId()));
+    return batch;
+  }
+
+  private static void putApprovals(ChangeUpdate update,
+      Map<String, Optional<Short>> approvals) {
+    for (Map.Entry<String, Optional<Short>> e : approvals.entrySet()) {
+      if (e.getValue().isPresent()) {
+        update.putApproval(e.getKey(), e.getValue().get());
+      } else {
+        update.removeApproval(e.getKey());
+      }
+    }
+  }
+
+  private ChangeControl changeControl(Change c) throws NoSuchChangeException {
+    return changeControlFactory.controlFor(
+        c, identifiedUserFactory.create(c.getOwner()));
+  }
+
+  private void setNew(ChangeNotes notes, final ChangeMessage msg)
+      throws NoSuchChangeException, IOException {
+    Change c = notes.getChange();
+
+    Change change = null;
+    ChangeUpdate update = null;
+    try {
+      db.changes().beginTransaction(c.getId());
+      try {
+        change = db.changes().atomicUpdate(
+            c.getId(),
+            new AtomicUpdate<Change>() {
+          @Override
+          public Change update(Change c) {
+            if (c.getStatus().isOpen()) {
+              c.setStatus(Change.Status.NEW);
+              ChangeUtil.updated(c);
+            }
+            return c;
+          }
+        });
+        ChangeControl control = changeControl(change);
+
+        //TODO(yyonas): atomic change is not propagated.
+        update = updateFactory.create(control, c.getLastUpdatedOn());
+        if (msg != null) {
+          cmUtil.addChangeMessage(db, update, msg);
+        }
+        db.commit();
+      } finally {
+        db.rollback();
+      }
+    } catch (OrmException err) {
+      logWarn("Cannot record merge failure message", err);
+    }
+    if (update != null) {
+      update.commit();
+    }
+    indexer.index(db, change);
+
+    PatchSetApproval submitter = null;
+    try {
+      submitter = approvalsUtil.getSubmitter(
+          db, notes, notes.getChange().currentPatchSetId());
+    } catch (Exception e) {
+      logError("Cannot get submitter for change " + notes.getChangeId(), e);
+    }
+    if (submitter != null) {
+      try {
+        hooks.doMergeFailedHook(c,
+            accountCache.get(submitter.getAccountId()).getAccount(),
+            db.patchSets().get(c.currentPatchSetId()), msg.getMessage(), db);
+      } catch (OrmException ex) {
+        logError("Cannot run hook for merge failed " + c.getId(), ex);
+      }
+    }
+  }
+
+  private void abandonAllOpenChanges(Project.NameKey destProject)
+      throws NoSuchChangeException {
+>>>>>>> BRANCH (5da67b ChangeIT: Assert that submitting a change doesn't remove non)
     try {
       for (ChangeData cd : internalChangeQuery.byProjectOpen(destProject)) {
         try (BatchUpdate bu = batchUpdateFactory.create(db, destProject,
