@@ -190,6 +190,7 @@ java_test(
     ['src/test/java/**/*.java'],
     excludes = TESTUTIL + PROLOG_TESTS + PROLOG_TEST_CASE + QUERY_TESTS
   ),
+  resources = glob(['src/test/resources/com/google/gerrit/server/mail/*']),
   deps = TESTUTIL_DEPS + [
     ':testutil',
     '//gerrit-antlr:query_exception',
@@ -200,9 +201,13 @@ java_test(
     '//lib:grappa',
     '//lib:gson',
     '//lib:guava',
+<<<<<<< HEAD   (da92f7 Merge "Separates diff processing from diff building")
     '//lib:guava-retrying',
     '//lib:protobuf',
     '//lib/dropwizard:dropwizard-core',
+=======
+    '//lib/commons:validator',
+>>>>>>> BRANCH (802a16 Update commons-validator to 1.5.1 and add test for validatin)
     '//lib/guice:guice-assistedinject',
     '//lib/prolog:runtime',
   ],
