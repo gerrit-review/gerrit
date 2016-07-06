@@ -53,10 +53,15 @@ import com.google.gerrit.server.project.Util;
 import com.google.gerrit.server.query.change.ChangeData;
 import com.google.gerrit.testutil.FakeEmailSender.Message;
 import com.google.gerrit.testutil.TestTimeUtil;
+import com.google.gerrit.server.git.ProjectConfig;
 
+<<<<<<< HEAD   (bf7173 Revert "Revert "Reapply: Revert "Use changeRefsById to track)
 import org.eclipse.jgit.junit.TestRepository;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
+=======
+import org.eclipse.jgit.lib.ObjectId;
+>>>>>>> BRANCH (e4f139 AbstractPushForReview: Add test for message output)
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.RefSpec;
@@ -125,6 +130,39 @@ public abstract class AbstractPushForReview extends AbstractDaemonTest {
     PushOneCommit.Result r = pushTo("refs/for/master");
     r.assertOkStatus();
     r.assertChange(Change.Status.NEW, null);
+  }
+
+  @Test
+  public void testOutput() throws Exception {
+    String url = canonicalWebUrl.get();
+    ObjectId initialHead = testRepo.getRepository().resolve("HEAD");
+    PushOneCommit.Result r1 = pushTo("refs/for/master");
+    Change.Id id1 = r1.getChange().getId();
+    r1.assertOkStatus();
+    r1.assertChange(Change.Status.NEW, null);
+    r1.assertMessage(
+        "New changes:\n"
+        + "  " + url + id1 + " " + r1.getCommit().getShortMessage() + "\n");
+
+    testRepo.reset(initialHead);
+    String newMsg = r1.getCommit().getShortMessage() + " v2";
+    testRepo.branch("HEAD").commit()
+        .message(newMsg)
+        .insertChangeId(r1.getChangeId().substring(1))
+        .create();
+    PushOneCommit.Result r2 = pushFactory.create(
+            db, admin.getIdent(), testRepo, "another commit", "b.txt", "bbb")
+        .to("refs/for/master");
+    Change.Id id2 = r2.getChange().getId();
+    r2.assertOkStatus();
+    r2.assertChange(Change.Status.NEW, null);
+    r2.assertMessage(
+        "New changes:\n"
+        + "  " + url + id2 + " another commit\n"
+        + "\n"
+        + "\n"
+        + "Updated changes:\n"
+        + "  " + url + id1 + " " + newMsg + "\n");
   }
 
   @Test
@@ -280,6 +318,7 @@ public abstract class AbstractPushForReview extends AbstractDaemonTest {
     r.assertOkStatus();
     edit = getEdit(r.getChangeId());
     assertThat(edit).isNotNull();
+<<<<<<< HEAD   (bf7173 Revert "Revert "Reapply: Revert "Use changeRefsById to track)
   }
 
   @Test
@@ -294,6 +333,12 @@ public abstract class AbstractPushForReview extends AbstractDaemonTest {
       assertThat(cm.message).isEqualTo(
           "Uploaded patch set 1.\nmy test message");
     }
+=======
+    r.assertMessage("Updated Changes:\n  "
+        + canonicalWebUrl.get()
+        + r.getChange().getId()
+        + " " + edit.commit.subject + " [EDIT]\n");
+>>>>>>> BRANCH (e4f139 AbstractPushForReview: Add test for message output)
   }
 
   @Test
@@ -539,6 +584,34 @@ public abstract class AbstractPushForReview extends AbstractDaemonTest {
   }
 
   @Test
+  public void testCreateNewChangeForAllNotInTarget() throws Exception {
+    ProjectConfig config = projectCache.checkedGet(project).getConfig();
+    config.getProject().setCreateNewChangeForAllNotInTarget(InheritableBoolean.TRUE);
+    saveProjectConfig(project, config);
+
+    PushOneCommit push =
+        pushFactory.create(db, admin.getIdent(), testRepo, PushOneCommit.SUBJECT,
+            "a.txt", "content");
+    PushOneCommit.Result r = push.to("refs/for/master");
+    r.assertOkStatus();
+
+    push =
+        pushFactory.create(db, admin.getIdent(), testRepo, PushOneCommit.SUBJECT,
+            "b.txt", "anotherContent");
+    r = push.to("refs/for/master");
+    r.assertOkStatus();
+
+    gApi.projects()
+        .name(project.get())
+        .branch("otherBranch")
+        .create(new BranchInput());
+
+    PushOneCommit.Result r2 = push.to("refs/for/otherBranch");
+    r2.assertOkStatus();
+    assertTwoChangesWithSameRevision(r);
+  }
+
+  @Test
   public void testPushSameCommitTwiceUsingMagicBranchBaseOption()
       throws Exception {
     grant(Permission.PUSH, project, "refs/heads/master");
@@ -561,7 +634,16 @@ public abstract class AbstractPushForReview extends AbstractDaemonTest {
         testRepo, "refs/for/foo%base=" + rBase.getCommit().name(), false, false);
     assertThat(pr.getMessages()).contains("changes: new: 1, refs: 1, done");
 
+<<<<<<< HEAD   (bf7173 Revert "Revert "Reapply: Revert "Use changeRefsById to track)
     List<ChangeInfo> changes = query(r.getCommit().name());
+=======
+    assertTwoChangesWithSameRevision(r);
+  }
+
+  private void assertTwoChangesWithSameRevision(PushOneCommit.Result result)
+      throws Exception {
+    List<ChangeInfo> changes = query(result.getCommitId().name());
+>>>>>>> BRANCH (e4f139 AbstractPushForReview: Add test for message output)
     assertThat(changes).hasSize(2);
     ChangeInfo c1 = get(changes.get(0).id);
     ChangeInfo c2 = get(changes.get(1).id);

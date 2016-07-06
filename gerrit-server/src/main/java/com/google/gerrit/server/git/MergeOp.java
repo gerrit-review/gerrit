@@ -581,7 +581,14 @@ public class MergeOp implements AutoCloseable {
       for (Ref r : or.repo.getRefDatabase().getRefs(Constants.R_HEADS)
           .values()) {
         try {
+<<<<<<< HEAD   (bf7173 Revert "Revert "Reapply: Revert "Use changeRefsById to track)
           alreadyAccepted.add(or.rw.parseCommit(r.getObjectId()));
+=======
+          CodeReviewCommit aac = rw.parseCommit(r.getObjectId());
+          if (!commits.values().contains(aac)) {
+            alreadyAccepted.add(aac);
+          }
+>>>>>>> BRANCH (e4f139 AbstractPushForReview: Add test for message output)
         } catch (IncorrectObjectTypeException iote) {
           // Not a commit? Skip over it.
         }
