@@ -1,11 +1,18 @@
 = Gerrit Code Review - Release Notes
 
+<<<<<<< HEAD   (b5546f Merge "Accounts API: Add methods to create an account")
 [[s2_13]]
 == Version 2.13.x
 * link:ReleaseNotes-2.13.html[2.13]
 
 [[s2_12]]
 == Version 2.12.x
+=======
+[[2_12]]
+Version 2.12.x
+--------------
+* link:ReleaseNotes-2.12.3.html[2.12.3]
+>>>>>>> BRANCH (05541e Set version to 2.12.3)
 * link:ReleaseNotes-2.12.2.html[2.12.2]
 * link:ReleaseNotes-2.12.1.html[2.12.1]
 * link:ReleaseNotes-2.12.html[2.12]
