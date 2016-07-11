@@ -27,6 +27,7 @@ Rebuilds the secondary index.
 --verbose::
 	Output debug information for each change.
 
+<<<<<<< HEAD   (4d8bc7 Merge changes I579e6f2c,I171cb585,Ieebbc7f6)
 --list::
 	List available index names.
 
@@ -34,6 +35,8 @@ Rebuilds the secondary index.
 	Reindex only index with given name. This option can be supplied
 	more than once to reindex multiple indices.
 
+=======
+>>>>>>> BRANCH (c5fe4f Remove --dry-run option from reindex command documentation)
 == CONTEXT
 The secondary index must be enabled. See
 link:config-gerrit.html#index.type[index.type].
