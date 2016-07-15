@@ -26,6 +26,12 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.Weigher;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
+<<<<<<< HEAD   (a16f8a Merge changes from topic 'use-account-index-to-suggest-user-)
+=======
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
+import com.google.common.util.concurrent.UncheckedExecutionException;
+>>>>>>> BRANCH (7872b5 PatchSetInserter: Always use db from Context)
 import com.google.gerrit.extensions.client.SubmitType;
 import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.server.cache.CacheModule;
@@ -228,8 +234,13 @@ public class MergeabilityCacheImpl implements MergeabilityCache {
     ObjectId into = intoRef != null ? intoRef.getObjectId() : ObjectId.zeroId();
     EntryKey key = new EntryKey(commit, into, submitType, mergeStrategy);
     try {
+<<<<<<< HEAD   (a16f8a Merge changes from topic 'use-account-index-to-suggest-user-)
       return cache.get(key, new Loader(key, dest, repo));
     } catch (ExecutionException e) {
+=======
+      return cache.get(key, new Loader(key, dest, repo, db));
+    } catch (ExecutionException | UncheckedExecutionException e) {
+>>>>>>> BRANCH (7872b5 PatchSetInserter: Always use db from Context)
       log.error(String.format("Error checking mergeability of %s into %s (%s)",
             key.commit.name(), key.into.name(), key.submitType.name()),
           e.getCause());

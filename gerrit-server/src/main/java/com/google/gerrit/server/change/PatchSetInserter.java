@@ -109,7 +109,12 @@ public class PatchSetInserter extends BatchUpdate.Op {
   private ReviewerSet oldReviewers;
 
   @AssistedInject
+<<<<<<< HEAD   (a16f8a Merge changes from topic 'use-account-index-to-suggest-user-)
   public PatchSetInserter(ApprovalsUtil approvalsUtil,
+=======
+  public PatchSetInserter(ChangeHooks hooks,
+      ApprovalsUtil approvalsUtil,
+>>>>>>> BRANCH (7872b5 PatchSetInserter: Always use db from Context)
       ApprovalCopier approvalCopier,
       ChangeMessagesUtil cmUtil,
       PatchSetInfoFactory patchSetInfoFactory,
@@ -120,6 +125,10 @@ public class PatchSetInserter extends BatchUpdate.Op {
       @Assisted ChangeControl ctl,
       @Assisted PatchSet.Id psId,
       @Assisted RevCommit commit) {
+<<<<<<< HEAD   (a16f8a Merge changes from topic 'use-account-index-to-suggest-user-)
+=======
+    this.hooks = hooks;
+>>>>>>> BRANCH (7872b5 PatchSetInserter: Always use db from Context)
     this.approvalsUtil = approvalsUtil;
     this.approvalCopier = approvalCopier;
     this.cmUtil = cmUtil;
@@ -204,10 +213,17 @@ public class PatchSetInserter extends BatchUpdate.Op {
   }
 
   @Override
+<<<<<<< HEAD   (a16f8a Merge changes from topic 'use-account-index-to-suggest-user-)
   public boolean updateChange(ChangeContext ctx)
       throws ResourceConflictException, OrmException, IOException {
     ReviewDb db = ctx.getDb();
     ChangeControl ctl = ctx.getControl();
+=======
+  public void updateChange(ChangeContext ctx) throws OrmException,
+      InvalidChangeOperationException {
+    ReviewDb db = ctx.getDb();
+    ChangeControl ctl = ctx.getChangeControl();
+>>>>>>> BRANCH (7872b5 PatchSetInserter: Always use db from Context)
 
     change = ctx.getChange();
     ChangeUpdate update = ctx.getUpdate(psId);
