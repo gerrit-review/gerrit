@@ -277,7 +277,11 @@ public class ChangeInserter extends BatchUpdate.InsertChangeOp {
   }
 
   public void setPushCertificate(String cert) {
+<<<<<<< HEAD   (0135b5 ReceiveCommits: Set push certificate on patch sets)
     pushCert = cert;
+=======
+    patchSet.setPushCertificate(cert);
+>>>>>>> BRANCH (43fe3f ReceiveCommits: Set push certificate on new changes)
   }
 
   public PatchSet getPatchSet() {
