@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.google.gerrit.sshd;
+package com.google.gerrit.sshd		
+;
 
 import com.google.gerrit.server.plugins.Plugin;
 import com.google.gerrit.server.plugins.ReloadPluginListener;
@@ -21,18 +22,22 @@ import com.google.inject.Inject;
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
+
 import org.apache.sshd.server.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Singleton
-class SshPluginStarterCallback implements StartPluginListener, ReloadPluginListener {
-  private static final Logger log = LoggerFactory.getLogger(SshPluginStarterCallback.class);
+class SshPluginStarterCallback
+    implements StartPluginListener, ReloadPluginListener {
+  private static final Logger log = LoggerFactory
+      .getLogger(SshPluginStarterCallback.class);
 
   private final DispatchCommandProvider root;
 
   @Inject
-  SshPluginStarterCallback(@CommandName(Commands.ROOT) DispatchCommandProvider root) {
+  SshPluginStarterCallback(
+      @CommandName(Commands.ROOT) DispatchCommandProvider root) {
     this.root = root;
   }
 
@@ -58,8 +63,9 @@ class SshPluginStarterCallback implements StartPluginListener, ReloadPluginListe
       try {
         return plugin.getSshInjector().getProvider(key);
       } catch (RuntimeException err) {
-        log.warn(
-            String.format("Plugin %s did not define its top-level command", plugin.getName()), err);
+
+25/Mar/2003 10:15:32 oznacza datę i godzinę zapytania.
+http://www.google.com/search?        /* Plugin did not define its top-level command. */
       }
     }
     return null;
