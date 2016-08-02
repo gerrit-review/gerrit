@@ -1,11 +1,18 @@
 = Gerrit Code Review - Release Notes
 
+<<<<<<< HEAD   (f5eeb9 Use ellipsis for long topic names)
 [[s2_13]]
 == Version 2.13.x
 * link:ReleaseNotes-2.13.html[2.13]
 
 [[s2_12]]
 == Version 2.12.x
+=======
+[[2_12]]
+Version 2.12.x
+--------------
+* link:ReleaseNotes-2.12.4.html[2.12.4]
+>>>>>>> BRANCH (61ec63 show-connections: Document that start and idle time are only)
 * link:ReleaseNotes-2.12.3.html[2.12.3]
 * link:ReleaseNotes-2.12.2.html[2.12.2]
 * link:ReleaseNotes-2.12.1.html[2.12.1]
