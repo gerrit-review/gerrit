@@ -329,6 +329,11 @@ public class SshDaemon extends SshServer implements SshInfo, LifecycleListener {
       if (getSessionFactory() == null) {
         setSessionFactory(createSessionFactory());
       }
+<<<<<<< HEAD   (9cb649 Merge "Separate CCs from reviewers when NoteDb is enabled")
+=======
+      sessionFactory.setServer(this);
+      setupSessionTimeout(sessionFactory);
+>>>>>>> BRANCH (271ee3 Set uploader for inline edit)
       daemonAcceptor = createAcceptor();
 
       try {
