@@ -114,5 +114,37 @@ public class RestSession extends HttpSession {
 
   public RestResponse delete(String endPoint) throws IOException {
     return execute(Request.Delete(url + "/a" + endPoint));
+<<<<<<< HEAD   (49a617 Merge "Add data-branch and data-project to attributes for re)
+=======
+  }
+
+  public RestResponse head(String endPoint) throws IOException {
+    return execute(Request.Head(url + "/a" + endPoint));
+  }
+
+  public static RawInput newRawInput(String content) {
+    return newRawInput(content.getBytes(UTF_8));
+  }
+
+  public static RawInput newRawInput(final byte[] bytes) {
+    Preconditions.checkNotNull(bytes);
+    Preconditions.checkArgument(bytes.length > 0);
+    return new RawInput() {
+      @Override
+      public InputStream getInputStream() throws IOException {
+        return new ByteArrayInputStream(bytes);
+      }
+
+      @Override
+      public String getContentType() {
+        return "application/octet-stream";
+      }
+
+      @Override
+      public long getContentLength() {
+        return bytes.length;
+      }
+    };
+>>>>>>> BRANCH (199bba Update 2.12.4 release notes)
   }
 }

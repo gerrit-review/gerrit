@@ -21,14 +21,15 @@ import static com.google.gerrit.acceptance.PushOneCommit.PATCH;
 import static com.google.gerrit.acceptance.PushOneCommit.SUBJECT;
 import static com.google.gerrit.server.group.SystemGroupBackend.REGISTERED_USERS;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.http.HttpStatus.SC_OK;
 import static org.eclipse.jgit.lib.Constants.HEAD;
 import static org.junit.Assert.fail;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.gerrit.acceptance.AbstractDaemonTest;
-import com.google.gerrit.acceptance.NoHttpd;
 import com.google.gerrit.acceptance.PushOneCommit;
+import com.google.gerrit.acceptance.RestResponse;
 import com.google.gerrit.acceptance.TestAccount;
 import com.google.gerrit.common.data.Permission;
 import com.google.gerrit.extensions.api.changes.ChangeApi;
@@ -77,7 +78,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-@NoHttpd
 public class RevisionIT extends AbstractDaemonTest {
 
   @Inject
@@ -620,6 +620,20 @@ public class RevisionIT extends AbstractDaemonTest {
     bin.writeTo(os);
     String res = new String(os.toByteArray(), UTF_8);
     assertThat(res).isEqualTo(FILE_CONTENT);
+  }
+
+  @Test
+  public void contentType() throws Exception {
+    PushOneCommit.Result r = createChange();
+
+    String endPoint = "/changes/" + r.getChangeId()
+      + "/revisions/" + r.getCommit().name()
+      + "/files/" + FILE_NAME
+      + "/content";
+    RestResponse response = adminSession.head(endPoint);
+    assertThat(response.getStatusCode()).isEqualTo(SC_OK);
+    assertThat(response.getContentType()).startsWith("text/plain");
+    assertThat(response.hasContent()).isFalse();
   }
 
   private void assertMergeable(String id, boolean expected) throws Exception {
