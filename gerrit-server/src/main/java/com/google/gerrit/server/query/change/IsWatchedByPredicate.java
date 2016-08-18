@@ -46,7 +46,12 @@ class IsWatchedByPredicate extends AndPredicate<ChangeData> {
   private static List<Predicate<ChangeData>> filters(
       ChangeQueryBuilder.Arguments args,
       boolean checkIsVisible) throws QueryParseException {
+<<<<<<< HEAD   (49802a Update git submodules)
     List<Predicate<ChangeData>> r = new ArrayList<>();
+=======
+    CurrentUser user = args.getIdentifiedUser();
+    List<Predicate<ChangeData>> r = Lists.newArrayList();
+>>>>>>> BRANCH (162bd6 Merge "Fix log files not being compressed when running in a )
     ChangeQueryBuilder builder = new ChangeQueryBuilder(args);
     for (ProjectWatchKey w : getWatches(args)) {
       Predicate<ChangeData> f = null;

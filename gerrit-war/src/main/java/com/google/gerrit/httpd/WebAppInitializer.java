@@ -27,7 +27,11 @@ import com.google.gerrit.httpd.raw.StaticModule;
 import com.google.gerrit.lifecycle.LifecycleManager;
 import com.google.gerrit.lifecycle.LifecycleModule;
 import com.google.gerrit.lucene.LuceneIndexModule;
+<<<<<<< HEAD   (49802a Update git submodules)
 import com.google.gerrit.metrics.dropwizard.DropWizardMetricMaker;
+=======
+import com.google.gerrit.pgm.util.LogFileCompressor;
+>>>>>>> BRANCH (162bd6 Merge "Fix log files not being compressed when running in a )
 import com.google.gerrit.reviewdb.client.AuthType;
 import com.google.gerrit.server.account.InternalAccountDirectory;
 import com.google.gerrit.server.cache.h2.DefaultCacheFactory;
@@ -294,11 +298,17 @@ public class WebAppInitializer extends GuiceServletContextListener
 
   private Injector createSysInjector() {
     final List<Module> modules = new ArrayList<>();
+<<<<<<< HEAD   (49802a Update git submodules)
     modules.add(new DropWizardMetricMaker.RestModule());
     modules.add(new EventBroker.Module());
     modules.add(new H2AccountPatchReviewStore.Module());
     modules.add(cfgInjector.getInstance(GitRepositoryManagerModule.class));
     modules.add(new StreamEventsApiListener.Module());
+=======
+    modules.add(new LogFileCompressor.Module());
+    modules.add(new WorkQueue.Module());
+    modules.add(new ChangeHookRunner.Module());
+>>>>>>> BRANCH (162bd6 Merge "Fix log files not being compressed when running in a )
     modules.add(new ReceiveCommitsExecutorModule());
     modules.add(new DiffExecutorModule());
     modules.add(new MimeUtil2Module());
