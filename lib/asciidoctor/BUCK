@@ -43,9 +43,15 @@ java_library(
 
 maven_jar(
   name = 'asciidoctor',
+<<<<<<< HEAD   (162bd6 Merge "Fix log files not being compressed when running in a )
   id = 'org.asciidoctor:asciidoctorj:1.5.2',
   sha1 = '39d33f739ec1c46f6e908a725264eb74b23c9f99',
   license = 'Apache2.0',
+=======
+  id = 'org.asciidoctor:asciidoctorj:1.5.0',
+  sha1 = '192df5660f72a0fb76966dcc64193b94fba65f99',
+  license = 'asciidoctor',
+>>>>>>> BRANCH (34670b Add correct license for asciidoctor)
   visibility = [],
   attach_source = False,
 )
