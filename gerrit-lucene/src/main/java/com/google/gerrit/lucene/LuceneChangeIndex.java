@@ -24,10 +24,15 @@ import static com.google.gerrit.server.index.change.ChangeField.PROJECT;
 import static com.google.gerrit.server.index.change.ChangeIndexRewriter.CLOSED_STATUSES;
 import static com.google.gerrit.server.index.change.ChangeIndexRewriter.OPEN_STATUSES;
 
+<<<<<<< HEAD   (880a9b Merge "SubmoduleOp: Add missing space in generated commit me)
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.FluentIterable;
+=======
+import com.google.common.base.Throwables;
+import com.google.common.collect.ImmutableMap;
+>>>>>>> BRANCH (87f6de LuceneChangeIndex: Remove unused variable)
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
@@ -95,7 +100,10 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+<<<<<<< HEAD   (880a9b Merge "SubmoduleOp: Add missing space in generated commit me)
 import java.util.concurrent.TimeUnit;
+=======
+>>>>>>> BRANCH (87f6de LuceneChangeIndex: Remove unused variable)
 
 /**
  * Secondary index implementation using Apache Lucene.
@@ -305,6 +313,7 @@ public class LuceneChangeIndex implements ChangeIndex {
     public ResultSet<ChangeData> read() throws OrmException {
       if (Thread.interrupted()) {
         Thread.currentThread().interrupt();
+<<<<<<< HEAD   (880a9b Merge "SubmoduleOp: Add missing space in generated commit me)
         throw new OrmException("interrupted");
       }
 
@@ -319,6 +328,20 @@ public class LuceneChangeIndex implements ChangeIndex {
     }
 
     private List<Document> doRead(Set<String> fields) throws IOException {
+=======
+        throw new OrmException("interupted");
+      }
+      return new ChangeDataResults(
+          executor.submit(new Callable<List<Document>>() {
+            @Override
+            public List<Document> call() throws OrmException {
+              return doRead();
+            }
+          }));
+    }
+
+    private List<Document> doRead() throws OrmException {
+>>>>>>> BRANCH (87f6de LuceneChangeIndex: Remove unused variable)
       IndexSearcher[] searchers = new IndexSearcher[indexes.size()];
       try {
         int realLimit = opts.start() + opts.limit();
@@ -329,12 +352,27 @@ public class LuceneChangeIndex implements ChangeIndex {
         }
         TopDocs docs = TopDocs.merge(sort, realLimit, hits);
 
+<<<<<<< HEAD   (880a9b Merge "SubmoduleOp: Add missing space in generated commit me)
         List<Document> result = new ArrayList<>(docs.scoreDocs.length);
+=======
+        List<Document> result =
+            Lists.newArrayListWithCapacity(docs.scoreDocs.length);
+>>>>>>> BRANCH (87f6de LuceneChangeIndex: Remove unused variable)
         for (int i = opts.start(); i < docs.scoreDocs.length; i++) {
           ScoreDoc sd = docs.scoreDocs[i];
+<<<<<<< HEAD   (880a9b Merge "SubmoduleOp: Add missing space in generated commit me)
           result.add(searchers[sd.shardIndex].doc(sd.doc, fields));
+=======
+          Document doc = searchers[sd.shardIndex].doc(sd.doc, FIELDS);
+          result.add(doc);
+>>>>>>> BRANCH (87f6de LuceneChangeIndex: Remove unused variable)
         }
         return result;
+<<<<<<< HEAD   (880a9b Merge "SubmoduleOp: Add missing space in generated commit me)
+=======
+      } catch (IOException e) {
+        throw new OrmException(e);
+>>>>>>> BRANCH (87f6de LuceneChangeIndex: Remove unused variable)
       } finally {
         for (int i = 0; i < indexes.size(); i++) {
           if (searchers[i] != null) {
@@ -351,11 +389,52 @@ public class LuceneChangeIndex implements ChangeIndex {
 
   private class ChangeDataResults implements ResultSet<ChangeData> {
     private final Future<List<Document>> future;
+<<<<<<< HEAD   (880a9b Merge "SubmoduleOp: Add missing space in generated commit me)
     private final Set<String> fields;
 
     ChangeDataResults(Future<List<Document>> future, Set<String> fields) {
       this.future = future;
       this.fields = fields;
+=======
+
+    ChangeDataResults(Future<List<Document>> future) {
+      this.future = future;
+    }
+
+    @Override
+    public Iterator<ChangeData> iterator() {
+      return toList().iterator();
+    }
+
+    @Override
+    public List<ChangeData> toList() {
+      try {
+        List<Document> docs = future.get();
+        List<ChangeData> result = new ArrayList<>(docs.size());
+        for (Document doc : docs) {
+          result.add(toChangeData(doc));
+        }
+        return result;
+      } catch (InterruptedException e) {
+        close();
+        throw new OrmRuntimeException(e);
+      } catch (ExecutionException e) {
+        Throwables.propagateIfPossible(e.getCause());
+        throw new OrmRuntimeException(e.getCause());
+      }
+    }
+
+    @Override
+    public void close() {
+      future.cancel(false /* do not interrupt Lucene */);
+    }
+  }
+  private ChangeData toChangeData(Document doc) {
+    BytesRef cb = doc.getBinaryValue(CHANGE_FIELD);
+    if (cb == null) {
+      int id = doc.getField(ID_FIELD).numericValue().intValue();
+      return changeDataFactory.create(db.get(), new Change.Id(id));
+>>>>>>> BRANCH (87f6de LuceneChangeIndex: Remove unused variable)
     }
 
     @Override

@@ -2,4 +2,8 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (880a9b Merge "SubmoduleOp: Add missing space in generated commit me)
 GERRIT_VERSION = '2.13-SNAPSHOT'
+=======
+GERRIT_VERSION = '2.12.4'
+>>>>>>> BRANCH (87f6de LuceneChangeIndex: Remove unused variable)

@@ -36,7 +36,11 @@ plugin project.
 ----
 mvn archetype:generate -DarchetypeGroupId=com.google.gerrit \
     -DarchetypeArtifactId=gerrit-plugin-archetype \
+<<<<<<< HEAD   (880a9b Merge "SubmoduleOp: Add missing space in generated commit me)
     -DarchetypeVersion=2.13-SNAPSHOT \
+=======
+    -DarchetypeVersion=2.12.4 \
+>>>>>>> BRANCH (87f6de LuceneChangeIndex: Remove unused variable)
     -DgroupId=com.googlesource.gerrit.plugins.testplugin \
     -DartifactId=testplugin
 ----

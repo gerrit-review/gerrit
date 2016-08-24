@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-acceptance-framework</artifactId>
+<<<<<<< HEAD   (880a9b Merge "SubmoduleOp: Add missing space in generated commit me)
   <version>2.13-SNAPSHOT</version>
+=======
+  <version>2.12.4</version>
+>>>>>>> BRANCH (87f6de LuceneChangeIndex: Remove unused variable)
   <packaging>jar</packaging>
   <name>Gerrit Code Review - Acceptance Test Framework</name>
   <description>Framework for Gerrit's acceptance tests</description>
