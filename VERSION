@@ -2,4 +2,8 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (075271 Fix typo in 2.12.4 release notes)
 GERRIT_VERSION = '2.12.4'
+=======
+GERRIT_VERSION = '2.11.10'
+>>>>>>> BRANCH (11a891 Set version to 2.11.10)
