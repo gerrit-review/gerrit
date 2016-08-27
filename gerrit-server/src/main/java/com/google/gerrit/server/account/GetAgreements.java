@@ -23,6 +23,7 @@ import com.google.gerrit.extensions.restapi.MethodNotAllowedException;
 import com.google.gerrit.extensions.restapi.RestApiException;
 import com.google.gerrit.extensions.restapi.RestReadView;
 import com.google.gerrit.reviewdb.client.AccountGroup;
+import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.IdentifiedUser;
 import com.google.gerrit.server.config.AgreementJson;
 import com.google.gerrit.server.config.GerritServerConfig;
@@ -44,22 +45,31 @@ public class GetAgreements implements RestReadView<AccountResource> {
   private static final Logger log =
       LoggerFactory.getLogger(GetAgreements.class);
 
-  private final Provider<IdentifiedUser> self;
+  private final Provider<CurrentUser> self;
   private final ProjectCache projectCache;
+<<<<<<< HEAD   (660670 Create elements after imports are resolved)
   private final IdentifiedUser.GenericFactory identifiedUserFactory;
   private final AgreementJson agreementJson;
+=======
+>>>>>>> BRANCH (379e88 Update JGit to 4.4.1.201607150455-r.137-gdd2a5a7)
   private final boolean agreementsEnabled;
 
   @Inject
-  GetAgreements(Provider<IdentifiedUser> self,
+  GetAgreements(Provider<CurrentUser> self,
       ProjectCache projectCache,
+<<<<<<< HEAD   (660670 Create elements after imports are resolved)
       IdentifiedUser.GenericFactory identifiedUserFactory,
       AgreementJson agreementJson,
+=======
+>>>>>>> BRANCH (379e88 Update JGit to 4.4.1.201607150455-r.137-gdd2a5a7)
       @GerritServerConfig Config config) {
     this.self = self;
     this.projectCache = projectCache;
+<<<<<<< HEAD   (660670 Create elements after imports are resolved)
     this.identifiedUserFactory = identifiedUserFactory;
     this.agreementJson = agreementJson;
+=======
+>>>>>>> BRANCH (379e88 Update JGit to 4.4.1.201607150455-r.137-gdd2a5a7)
     this.agreementsEnabled =
         config.getBoolean("auth", "contributorAgreements", false);
   }
@@ -71,12 +81,14 @@ public class GetAgreements implements RestReadView<AccountResource> {
       throw new MethodNotAllowedException("contributor agreements disabled");
     }
 
-    if (self.get() != resource.getUser()) {
+    if (!self.get().isIdentifiedUser()) {
       throw new AuthException("not allowed to get contributor agreements");
     }
 
-    IdentifiedUser user =
-        identifiedUserFactory.create(self.get().getAccountId());
+    IdentifiedUser user = self.get().asIdentifiedUser();
+    if (user != resource.getUser()) {
+      throw new AuthException("not allowed to get contributor agreements");
+    }
 
     List<AgreementInfo> results = new ArrayList<>();
     Collection<ContributorAgreement> cas =
