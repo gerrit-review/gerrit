@@ -181,7 +181,11 @@ public class AccountManager {
   }
 
   private void update(ReviewDb db, AuthRequest who, AccountExternalId extId)
+<<<<<<< HEAD   (e5a83c Update build/release documentation with new API/WAR commands)
       throws OrmException, IOException {
+=======
+      throws OrmException {
+>>>>>>> BRANCH (4fd1e5 AccountManager: Don't try to change username that is already)
     IdentifiedUser user = userFactory.create(extId.getAccountId());
     Account toUpdate = null;
 
