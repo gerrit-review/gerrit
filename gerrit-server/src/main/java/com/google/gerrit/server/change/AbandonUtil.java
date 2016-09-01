@@ -90,8 +90,20 @@ public class AbandonUtil {
       for (Project.NameKey project : abandons.keySet()) {
         Collection<ChangeControl> changes = abandons.get(project);
         try {
+<<<<<<< HEAD   (225b7a Option to reject implicit merges when pushing changes for re)
           abandon.batchAbandon(project, internalUser, changes, message);
           count += changes.size();
+=======
+          if (noNeedToAbandon(cd, query)){
+            log.debug("Change data \"{}\" does not satisfy the query \"{}\" any"
+                + " more, hence skipping it in clean up", cd, query);
+            continue;
+          }
+          abandon.abandon(changeControl(cd), cfg.getAbandonMessage());
+          count++;
+        } catch (ResourceConflictException e) {
+          // Change was already merged or abandoned.
+>>>>>>> BRANCH (968e3b Merge branch 'stable-2.12' into stable-2.13)
         } catch (Throwable e) {
           StringBuilder msg =
               new StringBuilder("Failed to auto-abandon inactive change(s):");
@@ -108,5 +120,20 @@ public class AbandonUtil {
       log.error(
           "Failed to query inactive open changes for auto-abandoning.", e);
     }
+<<<<<<< HEAD   (225b7a Option to reject implicit merges when pushing changes for re)
+=======
+  }
+
+  private boolean noNeedToAbandon(ChangeData cd, String query)
+      throws OrmException, QueryParseException {
+    String newQuery = query + " change:" + cd.getId();
+    List<ChangeData> changesToAbandon = queryProcessor.enforceVisibility(false)
+        .query(queryBuilder.parse(newQuery)).entities();
+    return changesToAbandon.isEmpty();
+  }
+
+  private ChangeControl changeControl(ChangeData cd) throws OrmException {
+    return cd.changeControl(internalUserFactory.create());
+>>>>>>> BRANCH (968e3b Merge branch 'stable-2.12' into stable-2.13)
   }
 }
