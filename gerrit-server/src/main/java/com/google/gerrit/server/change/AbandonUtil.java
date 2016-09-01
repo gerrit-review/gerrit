@@ -73,7 +73,16 @@ public class AbandonUtil {
       int count = 0;
       for (ChangeData cd : changesToAbandon) {
         try {
+<<<<<<< HEAD   (685c89 Update 2.13 release notes)
           abandon.abandon(changeControl(cd), cfg.getAbandonMessage());
+=======
+          if (noNeedToAbandon(cd, query)){
+            log.debug("Change data \"{}\" does not satisfy the query \"{}\" any"
+                + " more, hence skipping it in clean up", cd, query);
+            continue;
+          }
+          abandon.abandon(changeControl(cd), cfg.getAbandonMessage(), null);
+>>>>>>> BRANCH (ccd5b7 Merge "Prevent limit of search outbounding max int value" in)
           count++;
         } catch (ResourceConflictException e) {
           // Change was already merged or abandoned.
@@ -90,7 +99,23 @@ public class AbandonUtil {
     }
   }
 
+<<<<<<< HEAD   (685c89 Update 2.13 release notes)
   private ChangeControl changeControl(ChangeData cd) throws OrmException {
     return cd.changeControl(internalUserFactory.create());
+=======
+  private boolean noNeedToAbandon(ChangeData cd, String query)
+      throws OrmException, QueryParseException {
+    String newQuery = query + " change:" + cd.getId();
+    List<ChangeData> changesToAbandon = queryProcessor.enforceVisibility(false)
+        .queryChanges(queryBuilder.parse(newQuery)).changes();
+    return changesToAbandon.isEmpty();
+  }
+
+  private ChangeControl changeControl(ChangeData cd)
+      throws NoSuchChangeException, OrmException {
+    Change c = cd.change();
+    return changeControlFactory.controlFor(c,
+        identifiedUserFactory.create(c.getOwner()));
+>>>>>>> BRANCH (ccd5b7 Merge "Prevent limit of search outbounding max int value" in)
   }
 }
