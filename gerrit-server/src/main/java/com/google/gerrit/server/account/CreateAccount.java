@@ -37,16 +37,23 @@ import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gerrit.server.IdentifiedUser;
 import com.google.gerrit.server.api.accounts.AccountExternalIdCreator;
 import com.google.gerrit.server.group.GroupsCollection;
+<<<<<<< HEAD   (3dfb7b Lifecycle{Manager,Module}: Add missing Javadoc)
 import com.google.gerrit.server.index.account.AccountIndexer;
+=======
+import com.google.gerrit.server.mail.OutgoingEmailValidator;
+>>>>>>> BRANCH (3aaf83 Fix usage of OutgoingEmailValidator to make sure TLD overrid)
 import com.google.gerrit.server.ssh.SshKeyCache;
 import com.google.gwtorm.server.OrmDuplicateKeyException;
 import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.assistedinject.Assisted;
+<<<<<<< HEAD   (3dfb7b Lifecycle{Manager,Module}: Add missing Javadoc)
 
 import org.apache.commons.validator.routines.EmailValidator;
 import org.eclipse.jgit.errors.ConfigInvalidException;
+=======
+>>>>>>> BRANCH (3aaf83 Fix usage of OutgoingEmailValidator to make sure TLD overrid)
 
 import java.io.IOException;
 import java.util.Collections;
@@ -140,7 +147,7 @@ public class CreateAccount
         throw new UnprocessableEntityException(
             "email '" + input.email + "' already exists");
       }
-      if (!EmailValidator.getInstance().isValid(input.email)) {
+      if (!OutgoingEmailValidator.isValid(input.email)) {
         throw new BadRequestException("invalid email address");
       }
     }
