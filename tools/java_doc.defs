@@ -6,9 +6,22 @@ def java_doc(
     srcs = [],
     deps = [],
     visibility = [],
+<<<<<<< HEAD   (7e30d8 Merge "Add user preference for auto-selecting a base for mer)
+=======
+    do_it_wrong = False,
+    external_docs = [],
+>>>>>>> BRANCH (1621f4 Merge "Merge branch 'stable-2.12' into stable-2.13" into sta)
   ):
+<<<<<<< HEAD   (7e30d8 Merge "Add user preference for auto-selecting a base for mer)
   # TODO(davido): Actually we shouldn't need to extract the source
   # archive, javadoc should just work with provided archive.
+=======
+  if do_it_wrong:
+    sourcepath = paths
+  else:
+    sourcepath = ['$SRCDIR/' + n for n in paths]
+  external_docs.insert(0, 'http://docs.oracle.com/javase/7/docs/api')
+>>>>>>> BRANCH (1621f4 Merge "Merge branch 'stable-2.12' into stable-2.13" into sta)
   genrule(
     name = name,
     cmd = ' '.join([
@@ -21,7 +34,7 @@ def java_doc(
       '-charset UTF-8',
       '-notimestamp',
       '-windowtitle "' + title + '"',
-      '-link http://docs.oracle.com/javase/7/docs/api',
+      ' '.join(['-link %s' % url for url in external_docs]),
       '-subpackages ',
       ':'.join(pkgs),
       '-sourcepath $TMP/sourcepath',
