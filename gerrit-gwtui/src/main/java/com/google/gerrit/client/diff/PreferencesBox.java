@@ -102,9 +102,13 @@ public class PreferencesBox extends Composite {
   @UiField ToggleButton expandAllComments;
   @UiField ToggleButton renderEntireFile;
   @UiField ToggleButton matchBrackets;
+<<<<<<< HEAD   (914cf0 Add es6-promise for Internet Explorer)
   @UiField ToggleButton skipDeleted;
   @UiField ToggleButton skipUnchanged;
   @UiField ToggleButton skipUncommented;
+=======
+  @UiField ToggleButton lineWrapping;
+>>>>>>> BRANCH (ee24b3 Adds a new pref config called lineWrapping to Edit and Diff)
   @UiField ListBox theme;
   @UiField Element modeLabel;
   @UiField ListBox mode;
@@ -197,9 +201,13 @@ public class PreferencesBox extends Composite {
     manualReview.setValue(prefs.manualReview());
     expandAllComments.setValue(prefs.expandAllComments());
     matchBrackets.setValue(prefs.matchBrackets());
+<<<<<<< HEAD   (914cf0 Add es6-promise for Internet Explorer)
     skipDeleted.setValue(!prefs.skipDeleted());
     skipUnchanged.setValue(!prefs.skipUnchanged());
     skipUncommented.setValue(!prefs.skipUncommented());
+=======
+    lineWrapping.setValue(prefs.lineWrapping());
+>>>>>>> BRANCH (ee24b3 Adds a new pref config called lineWrapping to Edit and Diff)
     setTheme(prefs.theme());
 
     if (view == null || view.canRenderEntireFile(prefs)) {
@@ -503,6 +511,7 @@ public class PreferencesBox extends Composite {
         prefs.matchBrackets());
   }
 
+<<<<<<< HEAD   (914cf0 Add es6-promise for Internet Explorer)
   @UiHandler("skipDeleted")
   void onSkipDeleted(ValueChangeEvent<Boolean> e) {
     prefs.skipDeleted(!e.getValue());
@@ -519,6 +528,15 @@ public class PreferencesBox extends Composite {
   void onSkipUncommented(ValueChangeEvent<Boolean> e) {
     prefs.skipUncommented(!e.getValue());
     // TODO: Update the navigation links on the current DiffScreen
+=======
+  @UiHandler("lineWrapping")
+  void onLineWrapping(ValueChangeEvent<Boolean> e) {
+    prefs.lineWrapping(e.getValue());
+    view.getCmFromSide(DisplaySide.A).setOption("lineWrapping",
+        prefs.lineWrapping());
+    view.getCmFromSide(DisplaySide.B).setOption("lineWrapping",
+        prefs.lineWrapping());
+>>>>>>> BRANCH (ee24b3 Adds a new pref config called lineWrapping to Edit and Diff)
   }
 
   @UiHandler("theme")
