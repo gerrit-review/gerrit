@@ -298,6 +298,7 @@ limitations under the License.
         </g:ToggleButton></td>
       </tr>
       <tr>
+<<<<<<< HEAD   (914cf0 Add es6-promise for Internet Explorer)
         <th><ui:msg>Skip Deleted Files</ui:msg></th>
         <td><g:ToggleButton ui:field='skipDeleted'>
           <g:upFace><ui:msg>Yes</ui:msg></g:upFace>
@@ -316,6 +317,12 @@ limitations under the License.
         <td><g:ToggleButton ui:field='skipUncommented'>
           <g:upFace><ui:msg>Yes</ui:msg></g:upFace>
           <g:downFace><ui:msg>No</ui:msg></g:downFace>
+=======
+        <th><ui:msg>Line Wrapping</ui:msg></th>
+        <td><g:ToggleButton ui:field='lineWrapping'>
+          <g:upFace><ui:msg>Off</ui:msg></g:upFace>
+          <g:downFace><ui:msg>On</ui:msg></g:downFace>
+>>>>>>> BRANCH (ee24b3 Adds a new pref config called lineWrapping to Edit and Diff)
         </g:ToggleButton></td>
       </tr>
       <tr>
