@@ -252,7 +252,11 @@ public class LuceneChangeIndex implements ChangeIndex {
     if (!Sets.intersection(statuses, CLOSED_STATUSES).isEmpty()) {
       indexes.add(closedIndex);
     }
+<<<<<<< HEAD   (756cb5 WebLinks: Prevent NPE when file history weblink is null)
     return new QuerySource(indexes, queryBuilder.toQuery(p), opts, getSort());
+=======
+    return new QuerySource(indexes, p, opts, getSort());
+>>>>>>> BRANCH (f00dee Print proper name for QuerySource tasks in show-queue comman)
   }
 
   @Override
@@ -273,15 +277,28 @@ public class LuceneChangeIndex implements ChangeIndex {
   }
 
   private class QuerySource implements ChangeDataSource {
+<<<<<<< HEAD   (756cb5 WebLinks: Prevent NPE when file history weblink is null)
     private final List<ChangeSubIndex> indexes;
+=======
+    private final List<SubIndex> indexes;
+    private final Predicate<ChangeData> predicate;
+>>>>>>> BRANCH (f00dee Print proper name for QuerySource tasks in show-queue comman)
     private final Query query;
     private final QueryOptions opts;
     private final Sort sort;
 
+<<<<<<< HEAD   (756cb5 WebLinks: Prevent NPE when file history weblink is null)
     private QuerySource(List<ChangeSubIndex> indexes, Query query, QueryOptions opts,
         Sort sort) {
+=======
+
+    private QuerySource(List<SubIndex> indexes, Predicate<ChangeData> predicate,
+        QueryOptions opts, Sort sort) throws QueryParseException {
+>>>>>>> BRANCH (f00dee Print proper name for QuerySource tasks in show-queue comman)
       this.indexes = indexes;
-      this.query = checkNotNull(query, "null query from Lucene");
+      this.predicate = predicate;
+      this.query = checkNotNull(queryBuilder.toQuery(predicate),
+          "null query from Lucene");
       this.opts = opts;
       this.sort = sort;
     }
@@ -298,7 +315,7 @@ public class LuceneChangeIndex implements ChangeIndex {
 
     @Override
     public String toString() {
-      return query.toString();
+      return predicate.toString();
     }
 
     @Override
@@ -315,7 +332,16 @@ public class LuceneChangeIndex implements ChangeIndex {
             public List<Document> call() throws IOException {
               return doRead(fields);
             }
+<<<<<<< HEAD   (756cb5 WebLinks: Prevent NPE when file history weblink is null)
           }), fields);
+=======
+
+            @Override
+            public String toString() {
+              return predicate.toString();
+            }
+          }));
+>>>>>>> BRANCH (f00dee Print proper name for QuerySource tasks in show-queue comman)
     }
 
     private List<Document> doRead(Set<String> fields) throws IOException {
