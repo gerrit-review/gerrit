@@ -2,4 +2,8 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (b25ccd Merge "GetRevisionActions: Use Provider<MergeSuperSet>")
 GERRIT_VERSION = '2.14-SNAPSHOT'
+=======
+GERRIT_VERSION = '2.13-rc1'
+>>>>>>> BRANCH (c40eb5 Fix rendering of block in documentation of init program)
