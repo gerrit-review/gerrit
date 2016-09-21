@@ -2,4 +2,8 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (502df7 Merge changes I8978e906,I83d36056,Ib97b137c,I45b16437)
 GERRIT_VERSION = '2.14-SNAPSHOT'
+=======
+GERRIT_VERSION = '2.13'
+>>>>>>> BRANCH (c36d5a Set version to 2.13)
