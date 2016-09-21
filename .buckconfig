@@ -24,8 +24,12 @@
   target_level = 8
 
 [project]
+<<<<<<< HEAD   (c1e78e DeleteReviewer: Fix incorrect filter function)
   allow_symlinks = allow
   ignore = .git, eclipse-out, bazel-gerrit
+=======
+  ignore = .git, eclipse-out, bazel-gerrit, bin
+>>>>>>> BRANCH (0ee986 Diffy should use the unported CC-BY 3.0 license)
   parallel_parsing = true
 
 [cache]
