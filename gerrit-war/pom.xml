@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-war</artifactId>
+<<<<<<< HEAD   (f84710 Merge "Establish library compliance for powermock and its de)
   <version>2.14-SNAPSHOT</version>
+=======
+  <version>2.13.1-SNAPSHOT</version>
+>>>>>>> BRANCH (58ee8c Merge "Set version to 2.13.1-SNAPSHOT" into stable-2.13)
   <packaging>war</packaging>
   <name>Gerrit Code Review - WAR</name>
   <description>Gerrit WAR</description>

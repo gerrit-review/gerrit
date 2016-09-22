@@ -2,4 +2,8 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (f84710 Merge "Establish library compliance for powermock and its de)
 GERRIT_VERSION = '2.14-SNAPSHOT'
+=======
+GERRIT_VERSION = '2.13.1-SNAPSHOT'
+>>>>>>> BRANCH (58ee8c Merge "Set version to 2.13.1-SNAPSHOT" into stable-2.13)
