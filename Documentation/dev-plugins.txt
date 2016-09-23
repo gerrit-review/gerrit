@@ -36,7 +36,11 @@ plugin project.
 ----
 mvn archetype:generate -DarchetypeGroupId=com.google.gerrit \
     -DarchetypeArtifactId=gerrit-plugin-archetype \
+<<<<<<< HEAD   (1f367c Update git submodules)
     -DarchetypeVersion=2.13 \
+=======
+    -DarchetypeVersion=2.12.5 \
+>>>>>>> BRANCH (b224bf Set version to 2.12.5)
     -DgroupId=com.googlesource.gerrit.plugins.testplugin \
     -DartifactId=testplugin
 ----

@@ -1,11 +1,18 @@
 = Gerrit Code Review - Release Notes
 
+<<<<<<< HEAD   (1f367c Update git submodules)
 [[s2_13]]
 == Version 2.13.x
 * link:ReleaseNotes-2.13.html[2.13]
 
 [[s2_12]]
 == Version 2.12.x
+=======
+[[2_12]]
+Version 2.12.x
+--------------
+* link:ReleaseNotes-2.12.5.html[2.12.5]
+>>>>>>> BRANCH (b224bf Set version to 2.12.5)
 * link:ReleaseNotes-2.12.4.html[2.12.4]
 * link:ReleaseNotes-2.12.3.html[2.12.3]
 * link:ReleaseNotes-2.12.2.html[2.12.2]

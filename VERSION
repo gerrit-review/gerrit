@@ -2,4 +2,8 @@
 # Used by :api_install and :api_deploy targets
 # when talking to the destination repository.
 #
+<<<<<<< HEAD   (1f367c Update git submodules)
 GERRIT_VERSION = '2.13.1-SNAPSHOT'
+=======
+GERRIT_VERSION = '2.12.5'
+>>>>>>> BRANCH (b224bf Set version to 2.12.5)
