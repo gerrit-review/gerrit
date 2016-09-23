@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-extension-api</artifactId>
+<<<<<<< HEAD   (68f897 Merge "Bazel: add support for unsigning jar files")
   <version>2.14-SNAPSHOT</version>
+=======
+  <version>2.13.1</version>
+>>>>>>> BRANCH (dc53b6 Update 2.13.1 release notes)
   <packaging>jar</packaging>
   <name>Gerrit Code Review - Extension API</name>
   <description>API for Gerrit Extensions</description>
