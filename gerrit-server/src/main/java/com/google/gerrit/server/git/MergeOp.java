@@ -469,11 +469,66 @@ public class MergeOp implements AutoCloseable {
     commits.maybeFailVerbose();
     SubmoduleOp submoduleOp = subOpFactory.create(branches, orm);
     try {
+<<<<<<< HEAD   (6f4c0c Merge "Fix malformed account suggestions" into stable-2.13)
       List<SubmitStrategy> strategies = getSubmitStrategies(toSubmit, submoduleOp);
       Set<Project.NameKey> allProjects = submoduleOp.getProjectsInOrder();
       // in case superproject subscription is disabled, allProjects would be null
       if (allProjects == null) {
         allProjects = projects;
+=======
+      repo = repoManager.openRepository(name);
+    } catch (RepositoryNotFoundException notFound) {
+      throw new NoSuchProjectException(name, notFound);
+    } catch (IOException err) {
+      String m = "Error opening repository \"" + name.get() + '"';
+      throw new IntegrationException(m, err);
+    }
+
+    rw = CodeReviewCommit.newRevWalk(repo);
+    rw.sort(RevSort.TOPO);
+    rw.sort(RevSort.COMMIT_TIME_DESC, true);
+    rw.setRetainBody(false);
+    canMergeFlag = rw.newFlag("CAN_MERGE");
+
+    inserter = repo.newObjectInserter();
+  }
+
+  private void closeRepository() {
+    if (inserter != null) {
+      inserter.close();
+      inserter = null;
+    }
+    if (rw != null) {
+      rw.close();
+      rw = null;
+    }
+    if (repo != null) {
+      repo.close();
+      repo = null;
+    }
+  }
+
+  private RefUpdate getPendingRefUpdate(Branch.NameKey destBranch)
+      throws IntegrationException {
+
+    if (pendingRefUpdates.containsKey(destBranch)) {
+      logDebug("Access cached open branch {}: {}", destBranch.get(),
+          openBranches.get(destBranch));
+      return pendingRefUpdates.get(destBranch);
+    }
+
+    try {
+      RefUpdate branchUpdate = repo.updateRef(destBranch.get());
+      CodeReviewCommit branchTip;
+      if (branchUpdate.getOldObjectId() != null) {
+        branchTip = rw.parseCommit(branchUpdate.getOldObjectId());
+      } else if (Objects.equals(repo.getFullBranch(), destBranch.get())) {
+        branchTip = null;
+        branchUpdate.setExpectedOldObjectId(ObjectId.zeroId());
+      } else {
+        throw new IntegrationException("The destination branch "
+            + destBranch.get() + " does not exist anymore.");
+>>>>>>> BRANCH (0a503e Fix double Repository.close() in MergeOp)
       }
       BatchUpdate.execute(
           orm.batchUpdates(allProjects),
