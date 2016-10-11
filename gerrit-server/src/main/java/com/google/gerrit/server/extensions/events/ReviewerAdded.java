@@ -50,6 +50,7 @@ public class ReviewerAdded {
     this.util = util;
   }
 
+<<<<<<< HEAD   (5fdd63 A tiny fix to the polygerrit ui README)
   public void fire(ChangeInfo change, RevisionInfo revision,
       List<AccountInfo> reviewers, AccountInfo adder, Timestamp when) {
     if (!listeners.iterator().hasNext()) {
@@ -66,17 +67,28 @@ public class ReviewerAdded {
   }
 
   public void fire(Change change, PatchSet patchSet, List<Account.Id> reviewers,
+=======
+  public void fire(Change change, PatchSet patchSet, Account account,
+>>>>>>> BRANCH (e6e339 Squash event class private fire() methods into public method)
       Account adder, Timestamp when) {
     if (!listeners.iterator().hasNext() || reviewers.isEmpty()) {
       return;
     }
 
     try {
-      fire(util.changeInfo(change),
+      Event event = new Event(
+          util.changeInfo(change),
           util.revisionInfo(change.getProject(), patchSet),
           Lists.transform(reviewers, util::accountInfo),
           util.accountInfo(adder),
           when);
+      for (ReviewerAddedListener l : listeners) {
+        try {
+          l.onReviewerAdded(event);
+        } catch (Exception e) {
+          util.logEventListenerError(log, e);
+        }
+      }
     } catch (PatchListNotAvailableException | GpgException | IOException
         | OrmException e) {
       log.error("Couldn't fire event", e);

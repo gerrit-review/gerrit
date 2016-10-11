@@ -25,8 +25,11 @@ import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gerrit.server.GpgException;
+<<<<<<< HEAD   (5fdd63 A tiny fix to the polygerrit ui README)
 import com.google.gerrit.server.account.AccountCache;
 import com.google.gerrit.server.account.AccountJson;
+=======
+>>>>>>> BRANCH (e6e339 Squash event class private fire() methods into public method)
 import com.google.gerrit.server.change.ChangeJson;
 import com.google.gerrit.server.patch.PatchListNotAvailableException;
 import com.google.gerrit.server.project.ChangeControl;
@@ -34,6 +37,8 @@ import com.google.gerrit.server.query.change.ChangeData;
 import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -46,18 +51,15 @@ public class EventUtil {
   private final ChangeData.Factory changeDataFactory;
   private final Provider<ReviewDb> db;
   private final ChangeJson changeJson;
-  private final AccountCache accountCache;
 
   @Inject
   EventUtil(ChangeJson.Factory changeJsonFactory,
       ChangeData.Factory changeDataFactory,
-      Provider<ReviewDb> db,
-      AccountCache accountCache) {
+      Provider<ReviewDb> db) {
     this.changeDataFactory = changeDataFactory;
     this.db = db;
     this.changeJson = changeJsonFactory.create(
         EnumSet.allOf(ListChangesOption.class));
-    this.accountCache = accountCache;
   }
 
   public ChangeInfo changeInfo(Change change) throws OrmException {
@@ -86,10 +88,6 @@ public class EventUtil {
     return AccountJson.toAccountInfo(a);
   }
 
-  public AccountInfo accountInfo(Account.Id accountId) {
-    return accountInfo(accountCache.get(accountId).getAccount());
-  }
-
   public Map<String, ApprovalInfo> approvals(Account a,
       Map<String, Short> approvals, Timestamp ts) {
     Map<String, ApprovalInfo> result = new HashMap<>();
@@ -99,5 +97,13 @@ public class EventUtil {
           ChangeJson.getApprovalInfo(a.getId(), value, null, ts));
     }
     return result;
+  }
+
+  public void logEventListenerError(Logger log, Exception error) {
+    if (log.isDebugEnabled()) {
+      log.debug("Error in event listener", error);
+    } else {
+      log.warn("Error in event listener: {}", error.getMessage());
+    }
   }
 }

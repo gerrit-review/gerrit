@@ -50,6 +50,7 @@ public class ReviewerDeleted {
     this.util = util;
   }
 
+<<<<<<< HEAD   (5fdd63 A tiny fix to the polygerrit ui README)
   public void fire(ChangeInfo change, RevisionInfo revision,
       AccountInfo reviewer, AccountInfo remover, String message,
       Map<String, ApprovalInfo> newApprovals,
@@ -69,6 +70,8 @@ public class ReviewerDeleted {
     }
   }
 
+=======
+>>>>>>> BRANCH (e6e339 Squash event class private fire() methods into public method)
   public void fire(Change change, PatchSet patchSet, Account reviewer,
       Account remover, String message, Map<String, Short> newApprovals,
       Map<String, Short> oldApprovals, NotifyHandling notify, Timestamp when) {
@@ -76,7 +79,8 @@ public class ReviewerDeleted {
       return;
     }
     try {
-      fire(util.changeInfo(change),
+      Event event = new Event(
+          util.changeInfo(change),
           util.revisionInfo(change.getProject(), patchSet),
           util.accountInfo(reviewer),
           util.accountInfo(remover),
@@ -85,6 +89,13 @@ public class ReviewerDeleted {
           util.approvals(reviewer, oldApprovals, when),
           notify,
           when);
+      for (ReviewerDeletedListener listener : listeners) {
+        try {
+          listener.onReviewerDeleted(event);
+        } catch (Exception e) {
+          util.logEventListenerError(log, e);
+        }
+      }
     } catch (PatchListNotAvailableException | GpgException | IOException
         | OrmException e) {
       log.error("Couldn't fire event", e);

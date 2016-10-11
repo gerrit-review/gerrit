@@ -117,7 +117,11 @@ public final class PatchSetApproval {
         new PatchSetApproval.Key(psId, src.getAccountId(), src.getLabelId());
     value = src.getValue();
     granted = src.granted;
+<<<<<<< HEAD   (5fdd63 A tiny fix to the polygerrit ui README)
     realAccountId = src.realAccountId;
+=======
+    tag = src.tag;
+>>>>>>> BRANCH (e6e339 Squash event class private fire() methods into public method)
   }
 
   public PatchSetApproval.Key getKey() {
