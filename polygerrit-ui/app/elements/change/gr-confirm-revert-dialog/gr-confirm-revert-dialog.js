@@ -38,10 +38,19 @@
       var originalTitle = message.split('\n')[0];
       var revertTitle = 'Revert "' + originalTitle + '"';
       if (!commitHash) {
+<<<<<<< HEAD   (48910a Do not add original description to reverts. Leave that for p)
         alert('Unable to find the commit hash of this issue.');
+=======
+        alert('Unable to find the commit hash of this change.');
+>>>>>>> BRANCH (95b96f Use commit hash instead of Change-ID in the revert message)
         return;
       }
       var revertCommitText = 'This reverts commit ' + commitHash + '.';
+<<<<<<< HEAD   (48910a Do not add original description to reverts. Leave that for p)
+=======
+      // Add '> ' in front of the original commit text.
+      var originalCommitText = message.replace(/^/gm, '> ');
+>>>>>>> BRANCH (95b96f Use commit hash instead of Change-ID in the revert message)
 
       this.message = revertTitle + '\n\n' +
                      revertCommitText + '\n\n' +
