@@ -36,7 +36,11 @@ plugin project.
 ----
 mvn archetype:generate -DarchetypeGroupId=com.google.gerrit \
     -DarchetypeArtifactId=gerrit-plugin-archetype \
+<<<<<<< HEAD   (344c1b Replace 2.12.x and 2.13.x release notes with links to homepa)
     -DarchetypeVersion=2.14-SNAPSHOT \
+=======
+    -DarchetypeVersion=2.13.2 \
+>>>>>>> BRANCH (a64ee6 Fix schema migration 128)
     -DgroupId=com.googlesource.gerrit.plugins.testplugin \
     -DartifactId=testplugin
 ----
