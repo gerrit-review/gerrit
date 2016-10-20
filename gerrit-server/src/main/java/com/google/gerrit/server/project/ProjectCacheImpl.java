@@ -19,6 +19,11 @@ import static java.util.stream.Collectors.toSet;
 import com.google.common.base.Throwables;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+<<<<<<< HEAD   (bd7de8 Merge changes Ia397f359,Id293cc0a)
+=======
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableSortedSet;
+>>>>>>> BRANCH (801dff Follow up to [1] - bring Java 7 compatibility back)
 import com.google.common.collect.Sets;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.reviewdb.client.AccountGroup;
@@ -207,7 +212,7 @@ public class ProjectCacheImpl implements ProjectCache {
       return list.get(ListKey.ALL);
     } catch (ExecutionException e) {
       log.warn("Cannot list available projects", e);
-      return Collections.emptySortedSet();
+      return ImmutableSortedSet.of();
     }
   }
 
