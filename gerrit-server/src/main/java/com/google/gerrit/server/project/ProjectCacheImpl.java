@@ -14,11 +14,16 @@
 
 package com.google.gerrit.server.project;
 
+<<<<<<< HEAD   (6e0ce1 Merge changes I8a340da1,I3358e14c)
 import static java.util.stream.Collectors.toSet;
 
+=======
+import com.google.common.base.Predicate;
+>>>>>>> BRANCH (84acf9 ProjectCacheImpl: Harden against null UUIDs)
 import com.google.common.base.Throwables;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Sets;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.reviewdb.client.AccountGroup;
@@ -59,6 +64,14 @@ public class ProjectCacheImpl implements ProjectCache {
 
   private static final String CACHE_NAME = "projects";
   private static final String CACHE_LIST = "project_list";
+
+  private static final Predicate<AccountGroup.UUID> NON_NULL_UUID =
+      new Predicate<AccountGroup.UUID>() {
+        @Override
+        public boolean apply(AccountGroup.UUID uuid) {
+          return uuid != null && uuid.get() != null;
+        }
+      };
 
   public static Module module() {
     return new CacheModule() {
@@ -213,6 +226,7 @@ public class ProjectCacheImpl implements ProjectCache {
 
   @Override
   public Set<AccountGroup.UUID> guessRelevantGroupUUIDs() {
+<<<<<<< HEAD   (6e0ce1 Merge changes I8a340da1,I3358e14c)
     return all().stream().map(n -> byName.getIfPresent(n.get()))
         .filter(Objects::nonNull)
         .flatMap(p -> p.getConfig().getAllGroupUUIDs().stream())
@@ -220,6 +234,19 @@ public class ProjectCacheImpl implements ProjectCache {
         // against them just in case there is a bug or corner case.
         .filter(id -> id != null && id.get() != null)
         .collect(toSet());
+=======
+    Set<AccountGroup.UUID> groups = new HashSet<>();
+    for (Project.NameKey n : all()) {
+      ProjectState p = byName.getIfPresent(n.get());
+      if (p != null) {
+        groups.addAll(FluentIterable
+            .from(p.getConfig().getAllGroupUUIDs())
+            .filter(NON_NULL_UUID)
+            .toSet());
+      }
+    }
+    return groups;
+>>>>>>> BRANCH (84acf9 ProjectCacheImpl: Harden against null UUIDs)
   }
 
   @Override

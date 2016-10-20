@@ -16,10 +16,13 @@ package com.google.gerrit.server.git;
 
 import com.google.gerrit.common.data.GroupReference;
 import com.google.gerrit.reviewdb.client.AccountGroup;
+<<<<<<< HEAD   (6e0ce1 Merge changes I8a340da1,I3358e14c)
 import com.google.gerrit.reviewdb.client.Project;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+=======
+>>>>>>> BRANCH (84acf9 ProjectCacheImpl: Harden against null UUIDs)
 
 import java.io.IOException;
 import java.util.ArrayList;
