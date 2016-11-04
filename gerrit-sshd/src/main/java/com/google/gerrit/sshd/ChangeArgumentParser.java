@@ -14,8 +14,14 @@
 
 package com.google.gerrit.sshd;
 
+<<<<<<< HEAD   (72e4f7 Merge "Bump auto-value to 1.4-rc1")
 import static java.util.stream.Collectors.toList;
 
+=======
+import com.google.common.base.Function;
+import com.google.common.base.Predicates;
+import com.google.common.collect.FluentIterable;
+>>>>>>> BRANCH (18d8f0 Remove unused import)
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.server.ReviewDb;
