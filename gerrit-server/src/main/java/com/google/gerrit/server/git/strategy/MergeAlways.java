@@ -14,10 +14,17 @@
 
 package com.google.gerrit.server.git.strategy;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.gerrit.server.git.CodeReviewCommit;
 import com.google.gerrit.server.git.IntegrationException;
 
+<<<<<<< HEAD   (0ff3e3 AbstractSubmit: Add more assertions in submitWholeTopic)
 import java.util.ArrayList;
+=======
+import org.eclipse.jgit.lib.PersonIdent;
+import org.eclipse.jgit.revwalk.RevCommit;
+
+>>>>>>> BRANCH (3f1de3 Set version to 2.12.6)
 import java.util.Collection;
 import java.util.List;
 
@@ -42,7 +49,18 @@ public class MergeAlways extends SubmitStrategy {
       CodeReviewCommit n = sorted.remove(0);
       ops.add(new MergeOneOp(args, n));
     }
+<<<<<<< HEAD   (0ff3e3 AbstractSubmit: Add more assertions in submitWholeTopic)
     return ops;
+=======
+
+    RevCommit initialTip = mergeTip.getInitialTip();
+    args.mergeUtil.markCleanMerges(args.rw, args.canMergeFlag,
+        mergeTip.getCurrentTip(), initialTip == null
+            ? ImmutableSet.<RevCommit> of() : ImmutableSet.of(initialTip));
+    setRefLogIdent();
+
+    return mergeTip;
+>>>>>>> BRANCH (3f1de3 Set version to 2.12.6)
   }
 
   static boolean dryRun(SubmitDryRun.Arguments args,

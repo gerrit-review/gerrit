@@ -14,9 +14,19 @@
 
 package com.google.gerrit.server.git.strategy;
 
+<<<<<<< HEAD   (0ff3e3 AbstractSubmit: Add more assertions in submitWholeTopic)
 import com.google.gerrit.server.git.BatchUpdate.RepoContext;
+=======
+import com.google.common.collect.ImmutableSet;
+>>>>>>> BRANCH (3f1de3 Set version to 2.12.6)
 import com.google.gerrit.server.git.CodeReviewCommit;
 import com.google.gerrit.server.git.IntegrationException;
+<<<<<<< HEAD   (0ff3e3 AbstractSubmit: Add more assertions in submitWholeTopic)
+=======
+import com.google.gerrit.server.git.MergeTip;
+
+import org.eclipse.jgit.revwalk.RevCommit;
+>>>>>>> BRANCH (3f1de3 Set version to 2.12.6)
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,10 +59,20 @@ public class FastForwardOnly extends SubmitStrategy {
       super(FastForwardOnly.this.args, toMerge);
     }
 
+<<<<<<< HEAD   (0ff3e3 AbstractSubmit: Add more assertions in submitWholeTopic)
     @Override
     public void updateRepoImpl(RepoContext ctx) {
       toMerge.setStatusCode(CommitMergeStatus.NOT_FAST_FORWARD);
     }
+=======
+    RevCommit initialTip = mergeTip.getInitialTip();
+    args.mergeUtil.markCleanMerges(args.rw, args.canMergeFlag,
+        mergeTip.getCurrentTip(), initialTip == null
+            ? ImmutableSet.<RevCommit> of() : ImmutableSet.of(initialTip));
+    setRefLogIdent();
+
+    return mergeTip;
+>>>>>>> BRANCH (3f1de3 Set version to 2.12.6)
   }
 
   static boolean dryRun(SubmitDryRun.Arguments args,

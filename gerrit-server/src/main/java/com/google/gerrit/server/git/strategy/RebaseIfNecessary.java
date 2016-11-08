@@ -14,6 +14,12 @@
 
 package com.google.gerrit.server.git.strategy;
 
+<<<<<<< HEAD   (0ff3e3 AbstractSubmit: Add more assertions in submitWholeTopic)
+=======
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
+import com.google.gerrit.common.TimeUtil;
+>>>>>>> BRANCH (3f1de3 Set version to 2.12.6)
 import com.google.gerrit.extensions.restapi.MergeConflictException;
 import com.google.gerrit.extensions.restapi.ResourceConflictException;
 import com.google.gerrit.extensions.restapi.RestApiException;
@@ -31,6 +37,13 @@ import com.google.gerrit.server.project.InvalidChangeOperationException;
 import com.google.gerrit.server.project.NoSuchChangeException;
 import com.google.gwtorm.server.OrmException;
 
+<<<<<<< HEAD   (0ff3e3 AbstractSubmit: Add more assertions in submitWholeTopic)
+=======
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.PersonIdent;
+import org.eclipse.jgit.revwalk.RevCommit;
+
+>>>>>>> BRANCH (3f1de3 Set version to 2.12.6)
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,11 +56,18 @@ public class RebaseIfNecessary extends SubmitStrategy {
   }
 
   @Override
+<<<<<<< HEAD   (0ff3e3 AbstractSubmit: Add more assertions in submitWholeTopic)
   public List<SubmitStrategyOp> buildOps(
       Collection<CodeReviewCommit> toMerge) throws IntegrationException {
     List<CodeReviewCommit> sorted = sort(toMerge);
     List<SubmitStrategyOp> ops = new ArrayList<>(sorted.size());
     boolean first = true;
+=======
+  protected MergeTip _run(final CodeReviewCommit branchTip,
+      final Collection<CodeReviewCommit> toMerge) throws IntegrationException {
+    MergeTip mergeTip = new MergeTip(branchTip, toMerge);
+    List<CodeReviewCommit> sorted = sort(toMerge, branchTip);
+>>>>>>> BRANCH (3f1de3 Set version to 2.12.6)
 
     for (CodeReviewCommit c : sorted) {
       if (c.getParentCount() > 1) {
@@ -67,9 +87,78 @@ public class RebaseIfNecessary extends SubmitStrategy {
       } else if (n.getParentCount() == 0) {
         ops.add(new RebaseRootOp(n));
       } else if (n.getParentCount() == 1) {
+<<<<<<< HEAD   (0ff3e3 AbstractSubmit: Add more assertions in submitWholeTopic)
         ops.add(new RebaseOneOp(n));
       } else {
         ops.add(new RebaseMultipleParentsOp(n));
+=======
+        if (args.mergeUtil.canFastForward(args.mergeSorter,
+            mergeTip.getCurrentTip(), args.rw, n)) {
+          n.setStatusCode(CommitMergeStatus.CLEAN_MERGE);
+          mergeTip.moveTipTo(n, n);
+
+        } else {
+          try {
+            PatchSet newPatchSet = rebase(n, mergeTip);
+            List<PatchSetApproval> approvals = Lists.newArrayList();
+            for (PatchSetApproval a : args.approvalsUtil.byPatchSet(args.db,
+                n.getControl(), n.getPatchsetId())) {
+              approvals.add(new PatchSetApproval(newPatchSet.getId(), a));
+            }
+            // rebaseChange.rebase() may already have copied some approvals,
+            // use upsert, not insert, to avoid constraint violation on database
+            args.db.patchSetApprovals().upsert(approvals);
+            CodeReviewCommit newTip = args.rw.parseCommit(
+                ObjectId.fromString(newPatchSet.getRevision().get()));
+            mergeTip.moveTipTo(newTip, newTip);
+            n.change().setCurrentPatchSet(
+                patchSetInfoFactory.get(args.rw, mergeTip.getCurrentTip(),
+                    newPatchSet.getId()));
+            mergeTip.getCurrentTip().copyFrom(n);
+            mergeTip.getCurrentTip().setControl(
+                args.changeControlFactory.controlFor(n.change(), args.caller));
+            mergeTip.getCurrentTip().setPatchsetId(newPatchSet.getId());
+            mergeTip.getCurrentTip().setStatusCode(
+                CommitMergeStatus.CLEAN_REBASE);
+            newCommits.put(newPatchSet.getId().getParentKey(),
+                mergeTip.getCurrentTip());
+            setRefLogIdent();
+          } catch (MergeConflictException e) {
+            n.setStatusCode(CommitMergeStatus.REBASE_MERGE_CONFLICT);
+            throw new IntegrationException(
+                "Cannot rebase " + n.name() + ": " + e.getMessage(), e);
+          } catch (NoSuchChangeException | OrmException | IOException
+              | RestApiException | UpdateException e) {
+            throw new IntegrationException("Cannot rebase " + n.name(), e);
+          }
+        }
+
+      } else if (n.getParentCount() > 1) {
+        // There are multiple parents, so this is a merge commit. We
+        // don't want to rebase the merge as clients can't easily
+        // rebase their history with that merge present and replaced
+        // by an equivalent merge with a different first parent. So
+        // instead behave as though MERGE_IF_NECESSARY was configured.
+        //
+        try {
+          if (args.rw.isMergedInto(mergeTip.getCurrentTip(), n)) {
+            mergeTip.moveTipTo(n, n);
+          } else {
+            PersonIdent myIdent = getSubmitterIdent();
+            mergeTip.moveTipTo(
+                args.mergeUtil.mergeOneCommit(myIdent, myIdent,
+                    args.repo, args.rw, args.inserter, args.canMergeFlag,
+                    args.destBranch, mergeTip.getCurrentTip(), n), n);
+          }
+          RevCommit initialTip = mergeTip.getInitialTip();
+          args.mergeUtil.markCleanMerges(args.rw, args.canMergeFlag,
+              mergeTip.getCurrentTip(), initialTip == null ?
+                  ImmutableSet.<RevCommit>of() : ImmutableSet.of(initialTip));
+          setRefLogIdent();
+        } catch (IOException e) {
+          throw new IntegrationException("Cannot merge " + n.name(), e);
+        }
+>>>>>>> BRANCH (3f1de3 Set version to 2.12.6)
       }
       first = false;
     }
@@ -212,11 +301,11 @@ public class RebaseIfNecessary extends SubmitStrategy {
     args.alreadyAccepted.add(mergeTip.getCurrentTip());
   }
 
-  private List<CodeReviewCommit> sort(Collection<CodeReviewCommit> toSort)
-      throws IntegrationException {
+  private List<CodeReviewCommit> sort(Collection<CodeReviewCommit> toSort,
+      RevCommit initialTip) throws IntegrationException {
     try {
       return new RebaseSorter(
-          args.rw, args.alreadyAccepted, args.canMergeFlag).sort(toSort);
+          args.rw, initialTip, args.canMergeFlag).sort(toSort);
     } catch (IOException e) {
       throw new IntegrationException("Commit sorting failed", e);
     }
