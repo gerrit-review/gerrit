@@ -24,6 +24,11 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.Assert.fail;
 
 import com.google.common.base.Function;
+<<<<<<< HEAD   (0ff3e3 AbstractSubmit: Add more assertions in submitWholeTopic)
+=======
+import com.google.common.base.Strings;
+import com.google.common.collect.HashMultimap;
+>>>>>>> BRANCH (3f1de3 Set version to 2.12.6)
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gerrit.acceptance.AbstractDaemonTest;
@@ -50,8 +55,18 @@ import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.reviewdb.client.PatchSetApproval;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.ApprovalsUtil;
+<<<<<<< HEAD   (0ff3e3 AbstractSubmit: Add more assertions in submitWholeTopic)
 import com.google.gerrit.server.change.RevisionResource;
 import com.google.gerrit.server.change.Submit;
+=======
+import com.google.gerrit.server.CurrentUser;
+import com.google.gerrit.server.IdentifiedUser;
+import com.google.gerrit.server.data.RefUpdateAttribute;
+import com.google.gerrit.server.events.ChangeMergedEvent;
+import com.google.gerrit.server.events.Event;
+import com.google.gerrit.server.events.RefUpdatedEvent;
+import com.google.gerrit.server.git.ProjectConfig;
+>>>>>>> BRANCH (3f1de3 Set version to 2.12.6)
 import com.google.gerrit.server.notedb.ChangeNotes;
 import com.google.gerrit.testutil.ConfigSuite;
 import com.google.gerrit.testutil.TestTimeUtil;
@@ -157,6 +172,7 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
         "Initial empty repository", "Change 1", "Change 2", "Change 3");
     if (getSubmitType() == SubmitType.MERGE_ALWAYS) {
       assertThat(commitsInRepo).contains(
+<<<<<<< HEAD   (0ff3e3 AbstractSubmit: Add more assertions in submitWholeTopic)
           "Merge changes from topic '" + expectedTopic + "'");
     }
   }
@@ -197,6 +213,43 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
 
     submit(visible.getChangeId(), new SubmitInput(), AuthException.class,
         "A change to be submitted with " + num + " is not visible");
+=======
+          "Merge changes from topic 'test-topic'");
+    }
+  }
+
+  @Test
+  public void submitChangeWhenParentOfOtherBranchTip() throws Exception {
+    // Chain of two commits
+    // Push both to topic-branch
+    // Push the first commit for review and submit
+    //
+    // C2 -- tip of topic branch
+    //  |
+    // C1 -- pushed for review
+    //  |
+    // C0 -- Master
+    //
+    ProjectConfig config = projectCache.checkedGet(project).getConfig();
+    config.getProject().setCreateNewChangeForAllNotInTarget(
+        InheritableBoolean.TRUE);
+    saveProjectConfig(project, config);
+
+    PushOneCommit push1 = pushFactory.create(db, admin.getIdent(), testRepo,
+        PushOneCommit.SUBJECT, "a.txt", "content");
+    PushOneCommit.Result c1 = push1.to("refs/heads/topic");
+    c1.assertOkStatus();
+    PushOneCommit push2 = pushFactory.create(db, admin.getIdent(), testRepo,
+        PushOneCommit.SUBJECT, "b.txt", "anotherContent");
+    PushOneCommit.Result c2 = push2.to("refs/heads/topic");
+    c2.assertOkStatus();
+
+    PushOneCommit.Result change1 = push1.to("refs/for/master");
+    change1.assertOkStatus();
+
+    approve(change1.getChangeId());
+    submit(change1.getChangeId());
+>>>>>>> BRANCH (3f1de3 Set version to 2.12.6)
   }
 
   private void assertSubmitter(PushOneCommit.Result change) throws Exception {

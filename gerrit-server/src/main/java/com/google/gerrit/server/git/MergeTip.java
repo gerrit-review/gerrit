@@ -50,7 +50,11 @@ public class MergeTip {
     checkArgument(!toMerge.isEmpty(), "toMerge may not be empty");
     this.initialTip = initialTip;
     this.branchTip = initialTip;
+<<<<<<< HEAD   (0ff3e3 AbstractSubmit: Add more assertions in submitWholeTopic)
     this.mergeResults = new HashMap<>();
+=======
+    this.mergeResults = Maps.newHashMap();
+>>>>>>> BRANCH (3f1de3 Set version to 2.12.6)
     // Assume fast-forward merge until opposite is proven.
     for (CodeReviewCommit commit : toMerge) {
       mergeResults.put(commit.copy(), commit.copy());

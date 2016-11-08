@@ -14,10 +14,16 @@
 
 package com.google.gerrit.server.git.strategy;
 
+<<<<<<< HEAD   (0ff3e3 AbstractSubmit: Add more assertions in submitWholeTopic)
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.gerrit.server.git.strategy.CommitMergeStatus.SKIPPED_IDENTICAL_TREE;
 
 import com.google.common.collect.ImmutableList;
+=======
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
+import com.google.gerrit.common.TimeUtil;
+>>>>>>> BRANCH (3f1de3 Set version to 2.12.6)
 import com.google.gerrit.extensions.restapi.MergeConflictException;
 import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.reviewdb.client.PatchSetInfo;
@@ -33,6 +39,7 @@ import com.google.gwtorm.server.OrmException;
 
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.PersonIdent;
+import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.transport.ReceiveCommand;
 
 import java.io.IOException;
@@ -123,6 +130,14 @@ public class CherryPick extends SubmitStrategy {
         newCommit = args.mergeUtil.createCherryPickFromCommit(
             args.repo, args.inserter, args.mergeTip.getCurrentTip(), toMerge,
             committer, cherryPickCmtMsg, args.rw);
+<<<<<<< HEAD   (0ff3e3 AbstractSubmit: Add more assertions in submitWholeTopic)
+=======
+        mergeTip.moveTipTo(newCommit, newCommit);
+        ctx.addRefUpdate(
+            new ReceiveCommand(ObjectId.zeroId(), newCommit, psId.toRefName()));
+        patchSetInfo =
+            patchSetInfoFactory.get(ctx.getRevWalk(), newCommit, psId);
+>>>>>>> BRANCH (3f1de3 Set version to 2.12.6)
       } catch (MergeConflictException mce) {
         // Keep going in the case of a single merge failure; the goal is to
         // cherry-pick as many commits as possible.
@@ -167,8 +182,24 @@ public class CherryPick extends SubmitStrategy {
       // Don't copy approvals, as this is already taken care of by
       // SubmitStrategyOp.
 
+<<<<<<< HEAD   (0ff3e3 AbstractSubmit: Add more assertions in submitWholeTopic)
       newCommit.setControl(ctx.getControl());
       return newPs;
+=======
+      List<PatchSetApproval> approvals = Lists.newArrayList();
+      for (PatchSetApproval a : args.approvalsUtil.byPatchSet(
+          args.db, toMerge.getControl(), toMerge.getPatchsetId())) {
+        approvals.add(new PatchSetApproval(ps.getId(), a));
+      }
+      args.db.patchSetApprovals().insert(approvals);
+
+      newCommit.copyFrom(toMerge);
+      newCommit.setStatusCode(CommitMergeStatus.CLEAN_PICK);
+      newCommit.setControl(
+          args.changeControlFactory.controlFor(toMerge.change(), args.caller));
+      newCommits.put(c.getId(), newCommit);
+      setRefLogIdent();
+>>>>>>> BRANCH (3f1de3 Set version to 2.12.6)
     }
   }
 
@@ -201,8 +232,15 @@ public class CherryPick extends SubmitStrategy {
         result = amendGitlink(result);
         mergeTip.moveTipTo(result, toMerge);
       }
+      RevCommit initialTip = mergeTip.getInitialTip();
       args.mergeUtil.markCleanMerges(args.rw, args.canMergeFlag,
+<<<<<<< HEAD   (0ff3e3 AbstractSubmit: Add more assertions in submitWholeTopic)
           mergeTip.getCurrentTip(), args.alreadyAccepted);
+=======
+          mergeTip.getCurrentTip(), initialTip == null
+              ? ImmutableSet.<RevCommit> of() : ImmutableSet.of(initialTip));
+      setRefLogIdent();
+>>>>>>> BRANCH (3f1de3 Set version to 2.12.6)
     }
   }
 
