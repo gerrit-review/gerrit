@@ -34,6 +34,7 @@ import com.google.gerrit.acceptance.PushOneCommit;
 import com.google.gerrit.acceptance.TestProjectInput;
 import com.google.gerrit.common.data.Permission;
 import com.google.gerrit.extensions.api.changes.SubmitInput;
+import com.google.gerrit.extensions.api.projects.BranchInput;
 import com.google.gerrit.extensions.api.projects.ProjectInput;
 import com.google.gerrit.extensions.client.ChangeStatus;
 import com.google.gerrit.extensions.client.InheritableBoolean;
@@ -349,24 +350,105 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
   @Test
   public void submitWholeTopic() throws Exception {
     assume().that(isSubmitWholeTopicEnabled()).isTrue();
+    String topic = "test-topic";
     PushOneCommit.Result change1 =
-        createChange("Change 1", "a.txt", "content", "test-topic");
+        createChange("Change 1", "a.txt", "content", topic);
     PushOneCommit.Result change2 =
-        createChange("Change 2", "b.txt", "content", "test-topic");
+        createChange("Change 2", "b.txt", "content", topic);
     PushOneCommit.Result change3 =
-        createChange("Change 3", "c.txt", "content", "test-topic");
+        createChange("Change 3", "c.txt", "content", topic);
     approve(change1.getChangeId());
     approve(change2.getChangeId());
     approve(change3.getChangeId());
     submit(change3.getChangeId());
-    change1.assertChange(Change.Status.MERGED, name("test-topic"), admin);
-    change2.assertChange(Change.Status.MERGED, name("test-topic"), admin);
-    change3.assertChange(Change.Status.MERGED, name("test-topic"), admin);
+    String expectedTopic = name(topic);
+    change1.assertChange(Change.Status.MERGED, expectedTopic, admin);
+    change2.assertChange(Change.Status.MERGED, expectedTopic, admin);
+    change3.assertChange(Change.Status.MERGED, expectedTopic, admin);
     // Check for the exact change to have the correct submitter.
     assertSubmitter(change3);
     // Also check submitters for changes submitted via the topic relationship.
     assertSubmitter(change1);
     assertSubmitter(change2);
+
+    // Check that the repo has the expected commits
+    List<RevCommit> log = getRemoteLog();
+    List<String> commitsInRepo = Lists.transform(log,
+        new Function<RevCommit, String>() {
+          @Override
+          public String apply(RevCommit input) {
+            return input.getShortMessage();
+          }
+        });
+    int expectedCommitCount = getSubmitType() == SubmitType.MERGE_ALWAYS
+        ? 5 // initial commit + 3 commits + merge commit
+        : 4; // initial commit + 3 commits
+    assertThat(log).hasSize(expectedCommitCount);
+
+    assertThat(commitsInRepo).containsAllOf(
+        "Initial empty repository", "Change 1", "Change 2", "Change 3");
+    if (getSubmitType() == SubmitType.MERGE_ALWAYS) {
+      assertThat(commitsInRepo).contains(
+          "Merge changes from topic '" + expectedTopic + "'");
+    }
+  }
+
+  @Test
+  public void submitWholeTopicMultipleProjectsAndBranches() throws Exception {
+    assume().that(isSubmitWholeTopicEnabled()).isTrue();
+    String topic = "test-topic";
+
+    // Create two test projects
+    TestRepository<?> repoA = createProjectWithPush(
+        "project-a", null, getSubmitType());
+    TestRepository<?> repoB = createProjectWithPush(
+        "project-b", null, getSubmitType());
+
+    // Create the dev branch on the test projects
+    BranchInput in = new BranchInput();
+    in.ref = "dev";
+    gApi.projects().name(name("project-a")).branch("dev").create(in);
+    gApi.projects().name(name("project-b")).branch("dev").create(in);
+
+    // Create changes on project-a
+    PushOneCommit.Result change1 =
+        createChange(repoA, "master", "Change 1", "a.txt", "content", topic);
+    PushOneCommit.Result change2 =
+        createChange(repoA, "master", "Change 2", "b.txt", "content", topic);
+    PushOneCommit.Result change3 =
+        createChange(repoA, "dev", "Change 3", "a.txt", "content", topic);
+    PushOneCommit.Result change4 =
+        createChange(repoA, "dev", "Change 4", "b.txt", "content", topic);
+
+    // Create changes on project-b
+    PushOneCommit.Result change5 =
+        createChange(repoB, "master", "Change 5", "a.txt", "content", topic);
+    PushOneCommit.Result change6 =
+        createChange(repoB, "master", "Change 6", "b.txt", "content", topic);
+    PushOneCommit.Result change7 =
+        createChange(repoB, "dev", "Change 7", "a.txt", "content", topic);
+    PushOneCommit.Result change8 =
+        createChange(repoB, "dev", "Change 8", "b.txt", "content", topic);
+
+    approve(change1.getChangeId());
+    approve(change2.getChangeId());
+    approve(change3.getChangeId());
+    approve(change4.getChangeId());
+    approve(change5.getChangeId());
+    approve(change6.getChangeId());
+    approve(change7.getChangeId());
+    approve(change8.getChangeId());
+    submit(change8.getChangeId());
+
+    String expectedTopic = name(topic);
+    change1.assertChange(Change.Status.MERGED, expectedTopic, admin);
+    change2.assertChange(Change.Status.MERGED, expectedTopic, admin);
+    change3.assertChange(Change.Status.MERGED, expectedTopic, admin);
+    change4.assertChange(Change.Status.MERGED, expectedTopic, admin);
+    change5.assertChange(Change.Status.MERGED, expectedTopic, admin);
+    change6.assertChange(Change.Status.MERGED, expectedTopic, admin);
+    change7.assertChange(Change.Status.MERGED, expectedTopic, admin);
+    change8.assertChange(Change.Status.MERGED, expectedTopic, admin);
   }
 
   @Test
@@ -405,6 +487,39 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
 
     submit(visible.getChangeId(), new SubmitInput(), AuthException.class,
         "A change to be submitted with " + num + " is not visible");
+  }
+
+  @Test
+  public void submitChangeWhenParentOfOtherBranchTip() throws Exception {
+    // Chain of two commits
+    // Push both to topic-branch
+    // Push the first commit for review and submit
+    //
+    // C2 -- tip of topic branch
+    //  |
+    // C1 -- pushed for review
+    //  |
+    // C0 -- Master
+    //
+    ProjectConfig config = projectCache.checkedGet(project).getConfig();
+    config.getProject().setCreateNewChangeForAllNotInTarget(
+        InheritableBoolean.TRUE);
+    saveProjectConfig(project, config);
+
+    PushOneCommit push1 = pushFactory.create(db, admin.getIdent(), testRepo,
+        PushOneCommit.SUBJECT, "a.txt", "content");
+    PushOneCommit.Result c1 = push1.to("refs/heads/topic");
+    c1.assertOkStatus();
+    PushOneCommit push2 = pushFactory.create(db, admin.getIdent(), testRepo,
+        PushOneCommit.SUBJECT, "b.txt", "anotherContent");
+    PushOneCommit.Result c2 = push2.to("refs/heads/topic");
+    c2.assertOkStatus();
+
+    PushOneCommit.Result change1 = push1.to("refs/for/master");
+    change1.assertOkStatus();
+
+    approve(change1.getChangeId());
+    submit(change1.getChangeId());
   }
 
   private void assertSubmitter(PushOneCommit.Result change) throws Exception {

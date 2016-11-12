@@ -19,7 +19,6 @@ import static com.google.common.truth.Truth.assertThat;
 import com.google.common.collect.Iterables;
 import com.google.gerrit.acceptance.AbstractDaemonTest;
 import com.google.gerrit.common.Nullable;
-import com.google.gerrit.common.data.Permission;
 import com.google.gerrit.common.data.SubscribeSection;
 import com.google.gerrit.extensions.client.SubmitType;
 import com.google.gerrit.reviewdb.client.Project;
@@ -80,6 +79,7 @@ public abstract class AbstractSubmoduleSubscription extends AbstractDaemonTest {
     cfg.setBoolean("change", null, "submitWholeTopic", true);
     cfg.setEnum("project", null, "submitType", SubmitType.REBASE_IF_NECESSARY);
     return cfg;
+<<<<<<< HEAD   (0bf2fb AbstractQueryAccountsTest: Remove unnecessary injection)
   }
 
   protected TestRepository<?> createProjectWithPush(String name,
@@ -89,6 +89,8 @@ public abstract class AbstractSubmoduleSubscription extends AbstractDaemonTest {
     grant(Permission.PUSH, project, "refs/heads/*");
     grant(Permission.SUBMIT, project, "refs/for/refs/heads/*");
     return cloneProject(project);
+=======
+>>>>>>> BRANCH (a06f4d AbstractSubmit: Test submit whole topic on multiple projects)
   }
 
   protected TestRepository<?> createProjectWithPush(String name,
