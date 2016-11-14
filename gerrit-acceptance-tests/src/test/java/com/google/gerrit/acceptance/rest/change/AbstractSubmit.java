@@ -29,8 +29,18 @@ import com.google.common.collect.Lists;
 import com.google.gerrit.acceptance.AbstractDaemonTest;
 import com.google.gerrit.acceptance.NoHttpd;
 import com.google.gerrit.acceptance.PushOneCommit;
+<<<<<<< HEAD   (62d466 Fix notes NPE for has:draft search predicate.)
+=======
+import com.google.gerrit.acceptance.RestResponse;
+import com.google.gerrit.acceptance.Sandboxed;
+>>>>>>> BRANCH (1d55a3 Fix broken submit tests)
 import com.google.gerrit.acceptance.TestProjectInput;
 import com.google.gerrit.extensions.api.changes.SubmitInput;
+<<<<<<< HEAD   (62d466 Fix notes NPE for has:draft search predicate.)
+=======
+import com.google.gerrit.extensions.api.projects.BranchInfo;
+import com.google.gerrit.extensions.api.projects.BranchInput;
+>>>>>>> BRANCH (1d55a3 Fix broken submit tests)
 import com.google.gerrit.extensions.api.projects.ProjectInput;
 import com.google.gerrit.extensions.client.ChangeStatus;
 import com.google.gerrit.extensions.client.InheritableBoolean;
@@ -74,7 +84,11 @@ import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
+<<<<<<< HEAD   (62d466 Fix notes NPE for has:draft search predicate.)
 @NoHttpd
+=======
+@Sandboxed
+>>>>>>> BRANCH (1d55a3 Fix broken submit tests)
 public abstract class AbstractSubmit extends AbstractDaemonTest {
   @ConfigSuite.Config
   public static Config submitWholeTopicEnabled() {
@@ -117,6 +131,86 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
   }
 
   @Test
+  public void submitWholeTopicMultipleProjects() throws Exception {
+    assume().that(isSubmitWholeTopicEnabled()).isTrue();
+    String topic = "test-topic";
+
+    // Create test projects
+    TestRepository<?> repoA = createProjectWithPush(
+        "project-a", null, getSubmitType());
+    TestRepository<?> repoB = createProjectWithPush(
+        "project-b", null, getSubmitType());
+
+    // Create changes on project-a
+    PushOneCommit.Result change1 =
+        createChange(repoA, "master", "Change 1", "a.txt", "content", topic);
+    PushOneCommit.Result change2 =
+        createChange(repoA, "master", "Change 2", "b.txt", "content", topic);
+
+    // Create changes on project-b
+    PushOneCommit.Result change3 =
+        createChange(repoB, "master", "Change 3", "a.txt", "content", topic);
+    PushOneCommit.Result change4 =
+        createChange(repoB, "master", "Change 4", "b.txt", "content", topic);
+
+    approve(change1.getChangeId());
+    approve(change2.getChangeId());
+    approve(change3.getChangeId());
+    approve(change4.getChangeId());
+    submit(change4.getChangeId());
+
+    String expectedTopic = name(topic);
+    change1.assertChange(Change.Status.MERGED, expectedTopic, admin);
+    change2.assertChange(Change.Status.MERGED, expectedTopic, admin);
+    change3.assertChange(Change.Status.MERGED, expectedTopic, admin);
+    change4.assertChange(Change.Status.MERGED, expectedTopic, admin);
+  }
+
+  @Test
+  public void submitWholeTopicMultipleBranchesOnSameProject() throws Exception {
+    assume().that(isSubmitWholeTopicEnabled()).isTrue();
+    String topic = "test-topic";
+
+    // Create test project
+    String projectName = "project-a";
+    TestRepository<?> repoA = createProjectWithPush(
+        projectName, null, getSubmitType());
+
+    RevCommit initialHead =
+        getRemoteHead(new Project.NameKey(name(projectName)), "master");
+
+    // Create the dev branch on the test project
+    BranchInput in = new BranchInput();
+    in.revision = initialHead.name();
+    gApi.projects().name(name(projectName)).branch("dev").create(in);
+
+    // Create changes on master
+    PushOneCommit.Result change1 =
+        createChange(repoA, "master", "Change 1", "a.txt", "content", topic);
+    PushOneCommit.Result change2 =
+        createChange(repoA, "master", "Change 2", "b.txt", "content", topic);
+
+    // Create  changes on dev
+    repoA.reset(initialHead);
+    PushOneCommit.Result change3 =
+        createChange(repoA, "dev", "Change 3", "a.txt", "content", topic);
+    PushOneCommit.Result change4 =
+        createChange(repoA, "dev", "Change 4", "b.txt", "content", topic);
+
+    approve(change1.getChangeId());
+    approve(change2.getChangeId());
+    approve(change3.getChangeId());
+    approve(change4.getChangeId());
+    submit(change4.getChangeId());
+
+    String expectedTopic = name(topic);
+    change1.assertChange(Change.Status.MERGED, expectedTopic, admin);
+    change2.assertChange(Change.Status.MERGED, expectedTopic, admin);
+    change3.assertChange(Change.Status.MERGED, expectedTopic, admin);
+    change4.assertChange(Change.Status.MERGED, expectedTopic, admin);
+  }
+
+  @Test
   public void submitWholeTopic() throws Exception {
     assume().that(isSubmitWholeTopicEnabled()).isTrue();
     String topic = "test-topic";
@@ -130,10 +224,17 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
     approve(change2.getChangeId());
     approve(change3.getChangeId());
     submit(change3.getChangeId());
+<<<<<<< HEAD   (62d466 Fix notes NPE for has:draft search predicate.)
     String expectedTopic = name(topic);
     change1.assertChange(Change.Status.MERGED, expectedTopic, admin);
     change2.assertChange(Change.Status.MERGED, expectedTopic, admin);
     change3.assertChange(Change.Status.MERGED, expectedTopic, admin);
+=======
+
+    change1.assertChange(Change.Status.MERGED, topic, admin);
+    change2.assertChange(Change.Status.MERGED, topic, admin);
+    change3.assertChange(Change.Status.MERGED, topic, admin);
+>>>>>>> BRANCH (1d55a3 Fix broken submit tests)
     // Check for the exact change to have the correct submitter.
     assertSubmitter(change3);
     // Also check submitters for changes submitted via the topic relationship.
@@ -158,7 +259,11 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
         "Initial empty repository", "Change 1", "Change 2", "Change 3");
     if (getSubmitType() == SubmitType.MERGE_ALWAYS) {
       assertThat(commitsInRepo).contains(
+<<<<<<< HEAD   (62d466 Fix notes NPE for has:draft search predicate.)
           "Merge changes from topic '" + expectedTopic + "'");
+=======
+          "Merge changes from topic '" + topic + "'");
+>>>>>>> BRANCH (1d55a3 Fix broken submit tests)
     }
   }
 
