@@ -24,6 +24,12 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.Assert.fail;
 
 import com.google.common.base.Function;
+<<<<<<< HEAD   (8a4d86 Merge branch 'stable-2.12' into stable-2.13)
+=======
+import com.google.common.base.Strings;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableList;
+>>>>>>> BRANCH (294450 Allow submit of merge of non change branch)
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gerrit.acceptance.AbstractDaemonTest;
@@ -313,6 +319,33 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
 
     approve(change1.getChangeId());
     submit(change1.getChangeId());
+  }
+
+  @Test
+  public void submitMergeOfNonChangeBranchTip() throws Exception {
+    // Merge a branch with commits that have not been submitted as
+    // changes.
+    //
+    // M  -- mergeCommit (pushed for review and submitted)
+    // | \
+    // |  S -- stable (pushed directly to refs/heads/stable)
+    // | /
+    // I   -- master
+    //
+    RevCommit master = getRemoteHead(project, "master");
+    PushOneCommit stableTip = pushFactory.create(db, admin.getIdent(), testRepo,
+        "Tip of branch stable", "stable.txt", "");
+    PushOneCommit.Result stable = stableTip.to("refs/heads/stable");
+    PushOneCommit mergeCommit = pushFactory.create(db, admin.getIdent(),
+        testRepo, "The merge commit", "merge.txt", "");
+    mergeCommit.setParents(ImmutableList.of(master, stable.getCommit()));
+    PushOneCommit.Result mergeReview = mergeCommit.to("refs/for/master");
+    approve(mergeReview.getChangeId());
+    submit(mergeReview.getChangeId());
+
+    List<RevCommit> log = getRemoteLog();
+    assertThat(log).contains(stable.getCommit());
+    assertThat(log).contains(mergeReview.getCommit());
   }
 
   private void assertSubmitter(PushOneCommit.Result change) throws Exception {
