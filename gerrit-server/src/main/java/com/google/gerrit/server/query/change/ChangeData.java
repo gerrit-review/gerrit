@@ -1129,8 +1129,13 @@ public class ChangeData {
         return Collections.emptySet();
       }
       draftsByUser = new HashSet<>();
+<<<<<<< HEAD   (8dc2cf Merge "Bazel: Fix testing plugins with acceptance framework")
       for (Comment sc : commentsUtil.draftByChange(db, notes)) {
         draftsByUser.add(sc.author.getId());
+=======
+      for (PatchLineComment sc : plcUtil.draftByChange(db, notes())) {
+        draftsByUser.add(sc.getAuthor());
+>>>>>>> BRANCH (260598 Merge branch 'stable-2.12' into stable-2.13)
       }
     }
     return draftsByUser;
