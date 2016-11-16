@@ -326,18 +326,27 @@ public class ListGroups implements RestReadView<TopLevelResource> {
           continue;
         }
       }
+<<<<<<< HEAD   (222cf2 Fix gr-account-list test failure in Firefox)
       if (!isAdmin) {
         GroupControl c = groupControlFactory.controlFor(group);
         if (!c.isVisible()) {
           continue;
         }
       }
+=======
+>>>>>>> BRANCH (260598 Merge branch 'stable-2.12' into stable-2.13)
       if (visibleToAll && !group.isVisibleToAll()) {
         continue;
       }
       if (!groupsToInspect.isEmpty()
           && !groupsToInspect.contains(group.getGroupUUID())) {
         continue;
+      }
+      if (!isAdmin) {
+        final GroupControl c = groupControlFactory.controlFor(group);
+        if (!c.isVisible()) {
+          continue;
+        }
       }
       filteredGroups.add(group);
     }

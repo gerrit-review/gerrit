@@ -26,6 +26,7 @@ public class SandboxTest extends AbstractDaemonTest {
     gApi.accounts().create("sandboxuser");
   }
 
+<<<<<<< HEAD   (222cf2 Fix gr-account-list test failure in Firefox)
   @Test
   public void testUserNotPresent1() throws Exception {
     assertThat(gApi.accounts().query("sandboxuser").get()).isEmpty();
@@ -34,5 +35,19 @@ public class SandboxTest extends AbstractDaemonTest {
   @Test
   public void testUserNotPresent2() throws Exception {
     assertThat(gApi.accounts().query("sandboxuser").get()).isEmpty();
+=======
+  private void testUserNotPresent() throws Exception {
+    assertThat(gApi.accounts().query("sandboxuser").get()).isEmpty();
+  }
+
+  @Test
+  public void testUserNotPresent1() throws Exception {
+    testUserNotPresent();
+  }
+
+  @Test
+  public void testUserNotPresent2() throws Exception {
+    testUserNotPresent();
+>>>>>>> BRANCH (260598 Merge branch 'stable-2.12' into stable-2.13)
   }
 }
