@@ -26,6 +26,7 @@ public class SandboxTest extends AbstractDaemonTest {
     gApi.accounts().create("sandboxuser");
   }
 
+<<<<<<< HEAD   (795972 Add iron-a11y-keys-behavior back as a dep)
   @Test
   public void testUserNotPresent1() throws Exception {
     assertThat(gApi.accounts().query("sandboxuser").get()).isEmpty();
@@ -34,5 +35,19 @@ public class SandboxTest extends AbstractDaemonTest {
   @Test
   public void testUserNotPresent2() throws Exception {
     assertThat(gApi.accounts().query("sandboxuser").get()).isEmpty();
+=======
+  private void testUserNotPresent() throws Exception {
+    assertThat(gApi.accounts().query("sandboxuser").get()).isEmpty();
+  }
+
+  @Test
+  public void testUserNotPresent1() throws Exception {
+    testUserNotPresent();
+  }
+
+  @Test
+  public void testUserNotPresent2() throws Exception {
+    testUserNotPresent();
+>>>>>>> BRANCH (260598 Merge branch 'stable-2.12' into stable-2.13)
   }
 }

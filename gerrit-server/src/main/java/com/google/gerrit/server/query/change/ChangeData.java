@@ -1129,8 +1129,13 @@ public class ChangeData {
         return Collections.emptySet();
       }
       draftsByUser = new HashSet<>();
+<<<<<<< HEAD   (795972 Add iron-a11y-keys-behavior back as a dep)
       for (Comment sc : commentsUtil.draftByChange(db, notes)) {
         draftsByUser.add(sc.author.getId());
+=======
+      for (PatchLineComment sc : plcUtil.draftByChange(db, notes())) {
+        draftsByUser.add(sc.getAuthor());
+>>>>>>> BRANCH (260598 Merge branch 'stable-2.12' into stable-2.13)
       }
     }
     return draftsByUser;

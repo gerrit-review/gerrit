@@ -30,6 +30,7 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.Sets;
 import com.google.common.primitives.Chars;
 import com.google.gerrit.acceptance.AcceptanceTestRequestScope.Context;
+import com.google.gerrit.common.Nullable;
 import com.google.gerrit.common.data.AccessSection;
 import com.google.gerrit.common.data.ContributorAgreement;
 import com.google.gerrit.common.data.GroupReference;
@@ -1002,6 +1003,7 @@ public abstract class AbstractDaemonTest {
     assertThat(replyTo.getString()).isEqualTo(email);
   }
 
+<<<<<<< HEAD   (795972 Add iron-a11y-keys-behavior back as a dep)
   protected ContributorAgreement configureContributorAgreement(
       boolean autoVerify) throws Exception {
     ContributorAgreement ca;
@@ -1137,5 +1139,14 @@ public abstract class AbstractDaemonTest {
     assertThat(contentEntry.editA).isNull();
     assertThat(contentEntry.editB).isNull();
     assertThat(contentEntry.skip).isNull();
+=======
+  protected TestRepository<?> createProjectWithPush(String name,
+      @Nullable Project.NameKey parent,
+      SubmitType submitType) throws Exception {
+    Project.NameKey project = createProject(name, parent, true, submitType);
+    grant(Permission.PUSH, project, "refs/heads/*");
+    grant(Permission.SUBMIT, project, "refs/for/refs/heads/*");
+    return cloneProject(project);
+>>>>>>> BRANCH (260598 Merge branch 'stable-2.12' into stable-2.13)
   }
 }

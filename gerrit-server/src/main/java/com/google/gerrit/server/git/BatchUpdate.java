@@ -1029,10 +1029,18 @@ public class BatchUpdate implements AutoCloseable {
     }
 
     private ChangeContext newChangeContext(ReviewDb db, Repository repo,
-        RevWalk rw, Change.Id id) throws Exception {
+        RevWalk rw, Change.Id id) throws OrmException, NoSuchChangeException {
       Change c = newChanges.get(id);
       if (c == null) {
+<<<<<<< HEAD   (795972 Add iron-a11y-keys-behavior back as a dep)
         c = ChangeNotes.readOneReviewDbChange(db, id);
+=======
+        c = ReviewDbUtil.unwrapDb(db).changes().get(id);
+        if (c == null) {
+          logDebug("Failed to get change {} from unwrapped db", id);
+          throw new NoSuchChangeException(id);
+        }
+>>>>>>> BRANCH (260598 Merge branch 'stable-2.12' into stable-2.13)
       }
       // Pass in preloaded change to controlFor, to avoid:
       //  - reading from a db that does not belong to this update
