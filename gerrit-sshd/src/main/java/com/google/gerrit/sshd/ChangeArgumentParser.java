@@ -95,6 +95,7 @@ public class ChangeArgumentParser {
     changes.put(ctl.getId(), changesCollection.parse(ctl));
   }
 
+<<<<<<< HEAD   (d7424d Merge "Merge branch 'stable-2.13'")
   private List<ChangeControl> changeFromNotesFactory(String id, CurrentUser currentUser)
       throws OrmException {
     return changeNotesFactory.create(db, Arrays.asList(Change.Id.parse(id)))
@@ -103,9 +104,34 @@ public class ChangeArgumentParser {
         .filter(changeControl -> changeControl.isPresent())
         .map(changeControl -> changeControl.get())
         .collect(toList());
+=======
+  private List<ChangeControl> changeFromNotesFactory(String id,
+      final CurrentUser currentUser) throws OrmException, UnloggedFailure {
+    List<ChangeNotes> changes =
+        changeNotesFactory.create(db, parseId(id));
+    return FluentIterable.from(changes)
+        .transform(new Function<ChangeNotes, ChangeControl>() {
+          @Override
+          public ChangeControl apply(ChangeNotes changeNote) {
+            return controlForChange(changeNote, currentUser);
+          }
+        }).filter(Predicates.notNull()).toList();
+>>>>>>> BRANCH (b54112 Merge "Fix NPE when requesting invalid Change-Id to index" i)
   }
 
+<<<<<<< HEAD   (d7424d Merge "Merge branch 'stable-2.13'")
   private Optional<ChangeControl> controlForChange(ChangeNotes change, CurrentUser user) {
+=======
+  private List<Change.Id> parseId(String id) throws UnloggedFailure {
+    try {
+      return Arrays.asList(new Change.Id(Integer.parseInt(id)));
+    } catch (NumberFormatException e) {
+      throw new UnloggedFailure(2, "Invalid change ID " + id, e);
+    }
+  }
+
+  private ChangeControl controlForChange(ChangeNotes change, CurrentUser user) {
+>>>>>>> BRANCH (b54112 Merge "Fix NPE when requesting invalid Change-Id to index" i)
     try {
       return Optional.of(changeControlFactory.controlFor(change, user));
     } catch (NoSuchChangeException e) {
