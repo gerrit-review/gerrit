@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-plugin-api</artifactId>
+<<<<<<< HEAD   (3e61f7 Organize imports)
   <version>2.14-SNAPSHOT</version>
+=======
+  <version>2.13.3</version>
+>>>>>>> BRANCH (c2bdbe Merge branch 'stable-2.12' into stable-2.13)
   <packaging>jar</packaging>
   <name>Gerrit Code Review - Plugin API</name>
   <description>API for Gerrit Plugins</description>
