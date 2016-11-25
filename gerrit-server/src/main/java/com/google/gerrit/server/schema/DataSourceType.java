@@ -24,7 +24,13 @@ public interface DataSourceType {
 
   String getUrl();
 
+<<<<<<< HEAD   (4d8ec4 Git-ignore .primary_build_tool and .gwt_work_dir)
   boolean usePool();
+=======
+  public String getValidationQuery();
+
+  public boolean usePool();
+>>>>>>> BRANCH (96bbab Fix DB connection pool verification)
 
   /**
    * Return a ScriptRunner that runs the index script. Must not return

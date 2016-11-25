@@ -137,7 +137,13 @@ public class DataSourceProvider implements Provider<DataSource>,
       ds.setMaxWait(ConfigUtil.getTimeUnit(cfg, "database", null,
           "poolmaxwait", MILLISECONDS.convert(30, SECONDS), MILLISECONDS));
       ds.setInitialSize(ds.getMinIdle());
+<<<<<<< HEAD   (4d8ec4 Git-ignore .primary_build_tool and .gwt_work_dir)
       exportPoolMetrics(ds);
+=======
+      ds.setValidationQuery(dst.getValidationQuery());
+      ds.setValidationQueryTimeout(5);
+
+>>>>>>> BRANCH (96bbab Fix DB connection pool verification)
       return intercept(interceptor, ds);
 
     }
