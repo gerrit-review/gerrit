@@ -106,9 +106,12 @@ public class AccountApiImpl implements AccountApi {
   private final SshKeys sshKeys;
   private final GetAgreements getAgreements;
   private final PutAgreement putAgreement;
+<<<<<<< HEAD   (d01ad0 Fix improper implementation of getKeyboardEvent)
   private final GetActive getActive;
   private final PutActive putActive;
   private final DeleteActive deleteActive;
+=======
+>>>>>>> BRANCH (8f83bb AccountManager#create: Do not overwrite external ID of other)
   private final Index index;
 
   @Inject
@@ -137,9 +140,12 @@ public class AccountApiImpl implements AccountApi {
       SshKeys sshKeys,
       GetAgreements getAgreements,
       PutAgreement putAgreement,
+<<<<<<< HEAD   (d01ad0 Fix improper implementation of getKeyboardEvent)
       GetActive getActive,
       PutActive putActive,
       DeleteActive deleteActive,
+=======
+>>>>>>> BRANCH (8f83bb AccountManager#create: Do not overwrite external ID of other)
       Index index,
       @Assisted AccountResource account) {
     this.account = account;
@@ -168,9 +174,12 @@ public class AccountApiImpl implements AccountApi {
     this.gpgApiAdapter = gpgApiAdapter;
     this.getAgreements = getAgreements;
     this.putAgreement = putAgreement;
+<<<<<<< HEAD   (d01ad0 Fix improper implementation of getKeyboardEvent)
     this.getActive = getActive;
     this.putActive = putActive;
     this.deleteActive = deleteActive;
+=======
+>>>>>>> BRANCH (8f83bb AccountManager#create: Do not overwrite external ID of other)
     this.index = index;
   }
 
