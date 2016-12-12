@@ -1223,9 +1223,15 @@ public class ChangeJson {
       i.commit = parent.name();
       i.subject = parent.getShortMessage();
       if (addLinks) {
+<<<<<<< HEAD   (39d362 Update git submodules)
         List<WebLinkInfo> parentLinks =
             webLinks.getParentLinks(project, parent.name());
         i.webLinks = parentLinks.isEmpty() ? null : parentLinks;
+=======
+        FluentIterable<WebLinkInfo> parentLinks =
+            webLinks.getParentLinks(project, parent.name());
+        i.webLinks = parentLinks.isEmpty() ? null : parentLinks.toList();
+>>>>>>> BRANCH (8140f0 Update git submodules)
       }
       info.parents.add(i);
     }
