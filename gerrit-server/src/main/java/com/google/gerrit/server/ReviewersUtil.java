@@ -191,17 +191,29 @@ public class ReviewersUtil {
   private List<Account.Id> suggestAccounts(SuggestReviewers suggestReviewers,
       VisibilityControl visibilityControl)
       throws OrmException {
+<<<<<<< HEAD   (709627 Export httpcore in plugin API)
     try (Timer0.Context ctx = metrics.queryAccountsLatency.start()) {
       AccountIndex searchIndex = accountIndexes.getSearchIndex();
       if (searchIndex != null) {
         return suggestAccountsFromIndex(suggestReviewers);
       }
       return suggestAccountsFromDb(suggestReviewers, visibilityControl);
+=======
+    AccountIndex searchIndex = indexes.getSearchIndex();
+    if (searchIndex != null) {
+      return suggestAccountsFromIndex(suggestReviewers, visibilityControl);
+>>>>>>> BRANCH (9b5129 Implement reviewers visibility check for suggestions)
     }
   }
 
+<<<<<<< HEAD   (709627 Export httpcore in plugin API)
   private List<Account.Id> suggestAccountsFromIndex(
       SuggestReviewers suggestReviewers) throws OrmException {
+=======
+  private Collection<AccountInfo> suggestAccountsFromIndex(
+      SuggestReviewers suggestReviewers, VisibilityControl visibilityControl)
+      throws OrmException {
+>>>>>>> BRANCH (9b5129 Implement reviewers visibility check for suggestions)
     try {
       Set<Account.Id> matches = new HashSet<>();
       QueryResult<AccountState> result = accountQueryProcessor
@@ -209,7 +221,13 @@ public class ReviewersUtil {
           .query(accountQueryBuilder.defaultQuery(suggestReviewers.getQuery()));
       for (AccountState accountState : result.entities()) {
         Account.Id id = accountState.getAccount().getId();
+<<<<<<< HEAD   (709627 Export httpcore in plugin API)
         matches.add(id);
+=======
+        if (visibilityControl.isVisibleTo(id)) {
+          matches.put(id, accountLoader.get(id));
+        }
+>>>>>>> BRANCH (9b5129 Implement reviewers visibility check for suggestions)
       }
       return new ArrayList<>(matches);
     } catch (QueryParseException e) {

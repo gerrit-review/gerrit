@@ -15,12 +15,20 @@
 package com.google.gerrit.acceptance.rest.change;
 
 import static com.google.common.truth.Truth.assertThat;
+<<<<<<< HEAD   (709627 Export httpcore in plugin API)
 import static java.util.stream.Collectors.toList;
+=======
+import static com.google.gerrit.server.group.SystemGroupBackend.ANONYMOUS_USERS;
+>>>>>>> BRANCH (9b5129 Implement reviewers visibility check for suggestions)
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.gerrit.acceptance.AbstractDaemonTest;
 import com.google.gerrit.acceptance.GerritConfig;
+<<<<<<< HEAD   (709627 Export httpcore in plugin API)
+=======
+import com.google.gerrit.acceptance.GerritConfigs;
+>>>>>>> BRANCH (9b5129 Implement reviewers visibility check for suggestions)
 import com.google.gerrit.acceptance.Sandboxed;
 import com.google.gerrit.acceptance.TestAccount;
 import com.google.gerrit.common.data.GlobalCapability;
@@ -149,6 +157,18 @@ public class SuggestReviewersIT extends AbstractDaemonTest {
   }
 
   @Test
+  public void suggestReviewsPrivateProjectVisibility() throws Exception {
+    String changeId = createChange().getChangeId();
+    List<SuggestedReviewerInfo> reviewers;
+
+    setApiUser(user3);
+    block("read", ANONYMOUS_USERS, "refs/*");
+    allow("read", group1.getGroupUUID(), "refs/*");
+    reviewers = suggestReviewers(changeId, user2.username, 2);
+    assertThat(reviewers).isEmpty();
+  }
+
+  @Test
   @GerritConfig(name = "accounts.visibility", value = "SAME_GROUP")
   public void suggestReviewersViewAllAccounts() throws Exception {
     String changeId = createChange().getChangeId();
@@ -181,49 +201,54 @@ public class SuggestReviewersIT extends AbstractDaemonTest {
     String changeId = createChange().getChangeId();
     List<SuggestedReviewerInfo> reviewers;
 
-    reviewers = suggestReviewers(changeId, "first", 4);
+    reviewers = suggestReviewers(changeId, "first");
     assertThat(reviewers).hasSize(3);
 
-    reviewers = suggestReviewers(changeId, "first1", 2);
+    reviewers = suggestReviewers(changeId, "first1");
     assertThat(reviewers).hasSize(1);
 
-    reviewers = suggestReviewers(changeId, "last", 4);
+    reviewers = suggestReviewers(changeId, "last");
     assertThat(reviewers).hasSize(3);
 
-    reviewers = suggestReviewers(changeId, "last1", 2);
+    reviewers = suggestReviewers(changeId, "last1");
     assertThat(reviewers).hasSize(1);
 
-    reviewers = suggestReviewers(changeId, "fi la", 4);
+    reviewers = suggestReviewers(changeId, "fi la");
     assertThat(reviewers).hasSize(3);
 
-    reviewers = suggestReviewers(changeId, "la fi", 4);
+    reviewers = suggestReviewers(changeId, "la fi");
     assertThat(reviewers).hasSize(3);
 
-    reviewers = suggestReviewers(changeId, "first1 la", 2);
+    reviewers = suggestReviewers(changeId, "first1 la");
     assertThat(reviewers).hasSize(1);
 
-    reviewers = suggestReviewers(changeId, "fi last1", 2);
+    reviewers = suggestReviewers(changeId, "fi last1");
     assertThat(reviewers).hasSize(1);
 
-    reviewers = suggestReviewers(changeId, "first1 last2", 1);
+    reviewers = suggestReviewers(changeId, "first1 last2");
     assertThat(reviewers).hasSize(0);
 
-    reviewers = suggestReviewers(changeId, name("user"), 7);
+    reviewers = suggestReviewers(changeId, name("user"));
     assertThat(reviewers).hasSize(6);
 
-    reviewers = suggestReviewers(changeId, user1.username, 2);
+    reviewers = suggestReviewers(changeId, user1.username);
     assertThat(reviewers).hasSize(1);
 
+<<<<<<< HEAD   (709627 Export httpcore in plugin API)
     reviewers = suggestReviewers(changeId, "example.com", 7);
     assertThat(reviewers).hasSize(5);
+=======
+    reviewers = suggestReviewers(changeId, "example.com");
+    assertThat(reviewers).hasSize(6);
+>>>>>>> BRANCH (9b5129 Implement reviewers visibility check for suggestions)
 
-    reviewers = suggestReviewers(changeId, user1.email, 2);
+    reviewers = suggestReviewers(changeId, user1.email);
     assertThat(reviewers).hasSize(1);
 
-    reviewers = suggestReviewers(changeId, user1.username + " example", 2);
+    reviewers = suggestReviewers(changeId, user1.username + " example");
     assertThat(reviewers).hasSize(1);
 
-    reviewers = suggestReviewers(changeId, user4.email.toLowerCase(), 2);
+    reviewers = suggestReviewers(changeId, user4.email.toLowerCase());
     assertThat(reviewers).hasSize(1);
     assertThat(reviewers.get(0).account.email).isEqualTo(user4.email);
   }
@@ -426,6 +451,14 @@ public class SuggestReviewersIT extends AbstractDaemonTest {
             .collect(Collectors.toList()))
         .containsExactly(reviewer1.id.get(), reviewer2.id.get())
         .inOrder();
+  }
+
+  private List<SuggestedReviewerInfo> suggestReviewers(String changeId,
+      String query) throws Exception {
+    return gApi.changes()
+        .id(changeId)
+        .suggestReviewers(query)
+        .get();
   }
 
   private List<SuggestedReviewerInfo> suggestReviewers(String changeId,
