@@ -768,6 +768,7 @@ public class ChangeIT extends AbstractDaemonTest {
   }
 
   @Test
+<<<<<<< HEAD   (e3db98 Merge "Don't include directory entries in GWT UI zip files")
   public void pushCommitOfOtherUser() throws Exception {
     // admin pushes commit of user
     PushOneCommit push = pushFactory.create(db, user.getIdent(), testRepo);
@@ -911,6 +912,8 @@ public class ChangeIT extends AbstractDaemonTest {
   }
 
   @Test
+=======
+>>>>>>> BRANCH (d89b70 Change kind cache: Don't fail if prior ps has no parent, but)
   public void addReviewerThatCannotSeeChange() throws Exception {
     // create hidden project that is only visible to administrators
     Project.NameKey p = createProject("p");
