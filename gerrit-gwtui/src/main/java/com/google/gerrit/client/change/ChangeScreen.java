@@ -597,6 +597,7 @@ public class ChangeScreen extends Screen {
   private void initEditMode(ChangeInfo info, String revision) {
     if (Gerrit.isSignedIn()) {
       RevisionInfo rev = info.revision(revision);
+<<<<<<< HEAD   (db1bc8 Merge "Organize imports")
       if (info.status().isOpen()) {
         if (isEditModeEnabled(info, rev)) {
           editMode.setVisible(fileTableMode == FileTable.Mode.REVIEW);
@@ -617,6 +618,37 @@ public class ChangeScreen extends Screen {
           editMode.setVisible(false);
           addFile.setVisible(false);
           reviewMode.setVisible(false);
+=======
+      boolean isOpen = info.status().isOpen();
+      if (isOpen && isEditModeEnabled(info, rev)) {
+        editMode.setVisible(fileTableMode == FileTable.Mode.REVIEW);
+        addFile.setVisible(!editMode.isVisible());
+        deleteFile.setVisible(!editMode.isVisible());
+        renameFile.setVisible(!editMode.isVisible());
+        reviewMode.setVisible(!editMode.isVisible());
+        addFileAction = new AddFileAction(
+            changeId, info.revision(revision),
+            style, addFile, files);
+        deleteFileAction = new DeleteFileAction(
+            changeId, info.revision(revision),
+            style, addFile);
+        renameFileAction = new RenameFileAction(
+            changeId, info.revision(revision),
+            style, addFile);
+      } else {
+        editMode.setVisible(false);
+        addFile.setVisible(false);
+        reviewMode.setVisible(false);
+      }
+
+      if (rev.isEdit()) {
+        if (isOpen) {
+          if (info.hasEditBasedOnCurrentPatchSet()) {
+            publishEdit.setVisible(true);
+          } else {
+            rebaseEdit.setVisible(true);
+          }
+>>>>>>> BRANCH (e7fc0e ChangeScreen: Enable Delete Edit for merged changes)
         }
 
         if (rev.isEdit()) {
