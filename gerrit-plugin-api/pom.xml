@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-plugin-api</artifactId>
+<<<<<<< HEAD   (49084a Merge "Index Account REST endpoint: Remove unneeded exceptio)
   <version>2.14-SNAPSHOT</version>
+=======
+  <version>2.13.5</version>
+>>>>>>> BRANCH (481ba3 Set version to 2.13.5)
   <packaging>jar</packaging>
   <name>Gerrit Code Review - Plugin API</name>
   <description>API for Gerrit Plugins</description>
