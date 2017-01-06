@@ -139,11 +139,19 @@ public class SubmoduleOp {
         "enableSuperProjectSubscriptions", true);
     this.orm = orm;
     this.updatedBranches = updatedBranches;
+<<<<<<< HEAD   (26a551 Merge "More horizontal space for patch set descriptions")
     this.targets = MultimapBuilder.hashKeys().hashSetValues().build();
+=======
+    this.targets = HashMultimap.create();
+>>>>>>> BRANCH (0dcdaf Fix project ordering bug in submodule subscription)
     this.affectedBranches = new HashSet<>();
     this.branchTips = new HashMap<>();
     this.branchGitModules = new HashMap<>();
+<<<<<<< HEAD   (26a551 Merge "More horizontal space for patch set descriptions")
     this.branchesByProject = MultimapBuilder.hashKeys().hashSetValues().build();
+=======
+    this.branchesByProject = HashMultimap.create();
+>>>>>>> BRANCH (0dcdaf Fix project ordering bug in submodule subscription)
     this.sortedBranches = calculateSubscriptionMap();
   }
 
@@ -379,7 +387,10 @@ public class SubmoduleOp {
             "The branch was probably deleted from the subscriber repository");
       }
       currentCommit = or.rw.parseCommit(r.getObjectId());
+<<<<<<< HEAD   (26a551 Merge "More horizontal space for patch set descriptions")
       addBranchTip(subscriber, currentCommit);
+=======
+>>>>>>> BRANCH (0dcdaf Fix project ordering bug in submodule subscription)
     }
 
     StringBuilder msgbuf = new StringBuilder("");
@@ -560,7 +571,11 @@ public class SubmoduleOp {
       throws SubmoduleException {
     LinkedHashSet<Project.NameKey> projects = new LinkedHashSet<>();
     for (Project.NameKey project : branchesByProject.keySet()) {
+<<<<<<< HEAD   (26a551 Merge "More horizontal space for patch set descriptions")
       addAllSubmoduleProjects(project, new LinkedHashSet<>(), projects);
+=======
+      addAllSubmoduleProjects(project, new LinkedHashSet<Project.NameKey>(), projects);
+>>>>>>> BRANCH (0dcdaf Fix project ordering bug in submodule subscription)
     }
 
     for (Branch.NameKey branch : updatedBranches) {

@@ -264,6 +264,7 @@ public class SubmoduleSubscriptionsWholeTopicMergeIT
   }
 
   @Test
+<<<<<<< HEAD   (26a551 Merge "More horizontal space for patch set descriptions")
   public void doNotUseFastForward() throws Exception {
     TestRepository<?> superRepo = createProjectWithPush("super-project", false);
     TestRepository<?> sub = createProjectWithPush("sub", false);
@@ -315,6 +316,59 @@ public class SubmoduleSubscriptionsWholeTopicMergeIT
 
   @Test
   public void sameProjectSameBranchDifferentPaths() throws Exception {
+=======
+  public void testDoNotUseFastForward() throws Exception {
+    TestRepository<?> superRepo = createProjectWithPush("super-project", false);
+    TestRepository<?> sub = createProjectWithPush("sub", false);
+
+    allowMatchingSubmoduleSubscription("sub", "refs/heads/master",
+        "super-project", "refs/heads/master");
+
+    createSubmoduleSubscription(superRepo, "master", "sub", "master");
+
+    ObjectId subId =
+        pushChangeTo(sub, "refs/for/master", "some message", "same-topic");
+
+    ObjectId superId =
+        pushChangeTo(superRepo, "refs/for/master", "some message", "same-topic");
+
+    String subChangeId = getChangeId(sub, subId).get();
+    approve(subChangeId);
+    approve(getChangeId(superRepo, superId).get());
+
+    gApi.changes().id(subChangeId).current().submit();
+
+    expectToHaveSubmoduleState(superRepo, "master", "sub", sub, "master");
+    RevCommit superHead = getRemoteHead(name("super-project"), "master");
+    assertThat(superHead.getShortMessage()).contains("some message");
+    assertThat(superHead.getId()).isNotEqualTo(superId);
+  }
+
+  @Test
+  public void testUseFastForwardWhenNoSubmodule() throws Exception {
+    TestRepository<?> superRepo = createProjectWithPush("super-project", false);
+    TestRepository<?> sub = createProjectWithPush("sub", false);
+
+    ObjectId subId =
+        pushChangeTo(sub, "refs/for/master", "some message", "same-topic");
+
+    ObjectId superId =
+        pushChangeTo(superRepo, "refs/for/master", "some message", "same-topic");
+
+    String subChangeId = getChangeId(sub, subId).get();
+    approve(subChangeId);
+    approve(getChangeId(superRepo, superId).get());
+
+    gApi.changes().id(subChangeId).current().submit();
+
+    RevCommit superHead = getRemoteHead(name("super-project"), "master");
+    assertThat(superHead.getShortMessage()).isEqualTo("some message");
+    assertThat(superHead.getId()).isEqualTo(superId);
+  }
+
+  @Test
+  public void testSameProjectSameBranchDifferentPaths() throws Exception {
+>>>>>>> BRANCH (0dcdaf Fix project ordering bug in submodule subscription)
     TestRepository<?> superRepo = createProjectWithPush("super-project");
     TestRepository<?> sub = createProjectWithPush("sub");
 
@@ -336,6 +390,50 @@ public class SubmoduleSubscriptionsWholeTopicMergeIT
 
     expectToHaveSubmoduleState(superRepo, "master", "sub", sub, "master");
     expectToHaveSubmoduleState(superRepo, "master", "sub-copy", sub, "master");
+
+    superRepo.git().fetch().setRemote("origin").call()
+        .getAdvertisedRef("refs/heads/master").getObjectId();
+
+    assertWithMessage("submodule subscription update "
+        + "should have made one commit")
+        .that(superRepo.getRepository().resolve("origin/master^"))
+        .isEqualTo(superPreviousId);
+  }
+
+  @Test
+  public void testSameProjectDifferentBranchDifferentPaths() throws Exception {
+    TestRepository<?> superRepo = createProjectWithPush("super-project");
+    TestRepository<?> sub = createProjectWithPush("sub");
+
+    allowMatchingSubmoduleSubscription("sub", "refs/heads/master",
+        "super-project", "refs/heads/master");
+    allowMatchingSubmoduleSubscription("sub", "refs/heads/dev",
+        "super-project", "refs/heads/master");
+
+    ObjectId devHead = pushChangeTo(sub, "dev");
+    Config config = new Config();
+    prepareSubmoduleConfigEntry(config, "sub", "sub-master", "master");
+    prepareSubmoduleConfigEntry(config, "sub", "sub-dev", "dev");
+    pushSubmoduleConfig(superRepo, "master", config);
+
+    ObjectId subMasterId =
+        pushChangeTo(sub, "refs/for/master", "some message", "b.txt",
+            "content b", "same-topic");
+
+    sub.reset(devHead);
+    ObjectId subDevId =
+        pushChangeTo(sub, "refs/for/dev", "some message in dev", "b.txt",
+            "content b", "same-topic");
+
+    approve(getChangeId(sub, subMasterId).get());
+    approve(getChangeId(sub, subDevId).get());
+
+    ObjectId superPreviousId = pushChangeTo(superRepo, "master");
+
+    gApi.changes().id(getChangeId(sub, subMasterId).get()).current().submit();
+
+    expectToHaveSubmoduleState(superRepo, "master", "sub-master", sub, "master");
+    expectToHaveSubmoduleState(superRepo, "master", "sub-dev", sub, "dev");
 
     superRepo.git().fetch().setRemote("origin").call()
         .getAdvertisedRef("refs/heads/master").getObjectId();
@@ -585,6 +683,7 @@ public class SubmoduleSubscriptionsWholeTopicMergeIT
   }
 
   @Test
+<<<<<<< HEAD   (26a551 Merge "More horizontal space for patch set descriptions")
   public void projectNoSubscriptionWholeTopic() throws Exception {
     TestRepository<?> repoA = createProjectWithPush("project-a");
     TestRepository<?> repoB = createProjectWithPush("project-b");
@@ -642,6 +741,65 @@ public class SubmoduleSubscriptionsWholeTopicMergeIT
     TestRepository<?> repoB = createProjectWithPush("project-b");
     // bootstrap the dev branch
     pushChangeTo(repoA, "dev");
+=======
+  public void testProjectNoSubscriptionWholeTopic() throws Exception {
+    TestRepository<?> repoA = createProjectWithPush("project-a");
+    TestRepository<?> repoB = createProjectWithPush("project-b");
+    // bootstrap the dev branch
+    ObjectId a0 = pushChangeTo(repoA, "dev");
+
+    // bootstrap the dev branch
+    ObjectId b0 = pushChangeTo(repoB, "dev");
+
+    // create a change for master branch in repo a
+    ObjectId aHead =
+        pushChangeTo(repoA, "refs/for/master", "master.txt", "content master A",
+            "some message in a master.txt", "same-topic");
+
+    // create a change for master branch in repo b
+    ObjectId bHead =
+        pushChangeTo(repoB, "refs/for/master", "master.txt", "content master B",
+            "some message in b master.txt", "same-topic");
+
+    // create a change for dev branch in repo a
+    repoA.reset(a0);
+    ObjectId aDevHead =
+        pushChangeTo(repoA, "refs/for/dev", "dev.txt", "content dev A",
+            "some message in a dev.txt", "same-topic");
+
+    // create a change for dev branch in repo b
+    repoB.reset(b0);
+    ObjectId bDevHead =
+        pushChangeTo(repoB, "refs/for/dev", "dev.txt", "content dev B",
+            "some message in b dev.txt", "same-topic");
+
+    approve(getChangeId(repoA, aHead).get());
+    approve(getChangeId(repoB, bHead).get());
+    approve(getChangeId(repoA, aDevHead).get());
+    approve(getChangeId(repoB, bDevHead).get());
+
+    gApi.changes().id(getChangeId(repoA, aDevHead).get()).current().submit();
+    assertThat(
+        getRemoteHead(name("project-a"), "refs/heads/master").getShortMessage())
+        .contains("some message in a master.txt");
+    assertThat(
+        getRemoteHead(name("project-a"), "refs/heads/dev").getShortMessage())
+        .contains("some message in a dev.txt");
+    assertThat(
+        getRemoteHead(name("project-b"), "refs/heads/master").getShortMessage())
+        .contains("some message in b master.txt");
+    assertThat(
+        getRemoteHead(name("project-b"), "refs/heads/dev").getShortMessage())
+        .contains("some message in b dev.txt");
+  }
+
+  @Test
+  public void testTwoProjectsMultipleBranchesWholeTopic() throws Exception {
+    TestRepository<?> repoA = createProjectWithPush("project-a");
+    TestRepository<?> repoB = createProjectWithPush("project-b");
+    // bootstrap the dev branch
+    ObjectId a0 = pushChangeTo(repoA, "dev");
+>>>>>>> BRANCH (0dcdaf Fix project ordering bug in submodule subscription)
 
     // bootstrap the dev branch
     ObjectId b0 = pushChangeTo(repoB, "dev");

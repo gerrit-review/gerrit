@@ -469,9 +469,14 @@ public class MergeOp implements AutoCloseable {
     commits.maybeFailVerbose();
     SubmoduleOp submoduleOp = subOpFactory.create(branches, orm);
     try {
+<<<<<<< HEAD   (26a551 Merge "More horizontal space for patch set descriptions")
       List<SubmitStrategy> strategies = getSubmitStrategies(toSubmit,
           submoduleOp, dryrun);
       this.allProjects = submoduleOp.getProjectsInOrder();
+=======
+      List<SubmitStrategy> strategies = getSubmitStrategies(toSubmit, submoduleOp);
+      Set<Project.NameKey> allProjects = submoduleOp.getProjectsInOrder();
+>>>>>>> BRANCH (0dcdaf Fix project ordering bug in submodule subscription)
       BatchUpdate.execute(orm.batchUpdates(allProjects),
           new SubmitStrategyListener(submitInput, strategies, commits),
           submissionId, dryrun);

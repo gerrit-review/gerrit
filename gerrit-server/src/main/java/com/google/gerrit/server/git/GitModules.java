@@ -68,6 +68,7 @@ public class GitModules {
     OpenRepo or = null;
     try {
       or = orm.openRepo(project);
+<<<<<<< HEAD   (26a551 Merge "More horizontal space for patch set descriptions")
       ObjectId id = or.repo.resolve(branch.get());
       if (id == null) {
         throw new IOException("Cannot open branch " + branch.get());
@@ -92,6 +93,8 @@ public class GitModules {
       }
       subscriptions = new SubmoduleSectionParser(bbc, canonicalWebUrl,
             branch).parseAllSections();
+=======
+>>>>>>> BRANCH (0dcdaf Fix project ordering bug in submodule subscription)
     } catch (NoSuchProjectException e) {
       throw new IOException(e);
     } finally {

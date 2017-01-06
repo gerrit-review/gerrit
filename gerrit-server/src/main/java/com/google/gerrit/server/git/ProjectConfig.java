@@ -276,6 +276,10 @@ public class ProjectConfig extends VersionedMetaData implements ValidationError.
     return subscribeSections;
   }
 
+  public Map<Project.NameKey, SubscribeSection> getSubscribeSections() {
+    return subscribeSections;
+  }
+
   public Collection<SubscribeSection> getSubscribeSections(
       Branch.NameKey branch) {
     Collection<SubscribeSection> ret = new ArrayList<>();

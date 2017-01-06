@@ -86,8 +86,13 @@ public abstract class AbstractSubmoduleSubscription extends AbstractDaemonTest {
       @Nullable Project.NameKey parent, boolean createEmptyCommit,
       SubmitType submitType) throws Exception {
     Project.NameKey project = createProject(name, parent, createEmptyCommit, submitType);
+<<<<<<< HEAD   (26a551 Merge "More horizontal space for patch set descriptions")
     grant(Permission.PUSH, project, "refs/heads/*");
     grant(Permission.SUBMIT, project, "refs/for/refs/heads/*");
+=======
+    grant("push", project, "refs/heads/*");
+    grant("submit", project, "refs/for/refs/heads/*");
+>>>>>>> BRANCH (0dcdaf Fix project ordering bug in submodule subscription)
     return cloneProject(project);
   }
 
