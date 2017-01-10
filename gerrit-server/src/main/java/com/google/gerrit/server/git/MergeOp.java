@@ -474,7 +474,11 @@ public class MergeOp implements AutoCloseable {
       this.allProjects = submoduleOp.getProjectsInOrder();
       BatchUpdate.execute(orm.batchUpdates(allProjects),
           new SubmitStrategyListener(submitInput, strategies, commits),
+<<<<<<< HEAD   (866788 Merge "Display comment resolve state")
           submissionId, dryrun);
+=======
+          submissionId);
+>>>>>>> BRANCH (a9e73b Fix eclipse unused variable warning)
     } catch (SubmoduleException e) {
       throw new IntegrationException(e);
     } catch (UpdateException e) {

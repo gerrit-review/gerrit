@@ -14,13 +14,20 @@
 
 package com.google.gerrit.server.git;
 
+<<<<<<< HEAD   (866788 Merge "Display comment resolve state")
+=======
+import com.google.common.collect.ArrayListMultimap;
+>>>>>>> BRANCH (a9e73b Fix eclipse unused variable warning)
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
+<<<<<<< HEAD   (866788 Merge "Display comment resolve state")
 import com.google.common.collect.MultimapBuilder;
+=======
+>>>>>>> BRANCH (a9e73b Fix eclipse unused variable warning)
 import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.server.query.change.ChangeData;
