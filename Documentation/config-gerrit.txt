@@ -503,6 +503,31 @@ it does not match, it is then validated against the `LDAP` password.
 By default this is set to `LDAP` when link:#auth.type[`auth.type`] is `LDAP`.
 Otherwise, the default value is `HTTP`.
 
+[[auth.gitBasicAuthPolicy]]auth.gitBasicAuthPolicy::
++
+When `auth.type` is `LDAP` and BasicAuth (i.e., link:#auth.gitBasicAuth[`auth.gitBasicAuth`]
+is set to true), it allows using either the generated HTTP password, the LDAP
+password or both to authenticate Git over HTTP and REST API requests. The
+supported values are:
++
+*`HTTP`
++
+Only the randomly generated HTTP password is accepted when doing Git over HTTP
+and REST API requests.
++
+*`LDAP`
++
+Only the `LDAP` password is allowed when doing Git over HTTP and REST API
+requests.
++
+*`HTTP_LDAP`
++
+The password in the request is first checked against the HTTP password and, if
+it does not match, it is then validated against the `LDAP` password.
++
+By default this is set to `LDAP` when link:#auth.type[`auth.type`] is `LDAP`.
+Otherwise, the default value is `HTTP`.
+
 [[auth.gitOAuthProvider]]auth.gitOAuthProvider::
 +
 Selects the OAuth 2 provider to authenticate git over HTTP traffic with.

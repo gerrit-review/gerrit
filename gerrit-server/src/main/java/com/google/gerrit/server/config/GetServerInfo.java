@@ -19,6 +19,7 @@ import static java.util.stream.Collectors.toList;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+<<<<<<< HEAD   (0b4a13 Merge "ElasticTestUtils needs dependency to "//gerrit-review)
 import com.google.gerrit.common.data.ContributorAgreement;
 import com.google.gerrit.extensions.client.UiType;
 import com.google.gerrit.extensions.common.AuthInfo;
@@ -32,6 +33,9 @@ import com.google.gerrit.extensions.common.ServerInfo;
 import com.google.gerrit.extensions.common.SshdInfo;
 import com.google.gerrit.extensions.common.SuggestInfo;
 import com.google.gerrit.extensions.common.UserConfigInfo;
+=======
+import com.google.gerrit.extensions.client.GitBasicAuthPolicy;
+>>>>>>> BRANCH (d0bf01 Allow HTTP password when using LDAP and basic authentication)
 import com.google.gerrit.extensions.config.CloneCommand;
 import com.google.gerrit.extensions.config.DownloadCommand;
 import com.google.gerrit.extensions.config.DownloadScheme;
@@ -161,6 +165,7 @@ public class GetServerInfo implements RestReadView<ConfigResource> {
     info.switchAccountUrl = cfg.getSwitchAccountUrl();
     info.isGitBasicAuth = toBoolean(cfg.isGitBasicAuth());
     info.gitBasicAuthPolicy = cfg.getGitBasicAuthPolicy();
+<<<<<<< HEAD   (0b4a13 Merge "ElasticTestUtils needs dependency to "//gerrit-review)
 
     if (info.useContributorAgreements != null) {
       Collection<ContributorAgreement> agreements =
@@ -173,6 +178,8 @@ public class GetServerInfo implements RestReadView<ConfigResource> {
         }
       }
     }
+=======
+>>>>>>> BRANCH (d0bf01 Allow HTTP password when using LDAP and basic authentication)
 
     switch (info.authType) {
       case LDAP:
@@ -366,5 +373,90 @@ public class GetServerInfo implements RestReadView<ConfigResource> {
 
   private static Boolean toBoolean(boolean v) {
     return v ? v : null;
+<<<<<<< HEAD   (0b4a13 Merge "ElasticTestUtils needs dependency to "//gerrit-review)
+=======
+  }
+
+  public static class ServerInfo {
+    public AuthInfo auth;
+    public ChangeConfigInfo change;
+    public DownloadInfo download;
+    public GerritInfo gerrit;
+    public Boolean noteDbEnabled;
+    public PluginConfigInfo plugin;
+    public SshdInfo sshd;
+    public SuggestInfo suggest;
+    public Map<String, String> urlAliases;
+    public UserConfigInfo user;
+    public ReceiveInfo receive;
+  }
+
+  public static class AuthInfo {
+    public AuthType authType;
+    public Boolean useContributorAgreements;
+    public List<Account.FieldName> editableAccountFields;
+    public String loginUrl;
+    public String loginText;
+    public String switchAccountUrl;
+    public String registerUrl;
+    public String registerText;
+    public String editFullNameUrl;
+    public String httpPasswordUrl;
+    public Boolean isGitBasicAuth;
+    public GitBasicAuthPolicy gitBasicAuthPolicy;
+  }
+
+  public static class ChangeConfigInfo {
+    public Boolean allowBlame;
+    public Boolean allowDrafts;
+    public int largeChange;
+    public String replyLabel;
+    public String replyTooltip;
+    public int updateDelay;
+    public Boolean submitWholeTopic;
+  }
+
+  public static class DownloadInfo {
+    public Map<String, DownloadSchemeInfo> schemes;
+    public List<String> archives;
+  }
+
+  public static class DownloadSchemeInfo {
+    public String url;
+    public Boolean isAuthRequired;
+    public Boolean isAuthSupported;
+    public Map<String, String> commands;
+    public Map<String, String> cloneCommands;
+  }
+
+  public static class GerritInfo {
+    public String allProjects;
+    public String allUsers;
+    public Boolean docSearch;
+    public String docUrl;
+    public Boolean editGpgKeys;
+    public String reportBugUrl;
+    public String reportBugText;
+  }
+
+  public static class PluginConfigInfo {
+    public Boolean hasAvatars;
+    public List<String> jsResourcePaths;
+  }
+
+  public static class SshdInfo {
+  }
+
+  public static class SuggestInfo {
+    public int from;
+  }
+
+  public static class UserConfigInfo {
+    public String anonymousCowardName;
+  }
+
+  public static class ReceiveInfo {
+    public Boolean enableSignedPush;
+>>>>>>> BRANCH (d0bf01 Allow HTTP password when using LDAP and basic authentication)
   }
 }

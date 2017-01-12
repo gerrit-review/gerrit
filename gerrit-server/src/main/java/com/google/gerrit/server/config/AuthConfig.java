@@ -14,7 +14,10 @@
 
 package com.google.gerrit.server.config;
 
+<<<<<<< HEAD   (0b4a13 Merge "ElasticTestUtils needs dependency to "//gerrit-review)
 import com.google.gerrit.extensions.client.AuthType;
+=======
+>>>>>>> BRANCH (d0bf01 Allow HTTP password when using LDAP and basic authentication)
 import com.google.gerrit.extensions.client.GitBasicAuthPolicy;
 import com.google.gerrit.reviewdb.client.AccountExternalId;
 import com.google.gerrit.server.auth.openid.OpenIdProviderPattern;
