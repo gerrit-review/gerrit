@@ -14,7 +14,10 @@
 
 package com.google.gerrit.server.config;
 
+<<<<<<< HEAD   (265172 Merge "Index admin user account that is created during init")
 import com.google.gerrit.extensions.client.AuthType;
+=======
+>>>>>>> BRANCH (d0bf01 Allow HTTP password when using LDAP and basic authentication)
 import com.google.gerrit.extensions.client.GitBasicAuthPolicy;
 import com.google.gerrit.reviewdb.client.AccountExternalId;
 import com.google.gerrit.server.auth.openid.OpenIdProviderPattern;
