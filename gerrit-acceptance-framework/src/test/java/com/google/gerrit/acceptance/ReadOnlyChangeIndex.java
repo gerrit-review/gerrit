@@ -32,6 +32,7 @@ public class ReadOnlyChangeIndex implements ChangeIndex {
     this.index = index;
   }
 
+  
   public ChangeIndex unwrap() {
     return index;
   }

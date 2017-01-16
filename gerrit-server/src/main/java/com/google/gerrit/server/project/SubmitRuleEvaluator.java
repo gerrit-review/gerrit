@@ -349,6 +349,12 @@ public class SubmitRuleEvaluator {
             return invalidResult(submitRule, submitRecord);
           }
         } catch (UserTermExpected e) {
+
+          System.out.println("# " + status + " -> name = " + status.name()
+              + " \n--> msg = " + e.getMessage()
+              + " \n--> rule = " + submitRule.toQuotedString()
+              + " \n--> record = " + submitRecord.toQuotedString());
+
           return invalidResult(submitRule, submitRecord, e.getMessage());
         }
       }
@@ -485,10 +491,17 @@ public class SubmitRuleEvaluator {
 
       List<Term> results = new ArrayList<>();
       try {
+        System.out.println("-> enter -> " + userRuleWrapperName + " , " + sr.toQuotedString());
+        List<Term[]> tests = env.all("gerrit", userRuleWrapperName, sr, new VariableTerm());
+        System.out.println("tests: " + tests);
+
         for (Term[] template : env.all("gerrit", userRuleWrapperName, sr,
               new VariableTerm())) {
           results.add(template[1]);
+
+          System.out.println("*********** " + template[1].toQuotedString());
         }
+        System.out.println("-> exist -> \n");
       } catch (ReductionLimitException err) {
         throw new RuleEvalException(String.format(
             "%s on change %d of %s",

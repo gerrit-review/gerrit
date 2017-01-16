@@ -17,30 +17,43 @@ package com.google.gerrit.acceptance.server.change;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.gerrit.acceptance.PushOneCommit.FILE_NAME;
 import static com.google.gerrit.acceptance.PushOneCommit.SUBJECT;
+import static com.google.gerrit.server.group.SystemGroupBackend.ANONYMOUS_USERS;
+import static com.google.gerrit.server.project.Util.category;
+import static com.google.gerrit.server.project.Util.value;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gerrit.acceptance.AbstractDaemonTest;
+import com.google.gerrit.acceptance.GitUtil;
 import com.google.gerrit.acceptance.NoHttpd;
 import com.google.gerrit.acceptance.PushOneCommit;
+import com.google.gerrit.common.data.LabelType;
+import com.google.gerrit.common.data.Permission;
 import com.google.gerrit.extensions.api.changes.DraftInput;
 import com.google.gerrit.extensions.api.changes.ReviewInput;
 import com.google.gerrit.extensions.api.changes.ReviewInput.CommentInput;
 import com.google.gerrit.extensions.api.changes.ReviewInput.DraftHandling;
+import com.google.gerrit.extensions.client.ChangeStatus;
 import com.google.gerrit.extensions.client.Comment;
 import com.google.gerrit.extensions.client.Side;
+import com.google.gerrit.extensions.common.ChangeInfo;
 import com.google.gerrit.extensions.common.CommentInfo;
 import com.google.gerrit.extensions.restapi.BadRequestException;
 import com.google.gerrit.extensions.restapi.IdString;
 import com.google.gerrit.extensions.restapi.ResourceNotFoundException;
 import com.google.gerrit.extensions.restapi.TopLevelResource;
+import com.google.gerrit.reviewdb.client.AccountGroup;
 import com.google.gerrit.reviewdb.client.Patch;
+import com.google.gerrit.reviewdb.client.RefNames;
 import com.google.gerrit.server.change.ChangeResource;
 import com.google.gerrit.server.change.ChangesCollection;
 import com.google.gerrit.server.change.PostReview;
 import com.google.gerrit.server.change.RevisionResource;
+import com.google.gerrit.server.git.ProjectConfig;
+import com.google.gerrit.server.group.SystemGroupBackend;
+import com.google.gerrit.server.project.Util;
 import com.google.gerrit.testutil.FakeEmailSender;
 import com.google.gerrit.testutil.FakeEmailSender.Message;
 import com.google.inject.Inject;
@@ -389,7 +402,7 @@ public class CommentsIT extends AbstractDaemonTest {
     addComment(r1, "nit: trailing whitespace");
     Map<String, List<CommentInfo>> result = getPublishedComments(changeId, revId);
     assertThat(result.get(FILE_NAME)).hasSize(2);
-    addComment(r1, "nit: trailing whitespace", true);
+    addComment(r1, "nit: trailing whitespace", true, false);
     result = getPublishedComments(changeId, revId);
     assertThat(result.get(FILE_NAME)).hasSize(2);
 
@@ -398,7 +411,7 @@ public class CommentsIT extends AbstractDaemonTest {
         .to("refs/for/master");
     changeId = r2.getChangeId();
     revId = r2.getCommit().getName();
-    addComment(r2, "nit: trailing whitespace", true);
+    addComment(r2, "nit: trailing whitespace", true, false);
     result = getPublishedComments(changeId, revId);
     assertThat(result.get(FILE_NAME)).hasSize(1);
   }
@@ -648,6 +661,127 @@ public class CommentsIT extends AbstractDaemonTest {
     assertThat(drafts.get(0).tag).isEqualTo("tag2");
   }
 
+  @Test
+  public void unresolvedCommentsBlocked()
+      throws Exception {
+    PushOneCommit.Result r = createChange();
+
+    setApiUser(admin);
+    gApi.changes()
+        .id(r.getChangeId())
+        .revision(r.getCommit().name())
+        .review(ReviewInput.approve());
+
+    GitUtil.fetch(testRepo, RefNames.REFS_CONFIG + ":config");
+    testRepo.reset("config");
+//    PushOneCommit push2 = pushFactory.create(db, admin.getIdent(), testRepo,
+//        "Configure",
+//        "rules.pl",
+//        "submit_rule(submit(CR)) :-\n"
+//            + "  gerrit:unresolved_comments(0),\n"
+//            + "  gerrit:default_submit(X).");
+//
+    PushOneCommit push2 = pushFactory.create(db, admin.getIdent(), testRepo,
+        "Configure",
+        "rules.pl",
+        "submit_rule(submit(CR)) :- \n"
+            + "gerrit:change_branch('refs/meta/config'),\n"
+            + "!,\n"
+            + "gerrit:max_with_block(-2, 2, 'Code-Review', CR).\n\n"
+
+            + "submit_rule(submit(CR, V, L)) :- \n"
+            + "needs_library_compliance,\n"
+            + "!,\n"
+            + "base(CR, V),\n"
+            + "gerrit:max_with_block(-1, 1, 'Library-Compliance', L).\n\n"
+
+            + "submit_rule(submit(CR, V)) :- \n"
+            + "is_no_polygerrit_change, \n"
+            + "!,\n"
+            + "base(CR, V).\n\n"
+
+            + "submit_rule(submit(P, V)) :- \n"
+            + "gerrit:max_with_block(-2, 2, 'PolyGerrit-Review', P),\n"
+            + "gerrit:max_with_block(-1, 1, 'Verified', V). \n\n"
+
+            + "base(CR, V) :- \n"
+            + "gerrit:unresolved_comments(0), \n"
+            + "gerrit:max_with_block(-2, 2, 'Code-Review', CR), \n"
+            + "gerrit:max_with_block(-1, 1, 'Verified', V). \n\n"
+
+            + "needs_library_compliance :- "
+            + "gerrit:commit_delta('^lib/'), !.\n"
+
+            + "needs_library_compliance :- "
+            + "gerrit:commit_delta('^[.]buckversion$'), !. \n"
+
+            + "nneeds_library_compliance :- "
+            + "gerrit:commit_delta('^WORKSPACE$'), !. \n\n"
+
+            + "is_no_polygerrit_change :- \n"
+            + "gerrit:commit_delta('^(?!polygerrit-ui/).*$').");
+
+    push2.to(RefNames.REFS_CONFIG);
+
+    // Allow user to approve
+    //    ProjectConfig cfg = projectCache.checkedGet(project).getConfig();
+    //    AccountGroup.UUID registeredUsers =
+    //        SystemGroupBackend.getGroup(REGISTERED_USERS).getUUID();
+    //    String heads = RefNames.REFS_HEADS + "*";
+    //    Util.allow(cfg, Permission.forLabel(Util.codeReview().getName()), -2, 2,
+    //        registeredUsers, heads);
+    //    saveProjectConfig(project, cfg);
+
+
+
+    addComment(r, "nit: trailing whitespace", true, false);
+
+    // print out number of unresolved comments
+    Map<String, List<CommentInfo>> comments =
+        gApi.changes().id(r.getChangeId()).comments();
+    for (Map.Entry<String, List<CommentInfo>> entry : comments.entrySet()) {
+      for (CommentInfo c : entry.getValue()) {
+        System.out.println(c.message + " --> unresolved: " + c.unresolved);
+      }
+    }
+
+    LabelType verified = category("Verified",
+        value(1, "Passes"), value(0, "No score"), value(-1, "Failed"));
+    LabelType resolved = category("Resolved",
+        value(1, "Passes"), value(0, "No score"), value(-1, "Failed"));
+    ProjectConfig cfg = projectCache.checkedGet(project).getConfig();
+    cfg.getLabelSections().put(verified.getName(), verified);
+    cfg.getLabelSections().put(resolved.getName(), resolved);
+    String heads = "refs/heads/*";
+    AccountGroup.UUID anon =
+        SystemGroupBackend.getGroup(ANONYMOUS_USERS).getUUID();
+    Util.allow(cfg, Permission.forLabel("Verified"), -1, 1, anon, heads);
+    Util.allow(cfg, Permission.forLabel("Resolved"), -1, 1, anon, heads);
+    saveProjectConfig(project, cfg);
+
+    setApiUser(admin);
+    ReviewInput in = new ReviewInput();
+    in.label("Code-Review", 2);
+    in.label("Verified", 0);
+    in.label("Resolved", 1);
+    gApi.changes().id(r.getChangeId()).current().review(in);
+
+    gApi.changes()
+        .id(r.getChangeId())
+        .revision(r.getCommit().name())
+        .submit();
+
+    ChangeInfo change = gApi.changes()
+        .id(r.getChangeId())
+        .get();
+    assertThat(change.status).isEqualTo(ChangeStatus.MERGED);
+    //    assertThat(change.labels.keySet()).containsExactly("Code-Review",
+    //        "Non-Author-Code-Review");
+    //    assertThat(change.permittedLabels.keySet()).containsExactly("Code-Review");
+    //    assertPermitted(change, "Code-Review", 0, 1, 2);
+  }
+
+
   private static String extractComments(String msg) {
     // Extract lines between start "....." and end "-- ".
     Pattern p = Pattern.compile(".*[.]{5}\n+(.*)\\n+-- \n.*", Pattern.DOTALL);
@@ -664,15 +798,16 @@ public class CommentsIT extends AbstractDaemonTest {
 
   private void addComment(PushOneCommit.Result r, String message)
       throws Exception {
-    addComment(r, message, false);
+    addComment(r, message, false, false);
   }
 
   private void addComment(PushOneCommit.Result r, String message,
-      boolean omitDuplicateComments) throws Exception {
+      boolean omitDuplicateComments, boolean unresolved) throws Exception {
     CommentInput c = new CommentInput();
     c.line = 1;
     c.message = message;
     c.path = FILE_NAME;
+    c.unresolved = unresolved;
     ReviewInput in = newInput(c);
     in.omitDuplicateComments = omitDuplicateComments;
     gApi.changes()

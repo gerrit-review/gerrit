@@ -1004,6 +1004,15 @@ public class ChangeData {
     return publishedComments;
   }
 
+  public boolean hasUnresolvedComments() throws OrmException {
+    for (Comment c : publishedComments()) {
+      if (c.unresolved) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public List<ChangeMessage> messages()
       throws OrmException {
     if (messages == null) {
