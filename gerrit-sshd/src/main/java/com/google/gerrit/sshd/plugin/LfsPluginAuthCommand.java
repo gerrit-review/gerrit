@@ -16,6 +16,7 @@ package com.google.gerrit.sshd.plugin;
 
 import com.google.gerrit.extensions.registration.DynamicItem;
 import com.google.gerrit.server.CurrentUser;
+<<<<<<< HEAD   (222a53 Merge "Show 'Loading actions' in actions bar when loading ac)
 import com.google.gerrit.sshd.CommandModule;
 import com.google.gerrit.sshd.SshCommand;
 import com.google.inject.Inject;
@@ -37,6 +38,40 @@ public class LfsPluginAuthCommand extends SshCommand {
     protected void configure() {
       command("git-lfs-authenticate").to(LfsPluginAuthCommand.class);
       DynamicItem.itemOf(binder(), LfsSshPluginAuth.class);
+=======
+import com.google.gerrit.server.config.GerritServerConfig;
+import com.google.gerrit.sshd.CommandModule;
+import com.google.gerrit.sshd.SshCommand;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+
+import org.eclipse.jgit.lib.Config;
+import org.kohsuke.args4j.Argument;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class LfsPluginAuthCommand extends SshCommand {
+  public interface LfsSshPluginAuth {
+    String authenticate(CurrentUser user, List<String> args)
+        throws UnloggedFailure, Failure;
+  }
+
+  public static class Module extends CommandModule {
+    private final boolean pluginProvided;
+
+    @Inject
+    Module(@GerritServerConfig Config cfg) {
+      pluginProvided = cfg.getString("lfs", null, "plugin") != null;
+    }
+
+    @Override
+    protected void configure() {
+      if (pluginProvided) {
+        command("git-lfs-authenticate").to(LfsPluginAuthCommand.class);
+        DynamicItem.itemOf(binder(), LfsSshPluginAuth.class);
+      }
+>>>>>>> BRANCH (2897e9 Fix gitweb review link)
     }
   }
 
