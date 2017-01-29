@@ -93,7 +93,7 @@ public class GitwebConfig {
     return values.length > 0 && isNullOrEmpty(values[0]);
   }
 
-  private static GitwebType typeFromConfig(Config cfg) {
+  public static GitwebType typeFromConfig(Config cfg) {
     GitwebType defaultType = defaultType(cfg.getString("gitweb", null, "type"));
     if (defaultType == null) {
       return null;
