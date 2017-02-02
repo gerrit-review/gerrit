@@ -173,6 +173,11 @@ public class GitUtil {
     return pushHead(testRepo, ref, false);
   }
 
+  public static PushResult pushHead(TestRepository<?> testRepo, String ref)
+      throws GitAPIException {
+    return pushHead(testRepo, ref, false);
+  }
+
   public static PushResult pushHead(TestRepository<?> testRepo, String ref,
       boolean pushTags) throws GitAPIException {
     return pushHead(testRepo, ref, pushTags, false);
