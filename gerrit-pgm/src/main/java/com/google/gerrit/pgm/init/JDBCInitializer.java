@@ -38,7 +38,7 @@ class JDBCInitializer implements DatabaseConfigInitializer {
       } else if (url.startsWith("jdbc:h2:")) {
         database.set("driver", "org.h2.Driver");
       } else if (url.startsWith("jdbc:mysql:")) {
-        database.set("driver", "com.mysql.jdbc.Driver");
+        database.set("driver", "org.mariadb.jdbc.Driver");
       } else if (url.startsWith("jdbc:postgresql:")) {
         database.set("driver", "org.postgresql.Driver");
       }
