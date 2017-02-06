@@ -41,9 +41,16 @@ public class ServerPlugin extends Plugin {
   private final Path dataDir;
   private final String pluginCanonicalWebUrl;
   private final ClassLoader classLoader;
+<<<<<<< HEAD   (068330 Merge changes Ice480cab,I429e3e10,I4379e493,I592312ed,I69e6d)
   protected Class<? extends Module> sysModule;
   protected Class<? extends Module> sshModule;
   protected Class<? extends Module> httpModule;
+=======
+  private final String metricsPrefix;
+  private Class<? extends Module> sysModule;
+  private Class<? extends Module> sshModule;
+  private Class<? extends Module> httpModule;
+>>>>>>> BRANCH (c3bbd5 Allow plugins to set a custom metrics prefix)
 
   private Injector sysInjector;
   private Injector sshInjector;
@@ -58,7 +65,8 @@ public class ServerPlugin extends Plugin {
       FileSnapshot snapshot,
       PluginContentScanner scanner,
       Path dataDir,
-      ClassLoader classLoader) throws InvalidPluginException {
+      ClassLoader classLoader,
+      String metricsPrefix) throws InvalidPluginException {
     super(name, srcJar, pluginUser, snapshot,
         scanner == null
             ? ApiType.PLUGIN
@@ -67,10 +75,28 @@ public class ServerPlugin extends Plugin {
     this.scanner = scanner;
     this.dataDir = dataDir;
     this.classLoader = classLoader;
+<<<<<<< HEAD   (068330 Merge changes Ice480cab,I429e3e10,I4379e493,I592312ed,I69e6d)
     this.manifest = scanner == null ? null : getPluginManifest(scanner);
     if (manifest != null) {
       loadGuiceModules(manifest, classLoader);
     }
+=======
+    this.manifest = getPluginManifest(scanner);
+    this.metricsPrefix = metricsPrefix;
+    loadGuiceModules(manifest, classLoader);
+  }
+
+  public ServerPlugin(String name,
+      String pluginCanonicalWebUrl,
+      PluginUser pluginUser,
+      Path srcJar,
+      FileSnapshot snapshot,
+      PluginContentScanner scanner,
+      Path dataDir,
+      ClassLoader classLoader) throws InvalidPluginException {
+    this(name, pluginCanonicalWebUrl, pluginUser, srcJar, snapshot, scanner,
+        dataDir, classLoader, null);
+>>>>>>> BRANCH (c3bbd5 Allow plugins to set a custom metrics prefix)
   }
 
   private void loadGuiceModules(Manifest manifest, ClassLoader classLoader) throws InvalidPluginException {
@@ -117,6 +143,10 @@ public class ServerPlugin extends Plugin {
 
   String getPluginCanonicalWebUrl() {
     return pluginCanonicalWebUrl;
+  }
+
+  String getMetricsPrefix() {
+    return metricsPrefix;
   }
 
   private static Manifest getPluginManifest(PluginContentScanner scanner)
