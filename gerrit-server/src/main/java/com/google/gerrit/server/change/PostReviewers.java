@@ -18,6 +18,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.gerrit.extensions.client.ReviewerState.CC;
 import static com.google.gerrit.extensions.client.ReviewerState.REVIEWER;
 
+import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableMap;
@@ -29,7 +30,10 @@ import com.google.gerrit.common.errors.NoSuchGroupException;
 import com.google.gerrit.extensions.api.changes.AddReviewerInput;
 import com.google.gerrit.extensions.api.changes.AddReviewerResult;
 import com.google.gerrit.extensions.api.changes.NotifyHandling;
+<<<<<<< HEAD   (b3cb86 Fix zero width space in editable text area)
 import com.google.gerrit.extensions.api.changes.RecipientType;
+=======
+>>>>>>> BRANCH (92cba8 Only send one newchange email from PostReviewer)
 import com.google.gerrit.extensions.api.changes.ReviewerInfo;
 import com.google.gerrit.extensions.client.ReviewerState;
 import com.google.gerrit.extensions.restapi.BadRequestException;
@@ -185,14 +189,20 @@ public class PostReviewers implements RestModifyView<ChangeResource, AddReviewer
       throw new UnprocessableEntityException(
           MessageFormat.format(ChangeMessages.get().reviewerNotFoundUser, input.reviewer));
     }
+<<<<<<< HEAD   (b3cb86 Fix zero width space in editable text area)
     return putAccount(
         input.reviewer,
         reviewerFactory.create(rsrc, accountId),
         input.state(),
         input.notify,
         notifyUtil.resolveAccounts(input.notifyDetails));
+=======
+    return putAccount(input.reviewer, reviewerFactory.create(rsrc, accountId),
+        input.state(), input.notify);
+>>>>>>> BRANCH (92cba8 Only send one newchange email from PostReviewer)
   }
 
+<<<<<<< HEAD   (b3cb86 Fix zero width space in editable text area)
   Addition ccCurrentUser(CurrentUser user, RevisionResource revision) {
     return new Addition(
         user.getUserName(),
@@ -209,10 +219,15 @@ public class PostReviewers implements RestModifyView<ChangeResource, AddReviewer
       ReviewerState state,
       NotifyHandling notify,
       ListMultimap<RecipientType, Account.Id> accountsToNotify)
+=======
+  private Addition putAccount(String reviewer, ReviewerResource rsrc,
+      ReviewerState state, NotifyHandling notify)
+>>>>>>> BRANCH (92cba8 Only send one newchange email from PostReviewer)
       throws UnprocessableEntityException {
     Account member = rsrc.getReviewerUser().getAccount();
     ChangeControl control = rsrc.getReviewerControl();
     if (isValidReviewer(member, control)) {
+<<<<<<< HEAD   (b3cb86 Fix zero width space in editable text area)
       return new Addition(
           reviewer,
           rsrc.getChangeResource(),
@@ -220,6 +235,10 @@ public class PostReviewers implements RestModifyView<ChangeResource, AddReviewer
           state,
           notify,
           accountsToNotify);
+=======
+      return new Addition(reviewer, rsrc.getChangeResource(),
+          ImmutableMap.of(member.getId(), control), state, notify);
+>>>>>>> BRANCH (92cba8 Only send one newchange email from PostReviewer)
     }
     if (member.isActive()) {
       throw new UnprocessableEntityException(String.format("Change not visible to %s", reviewer));
@@ -278,6 +297,7 @@ public class PostReviewers implements RestModifyView<ChangeResource, AddReviewer
       }
     }
 
+<<<<<<< HEAD   (b3cb86 Fix zero width space in editable text area)
     return new Addition(
         input.reviewer,
         rsrc,
@@ -285,6 +305,10 @@ public class PostReviewers implements RestModifyView<ChangeResource, AddReviewer
         input.state(),
         input.notify,
         notifyUtil.resolveAccounts(input.notifyDetails));
+=======
+    return new Addition(input.reviewer, rsrc, reviewers, input.state(),
+        input.notify);
+>>>>>>> BRANCH (92cba8 Only send one newchange email from PostReviewer)
   }
 
   private boolean isValidReviewer(Account member, ChangeControl control) {
@@ -315,9 +339,14 @@ public class PostReviewers implements RestModifyView<ChangeResource, AddReviewer
     private final Map<Account.Id, ChangeControl> reviewers;
 
     protected Addition(String reviewer) {
+<<<<<<< HEAD   (b3cb86 Fix zero width space in editable text area)
       this(reviewer, null, null, REVIEWER, null, ImmutableListMultimap.of());
+=======
+      this(reviewer, null, null, REVIEWER, null);
+>>>>>>> BRANCH (92cba8 Only send one newchange email from PostReviewer)
     }
 
+<<<<<<< HEAD   (b3cb86 Fix zero width space in editable text area)
     protected Addition(
         String reviewer,
         ChangeResource rsrc,
@@ -325,6 +354,11 @@ public class PostReviewers implements RestModifyView<ChangeResource, AddReviewer
         ReviewerState state,
         NotifyHandling notify,
         ListMultimap<RecipientType, Account.Id> accountsToNotify) {
+=======
+    protected Addition(String reviewer, ChangeResource rsrc,
+        Map<Account.Id, ChangeControl> reviewers, ReviewerState state,
+        NotifyHandling notify) {
+>>>>>>> BRANCH (92cba8 Only send one newchange email from PostReviewer)
       result = new AddReviewerResult(reviewer);
       if (reviewers == null) {
         this.reviewers = ImmutableMap.of();
@@ -332,7 +366,11 @@ public class PostReviewers implements RestModifyView<ChangeResource, AddReviewer
         return;
       }
       this.reviewers = reviewers;
+<<<<<<< HEAD   (b3cb86 Fix zero width space in editable text area)
       op = new Op(rsrc, reviewers, state, notify, accountsToNotify);
+=======
+      op = new Op(rsrc, reviewers, state, notify);
+>>>>>>> BRANCH (92cba8 Only send one newchange email from PostReviewer)
     }
 
     void gatherResults() throws OrmException {
@@ -363,24 +401,35 @@ public class PostReviewers implements RestModifyView<ChangeResource, AddReviewer
     final Map<Account.Id, ChangeControl> reviewers;
     final ReviewerState state;
     final NotifyHandling notify;
+<<<<<<< HEAD   (b3cb86 Fix zero width space in editable text area)
     final ListMultimap<RecipientType, Account.Id> accountsToNotify;
+=======
+>>>>>>> BRANCH (92cba8 Only send one newchange email from PostReviewer)
     List<PatchSetApproval> addedReviewers;
     Collection<Account.Id> addedCCs;
 
     private final ChangeResource rsrc;
     private PatchSet patchSet;
 
+<<<<<<< HEAD   (b3cb86 Fix zero width space in editable text area)
     Op(
         ChangeResource rsrc,
         Map<Account.Id, ChangeControl> reviewers,
         ReviewerState state,
         NotifyHandling notify,
         ListMultimap<RecipientType, Account.Id> accountsToNotify) {
+=======
+    Op(ChangeResource rsrc, Map<Account.Id, ChangeControl> reviewers,
+        ReviewerState state, NotifyHandling notify) {
+>>>>>>> BRANCH (92cba8 Only send one newchange email from PostReviewer)
       this.rsrc = rsrc;
       this.reviewers = reviewers;
       this.state = state;
       this.notify = notify;
+<<<<<<< HEAD   (b3cb86 Fix zero width space in editable text area)
       this.accountsToNotify = checkNotNull(accountsToNotify);
+=======
+>>>>>>> BRANCH (92cba8 Only send one newchange email from PostReviewer)
     }
 
     @Override
@@ -422,12 +471,23 @@ public class PostReviewers implements RestModifyView<ChangeResource, AddReviewer
         if (addedCCs == null) {
           addedCCs = new ArrayList<>();
         }
+<<<<<<< HEAD   (b3cb86 Fix zero width space in editable text area)
         emailReviewers(
             rsrc.getChange(),
             Lists.transform(addedReviewers, r -> r.getAccountId()),
             addedCCs,
             notify,
             accountsToNotify);
+=======
+        List<Account.Id> accounts = Lists.transform(addedReviewers,
+            new Function<PatchSetApproval, Account.Id>() {
+              public Account.Id apply(PatchSetApproval psa) {
+                return psa.getAccountId();
+              }
+            });
+
+        emailReviewers(rsrc.getChange(), accounts, addedCCs, notify);
+>>>>>>> BRANCH (92cba8 Only send one newchange email from PostReviewer)
         if (!addedReviewers.isEmpty()) {
           List<Account> reviewers =
               Lists.transform(
@@ -439,12 +499,17 @@ public class PostReviewers implements RestModifyView<ChangeResource, AddReviewer
     }
   }
 
+<<<<<<< HEAD   (b3cb86 Fix zero width space in editable text area)
   public void emailReviewers(
       Change change,
       Collection<Account.Id> added,
       Collection<Account.Id> copied,
       NotifyHandling notify,
       ListMultimap<RecipientType, Account.Id> accountsToNotify) {
+=======
+  public void emailReviewers(Change change, Collection<Account.Id> added,
+      Collection<Account.Id> copied, NotifyHandling notify) {
+>>>>>>> BRANCH (92cba8 Only send one newchange email from PostReviewer)
     if (added.isEmpty() && copied.isEmpty()) {
       return;
     }
@@ -470,11 +535,16 @@ public class PostReviewers implements RestModifyView<ChangeResource, AddReviewer
     }
 
     try {
+<<<<<<< HEAD   (b3cb86 Fix zero width space in editable text area)
       AddReviewerSender cm = addReviewerSenderFactory.create(change.getProject(), change.getId());
       if (notify != null) {
         cm.setNotify(notify);
       }
       cm.setAccountsToNotify(accountsToNotify);
+=======
+      AddReviewerSender cm = addReviewerSenderFactory
+          .create(change.getProject(), change.getId(), notify);
+>>>>>>> BRANCH (92cba8 Only send one newchange email from PostReviewer)
       cm.setFrom(userId);
       cm.addReviewers(toMail);
       cm.addExtraCC(toCopy);

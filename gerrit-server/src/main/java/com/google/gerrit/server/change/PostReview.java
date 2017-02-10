@@ -48,7 +48,10 @@ import com.google.gerrit.extensions.api.changes.ReviewInput.CommentInput;
 import com.google.gerrit.extensions.api.changes.ReviewInput.DraftHandling;
 import com.google.gerrit.extensions.api.changes.ReviewInput.RobotCommentInput;
 import com.google.gerrit.extensions.api.changes.ReviewResult;
+<<<<<<< HEAD   (b3cb86 Fix zero width space in editable text area)
 import com.google.gerrit.extensions.api.changes.ReviewerInfo;
+=======
+>>>>>>> BRANCH (92cba8 Only send one newchange email from PostReviewer)
 import com.google.gerrit.extensions.client.ReviewerState;
 import com.google.gerrit.extensions.client.Side;
 import com.google.gerrit.extensions.common.AccountInfo;
@@ -218,8 +221,13 @@ public class PostReview implements RestModifyView<RevisionResource, ReviewInput>
         // Prevent notifications because setting reviewers is batched.
         reviewerInput.notify = NotifyHandling.NONE;
 
+<<<<<<< HEAD   (b3cb86 Fix zero width space in editable text area)
         PostReviewers.Addition result =
             postReviewers.prepareApplication(revision.getChangeResource(), reviewerInput, true);
+=======
+        PostReviewers.Addition result = postReviewers.prepareApplication(
+            revision.getChangeResource(), reviewerInput);
+>>>>>>> BRANCH (92cba8 Only send one newchange email from PostReviewer)
         reviewerJsonResults.put(reviewerInput.reviewer, result.result);
         if (result.result.error != null) {
           hasError = true;
@@ -293,12 +301,17 @@ public class PostReview implements RestModifyView<RevisionResource, ReviewInput>
         reviewerResult.gatherResults();
       }
 
+<<<<<<< HEAD   (b3cb86 Fix zero width space in editable text area)
       emailReviewers(revision.getChange(), reviewerResults, input.notify, accountsToNotify);
+=======
+      emailReviewers(revision.getChange(), reviewerResults, input.notify);
+>>>>>>> BRANCH (92cba8 Only send one newchange email from PostReviewer)
     }
 
     return Response.ok(output);
   }
 
+<<<<<<< HEAD   (b3cb86 Fix zero width space in editable text area)
   private void emailReviewers(
       Change change,
       List<PostReviewers.Addition> reviewerAdditions,
@@ -314,6 +327,20 @@ public class PostReview implements RestModifyView<RevisionResource, ReviewInput>
       }
     }
     postReviewers.emailReviewers(change, to, cc, notify, accountsToNotify);
+=======
+  private void emailReviewers(Change change,
+      List<PostReviewers.Addition> reviewerAdditions, NotifyHandling notify) {
+    List<Account.Id> to = new ArrayList<>();
+    List<Account.Id> cc = new ArrayList<>();
+    for (PostReviewers.Addition addition : reviewerAdditions) {
+      if (addition.op.state == ReviewerState.REVIEWER) {
+        to.addAll(addition.op.reviewers.keySet());
+      } else if (addition.op.state == ReviewerState.CC) {
+        cc.addAll(addition.op.reviewers.keySet());
+      }
+    }
+    postReviewers.emailReviewers(change, to, cc, notify);
+>>>>>>> BRANCH (92cba8 Only send one newchange email from PostReviewer)
   }
 
   private RevisionResource onBehalfOf(RevisionResource rev, ReviewInput in)

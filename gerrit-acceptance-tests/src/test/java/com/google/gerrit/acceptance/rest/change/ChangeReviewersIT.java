@@ -446,6 +446,7 @@ public class ChangeReviewersIT extends AbstractDaemonTest {
     assertThat(messages).hasSize(2);
 
     Message m = messages.get(0);
+<<<<<<< HEAD   (b3cb86 Fix zero width space in editable text area)
     assertThat(m.rcpt()).containsExactly(user.emailAddress, observer.emailAddress);
     assertThat(m.body()).contains(admin.fullName + " has posted comments on this change.");
     assertThat(m.body()).contains("Change subject: " + PushOneCommit.SUBJECT + "\n");
@@ -453,6 +454,19 @@ public class ChangeReviewersIT extends AbstractDaemonTest {
 
     m = messages.get(1);
     assertThat(m.rcpt()).containsExactly(user.emailAddress, observer.emailAddress);
+=======
+    assertThat(m.rcpt())
+        .containsExactly(user.emailAddress,observer.emailAddress);
+    assertThat(m.body())
+        .contains(admin.fullName + " has posted comments on this change.");
+    assertThat(m.body())
+        .contains("Change subject: " + PushOneCommit.SUBJECT + "\n");
+    assertThat(m.body()).contains("Patch Set 1: Code-Review+2");
+
+    m = messages.get(1);
+    assertThat(m.rcpt())
+        .containsExactly(user.emailAddress, observer.emailAddress);
+>>>>>>> BRANCH (92cba8 Only send one newchange email from PostReviewer)
     assertThat(m.body()).contains("Hello " + user.fullName + ",\n");
     assertThat(m.body()).contains("I'd like you to do a code review.");
   }

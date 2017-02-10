@@ -25,7 +25,10 @@ public class AddReviewerInput {
   public Boolean confirmed;
   public ReviewerState state;
   public NotifyHandling notify;
+<<<<<<< HEAD   (b3cb86 Fix zero width space in editable text area)
   public Map<RecipientType, NotifyInfo> notifyDetails;
+=======
+>>>>>>> BRANCH (92cba8 Only send one newchange email from PostReviewer)
 
   public boolean confirmed() {
     return (confirmed != null) ? confirmed : false;
