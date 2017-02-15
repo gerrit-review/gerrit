@@ -422,12 +422,24 @@ public class PostReviewers implements RestModifyView<ChangeResource, AddReviewer
         if (addedCCs == null) {
           addedCCs = new ArrayList<>();
         }
+<<<<<<< HEAD   (0aecea Revert "Add a User Preference to Receive only Plaintext Emai)
         emailReviewers(
             rsrc.getChange(),
             Lists.transform(addedReviewers, r -> r.getAccountId()),
             addedCCs,
             notify,
             accountsToNotify);
+=======
+        List<Account.Id> accounts = Lists.transform(addedReviewers,
+            new Function<PatchSetApproval, Account.Id>() {
+              @Override
+              public Account.Id apply(PatchSetApproval psa) {
+                return psa.getAccountId();
+              }
+            });
+
+        emailReviewers(rsrc.getChange(), accounts, addedCCs, notify);
+>>>>>>> BRANCH (6e4dae PostReviewers: Add missing @Override tag)
         if (!addedReviewers.isEmpty()) {
           List<Account> reviewers =
               Lists.transform(
