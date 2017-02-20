@@ -1,4 +1,4 @@
-// Copyright (C) 2015 The Android Open Source Project
+// Copyright (C) 2009 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,8 +26,8 @@ import com.google.gerrit.client.access.ProjectAccessInfo;
 import com.google.gerrit.client.actions.ActionButton;
 import com.google.gerrit.client.info.ActionInfo;
 import com.google.gerrit.client.info.WebLinkInfo;
+import com.google.gerrit.client.projects.BranchInfo;
 import com.google.gerrit.client.projects.ProjectApi;
-import com.google.gerrit.client.projects.TagInfo;
 import com.google.gerrit.client.rpc.GerritCallback;
 import com.google.gerrit.client.rpc.NativeString;
 import com.google.gerrit.client.rpc.Natives;
@@ -66,37 +66,37 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwtexpui.globalkey.client.NpTextBox;
 import com.google.gwtexpui.safehtml.client.SafeHtmlBuilder;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ProjectTagsScreen extends PaginatedProjectScreen {
+public class ProjectBranchesScreen extends PaginatedProjectScreen {
   private Hyperlink prev;
   private Hyperlink next;
-  private TagsTable tagTable;
-  private Button delTag;
-  private Button addTag;
+  private BranchesTable branchTable;
+  private Button delBranch;
+  private Button addBranch;
   private HintTextBox nameTxtBox;
   private HintTextBox irevTxtBox;
   private FlowPanel addPanel;
   private NpTextBox filterTxt;
   private Query query;
 
-  public ProjectTagsScreen(Project.NameKey toShow) {
+  public ProjectBranchesScreen(final Project.NameKey toShow) {
     super(toShow);
   }
 
   @Override
   public String getScreenToken() {
-    return PageLinks.toProjectTags(getProjectKey());
+    return PageLinks.toProjectBranches(getProjectKey());
   }
 
   @Override
   protected void onLoad() {
     super.onLoad();
     addPanel.setVisible(false);
-    AccessMap.get(getProjectKey(),
+    AccessMap.get(
+        getProjectKey(),
         new GerritCallback<ProjectAccessInfo>() {
           @Override
           public void onSuccess(ProjectAccessInfo result) {
@@ -104,12 +104,12 @@ public class ProjectTagsScreen extends PaginatedProjectScreen {
           }
         });
     query = new Query(match).start(start).run();
-    savedPanel = TAGS;
+    savedPanel = BRANCHES;
   }
 
   private void updateForm() {
-    tagTable.updateDeleteButton();
-    addTag.setEnabled(true);
+    branchTable.updateDeleteButton();
+    addBranch.setEnabled(true);
     nameTxtBox.setEnabled(true);
     irevTxtBox.setEnabled(true);
   }
@@ -133,59 +133,62 @@ public class ProjectTagsScreen extends PaginatedProjectScreen {
 
     nameTxtBox = new HintTextBox();
     nameTxtBox.setVisibleLength(texBoxLength);
-    nameTxtBox.setHintText(AdminConstants.I.defaultTagName());
-    nameTxtBox.addKeyPressHandler(new KeyPressHandler() {
-      @Override
-      public void onKeyPress(KeyPressEvent event) {
-        if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
-          doAddNewTag();
-        }
-      }
-    });
-    addGrid.setText(0, 0, AdminConstants.I.columnTagName() + ":");
+    nameTxtBox.setHintText(AdminConstants.I.defaultBranchName());
+    nameTxtBox.addKeyPressHandler(
+        new KeyPressHandler() {
+          @Override
+          public void onKeyPress(KeyPressEvent event) {
+            if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+              doAddNewBranch();
+            }
+          }
+        });
+    addGrid.setText(0, 0, AdminConstants.I.columnBranchName() + ":");
     addGrid.setWidget(0, 1, nameTxtBox);
 
     irevTxtBox = new HintTextBox();
     irevTxtBox.setVisibleLength(texBoxLength);
     irevTxtBox.setHintText(AdminConstants.I.defaultRevisionSpec());
-    irevTxtBox.addKeyPressHandler(new KeyPressHandler() {
-      @Override
-      public void onKeyPress(KeyPressEvent event) {
-        if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
-          doAddNewTag();
-        }
-      }
-    });
+    irevTxtBox.addKeyPressHandler(
+        new KeyPressHandler() {
+          @Override
+          public void onKeyPress(KeyPressEvent event) {
+            if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+              doAddNewBranch();
+            }
+          }
+        });
     addGrid.setText(1, 0, AdminConstants.I.initialRevision() + ":");
     addGrid.setWidget(1, 1, irevTxtBox);
 
-    addTag = new Button(AdminConstants.I.buttonAddTag());
-    addTag.addClickHandler(new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent event) {
-        doAddNewTag();
-      }
-    });
+    addBranch = new Button(AdminConstants.I.buttonAddBranch());
+    addBranch.addClickHandler(
+        new ClickHandler() {
+          @Override
+          public void onClick(final ClickEvent event) {
+            doAddNewBranch();
+          }
+        });
     addPanel.add(addGrid);
-    addPanel.add(addTag);
+    addPanel.add(addBranch);
 
-    tagTable = new TagsTable();
+    branchTable = new BranchesTable();
 
-    delTag = new Button(AdminConstants.I.buttonDeleteTag());
-    delTag.setStyleName(Gerrit.RESOURCES.css().branchTableDeleteButton());
-    delTag.addClickHandler(new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent event) {
-        tagTable.deleteChecked();
-      }
-    });
-
+    delBranch = new Button(AdminConstants.I.buttonDeleteBranch());
+    delBranch.setStyleName(Gerrit.RESOURCES.css().branchTableDeleteButton());
+    delBranch.addClickHandler(
+        new ClickHandler() {
+          @Override
+          public void onClick(final ClickEvent event) {
+            branchTable.deleteChecked();
+          }
+        });
     HorizontalPanel buttons = new HorizontalPanel();
     buttons.setStyleName(Gerrit.RESOURCES.css().branchTablePrevNextLinks());
-    buttons.add(delTag);
+    buttons.add(delBranch);
     buttons.add(prev);
     buttons.add(next);
-    add(tagTable);
+    add(branchTable);
     add(buttons);
     add(addPanel);
   }
@@ -218,9 +221,9 @@ public class ProjectTagsScreen extends PaginatedProjectScreen {
     add(hp);
   }
 
-  private void doAddNewTag() {
-    final String tagName = nameTxtBox.getText().trim();
-    if ("".equals(tagName)) {
+  private void doAddNewBranch() {
+    final String branchName = nameTxtBox.getText().trim();
+    if ("".equals(branchName)) {
       nameTxtBox.setFocus(true);
       return;
     }
@@ -228,22 +231,27 @@ public class ProjectTagsScreen extends PaginatedProjectScreen {
     final String rev = irevTxtBox.getText().trim();
     if ("".equals(rev)) {
       irevTxtBox.setText("HEAD");
-      Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-        @Override
-        public void execute() {
-          irevTxtBox.selectAll();
-          irevTxtBox.setFocus(true);
-        }
-      });
+      Scheduler.get()
+          .scheduleDeferred(
+              new ScheduledCommand() {
+                @Override
+                public void execute() {
+                  irevTxtBox.selectAll();
+                  irevTxtBox.setFocus(true);
+                }
+              });
       return;
     }
 
-    addTag.setEnabled(false);
-    ProjectApi.createTag(getProjectKey(), tagName, rev,
-        new GerritCallback<TagInfo>() {
+    addBranch.setEnabled(false);
+    ProjectApi.createBranch(
+        getProjectKey(),
+        branchName,
+        rev,
+        new GerritCallback<BranchInfo>() {
           @Override
-          public void onSuccess(TagInfo tag) {
-            showAddedTag(tag);
+          public void onSuccess(BranchInfo branch) {
+            showAddedBranch(branch);
             nameTxtBox.setText("");
             irevTxtBox.setText("");
             query = new Query(match).start(start).run();
@@ -251,31 +259,33 @@ public class ProjectTagsScreen extends PaginatedProjectScreen {
 
           @Override
           public void onFailure(Throwable caught) {
-            addTag.setEnabled(true);
+            addBranch.setEnabled(true);
             selectAllAndFocus(nameTxtBox);
             new ErrorDialog(caught.getMessage()).center();
           }
         });
   }
 
-  void showAddedTag(TagInfo tag) {
+  void showAddedBranch(BranchInfo branch) {
     SafeHtmlBuilder b = new SafeHtmlBuilder();
     b.openElement("b");
-    b.append(Gerrit.C.tagCreationConfirmationMessage());
+    b.append(Gerrit.C.branchCreationConfirmationMessage());
     b.closeElement("b");
 
     b.openElement("p");
-    b.append(tag.ref());
+    b.append(branch.ref());
     b.closeElement("p");
 
     ConfirmationDialog confirmationDialog =
-        new ConfirmationDialog(Gerrit.C.tagCreationDialogTitle(),
-            b.toSafeHtml(), new ConfirmationCallback() {
-      @Override
-      public void onOk() {
-        //do nothing
-      }
-    });
+        new ConfirmationDialog(
+            Gerrit.C.branchCreationDialogTitle(),
+            b.toSafeHtml(),
+            new ConfirmationCallback() {
+              @Override
+              public void onOk() {
+                //do nothing
+              }
+            });
     confirmationDialog.center();
     confirmationDialog.setCancelVisible(false);
   }
@@ -285,14 +295,14 @@ public class ProjectTagsScreen extends PaginatedProjectScreen {
     textBox.setFocus(true);
   }
 
-  private class TagsTable extends NavigationTable<TagInfo> {
+  private class BranchesTable extends NavigationTable<BranchInfo> {
     private ValueChangeHandler<Boolean> updateDeleteHandler;
     boolean canDelete;
 
-    TagsTable() {
+    BranchesTable() {
       table.setWidth("");
-      table.setText(0, 1, AdminConstants.I.columnTagName());
-      table.setText(0, 2, AdminConstants.I.columnTagRevision());
+      table.setText(0, 2, AdminConstants.I.columnBranchName());
+      table.setText(0, 3, AdminConstants.I.columnBranchRevision());
 
       final FlexCellFormatter fmt = table.getFlexCellFormatter();
       fmt.addStyleName(0, 1, Gerrit.RESOURCES.css().iconHeader());
@@ -300,19 +310,21 @@ public class ProjectTagsScreen extends PaginatedProjectScreen {
       fmt.addStyleName(0, 3, Gerrit.RESOURCES.css().dataHeader());
       fmt.addStyleName(0, 4, Gerrit.RESOURCES.css().dataHeader());
 
-      updateDeleteHandler = new ValueChangeHandler<Boolean>() {
-        @Override
-        public void onValueChange(ValueChangeEvent<Boolean> event) {
-          updateDeleteButton();
-        }
-      };
+      updateDeleteHandler =
+          new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+              updateDeleteButton();
+            }
+          };
     }
 
     Set<String> getCheckedRefs() {
       Set<String> refs = new HashSet<>();
       for (int row = 1; row < table.getRowCount(); row++) {
-        final TagInfo k = getRowItem(row);
-        if (k != null && table.getWidget(row, 1) instanceof CheckBox
+        final BranchInfo k = getRowItem(row);
+        if (k != null
+            && table.getWidget(row, 1) instanceof CheckBox
             && ((CheckBox) table.getWidget(row, 1)).getValue()) {
           refs.add(k.ref());
         }
@@ -322,9 +334,8 @@ public class ProjectTagsScreen extends PaginatedProjectScreen {
 
     void setChecked(Set<String> refs) {
       for (int row = 1; row < table.getRowCount(); row++) {
-        final TagInfo k = getRowItem(row);
-        if (k != null && refs.contains(k.ref()) &&
-            table.getWidget(row, 1) instanceof CheckBox) {
+        final BranchInfo k = getRowItem(row);
+        if (k != null && refs.contains(k.ref()) && table.getWidget(row, 1) instanceof CheckBox) {
           ((CheckBox) table.getWidget(row, 1)).setValue(true);
         }
       }
@@ -335,7 +346,7 @@ public class ProjectTagsScreen extends PaginatedProjectScreen {
 
       SafeHtmlBuilder b = new SafeHtmlBuilder();
       b.openElement("b");
-      b.append(Gerrit.C.tagDeletionConfirmationMessage());
+      b.append(Gerrit.C.branchDeletionConfirmationMessage());
       b.closeElement("b");
 
       b.openElement("p");
@@ -354,25 +365,29 @@ public class ProjectTagsScreen extends PaginatedProjectScreen {
         return;
       }
 
-      delTag.setEnabled(false);
+      delBranch.setEnabled(false);
       ConfirmationDialog confirmationDialog =
-          new ConfirmationDialog(Gerrit.C.tagDeletionDialogTitle(),
-              b.toSafeHtml(), new ConfirmationCallback() {
-        @Override
-        public void onOk() {
-          deleteTags(refs);
-        }
+          new ConfirmationDialog(
+              Gerrit.C.branchDeletionDialogTitle(),
+              b.toSafeHtml(),
+              new ConfirmationCallback() {
+                @Override
+                public void onOk() {
+                  deleteBranches(refs);
+                }
 
-        @Override
-        public void onCancel() {
-          tagTable.updateDeleteButton();
-        }
-      });
+                @Override
+                public void onCancel() {
+                  branchTable.updateDeleteButton();
+                }
+              });
       confirmationDialog.center();
     }
 
-    private void deleteTags(final Set<String> tags) {
-      ProjectApi.deleteTags(getProjectKey(), tags,
+    private void deleteBranches(final Set<String> branches) {
+      ProjectApi.deleteBranches(
+          getProjectKey(),
+          branches,
           new GerritCallback<VoidResult>() {
             @Override
             public void onSuccess(VoidResult result) {
@@ -387,18 +402,18 @@ public class ProjectTagsScreen extends PaginatedProjectScreen {
           });
     }
 
-    void display(List<TagInfo> tags) {
-      displaySubset(tags, 0, tags.size());
+    void display(List<BranchInfo> branches) {
+      displaySubset(branches, 0, branches.size());
     }
 
-    void displaySubset(List<TagInfo> tags, int fromIndex, int toIndex) {
+    void displaySubset(List<BranchInfo> branches, int fromIndex, int toIndex) {
       canDelete = false;
 
       while (1 < table.getRowCount()) {
         table.removeRow(table.getRowCount() - 1);
       }
 
-      for (TagInfo k : tags.subList(fromIndex, toIndex)) {
+      for (BranchInfo k : branches.subList(fromIndex, toIndex)) {
         final int row = table.getRowCount();
         table.insertRow(row);
         applyDataRowStyle(row);
@@ -406,23 +421,50 @@ public class ProjectTagsScreen extends PaginatedProjectScreen {
       }
     }
 
-    void populate(int row, TagInfo k) {
-      CheckBox sel = new CheckBox();
-      sel.addValueChangeHandler(updateDeleteHandler);
-      table.setWidget(row, 1, sel);
-      canDelete = true;
+    void populate(int row, BranchInfo k) {
+      if (k.canDelete()) {
+        CheckBox sel = new CheckBox();
+        sel.addValueChangeHandler(updateDeleteHandler);
+        table.setWidget(row, 1, sel);
+        canDelete = true;
+      } else {
+        table.setText(row, 1, "");
+      }
 
       table.setWidget(row, 2, new InlineHTML(highlight(k.getShortName(), match)));
 
       if (k.revision() != null) {
-        table.setText(row, 3, k.revision());
+        if ("HEAD".equals(k.getShortName())) {
+          setHeadRevision(row, 3, k.revision());
+        } else {
+          table.setText(row, 3, k.revision());
+        }
       } else {
         table.setText(row, 3, "");
       }
 
+      FlowPanel actionsPanel = new FlowPanel();
+      if (k.webLinks() != null) {
+        for (WebLinkInfo webLink : Natives.asList(k.webLinks())) {
+          actionsPanel.add(webLink.toAnchor());
+        }
+      }
+      if (k.actions() != null) {
+        k.actions().copyKeysIntoChildren("id");
+        for (ActionInfo a : Natives.asList(k.actions().values())) {
+          actionsPanel.add(new ActionButton(getProjectKey(), k, a));
+        }
+      }
+      table.setWidget(row, 4, actionsPanel);
+
       final FlexCellFormatter fmt = table.getFlexCellFormatter();
       String iconCellStyle = Gerrit.RESOURCES.css().iconCell();
       String dataCellStyle = Gerrit.RESOURCES.css().dataCell();
+      if (RefNames.REFS_CONFIG.equals(k.getShortName()) || "HEAD".equals(k.getShortName())) {
+        iconCellStyle = Gerrit.RESOURCES.css().specialBranchIconCell();
+        dataCellStyle = Gerrit.RESOURCES.css().specialBranchDataCell();
+        fmt.setStyleName(row, 0, iconCellStyle);
+      }
       fmt.addStyleName(row, 1, iconCellStyle);
       fmt.addStyleName(row, 2, dataCellStyle);
       fmt.addStyleName(row, 3, dataCellStyle);
@@ -431,9 +473,9 @@ public class ProjectTagsScreen extends PaginatedProjectScreen {
       setRowItem(row, k);
     }
 
-    private void setHeadRevision(final int row, final int column,
-        final String rev) {
-      AccessMap.get(getProjectKey(),
+    private void setHeadRevision(final int row, final int column, final String rev) {
+      AccessMap.get(
+          getProjectKey(),
           new GerritCallback<ProjectAccessInfo>() {
             @Override
             public void onSuccess(ProjectAccessInfo result) {
@@ -467,47 +509,52 @@ public class ProjectTagsScreen extends PaginatedProjectScreen {
       OnEditEnabler e = new OnEditEnabler(save);
       e.listenTo(input);
 
-      edit.addClickHandler(new  ClickHandler() {
-        @Override
-        public void onClick(ClickEvent event) {
-          l.setVisible(false);
-          edit.setVisible(false);
-          input.setVisible(true);
-          save.setVisible(true);
-          cancel.setVisible(true);
-        }
-      });
-      save.addClickHandler(new  ClickHandler() {
-        @Override
-        public void onClick(ClickEvent event) {
-          save.setEnabled(false);
-          ProjectApi.setHead(getProjectKey(), input.getValue().trim(),
-              new GerritCallback<NativeString>() {
+      edit.addClickHandler(
+          new ClickHandler() {
             @Override
-            public void onSuccess(NativeString result) {
-              Gerrit.display(PageLinks.toProjectTags(getProjectKey()));
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-              super.onFailure(caught);
-              save.setEnabled(true);
+            public void onClick(ClickEvent event) {
+              l.setVisible(false);
+              edit.setVisible(false);
+              input.setVisible(true);
+              save.setVisible(true);
+              cancel.setVisible(true);
             }
           });
-        }
-      });
-      cancel.addClickHandler(new  ClickHandler() {
-        @Override
-        public void onClick(ClickEvent event) {
-          l.setVisible(true);
-          edit.setVisible(true);
-          input.setVisible(false);
-          input.setValue(headRevision);
-          save.setVisible(false);
-          save.setEnabled(false);
-          cancel.setVisible(false);
-        }
-      });
+      save.addClickHandler(
+          new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+              save.setEnabled(false);
+              ProjectApi.setHead(
+                  getProjectKey(),
+                  input.getValue().trim(),
+                  new GerritCallback<NativeString>() {
+                    @Override
+                    public void onSuccess(NativeString result) {
+                      Gerrit.display(PageLinks.toProjectBranches(getProjectKey()));
+                    }
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                      super.onFailure(caught);
+                      save.setEnabled(true);
+                    }
+                  });
+            }
+          });
+      cancel.addClickHandler(
+          new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+              l.setVisible(true);
+              edit.setVisible(true);
+              input.setVisible(false);
+              input.setValue(headRevision);
+              save.setVisible(false);
+              save.setEnabled(false);
+              cancel.setVisible(false);
+            }
+          });
 
       p.add(l);
       p.add(edit);
@@ -517,7 +564,7 @@ public class ProjectTagsScreen extends PaginatedProjectScreen {
       return p;
     }
 
-    boolean hasTagCanDelete() {
+    boolean hasBranchCanDelete() {
       return canDelete;
     }
 
@@ -533,7 +580,7 @@ public class ProjectTagsScreen extends PaginatedProjectScreen {
           }
         }
       }
-      delTag.setEnabled(on);
+      delBranch.setEnabled(on);
     }
 
     @Override
@@ -544,7 +591,7 @@ public class ProjectTagsScreen extends PaginatedProjectScreen {
     }
 
     @Override
-    protected Object getRowItemKey(TagInfo item) {
+    protected Object getRowItemKey(BranchInfo item) {
       return item.ref();
     }
   }
@@ -572,16 +619,16 @@ public class ProjectTagsScreen extends PaginatedProjectScreen {
     }
 
     Query run() {
-      // Retrieve one more tag than page size to determine if there are more
-      // tags to display
-      ProjectApi.getTags(
+      // Retrieve one more branch than page size to determine if there are more
+      // branches to display
+      ProjectApi.getBranches(
           getProjectKey(),
           pageSize + 1,
           qStart,
           qMatch,
-          new ScreenLoadCallback<JsArray<TagInfo>>(ProjectTagsScreen.this) {
+          new ScreenLoadCallback<JsArray<BranchInfo>>(ProjectBranchesScreen.this) {
             @Override
-            public void preDisplay(JsArray<TagInfo> result) {
+            public void preDisplay(JsArray<BranchInfo> result) {
               if (!isAttached()) {
                 // View has been disposed.
               } else if (query == Query.this) {
@@ -591,20 +638,20 @@ public class ProjectTagsScreen extends PaginatedProjectScreen {
                 query.run();
               }
             }
-      });
+          });
       return this;
     }
 
-    void showList(JsArray<TagInfo> result) {
+    void showList(JsArray<BranchInfo> result) {
       setToken(getTokenForScreen(qMatch, qStart));
-      ProjectTagsScreen.this.match = qMatch;
-      ProjectTagsScreen.this.start = qStart;
+      ProjectBranchesScreen.this.match = qMatch;
+      ProjectBranchesScreen.this.start = qStart;
 
       if (result.length() <= pageSize) {
-        tagTable.display(Natives.asList(result));
+        branchTable.display(Natives.asList(result));
         next.setVisible(false);
       } else {
-        tagTable.displaySubset(Natives.asList(result), 0, result.length() - 1);
+        branchTable.displaySubset(Natives.asList(result), 0, result.length() - 1);
         setupNavigationLink(next, qMatch, qStart + pageSize);
       }
       if (qStart > 0) {
@@ -613,9 +660,9 @@ public class ProjectTagsScreen extends PaginatedProjectScreen {
         prev.setVisible(false);
       }
 
-      delTag.setVisible(tagTable.hasTagCanDelete());
-      Set<String> checkedRefs = tagTable.getCheckedRefs();
-      tagTable.setChecked(checkedRefs);
+      delBranch.setVisible(branchTable.hasBranchCanDelete());
+      Set<String> checkedRefs = branchTable.getCheckedRefs();
+      branchTable.setChecked(checkedRefs);
       updateForm();
 
       if (!isCurrentView()) {
