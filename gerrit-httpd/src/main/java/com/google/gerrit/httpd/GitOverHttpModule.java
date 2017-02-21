@@ -14,7 +14,12 @@
 
 package com.google.gerrit.httpd;
 
+<<<<<<< HEAD   (16c6fe Remove dead AccountResource.Capability.has method)
 import static com.google.gerrit.extensions.client.AuthType.OAUTH;
+=======
+import static com.google.gerrit.reviewdb.client.AuthType.OAUTH;
+import static com.google.gerrit.httpd.plugins.LfsPluginServlet.LFS_REST;
+>>>>>>> BRANCH (70642f Filter Git LFS HTTP requests through auth filter)
 
 import com.google.gerrit.reviewdb.client.CoreDownloadSchemes;
 import com.google.gerrit.server.config.AuthConfig;
@@ -25,6 +30,9 @@ import javax.servlet.Filter;
 
 /** Configures Git access over HTTP with authentication. */
 public class GitOverHttpModule extends ServletModule {
+  private static final String LFS_URL_REGEX =
+      "^(?:(?!/a/))" + LFS_REST;
+
   private final AuthConfig authConfig;
   private final DownloadConfig downloadConfig;
 
@@ -55,6 +63,7 @@ public class GitOverHttpModule extends ServletModule {
       serveRegex(git).with(GitOverHttpServlet.class);
     }
 
+    filterRegex(LFS_URL_REGEX).through(authFilter);
     filter("/a/*").through(authFilter);
   }
 
