@@ -25,8 +25,34 @@ Most of this documentation refers to either type as a plugin.
 [[getting-started]]
 == Getting started
 
+<<<<<<< HEAD   (31035e Update .mailmap)
 To get started with the development of a plugin clone the sample
 plugin:
+=======
+To get started with the development of a plugin there are two
+recommended ways:
+
+. use the Gerrit Plugin Maven archetype to create a new plugin project:
++
+With the Gerrit Plugin Maven archetype you can create a skeleton for a
+plugin project.
++
+----
+mvn archetype:generate -DarchetypeGroupId=com.google.gerrit \
+    -DarchetypeArtifactId=gerrit-plugin-archetype \
+    -DarchetypeVersion=2.13.6 \
+    -DgroupId=com.googlesource.gerrit.plugins.testplugin \
+    -DartifactId=testplugin
+----
++
+Maven will ask for additional properties and then create the plugin in
+the current directory. To change the default property values answer 'n'
+when Maven asks to confirm the properties configuration. It will then
+ask again for all properties including those with predefined default
+values.
+
+. clone the sample plugin:
+>>>>>>> BRANCH (a09e97 Set version to 2.13.6)
 +
 This is a project that demonstrates the various features of the
 plugin API. It can be taken as an example to develop an own plugin.
