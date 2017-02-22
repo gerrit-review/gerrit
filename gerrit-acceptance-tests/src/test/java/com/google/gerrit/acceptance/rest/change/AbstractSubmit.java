@@ -891,12 +891,22 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
     assertApproved(changeId, admin);
   }
 
+<<<<<<< HEAD   (f7fc14 Format Java files with google-java-format)
   protected void assertApproved(String changeId, TestAccount user) throws Exception {
+=======
+  protected void assertApproved(String changeId, TestAccount user)
+      throws Exception {
+>>>>>>> BRANCH (43fe97 Don't require Add Patch Set permission for submit by rebase)
     ChangeInfo c = get(changeId, DETAILED_LABELS);
     LabelInfo cr = c.labels.get("Code-Review");
     assertThat(cr.all).hasSize(1);
     assertThat(cr.all.get(0).value).isEqualTo(2);
+<<<<<<< HEAD   (f7fc14 Format Java files with google-java-format)
     assertThat(new Account.Id(cr.all.get(0)._accountId)).isEqualTo(user.getId());
+=======
+    assertThat(new Account.Id(cr.all.get(0)._accountId))
+        .isEqualTo(user.getId());
+>>>>>>> BRANCH (43fe97 Don't require Add Patch Set permission for submit by rebase)
   }
 
   protected void assertMerged(String changeId) throws RestApiException {
@@ -910,15 +920,32 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
     assertThat(actual.getTimeZone()).isEqualTo(expected.getTimeZone());
   }
 
+<<<<<<< HEAD   (f7fc14 Format Java files with google-java-format)
   protected void assertSubmitter(String changeId, int psId) throws Exception {
     assertSubmitter(changeId, psId, admin);
   }
 
   protected void assertSubmitter(String changeId, int psId, TestAccount user) throws Exception {
     Change c = getOnlyElement(queryProvider.get().byKeyPrefix(changeId)).change();
+=======
+  protected void assertSubmitter(String changeId, int psId)
+      throws Exception {
+    assertSubmitter(changeId, psId, admin);
+  }
+
+  protected void assertSubmitter(String changeId, int psId, TestAccount user)
+      throws Exception {
+    Change c =
+        getOnlyElement(queryProvider.get().byKeyPrefix(changeId)).change();
+>>>>>>> BRANCH (43fe97 Don't require Add Patch Set permission for submit by rebase)
     ChangeNotes cn = notesFactory.createChecked(db, c);
+<<<<<<< HEAD   (f7fc14 Format Java files with google-java-format)
     PatchSetApproval submitter =
         approvalsUtil.getSubmitter(db, cn, new PatchSet.Id(cn.getChangeId(), psId));
+=======
+    PatchSetApproval submitter = approvalsUtil.getSubmitter(db, cn,
+        new PatchSet.Id(cn.getChangeId(), psId));
+>>>>>>> BRANCH (43fe97 Don't require Add Patch Set permission for submit by rebase)
     assertThat(submitter).isNotNull();
     assertThat(submitter.isLegacySubmit()).isTrue();
     assertThat(submitter.getAccountId()).isEqualTo(user.getId());

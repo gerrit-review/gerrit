@@ -88,8 +88,13 @@ public class PatchSetInserter extends BatchUpdate.Op {
 
   // Fields exposed as setters.
   private String message;
+<<<<<<< HEAD   (f7fc14 Format Java files with google-java-format)
   private String description;
   private CommitValidators.Policy validatePolicy = CommitValidators.Policy.GERRIT;
+=======
+  private CommitValidators.Policy validatePolicy =
+      CommitValidators.Policy.GERRIT;
+>>>>>>> BRANCH (43fe97 Don't require Add Patch Set permission for submit by rebase)
   private boolean checkAddPatchSetPermission = true;
   private boolean draft;
   private List<String> groups = Collections.emptyList();
@@ -152,7 +157,12 @@ public class PatchSetInserter extends BatchUpdate.Op {
     return this;
   }
 
+<<<<<<< HEAD   (f7fc14 Format Java files with google-java-format)
   public PatchSetInserter setCheckAddPatchSetPermission(boolean checkAddPatchSetPermission) {
+=======
+  public PatchSetInserter setCheckAddPatchSetPermission(
+      boolean checkAddPatchSetPermission) {
+>>>>>>> BRANCH (43fe97 Don't require Add Patch Set permission for submit by rebase)
     this.checkAddPatchSetPermission = checkAddPatchSetPermission;
     return this;
   }
@@ -302,7 +312,15 @@ public class PatchSetInserter extends BatchUpdate.Op {
   }
 
   private void validate(RepoContext ctx)
+<<<<<<< HEAD   (f7fc14 Format Java files with google-java-format)
       throws AuthException, ResourceConflictException, IOException, OrmException {
+=======
+      throws AuthException, ResourceConflictException, IOException,
+      OrmException {
+    CommitValidators cv = commitValidatorsFactory.create(
+        origCtl.getRefControl(), sshInfo, ctx.getRepository());
+
+>>>>>>> BRANCH (43fe97 Don't require Add Patch Set permission for submit by rebase)
     if (checkAddPatchSetPermission && !origCtl.canAddPatchSet(ctx.getDb())) {
       throw new AuthException("cannot add patch set");
     }

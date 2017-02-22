@@ -103,6 +103,12 @@ public class RebaseChangeOp extends BatchUpdate.Op {
     return this;
   }
 
+  public RebaseChangeOp setCheckAddPatchSetPermission(
+      boolean checkAddPatchSetPermission) {
+    this.checkAddPatchSetPermission = checkAddPatchSetPermission;
+    return this;
+  }
+
   public RebaseChangeOp setCheckAddPatchSetPermission(boolean checkAddPatchSetPermission) {
     this.checkAddPatchSetPermission = checkAddPatchSetPermission;
     return this;
@@ -170,6 +176,7 @@ public class RebaseChangeOp extends BatchUpdate.Op {
 
     rebasedCommit = rebaseCommit(ctx, original, baseCommit, newCommitMessage);
 
+<<<<<<< HEAD   (f7fc14 Format Java files with google-java-format)
     RevId baseRevId =
         new RevId((baseCommitish != null) ? baseCommitish : ObjectId.toString(baseCommit.getId()));
     Base base =
@@ -196,6 +203,20 @@ public class RebaseChangeOp extends BatchUpdate.Op {
               + originalPatchSet.getId().get()
               + " was rebased");
     }
+=======
+    rebasedPatchSetId = ChangeUtil.nextPatchSetId(
+        ctx.getRepository(), ctl.getChange().currentPatchSetId());
+    patchSetInserter = patchSetInserterFactory
+        .create(ctl, rebasedPatchSetId, rebasedCommit)
+        .setDraft(originalPatchSet.isDraft())
+        .setSendMail(false)
+        .setFireRevisionCreated(fireRevisionCreated)
+        .setCopyApprovals(copyApprovals)
+        .setCheckAddPatchSetPermission(checkAddPatchSetPermission)
+        .setMessage(
+          "Patch Set " + rebasedPatchSetId.get()
+          + ": Patch Set " + originalPatchSet.getId().get() + " was rebased");
+>>>>>>> BRANCH (43fe97 Don't require Add Patch Set permission for submit by rebase)
 
     if (base != null) {
       patchSetInserter.setGroups(base.patchSet().getGroups());
