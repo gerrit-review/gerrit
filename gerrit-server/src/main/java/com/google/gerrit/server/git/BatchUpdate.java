@@ -681,6 +681,7 @@ public class BatchUpdate implements AutoCloseable {
       logDebug("Executing updateRepo on {} RepoOnlyOps", repoOnlyOps.size());
       for (RepoOnlyOp op : repoOnlyOps) {
         op.updateRepo(ctx);
+<<<<<<< HEAD   (3a4e1b Merge "Add <ctrl>+S to help screen")
       }
 
       if (onSubmitValidators != null && commands != null && !commands.isEmpty()) {
@@ -694,6 +695,8 @@ public class BatchUpdate implements AutoCloseable {
             new ReadOnlyRepository(getRepository()),
             ctx.getInserter().newReader(),
             commands.getCommands());
+=======
+>>>>>>> BRANCH (78eca6 Fix wrong variable in log message in BatchUpdate)
       }
 
       if (inserter != null) {
@@ -708,7 +711,11 @@ public class BatchUpdate implements AutoCloseable {
     }
   }
 
+<<<<<<< HEAD   (3a4e1b Merge "Add <ctrl>+S to help screen")
   private void executeRefUpdates(boolean dryrun) throws IOException, RestApiException {
+=======
+  private void executeRefUpdates() throws IOException, RestApiException {
+>>>>>>> BRANCH (78eca6 Fix wrong variable in log message in BatchUpdate)
     if (commands == null || commands.isEmpty()) {
       logDebug("No ref updates to execute");
       return;
