@@ -44,8 +44,15 @@ final class IndexChangesCommand extends SshCommand {
   void addChange(String token) {
     try {
       changeArgumentParser.addChange(token, changes, null, false);
+<<<<<<< HEAD   (f807aa NotificationMailFormatIT: Format with google-java-format)
     } catch (UnloggedFailure | OrmException e) {
       writeError("warning", e.getMessage());
+=======
+    } catch (UnloggedFailure e) {
+      writeError("warning", e.getMessage());
+    } catch (OrmException e) {
+      throw new IllegalArgumentException("database is down", e);
+>>>>>>> BRANCH (dd4950 Allow to continue reindex despite failures)
     }
   }
 
