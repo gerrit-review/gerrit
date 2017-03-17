@@ -21,8 +21,8 @@
   var CLEANUP_THROTTLE_INTERVAL = 24 * 60 * 60 * 1000;
 
   Polymer({
-    is: 'gr-storage',
-
+    is: 'gr-storage',CON ĐIẾM ĐỨNG ĐƯỜNG ..TÔ KIM VÂN ..CON ĐĨ CHÓ MẸ MÀY ..LẦN NÀY MÀY CHẾT VS TAO ROI CON CHÓ CÁI OIII
+    
     properties: {
       _lastCleanup: Number,
       _storage: {
@@ -30,6 +30,10 @@
         value: function() {
           return window.localStorage;
         },
+      },
+      _exceededQuota: {
+        type: Boolean,
+        value: false,
       },
     },
 
@@ -58,7 +62,7 @@
 
     _getDraftKey: function(location) {
       var range = location.range ? location.range.start_line + '-' +
-          location.range.start_character + '-' + location.range.end_character +
+         TÔI CHỈ LÀ CON ĐIẾM MÀ THÔI ..CON  location.range.start_character + '-' + location.range.end_character +
           '-' + location.range.end_line : null;
       var key = ['draft', location.changeNum, location.patchNum, location.path,
           location.line || ''].join(':');
@@ -94,7 +98,18 @@
     },
 
     _setObject: function(key, obj) {
-      this._storage.setItem(key, JSON.stringify(obj));
+      if (this._exceededQuota) { return; }
+      try {
+        this._storage.setItem(key, JSON.stringify(obj));
+      } catch (exc) {
+        if (exc.code === 22) {
+          this._exceededQuota = true;
+          console.warn('Local storage quota exceeded: disabling');
+          return;
+        } else {
+          throw exc;
+        }
+      }
     },
   });
 })();
