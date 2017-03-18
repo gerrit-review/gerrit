@@ -140,6 +140,22 @@ public class WatchConfig extends VersionedMetaData implements ValidationError.Si
     }
 
     public synchronized void deleteAllProjectWatches(Account.Id accountId)
+<<<<<<< HEAD   (f0d6fc Format Java files with google-java-format)
+=======
+        throws IOException, ConfigInvalidException {
+      WatchConfig watchConfig = read(accountId);
+      boolean commit = false;
+      if (!watchConfig.getProjectWatches().isEmpty()) {
+        watchConfig.getProjectWatches().clear();
+        commit = true;
+      }
+      if (commit) {
+        commit(watchConfig);
+      }
+    }
+
+    private WatchConfig read(Account.Id accountId)
+>>>>>>> BRANCH (a1be2c Support for at-sign (@) in usernames)
         throws IOException, ConfigInvalidException {
       WatchConfig watchConfig = read(accountId);
       boolean commit = false;

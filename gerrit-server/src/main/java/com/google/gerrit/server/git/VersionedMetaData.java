@@ -281,12 +281,16 @@ public abstract class VersionedMetaData {
           return;
         }
 
+<<<<<<< HEAD   (f0d6fc Format Java files with google-java-format)
         // Reuse tree from parent commit unless there are contents in newTree or
         // there is no tree for a parent commit.
         ObjectId res =
             newTree.getEntryCount() != 0 || srcTree == null
                 ? newTree.writeTree(inserter)
                 : srcTree.copy();
+=======
+        ObjectId res = newTree.writeTree(inserter);
+>>>>>>> BRANCH (a1be2c Support for at-sign (@) in usernames)
         if (res.equals(srcTree) && !update.allowEmpty() && (commit.getTreeId() == null)) {
           // If there are no changes to the content, don't create the commit.
           return;
