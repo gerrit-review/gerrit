@@ -102,9 +102,16 @@ public class GroupsIT extends AbstractDaemonTest {
   public void addMembersWithAtSign() throws Exception {
     String g = createGroup("users");
     TestAccount u10 = accounts.create("u10", "u10@example.com", "Full Name 10");
+<<<<<<< HEAD   (a7480e Format Java files with google-java-format)
     TestAccount u11_at =
         accounts.create("u11@something", "u11@example.com", "Full Name 11 With At");
     TestAccount u11 = accounts.create("u11", "u11.another@example.com", "Full Name 11 Without At");
+=======
+    TestAccount u11_at = accounts.create("u11@something", "u11@example.com",
+                                         "Full Name 11 With At");
+    accounts.create("u11", "u11.another@example.com",
+                    "Full Name 11 Without At");
+>>>>>>> BRANCH (42acac GroupsIT: Remove unused variable)
     gApi.groups().id(g).addMembers(u10.username, u11_at.username);
     assertMembers(g, u10, u11_at);
   }
