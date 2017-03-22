@@ -1,0 +1,15 @@
+<<<<<<< HEAD   (2d6928 Merge "Implement isOnParent as functions rather than an attr)
+=======
+include_defs('//lib/maven.defs')
+include_defs('//lib/JGIT_VERSION')
+
+maven_jar(
+  name = 'junit',
+  id = 'org.eclipse.jgit:org.eclipse.jgit.junit:' + VERS,
+  sha1 = '3d953a327cda2b268a560b59c224a5f4d9dbd956',
+  license = 'DO_NOT_DISTRIBUTE',
+  repository = REPO,
+  unsign = True,
+  deps = ['//lib/jgit/org.eclipse.jgit:jgit'],
+)
+>>>>>>> BRANCH (1b4358 Set version to 2.13.7)

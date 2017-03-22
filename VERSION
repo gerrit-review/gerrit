@@ -1,0 +1,8 @@
+<<<<<<< HEAD   (2d6928 Merge "Implement isOnParent as functions rather than an attr)
+=======
+# Maven style API version (e.g. '2.x-SNAPSHOT').
+# Used by :api_install and :api_deploy targets
+# when talking to the destination repository.
+#
+GERRIT_VERSION = '2.13.7'
+>>>>>>> BRANCH (1b4358 Set version to 2.13.7)

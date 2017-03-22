@@ -1,0 +1,9 @@
+<<<<<<< HEAD   (2d6928 Merge "Implement isOnParent as functions rather than an attr)
+=======
+include_defs('//lib/maven.defs')
+
+REPO = MAVEN_CENTRAL # Leave here even if set to MAVEN_CENTRAL.
+VERS = '4.5.1.201703201650-r'
+DOC_VERS = VERS # Set to VERS unless using a snapshot
+JGIT_DOC_URL="http://download.eclipse.org/jgit/site/" + DOC_VERS + "/apidocs"
+>>>>>>> BRANCH (1b4358 Set version to 2.13.7)

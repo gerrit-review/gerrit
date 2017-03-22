@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-war</artifactId>
+<<<<<<< HEAD   (2d6928 Merge "Implement isOnParent as functions rather than an attr)
   <version>2.14-SNAPSHOT</version>
+=======
+  <version>2.13.7</version>
+>>>>>>> BRANCH (1b4358 Set version to 2.13.7)
   <packaging>war</packaging>
   <name>Gerrit Code Review - WAR</name>
   <description>Gerrit WAR</description>
