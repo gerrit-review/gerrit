@@ -38,8 +38,13 @@ public class RefOperationValidators {
   }
 
   public static ReceiveCommand getCommand(RefUpdate update, ReceiveCommand.Type type) {
+<<<<<<< HEAD   (710570 Merge "Merge branch 'stable-2.13'")
     return new ReceiveCommand(
         update.getOldObjectId(), update.getNewObjectId(), update.getName(), type);
+=======
+    return new ReceiveCommand(update.getExpectedOldObjectId(), update.getNewObjectId(),
+        update.getName(), type);
+>>>>>>> BRANCH (604cdb Be more consistent about object ids used in ref operation va)
   }
 
   private final RefReceivedEvent event;
