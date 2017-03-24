@@ -38,8 +38,13 @@ public class RefOperationValidators {
   }
 
   public static ReceiveCommand getCommand(RefUpdate update, ReceiveCommand.Type type) {
+<<<<<<< HEAD   (2a35a2 Merge changes from topic 'ref-validation-fixes' into stable-)
     return new ReceiveCommand(
         update.getExpectedOldObjectId(), update.getNewObjectId(), update.getName(), type);
+=======
+    return new ReceiveCommand(update.getExpectedOldObjectId(), update.getNewObjectId(),
+        update.getName(), type);
+>>>>>>> BRANCH (885c2c ReceiveCommits: parseBody before getFooterLines)
   }
 
   private final RefReceivedEvent event;
