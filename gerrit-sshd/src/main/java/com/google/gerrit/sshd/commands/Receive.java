@@ -20,6 +20,7 @@ import com.google.gerrit.server.IdentifiedUser;
 import com.google.gerrit.server.git.AsyncReceiveCommits;
 import com.google.gerrit.server.git.ReceiveCommits;
 import com.google.gerrit.server.git.VisibleRefFilter;
+import com.google.gerrit.server.mail.Address;
 import com.google.gerrit.sshd.AbstractGitCommand;
 import com.google.gerrit.sshd.CommandMetaData;
 import com.google.gerrit.sshd.SshSession;
@@ -53,7 +54,9 @@ final class Receive extends AbstractGitCommand {
   @Inject private SshSession session;
 
   private final Set<Account.Id> reviewerId = new HashSet<>();
+  private final Set<Address> reviewerByEmail = new HashSet<>();
   private final Set<Account.Id> ccId = new HashSet<>();
+  private final Set<Address> ccByEmail = new HashSet<>();
 
   @Option(
     name = "--reviewer",

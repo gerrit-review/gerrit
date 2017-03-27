@@ -101,6 +101,7 @@ import com.google.gerrit.server.git.validators.RefOperationValidationException;
 import com.google.gerrit.server.git.validators.RefOperationValidators;
 import com.google.gerrit.server.git.validators.ValidationMessage;
 import com.google.gerrit.server.index.change.ChangeIndexer;
+import com.google.gerrit.server.mail.Address;
 import com.google.gerrit.server.mail.MailUtil.MailRecipients;
 import com.google.gerrit.server.notedb.ChangeNotes;
 import com.google.gerrit.server.notedb.NotesMigration;
@@ -284,7 +285,9 @@ public class ReceiveCommits {
       };
 
   private Set<Account.Id> reviewersFromCommandLine = Sets.newLinkedHashSet();
+  private Set<Address> reviewersFromCommandLineByEmail = Sets.newLinkedHashSet();
   private Set<Account.Id> ccFromCommandLine = Sets.newLinkedHashSet();
+  private Set<Address> ccFromCommandLineByEmail = Sets.newLinkedHashSet();
 
   private final IdentifiedUser user;
   private final ReviewDb db;
@@ -513,8 +516,18 @@ public class ReceiveCommits {
   }
 
   /** Add reviewers for new (or updated) changes. */
+  public void addReviewersByEmail(Collection<Address> who) {
+    reviewersFromCommandLineByEmail.addAll(who);
+  }
+
+  /** Add reviewers for new (or updated) changes. */
   public void addExtraCC(Collection<Account.Id> who) {
     ccFromCommandLine.addAll(who);
+  }
+
+  /** Add reviewers for new (or updated) changes. */
+  public void addExtraCCByEmail(Collection<Address> who) {
+    ccFromCommandLineByEmail.addAll(who);
   }
 
   /** Set a message sender for this operation. */
@@ -1254,7 +1267,9 @@ public class ReceiveCommits {
     Branch.NameKey dest;
     RefControl ctl;
     Set<Account.Id> reviewer = Sets.newLinkedHashSet();
+    Set<Address> reviewerByEmail = Sets.newLinkedHashSet();
     Set<Account.Id> cc = Sets.newLinkedHashSet();
+    Set<Address> ccByEmail = Sets.newLinkedHashSet();
     Map<String, Short> labels = new HashMap<>();
     String message;
     List<RevCommit> baseCommit;
