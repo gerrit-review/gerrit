@@ -105,9 +105,14 @@ public class RebaseSorter {
       mirw.markStart(commit);
       // check if the commit is merged in other branches
       for (RevCommit accepted : alreadyAccepted) {
+<<<<<<< HEAD   (6558e4 Format lib/mina/BUILD with buildifier)
         if (mirw.isMergedInto(mirw.parseCommit(accepted), mirw.parseCommit(commit))) {
           log.debug(
               "Dependency {} merged into branch head {}.", commit.getName(), accepted.getName());
+=======
+        if (mirw.isMergedInto(mirw.parseCommit(commit),
+            mirw.parseCommit(accepted))) {
+>>>>>>> BRANCH (1bd442 Merge branch 'stable-2.12' into stable-2.13)
           return true;
         }
       }

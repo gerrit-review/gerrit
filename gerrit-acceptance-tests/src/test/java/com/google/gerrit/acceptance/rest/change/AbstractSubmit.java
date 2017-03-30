@@ -589,6 +589,7 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
   }
 
   @Test
+<<<<<<< HEAD   (6558e4 Format lib/mina/BUILD with buildifier)
   public void submitChangeWithCommitThatWasAlreadyMerged() throws Exception {
     // create and submit a change
     PushOneCommit.Result change = createChange();
@@ -756,6 +757,47 @@ public abstract class AbstractSubmit extends AbstractDaemonTest {
         bu.execute();
       }
     }
+=======
+  public void submitMergeOfNonChangeBranchNonTip() throws Exception {
+    // Merge a branch with commits that have not been submitted as
+    // changes.
+    //
+    // MC  -- merge commit (pushed for review and submitted)
+    // |\   S2 -- new stable tip (pushed directly to refs/heads/stable)
+    // M \ /
+    // |  S1 -- stable (pushed directly to refs/heads/stable)
+    // | /
+    // I -- master
+    //
+    RevCommit initial = getRemoteHead(project, "master");
+    // push directly to stable to S1
+    PushOneCommit.Result s1 = pushFactory.create(
+      db, admin.getIdent(), testRepo, "new commit into stable", "stable1.txt", "")
+      .to("refs/heads/stable");
+    // move the stable tip ahead to S2
+    pushFactory.create(
+      db, admin.getIdent(), testRepo, "Tip of branch stable", "stable2.txt", "")
+      .to("refs/heads/stable");
+
+    testRepo.reset(initial);
+
+    // move the master ahead
+    PushOneCommit.Result m = pushFactory.create(
+      db, admin.getIdent(), testRepo, "Move master ahead", "master.txt", "")
+      .to("refs/heads/master");
+
+    // create merge change
+    PushOneCommit mc =
+      pushFactory.create(db, admin.getIdent(), testRepo, "The merge commit", "merge.txt", "");
+    mc.setParents(ImmutableList.of(m.getCommit(), s1.getCommit()));
+    PushOneCommit.Result mergeReview = mc.to("refs/for/master");
+    approve(mergeReview.getChangeId());
+    submit(mergeReview.getChangeId());
+
+    List<RevCommit> log = getRemoteLog();
+    assertThat(log).contains(s1.getCommit());
+    assertThat(log).contains(mergeReview.getCommit());
+>>>>>>> BRANCH (1bd442 Merge branch 'stable-2.12' into stable-2.13)
   }
 
   private void assertSubmitter(PushOneCommit.Result change) throws Exception {
