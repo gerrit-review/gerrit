@@ -61,6 +61,7 @@ import java.util.List;
 import java.util.TimeZone;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectInserter;
+import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
@@ -153,8 +154,14 @@ public class CherryPickChange {
         // created later on, to ensure the cherry-picked commit is flushed
         // before patch sets are updated.
         ObjectInserter oi = git.newObjectInserter();
+<<<<<<< HEAD   (653e1d Merge "Expose RevWalk in CommitReceivedEvent")
         CodeReviewRevWalk revWalk = CodeReviewCommit.newRevWalk(oi.newReader())) {
       Ref destRef = git.getRefDatabase().exactRef(targetRef);
+=======
+        ObjectReader reader = oi.newReader();
+        CodeReviewRevWalk revWalk = CodeReviewCommit.newRevWalk(reader)) {
+      Ref destRef = git.getRefDatabase().exactRef(ref);
+>>>>>>> BRANCH (5df27b Merge "Upgrade JGit to 4.6.1.201703071140-r.169-g61e336475" )
       if (destRef == null) {
         throw new InvalidChangeOperationException(
             String.format("Branch %s does not exist.", destinationBranch));

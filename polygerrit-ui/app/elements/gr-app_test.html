@@ -44,6 +44,9 @@ limitations under the License.
       stub('gr-account-dropdown', {
         _getTopContent: sinon.stub(),
       });
+      stub('gr-account-dropdown', {
+        _getTopContent: sinon.stub(),
+      });
       stub('gr-rest-api-interface', {
         getAccount: function() { return Promise.resolve({}); },
         getAccountCapabilities: function() { return Promise.resolve({}); },
@@ -101,6 +104,10 @@ limitations under the License.
         assert.deepEqual(element.$.plugins.config, pluginConfig);
         done();
       });
+    });
+
+    test('canonical-path', function() {
+      assert.equal(Gerrit.CANONICAL_PATH, '/abc/def/ghi');
     });
 
     test('canonical-path', function() {
