@@ -25,8 +25,13 @@ import dk.brics.automaton.RunAutomaton;
 class RegexTopicPredicate extends ChangeRegexPredicate {
   private final RunAutomaton pattern;
 
+<<<<<<< HEAD   (e51b23 H2AccountPatchReviewStore: Set idle connection eviction time)
   RegexTopicPredicate(String re) {
     super(FUZZY_TOPIC, re);
+=======
+  RegexTopicPredicate(Schema<ChangeData> schema, String re) {
+    super(ExactTopicPredicate.topicField(schema), re);
+>>>>>>> BRANCH (37b929 Fix intopic predicate with regex)
 
     if (re.startsWith("^")) {
       re = re.substring(1);
