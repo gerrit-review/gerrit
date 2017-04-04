@@ -24,8 +24,13 @@ import dk.brics.automaton.RunAutomaton;
 class RegexTopicPredicate extends ChangeRegexPredicate {
   private final RunAutomaton pattern;
 
+<<<<<<< HEAD   (178b71 Merge branch 'stable-2.13' into stable-2.14)
   RegexTopicPredicate(String re) {
     super(FUZZY_TOPIC, re);
+=======
+  RegexTopicPredicate(Schema<ChangeData> schema, String re) {
+    super(ExactTopicPredicate.topicField(schema), re);
+>>>>>>> BRANCH (37b929 Fix intopic predicate with regex)
 
     if (re.startsWith("^")) {
       re = re.substring(1);
