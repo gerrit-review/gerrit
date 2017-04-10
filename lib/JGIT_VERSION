@@ -1,0 +1,9 @@
+<<<<<<< HEAD   (daed64 Merge "Update blame-cache to 0.2-1" into stable-2.14)
+=======
+include_defs('//lib/maven.defs')
+
+REPO = MAVEN_CENTRAL # Leave here even if set to MAVEN_CENTRAL.
+VERS = '4.5.2.201704071617-r'
+DOC_VERS = VERS # Set to VERS unless using a snapshot
+JGIT_DOC_URL="http://download.eclipse.org/jgit/site/" + DOC_VERS + "/apidocs"
+>>>>>>> BRANCH (fe862e Set version to 2.13.8)

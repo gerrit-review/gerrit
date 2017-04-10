@@ -1,0 +1,28 @@
+<<<<<<< HEAD   (daed64 Merge "Update blame-cache to 0.2-1" into stable-2.14)
+=======
+include_defs('//lib/maven.defs')
+include_defs('//lib/JGIT_VERSION')
+
+maven_jar(
+  name = 'jgit',
+  id = 'org.eclipse.jgit:org.eclipse.jgit:' + VERS,
+  bin_sha1 = '01352ebdefb10aab661b97413f651bd6ca3766ce',
+  src_sha1 = 'ad713d18ed0fa71279b002e2c1340a35dfbefee7',
+  license = 'jgit',
+  repository = REPO,
+  unsign = True,
+  deps = [':ewah'],
+  exclude = [
+    'META-INF/eclipse.inf',
+    'about.html',
+    'plugin.properties',
+  ],
+)
+
+maven_jar(
+  name = 'ewah',
+  id = 'com.googlecode.javaewah:JavaEWAH:0.7.9',
+  sha1 = 'eceaf316a8faf0e794296ebe158ae110c7d72a5a',
+  license = 'Apache2.0',
+)
+>>>>>>> BRANCH (fe862e Set version to 2.13.8)
