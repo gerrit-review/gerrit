@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-plugin-gwtui</artifactId>
+<<<<<<< HEAD   (fb9d80 Merge changes from topic 'stale-after-migration')
   <version>2.15-SNAPSHOT</version>
+=======
+  <version>2.14-rc0</version>
+>>>>>>> BRANCH (610005 Add new maintainers to developers section in pom.xml files)
   <packaging>jar</packaging>
   <name>Gerrit Code Review - Plugin GWT UI</name>
   <description>Common Classes for Gerrit GWT UI Plugins</description>
@@ -48,6 +52,12 @@
     </developer>
     <developer>
       <name>Shawn Pearce</name>
+    </developer>
+    <developer>
+      <name>Viktar Donich</name>
+    </developer>
+    <developer>
+      <name>Wyatt Allen</name>
     </developer>
   </developers>
 
