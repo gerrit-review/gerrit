@@ -72,8 +72,15 @@ limitations under the License.
       element._path = '/test/path';
       flush(function() {
         var gwtLink = element.$$('#gwtLink');
+<<<<<<< HEAD   (a2b6bd Merge "Add tests for notify_details")
         assert.equal(gwtLink.href, 'http://' + location.host +
             element.getBaseUrl() + '/?polygerrit=0#/test/path');
+=======
+        assert.equal(
+          gwtLink.href,
+          'http://' + location.host + element.getBaseUrl() + '/?polygerrit=0#/test/path'
+        );
+>>>>>>> BRANCH (4d0fe7 Soy index cleanup)
         done();
       });
     });
@@ -98,12 +105,19 @@ limitations under the License.
       });
     });
 
+<<<<<<< HEAD   (a2b6bd Merge "Add tests for notify_details")
     test('passes config to gr-plugin-host', function(done) {
       element.$.restAPI.getConfig.lastCall.returnValue.then(function(config) {
         var pluginConfig = config.plugin;
         assert.deepEqual(element.$.plugins.config, pluginConfig);
         done();
       });
+=======
+    test('sets plugins count', function() {
+      sandbox.stub(Gerrit, '_setPluginsCount');
+      element._loadPlugins([]);
+      assert.isTrue(Gerrit._setPluginsCount.calledWithExactly(0));
+>>>>>>> BRANCH (4d0fe7 Soy index cleanup)
     });
   });
 </script>

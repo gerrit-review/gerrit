@@ -23,6 +23,7 @@ limitations under the License.
 
 <link rel="import" href="../../bower_components/iron-test-helpers/iron-test-helpers.html">
 <script>
+<<<<<<< HEAD   (a2b6bd Merge "Add tests for notify_details")
   /** @type {String} */
   window.CANONICAL_PATH = '/r';
 </script>
@@ -74,3 +75,55 @@ limitations under the License.
     });
   });
 </script>
+=======
+  window.CANONICAL_PATH = '/r';
+</script>
+<link rel="import" href="base-url-behavior.html">
+
+<test-fixture id="basic">
+  <template>
+    <test-element></test-element>
+  </template>
+</test-fixture>
+
+<test-fixture id="within-overlay">
+  <template>
+    <gr-overlay>
+      <test-element></test-element>
+    </gr-overlay>
+  </template>
+</test-fixture>
+
+<script>
+  suite('base-url-behavior tests', function() {
+    var element;
+    var overlay;
+
+    suiteSetup(function() {
+      // Define a Polymer element that uses this behavior.
+      Polymer({
+        is: 'test-element',
+        behaviors: [
+          Gerrit.BaseUrlBehavior,
+        ],
+      });
+    });
+
+    setup(function() {
+      element = fixture('basic');
+      overlay = fixture('within-overlay');
+    });
+
+    test('getBaseUrl', function() {
+      assert.deepEqual(element.getBaseUrl(), '/r');
+    });
+
+    test('computeGwtUrl', function() {
+      assert.deepEqual(
+        element.computeGwtUrl('/r/c/1/'),
+        '/r/?polygerrit=0#/c/1/'
+      );
+    });
+  });
+</script>
+>>>>>>> BRANCH (4d0fe7 Soy index cleanup)

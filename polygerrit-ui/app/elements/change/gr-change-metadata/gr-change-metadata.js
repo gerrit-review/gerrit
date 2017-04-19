@@ -254,8 +254,13 @@
 
     _computeTopicHref: function(topic) {
       var encodedTopic = encodeURIComponent('\"' + topic + '\"');
+<<<<<<< HEAD   (a2b6bd Merge "Add tests for notify_details")
       return this.getBaseUrl() + '/q/topic:' +
         encodeURIComponent(encodedTopic) + '+(status:open OR status:merged)';
+=======
+      return this.getBaseUrl() + '/q/topic:' + encodeURIComponent(encodedTopic) +
+          '+(status:open OR status:merged)';
+>>>>>>> BRANCH (4d0fe7 Soy index cleanup)
     },
 
     _handleTopicRemoved: function() {

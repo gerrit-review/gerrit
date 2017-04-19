@@ -963,8 +963,12 @@
     },
 
     _fetchB64File: function(url) {
+<<<<<<< HEAD   (a2b6bd Merge "Add tests for notify_details")
       return fetch(this.getBaseUrl() + url, {credentials: 'same-origin'}).then(
             function(response) {
+=======
+      return fetch(this.getBaseUrl() + url, {credentials: 'same-origin'}).then(function(response) {
+>>>>>>> BRANCH (4d0fe7 Soy index cleanup)
         var type = response.headers.get('X-FYI-Content-Type');
         return response.text()
           .then(function(text) {

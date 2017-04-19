@@ -21,6 +21,7 @@ limitations under the License.
 <script src="../../bower_components/webcomponentsjs/webcomponents.min.js"></script>
 <script src="../../bower_components/web-component-tester/browser.js"></script>
 <script>
+<<<<<<< HEAD   (a2b6bd Merge "Add tests for notify_details")
   /** @type {String} */
   window.CANONICAL_PATH = '/r';
 </script>
@@ -76,3 +77,59 @@ limitations under the License.
     });
   });
 </script>
+=======
+  window.CANONICAL_PATH = '/r';
+</script>
+
+<link rel="import" href="../../bower_components/iron-test-helpers/iron-test-helpers.html">
+<link rel="import" href="../base-url-behavior/base-url-behavior.html">
+<link rel="import" href="rest-client-behavior.html">
+
+<test-fixture id="basic">
+  <template>
+    <test-element></test-element>
+  </template>
+</test-fixture>
+
+<test-fixture id="within-overlay">
+  <template>
+    <gr-overlay>
+      <test-element></test-element>
+    </gr-overlay>
+  </template>
+</test-fixture>
+
+<script>
+  suite('rest-client-behavior tests', function() {
+    var element;
+    var overlay;
+
+    suiteSetup(function() {
+      // Define a Polymer element that uses this behavior.
+      Polymer({
+        is: 'test-element',
+        behaviors: [
+          Gerrit.BaseUrlBehavior,
+          Gerrit.RESTClientBehavior,
+        ],
+      });
+    });
+
+    setup(function() {
+      element = fixture('basic');
+      overlay = fixture('within-overlay');
+    });
+
+    test('changeBaseURL', function() {
+      assert.deepEqual(
+        element.changeBaseURL('1', '1'),
+        '/r/changes/1/revisions/1'
+      );
+    });
+
+    test('changePath', function() {
+      assert.deepEqual(element.changePath('1'), '/r/c/1');
+    });
+  });
+</script>
+>>>>>>> BRANCH (4d0fe7 Soy index cleanup)

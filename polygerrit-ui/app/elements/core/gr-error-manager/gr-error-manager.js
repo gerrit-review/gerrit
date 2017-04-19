@@ -213,7 +213,10 @@
       ];
       window.open(this.getBaseUrl() +
           '/login/%3FcloseAfterLogin', '_blank', options.join(','));
+<<<<<<< HEAD   (a2b6bd Merge "Add tests for notify_details")
       this.listen(window, 'focus', '_handleWindowFocus');
+=======
+>>>>>>> BRANCH (4d0fe7 Soy index cleanup)
     },
 
     _handleCredentialRefreshed: function() {
