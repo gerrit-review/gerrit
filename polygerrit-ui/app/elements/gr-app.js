@@ -114,7 +114,11 @@
       this.$.restAPI.getPreferences();
       this.$.restAPI.getDiffPreferences();
       this.$.errorManager.knownAccountId =
+<<<<<<< HEAD   (31d0fc RepoContext: Format with google-java-format)
           this._account && this._account._account_id || null;
+=======
+        this._account && this._account._account_id || null;
+>>>>>>> BRANCH (e44951 Fix linter errors)
     },
 
     _viewChanged: function(view) {
