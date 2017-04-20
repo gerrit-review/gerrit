@@ -35,6 +35,7 @@ public class NotificationMailFormatIT extends AbstractDaemonTest {
 
     // Create change as admin and review as user
     PushOneCommit.Result r = createChange();
+    sender.clear();
     setApiUser(user);
     gApi.changes().id(r.getChangeId()).current().review(ReviewInput.recommend());
 
@@ -56,6 +57,7 @@ public class NotificationMailFormatIT extends AbstractDaemonTest {
   public void userReceivesHtmlAndPlaintextEmail() throws Exception {
     // Create change as admin and review as user
     PushOneCommit.Result r = createChange();
+    sender.clear();
     setApiUser(user);
     gApi.changes().id(r.getChangeId()).current().review(ReviewInput.recommend());
 

@@ -66,9 +66,7 @@ public abstract class NotificationEmail extends OutgoingEmail {
   protected void includeWatchers(NotifyType type, boolean includeWatchersFromNotifyConfig) {
     try {
       Watchers matching = getWatchers(type, includeWatchersFromNotifyConfig);
-      add(RecipientType.TO, matching.to);
-      add(RecipientType.CC, matching.cc);
-      add(RecipientType.BCC, matching.bcc);
+      add(matching);
     } catch (OrmException err) {
       // Just don't CC everyone. Better to send a partial message to those
       // we already have queued up then to fail deliver entirely to people
@@ -81,13 +79,13 @@ public abstract class NotificationEmail extends OutgoingEmail {
   protected abstract Watchers getWatchers(NotifyType type, boolean includeWatchersFromNotifyConfig)
       throws OrmException;
 
-  /** Add users or email addresses to the TO, CC, or BCC list. */
-  protected void add(RecipientType type, Watchers.List list) {
-    for (Account.Id user : list.accounts) {
-      add(type, user);
+  /** Add users or email addresses to BCC list. */
+  protected void add(Watchers watchers) {
+    for (Account.Id user : watchers.accounts) {
+      add(RecipientType.BCC, user);
     }
-    for (Address addr : list.emails) {
-      add(type, addr);
+    for (Address addr : watchers.emails) {
+      add(RecipientType.BCC, addr);
     }
   }
 

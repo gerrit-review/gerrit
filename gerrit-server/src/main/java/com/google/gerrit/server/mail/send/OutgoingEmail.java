@@ -177,8 +177,12 @@ public abstract class OutgoingEmail {
             j.add(address.getEmail());
           }
         }
-        smtpRcptTo.stream().forEach(a -> j.add(a.getEmail()));
-        smtpRcptToPlaintextOnly.stream().forEach(a -> j.add(a.getEmail()));
+        for (Address a : ((EmailHeader.AddressList) headers.get(HDR_TO)).getAddressList()) {
+          j.add(a.getEmail());
+        }
+        for (Address a : ((EmailHeader.AddressList) headers.get(HDR_CC)).getAddressList()) {
+          j.add(a.getEmail());
+        }
         setHeader("Reply-To", j.toString());
       }
 

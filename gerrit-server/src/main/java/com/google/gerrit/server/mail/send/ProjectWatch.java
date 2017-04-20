@@ -117,44 +117,26 @@ public class ProjectWatch {
   }
 
   public static class Watchers {
-    static class List {
-      protected final Set<Account.Id> accounts = new HashSet<>();
-      protected final Set<Address> emails = new HashSet<>();
-    }
-
-    protected final List to = new List();
-    protected final List cc = new List();
-    protected final List bcc = new List();
-
-    List list(NotifyConfig.Header header) {
-      switch (header) {
-        case TO:
-          return to;
-        case CC:
-          return cc;
-        default:
-        case BCC:
-          return bcc;
-      }
-    }
+    public final Set<Account.Id> accounts = new HashSet<>();
+    public final Set<Address> emails = new HashSet<>();
   }
 
   private void add(Watchers matching, NotifyConfig nc) throws OrmException, QueryParseException {
     for (GroupReference ref : nc.getGroups()) {
       CurrentUser user = new SingleGroupUser(args.capabilityControlFactory, ref.getUUID());
       if (filterMatch(user, nc.getFilter())) {
-        deliverToMembers(matching.list(nc.getHeader()), ref.getUUID());
+        deliverToMembers(matching, ref.getUUID());
       }
     }
 
     if (!nc.getAddresses().isEmpty()) {
       if (filterMatch(null, nc.getFilter())) {
-        matching.list(nc.getHeader()).emails.addAll(nc.getAddresses());
+        matching.emails.addAll(nc.getAddresses());
       }
     }
   }
 
-  private void deliverToMembers(Watchers.List matching, AccountGroup.UUID startUUID)
+  private void deliverToMembers(Watchers matching, AccountGroup.UUID startUUID)
       throws OrmException {
     ReviewDb db = args.db.get();
     Set<AccountGroup.UUID> seen = new HashSet<>();
@@ -203,7 +185,7 @@ public class ProjectWatch {
         // If we are set to notify on this type, add the user.
         // Otherwise, still return true to stop notifications for this user.
         if (watchedTypes.contains(type)) {
-          matching.bcc.accounts.add(accountId);
+          matching.accounts.add(accountId);
         }
         return true;
       }

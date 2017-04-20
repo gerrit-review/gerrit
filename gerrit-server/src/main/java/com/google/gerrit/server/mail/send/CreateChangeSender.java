@@ -14,7 +14,6 @@
 
 package com.google.gerrit.server.mail.send;
 
-import com.google.common.collect.Iterables;
 import com.google.gerrit.common.errors.EmailException;
 import com.google.gerrit.extensions.api.changes.RecipientType;
 import com.google.gerrit.reviewdb.client.Account;
@@ -51,17 +50,14 @@ public class CreateChangeSender extends NewChangeSender {
     try {
       // Try to mark interested owners with TO and CC or BCC line.
       Watchers matching = getWatchers(NotifyType.NEW_CHANGES, !isDraft && !change.isPrivate());
-      for (Account.Id user :
-          Iterables.concat(matching.to.accounts, matching.cc.accounts, matching.bcc.accounts)) {
+      for (Account.Id user : matching.accounts) {
         if (isOwnerOfProjectOrBranch(user)) {
           add(RecipientType.TO, user);
         }
       }
 
       // Add everyone else. Owners added above will not be duplicated.
-      add(RecipientType.TO, matching.to);
-      add(RecipientType.CC, matching.cc);
-      add(RecipientType.BCC, matching.bcc);
+      add(matching);
     } catch (OrmException err) {
       // Just don't CC everyone. Better to send a partial message to those
       // we already have queued up then to fail deliver entirely to people
