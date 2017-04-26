@@ -100,7 +100,11 @@ public class SitePathInitializer {
     chmod(0755, site.gerrit_sh);
     extract(site.gerrit_service, getClass(), "gerrit.service");
     chmod(0755, site.gerrit_service);
+<<<<<<< HEAD   (fda2cd Merge "Add the new gerrit systemctl file to init")
     extract(site.gerrit_service, getClass(), "gerrit.socket");
+=======
+    extract(site.gerrit_socket, getClass(), "gerrit.socket");
+>>>>>>> BRANCH (a4fbf0 Move systemctl files to /init/ rather than /systemd/)
     chmod(0755, site.gerrit_socket);
     chmod(0700, site.tmp_dir);
 
