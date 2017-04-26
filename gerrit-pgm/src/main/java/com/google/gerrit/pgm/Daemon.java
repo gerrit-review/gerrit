@@ -77,6 +77,7 @@ import com.google.gerrit.server.plugins.PluginGuiceEnvironment;
 import com.google.gerrit.server.plugins.PluginRestApiModule;
 import com.google.gerrit.server.schema.DataSourceProvider;
 import com.google.gerrit.server.schema.H2AccountPatchReviewStore;
+import com.google.gerrit.server.schema.JdbcAccountPatchReviewStore;
 import com.google.gerrit.server.schema.SchemaVersionCheck;
 import com.google.gerrit.server.securestore.DefaultSecureStore;
 import com.google.gerrit.server.securestore.SecureStore;
@@ -359,10 +360,16 @@ public class Daemon extends SiteProgram {
     modules.add(new WorkQueue.Module());
     modules.add(new StreamEventsApiListener.Module());
     modules.add(new EventBroker.Module());
+<<<<<<< HEAD   (02ca95 PolyGerrit: Fix documentation links)
     modules.add(
         test
             ? new H2AccountPatchReviewStore.InMemoryModule()
             : new H2AccountPatchReviewStore.Module());
+=======
+    modules.add(test
+        ? new H2AccountPatchReviewStore.InMemoryModule()
+        : new JdbcAccountPatchReviewStore.Module(config));
+>>>>>>> BRANCH (49799b Support Jdbc implementation of AccountPatchReviewStore)
     modules.add(new ReceiveCommitsExecutorModule());
     modules.add(new DiffExecutorModule());
     modules.add(new MimeUtil2Module());

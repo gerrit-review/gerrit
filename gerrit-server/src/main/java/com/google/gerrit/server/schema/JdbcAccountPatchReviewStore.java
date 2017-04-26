@@ -14,102 +14,112 @@
 
 package com.google.gerrit.server.schema;
 
-import com.google.common.annotations.VisibleForTesting;
-<<<<<<< HEAD   (02ca95 PolyGerrit: Fix documentation links)
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.primitives.Ints;
 import com.google.gerrit.extensions.events.LifecycleListener;
-=======
->>>>>>> BRANCH (49799b Support Jdbc implementation of AccountPatchReviewStore)
 import com.google.gerrit.extensions.registration.DynamicItem;
 import com.google.gerrit.lifecycle.LifecycleModule;
+import com.google.gerrit.reviewdb.client.Account;
+import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.server.change.AccountPatchReviewStore;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.config.SitePaths;
 import com.google.gwtorm.server.OrmDuplicateKeyException;
 import com.google.gwtorm.server.OrmException;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-<<<<<<< HEAD   (02ca95 PolyGerrit: Fix documentation links)
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-=======
 
-import org.eclipse.jgit.lib.Config;
-
->>>>>>> BRANCH (49799b Support Jdbc implementation of AccountPatchReviewStore)
-import java.sql.SQLException;
-<<<<<<< HEAD   (02ca95 PolyGerrit: Fix documentation links)
-import java.sql.Statement;
-import java.util.Collection;
-import java.util.Optional;
-import javax.sql.DataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.eclipse.jgit.lib.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-=======
->>>>>>> BRANCH (49799b Support Jdbc implementation of AccountPatchReviewStore)
 
-@Singleton
-<<<<<<< HEAD   (02ca95 PolyGerrit: Fix documentation links)
-public class H2AccountPatchReviewStore implements AccountPatchReviewStore, LifecycleListener {
-  private static final Logger log = LoggerFactory.getLogger(H2AccountPatchReviewStore.class);
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Collection;
+
+import javax.sql.DataSource;
+
+public abstract class JdbcAccountPatchReviewStore
+    implements AccountPatchReviewStore, LifecycleListener {
+  private static final Logger log =
+      LoggerFactory.getLogger(JdbcAccountPatchReviewStore.class);
 
   public static class Module extends LifecycleModule {
+    private final Config cfg;
+
+    public Module(Config cfg) {
+      this.cfg = cfg;
+    }
+
     @Override
     protected void configure() {
-      DynamicItem.bind(binder(), AccountPatchReviewStore.class).to(H2AccountPatchReviewStore.class);
-      listener().to(H2AccountPatchReviewStore.class);
+      String url = cfg.getString("accountPatchReviewDb", null, "url");
+      if (url == null || url.contains("h2")) {
+        DynamicItem.bind(binder(), AccountPatchReviewStore.class)
+            .to(H2AccountPatchReviewStore.class);
+        listener().to(H2AccountPatchReviewStore.class);
+      } else if (url.contains("postgresql")) {
+        DynamicItem.bind(binder(), AccountPatchReviewStore.class)
+            .to(PostgresqlAccountPatchReviewStore.class);
+        listener().to(PostgresqlAccountPatchReviewStore.class);
+      } else if (url.contains("mysql")) {
+        DynamicItem.bind(binder(), AccountPatchReviewStore.class)
+            .to(MysqlAccountPatchReviewStore.class);
+        listener().to(MysqlAccountPatchReviewStore.class);
+      } else {
+        throw new IllegalArgumentException(
+            "unsupported driver type for account patch reviews db: " + url);
+      }
     }
   }
-=======
-public class H2AccountPatchReviewStore extends JdbcAccountPatchReviewStore {
->>>>>>> BRANCH (49799b Support Jdbc implementation of AccountPatchReviewStore)
 
-  @VisibleForTesting
-  public static class InMemoryModule extends LifecycleModule {
-    @Override
-    protected void configure() {
-      H2AccountPatchReviewStore inMemoryStore = new H2AccountPatchReviewStore();
-      DynamicItem.bind(binder(), AccountPatchReviewStore.class).toInstance(inMemoryStore);
-      listener().toInstance(inMemoryStore);
+  private final DataSource ds;
+
+  public static JdbcAccountPatchReviewStore createAccountPatchReviewStore(
+      Config cfg, SitePaths sitePaths) {
+    String url = cfg.getString("accountPatchReviewDb", null, "url");
+    if (url == null || url.contains("h2")) {
+      return new H2AccountPatchReviewStore(cfg, sitePaths);
+    } else if (url.contains("postgresql")) {
+      return new PostgresqlAccountPatchReviewStore(cfg, sitePaths);
+    } else if (url.contains("mysql")) {
+      return new MysqlAccountPatchReviewStore(cfg, sitePaths);
+    } else {
+      throw new IllegalArgumentException(
+          "unsupported driver type for account patch reviews db: " + url);
     }
   }
 
-  @Inject
-<<<<<<< HEAD   (02ca95 PolyGerrit: Fix documentation links)
-  H2AccountPatchReviewStore(@GerritServerConfig Config cfg, SitePaths sitePaths) {
-    this.ds = createDataSource(H2.appendUrlOptions(cfg, getUrl(sitePaths)));
-  }
-
-  public static String getUrl(SitePaths sitePaths) {
-    return H2.createUrl(sitePaths.db_dir.resolve("account_patch_reviews"));
-=======
-  H2AccountPatchReviewStore(@GerritServerConfig Config cfg,
+  protected JdbcAccountPatchReviewStore(Config cfg,
       SitePaths sitePaths) {
-    super(cfg, sitePaths);
->>>>>>> BRANCH (49799b Support Jdbc implementation of AccountPatchReviewStore)
+    this.ds = createDataSource(getUrl(cfg, sitePaths));
   }
 
-  /**
-   * Creates an in-memory H2 database to store the reviewed flags. This should be used for tests
-   * only.
-   */
-  @VisibleForTesting
-  private H2AccountPatchReviewStore() {
-    // DB_CLOSE_DELAY=-1: By default the content of an in-memory H2 database is
-    // lost at the moment the last connection is closed. This option keeps the
-    // content as long as the vm lives.
-<<<<<<< HEAD   (02ca95 PolyGerrit: Fix documentation links)
-    this.ds = createDataSource("jdbc:h2:mem:account_patch_reviews;DB_CLOSE_DELAY=-1");
+  protected JdbcAccountPatchReviewStore(DataSource ds) {
+    this.ds = ds;
   }
 
-  private static DataSource createDataSource(String url) {
+  private static String getUrl(@GerritServerConfig Config cfg,
+      SitePaths sitePaths) {
+    String url = cfg.getString("accountPatchReviewDb", null, "url");
+    if (url == null) {
+      return H2.createUrl(sitePaths.db_dir.resolve("account_patch_reviews"));
+    }
+    return url;
+  }
+
+  protected static DataSource createDataSource(String url) {
     BasicDataSource datasource = new BasicDataSource();
-    datasource.setDriverClassName("org.h2.Driver");
+    if (url.contains("postgresql")) {
+      datasource.setDriverClassName("org.postgresql.Driver");
+    } else if (url.contains("h2")) {
+      datasource.setDriverClassName("org.h2.Driver");
+    } else if (url.contains("mysql")) {
+      datasource.setDriverClassName("com.mysql.jdbc.Driver");
+    }
     datasource.setUrl(url);
     datasource.setMaxActive(50);
     datasource.setMinIdle(4);
@@ -118,13 +128,9 @@ public class H2AccountPatchReviewStore extends JdbcAccountPatchReviewStore {
     datasource.setMinEvictableIdleTimeMillis(evictIdleTimeMs);
     datasource.setTimeBetweenEvictionRunsMillis(evictIdleTimeMs / 2);
     return datasource;
-=======
-    super(createDataSource("jdbc:h2:mem:account_patch_reviews;DB_CLOSE_DELAY=-1"));
->>>>>>> BRANCH (49799b Support Jdbc implementation of AccountPatchReviewStore)
   }
 
   @Override
-<<<<<<< HEAD   (02ca95 PolyGerrit: Fix documentation links)
   public void start() {
     try {
       createTableIfNotExists();
@@ -133,16 +139,11 @@ public class H2AccountPatchReviewStore extends JdbcAccountPatchReviewStore {
     }
   }
 
-  public static void createTableIfNotExists(String url) throws OrmException {
-    try (Connection con = DriverManager.getConnection(url);
-        Statement stmt = con.createStatement()) {
-      doCreateTable(stmt);
-    } catch (SQLException e) {
-      throw convertError("create", e);
-    }
+  public Connection getConnection() throws SQLException {
+    return ds.getConnection();
   }
 
-  private void createTableIfNotExists() throws OrmException {
+  public void createTableIfNotExists() throws OrmException {
     try (Connection con = ds.getConnection();
         Statement stmt = con.createStatement()) {
       doCreateTable(stmt);
@@ -163,8 +164,8 @@ public class H2AccountPatchReviewStore extends JdbcAccountPatchReviewStore {
             + ")");
   }
 
-  public static void dropTableIfExists(String url) throws OrmException {
-    try (Connection con = DriverManager.getConnection(url);
+  public void dropTableIfExists() throws OrmException {
+    try (Connection con = ds.getConnection();
         Statement stmt = con.createStatement()) {
       stmt.executeUpdate("DROP TABLE IF EXISTS account_patch_reviews");
     } catch (SQLException e) {
@@ -173,17 +174,17 @@ public class H2AccountPatchReviewStore extends JdbcAccountPatchReviewStore {
   }
 
   @Override
-  public void stop() {}
+  public void stop() {
+  }
 
   @Override
-  public boolean markReviewed(PatchSet.Id psId, Account.Id accountId, String path)
-      throws OrmException {
+  public boolean markReviewed(PatchSet.Id psId, Account.Id accountId,
+      String path) throws OrmException {
     try (Connection con = ds.getConnection();
         PreparedStatement stmt =
-            con.prepareStatement(
-                "INSERT INTO account_patch_reviews "
-                    + "(account_id, change_id, patch_set_id, file_name) VALUES "
-                    + "(?, ?, ?, ?)")) {
+            con.prepareStatement("INSERT INTO account_patch_reviews "
+                + "(account_id, change_id, patch_set_id, file_name) VALUES "
+                + "(?, ?, ?, ?)")) {
       stmt.setInt(1, accountId.get());
       stmt.setInt(2, psId.getParentKey().get());
       stmt.setInt(3, psId.get());
@@ -200,18 +201,17 @@ public class H2AccountPatchReviewStore extends JdbcAccountPatchReviewStore {
   }
 
   @Override
-  public void markReviewed(PatchSet.Id psId, Account.Id accountId, Collection<String> paths)
-      throws OrmException {
+  public void markReviewed(PatchSet.Id psId, Account.Id accountId,
+      Collection<String> paths) throws OrmException {
     if (paths == null || paths.isEmpty()) {
       return;
     }
 
     try (Connection con = ds.getConnection();
         PreparedStatement stmt =
-            con.prepareStatement(
-                "INSERT INTO account_patch_reviews "
-                    + "(account_id, change_id, patch_set_id, file_name) VALUES "
-                    + "(?, ?, ?, ?)")) {
+            con.prepareStatement("INSERT INTO account_patch_reviews "
+                + "(account_id, change_id, patch_set_id, file_name) VALUES "
+                + "(?, ?, ?, ?)")) {
       for (String path : paths) {
         stmt.setInt(1, accountId.get());
         stmt.setInt(2, psId.getParentKey().get());
@@ -234,10 +234,9 @@ public class H2AccountPatchReviewStore extends JdbcAccountPatchReviewStore {
       throws OrmException {
     try (Connection con = ds.getConnection();
         PreparedStatement stmt =
-            con.prepareStatement(
-                "DELETE FROM account_patch_reviews "
-                    + "WHERE account_id = ? AND change_id = ? AND "
-                    + "patch_set_id = ? AND file_name = ?")) {
+            con.prepareStatement("DELETE FROM account_patch_reviews "
+                + "WHERE account_id = ? AND change_id = ? AND "
+                + "patch_set_id = ? AND file_name = ?")) {
       stmt.setInt(1, accountId.get());
       stmt.setInt(2, psId.getParentKey().get());
       stmt.setInt(3, psId.get());
@@ -252,9 +251,8 @@ public class H2AccountPatchReviewStore extends JdbcAccountPatchReviewStore {
   public void clearReviewed(PatchSet.Id psId) throws OrmException {
     try (Connection con = ds.getConnection();
         PreparedStatement stmt =
-            con.prepareStatement(
-                "DELETE FROM account_patch_reviews "
-                    + "WHERE change_id = ? AND patch_set_id = ?")) {
+            con.prepareStatement("DELETE FROM account_patch_reviews "
+                + "WHERE change_id = ? AND patch_set_id = ?")) {
       stmt.setInt(1, psId.getParentKey().get());
       stmt.setInt(2, psId.get());
       stmt.executeUpdate();
@@ -264,8 +262,8 @@ public class H2AccountPatchReviewStore extends JdbcAccountPatchReviewStore {
   }
 
   @Override
-  public Optional<PatchSetWithReviewedFiles> findReviewed(PatchSet.Id psId, Account.Id accountId)
-      throws OrmException {
+  public Optional<PatchSetWithReviewedFiles> findReviewed(PatchSet.Id psId,
+      Account.Id accountId) throws OrmException {
     try (Connection con = ds.getConnection();
         PreparedStatement stmt =
             con.prepareStatement(
@@ -280,37 +278,48 @@ public class H2AccountPatchReviewStore extends JdbcAccountPatchReviewStore {
       stmt.setInt(3, psId.get());
       try (ResultSet rs = stmt.executeQuery()) {
         if (rs.next()) {
-          PatchSet.Id id = new PatchSet.Id(psId.getParentKey(), rs.getInt("PATCH_SET_ID"));
+          PatchSet.Id id = new PatchSet.Id(psId.getParentKey(),
+              rs.getInt("patch_set_id"));
           ImmutableSet.Builder<String> builder = ImmutableSet.builder();
           do {
-            builder.add(rs.getString("FILE_NAME"));
+            builder.add(rs.getString("file_name"));
           } while (rs.next());
 
           return Optional.of(
-              AccountPatchReviewStore.PatchSetWithReviewedFiles.create(id, builder.build()));
+              AccountPatchReviewStore.PatchSetWithReviewedFiles.create(
+                  id, builder.build()));
         }
 
-        return Optional.empty();
+        return Optional.absent();
       }
     } catch (SQLException e) {
       throw convertError("select", e);
     }
   }
 
-  public static OrmException convertError(String op, SQLException err) {
-=======
   public OrmException convertError(String op, SQLException err) {
->>>>>>> BRANCH (49799b Support Jdbc implementation of AccountPatchReviewStore)
-    switch (getSQLStateInt(err)) {
-      case 23001: // UNIQUE CONSTRAINT VIOLATION
-      case 23505: // DUPLICATE_KEY_1
-        return new OrmDuplicateKeyException("account_patch_reviews", err);
-
-      default:
-        if (err.getCause() == null && err.getNextException() != null) {
-          err.initCause(err.getNextException());
-        }
-        return new OrmException(op + " failure on account_patch_reviews", err);
+    if (err.getCause() == null && err.getNextException() != null) {
+      err.initCause(err.getNextException());
     }
+    return new OrmException(op + " failure on account_patch_reviews", err);
+  }
+
+  private static String getSQLState(SQLException err) {
+    String ec;
+    SQLException next = err;
+    do {
+      ec = next.getSQLState();
+      next = next.getNextException();
+    } while (ec == null && next != null);
+    return ec;
+  }
+
+  protected static int getSQLStateInt(SQLException err) {
+    String s = getSQLState(err);
+    if (s != null) {
+      Integer i = Ints.tryParse(s);
+      return i != null ? i : -1;
+    }
+    return 0;
   }
 }

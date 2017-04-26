@@ -23,6 +23,7 @@ import com.google.gerrit.server.GerritPersonIdent;
 import com.google.gerrit.server.config.AllProjectsName;
 import com.google.gerrit.server.config.AllUsersName;
 import com.google.gerrit.server.config.AnonymousCowardName;
+import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.config.SitePaths;
 import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.gerrit.server.group.SystemGroupBackend;
@@ -35,6 +36,14 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Stage;
+<<<<<<< HEAD   (02ca95 PolyGerrit: Fix documentation links)
+=======
+
+import org.eclipse.jgit.errors.ConfigInvalidException;
+import org.eclipse.jgit.lib.Config;
+import org.eclipse.jgit.lib.PersonIdent;
+
+>>>>>>> BRANCH (49799b Support Jdbc implementation of AccountPatchReviewStore)
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collections;
@@ -68,6 +77,7 @@ public class SchemaUpdater {
           protected void configure() {
             bind(SchemaVersion.class).to(SchemaVersion.C);
 
+<<<<<<< HEAD   (02ca95 PolyGerrit: Fix documentation links)
             for (Key<?> k :
                 new Key<?>[] {
                   Key.get(PersonIdent.class, GerritPersonIdent.class),
@@ -75,6 +85,15 @@ public class SchemaUpdater {
                 }) {
               rebind(parent, k);
             }
+=======
+        for (Key<?> k : new Key<?>[]{
+            Key.get(PersonIdent.class, GerritPersonIdent.class),
+            Key.get(String.class, AnonymousCowardName.class),
+            Key.get(Config.class, GerritServerConfig.class),
+            }) {
+          rebind(parent, k);
+        }
+>>>>>>> BRANCH (49799b Support Jdbc implementation of AccountPatchReviewStore)
 
             for (Class<?> c :
                 new Class<?>[] {
