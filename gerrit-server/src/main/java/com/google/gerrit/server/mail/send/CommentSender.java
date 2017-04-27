@@ -155,7 +155,11 @@ public class CommentSender extends ReplyToChangeSender {
     }
     if (notify.compareTo(NotifyHandling.ALL) >= 0) {
       bccStarredBy();
+<<<<<<< HEAD   (297c74 Merge "ChangeIT: Add asserts for ref-updated events on chang)
       includeWatchers(NotifyType.ALL_COMMENTS, !patchSet.isDraft() && !change.isPrivate());
+=======
+      includeWatchers(NotifyType.ALL_COMMENTS, !patchSet.isDraft());
+>>>>>>> BRANCH (efc835 Fix notifications for comments on draft patch sets)
     }
     removeUsersThatIgnoredTheChange();
 

@@ -130,6 +130,7 @@ public class ProjectWatchIT extends AbstractDaemonTest {
     nc.setName("team");
     nc.setHeader(NotifyConfig.Header.TO);
     nc.setTypes(EnumSet.of(NotifyType.NEW_PATCHSETS, NotifyType.ALL_COMMENTS));
+<<<<<<< HEAD   (297c74 Merge "ChangeIT: Add asserts for ref-updated events on chang)
 
     ProjectConfig cfg = projectCache.checkedGet(project).getConfig();
     cfg.putNotifyConfig("team", nc);
@@ -198,6 +199,8 @@ public class ProjectWatchIT extends AbstractDaemonTest {
     nc.setName("team");
     nc.setHeader(NotifyConfig.Header.TO);
     nc.setTypes(EnumSet.of(NotifyType.NEW_PATCHSETS));
+=======
+>>>>>>> BRANCH (efc835 Fix notifications for comments on draft patch sets)
 
     ProjectConfig cfg = projectCache.checkedGet(project).getConfig();
     cfg.putNotifyConfig("team", nc);
@@ -216,6 +219,13 @@ public class ProjectWatchIT extends AbstractDaemonTest {
             .create(db, admin.getIdent(), testRepo, "subject", "a", "a2", r.getChangeId())
             .to("refs/for/master%private");
     r.assertOkStatus();
+
+    assertThat(sender.getMessages()).isEmpty();
+
+    setApiUser(admin);
+    ReviewInput in = new ReviewInput();
+    in.message = "comment";
+    gApi.changes().id(r.getChangeId()).current().review(in);
 
     assertThat(sender.getMessages()).isEmpty();
   }
