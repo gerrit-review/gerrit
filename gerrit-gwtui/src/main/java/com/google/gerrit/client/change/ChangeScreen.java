@@ -485,8 +485,12 @@ public class ChangeScreen extends Screen {
   }
 
   private void gotoSibling(int offset) {
+<<<<<<< HEAD   (de4d6b Fix dashboards to use isVisible)
     if (offset > 0
         && changeInfo.currentRevision() != null
+=======
+    if (offset > 0 && changeInfo.currentRevision() != null
+>>>>>>> BRANCH (5989b5 Merge "Update docs for accountPatchReviewDb" into stable-2.1)
         && changeInfo.currentRevision().equals(revision)) {
       return;
     }

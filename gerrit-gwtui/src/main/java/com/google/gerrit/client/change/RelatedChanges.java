@@ -223,10 +223,18 @@ public class RelatedChanges extends TabPanel {
         EnumSet.of(ListChangesOption.CURRENT_REVISION, ListChangesOption.CURRENT_COMMIT),
         new TabChangeListCallback(Tab.CHERRY_PICKS, info.project(), revision));
 
+<<<<<<< HEAD   (de4d6b Fix dashboards to use isVisible)
     if (info.currentRevision() != null && info.currentRevision().equals(revision)) {
       ChangeApi.change(info.legacyId().get())
           .view("submitted_together")
           .get(new TabChangeListCallback(Tab.SUBMITTED_TOGETHER, info.project(), revision));
+=======
+    if (info.currentRevision() != null
+        && info.currentRevision().equals(revision)) {
+      ChangeApi.change(info.legacyId().get()).view("submitted_together")
+          .get(new TabChangeListCallback(Tab.SUBMITTED_TOGETHER,
+              info.project(), revision));
+>>>>>>> BRANCH (5989b5 Merge "Update docs for accountPatchReviewDb" into stable-2.1)
     }
 
     if (!Gerrit.info().change().isSubmitWholeTopicEnabled()
