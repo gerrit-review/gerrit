@@ -196,12 +196,19 @@ public class Revert
 
       Change.Id changeId = new Change.Id(seq.nextChangeId());
       ObjectId id = oi.insert(revertCommitBuilder);
+<<<<<<< HEAD   (26bdf6 Disable target="_blank" on MyMenu items)
       oi.flush();
+=======
+>>>>>>> BRANCH (cbd333 Merge "GET edit info: Expose base patch set number" into sta)
       RevCommit revertCommit = revWalk.parseCommit(id);
 
       ChangeInserter ins =
           changeInserterFactory
               .create(changeId, revertCommit, ctl.getChange().getDest().get())
+<<<<<<< HEAD   (26bdf6 Disable target="_blank" on MyMenu items)
+=======
+              .setValidatePolicy(CommitValidators.Policy.GERRIT)
+>>>>>>> BRANCH (cbd333 Merge "GET edit info: Expose base patch set number" into sta)
               .setTopic(changeToRevert.getTopic());
       ins.setMessage("Uploaded patch set 1.");
 
