@@ -64,6 +64,7 @@ public class AccountManager {
   private final Provider<InternalAccountQuery> accountQueryProvider;
   private final ExternalIds externalIds;
   private final ExternalIdsUpdate.Server externalIdsUpdateFactory;
+  private final AccountCache accountCache;
 
   @Inject
   AccountManager(
@@ -78,7 +79,8 @@ public class AccountManager {
       AuditService auditService,
       Provider<InternalAccountQuery> accountQueryProvider,
       ExternalIds externalIds,
-      ExternalIdsUpdate.Server externalIdsUpdateFactory) {
+      ExternalIdsUpdate.Server externalIdsUpdateFactory,
+      AccountCache accountCache) {
     this.schema = schema;
     this.accountsUpdateFactory = accountsUpdateFactory;
     this.byIdCache = byIdCache;
@@ -92,6 +94,7 @@ public class AccountManager {
     this.accountQueryProvider = accountQueryProvider;
     this.externalIds = externalIds;
     this.externalIdsUpdateFactory = externalIdsUpdateFactory;
+    this.accountCache = accountCache;
   }
 
   /** @return user identified by this external identity string */
@@ -366,10 +369,26 @@ public class AccountManager {
     try (ReviewDb db = schema.open()) {
       ExternalId extId = findExternalId(who.getExternalIdKey());
       if (extId != null) {
-        if (!extId.accountId().equals(to)) {
-          throw new AccountException("Identity in use by another account");
-        }
-        update(db, who, extId);
+        //if (!extId.accountId().equals(to)) {
+        //  throw new AccountException("Identity in use by another account");
+        //}
+
+        //externalIdsUpdateFactory.create().delete(db, extId);
+        //byEmailCache.evict(extId.email());
+        //byIdCache.evict(extId.accountId());
+        //update(db, who, extId);
+
+        Account a = db.accounts().get(extId.accountId());
+        a.setActive(false);
+        db.accounts().update(Collections.singleton(a));
+
+        externalIdsUpdateFactory.create().delete(db, extId);
+        accountCache.evict(extId.accountId());
+        externalIdsUpdateFactory
+            .create()
+            .insert(db, ExternalId.create(extId.key(), to, extId.email(), extId.password()));
+        accountCache.evict(to);
+
       } else {
         externalIdsUpdateFactory
             .create()
