@@ -49,6 +49,13 @@ import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
+<<<<<<< HEAD   (471fe9 SshDaemon: Set NIO2_READ_TIMEOUT to sshd.idleTimeout)
+=======
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+>>>>>>> BRANCH (b38e18 ReviewersUtil: Add logging and metrics for reviewer suggesti)
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,6 +65,7 @@ import java.util.Objects;
 import java.util.Set;
 
 public class ReviewersUtil {
+<<<<<<< HEAD   (471fe9 SshDaemon: Set NIO2_READ_TIMEOUT to sshd.idleTimeout)
   @Singleton
   private static class Metrics {
     final Timer0 queryAccountsLatency;
@@ -105,13 +113,57 @@ public class ReviewersUtil {
   // give the ranking algorithm a good set of candidates it can work with
   private static final int CANDIDATE_LIST_MULTIPLIER = 2;
 
+=======
+  private static final Logger log = LoggerFactory.getLogger(ReviewersUtil.class);
+
+  @Singleton
+  private static class Metrics {
+    final Timer0 queryAccountsLatency;
+    final Timer0 queryGroupsLatency;
+
+    @Inject
+    Metrics(MetricMaker metricMaker) {
+      queryAccountsLatency =
+          metricMaker.newTimer(
+              "reviewer_suggestion/query_accounts",
+              new Description("Latency for querying accounts for reviewer suggestion")
+                  .setCumulative()
+                  .setUnit(Units.MILLISECONDS));
+      queryGroupsLatency =
+          metricMaker.newTimer(
+              "reviewer_suggestion/query_groups",
+              new Description("Latency for querying groups for reviewer suggestion")
+                  .setCumulative()
+                  .setUnit(Units.MILLISECONDS));
+    }
+  }
+
+  private static final String MAX_SUFFIX = "\u9fa5";
+  private static final Ordering<SuggestedReviewerInfo> ORDERING =
+      Ordering.natural().onResultOf(new Function<SuggestedReviewerInfo, String>() {
+        @Nullable
+        @Override
+        public String apply(@Nullable SuggestedReviewerInfo suggestedReviewerInfo) {
+          if (suggestedReviewerInfo == null) {
+            return null;
+          }
+          return suggestedReviewerInfo.account != null
+              ? MoreObjects.firstNonNull(suggestedReviewerInfo.account.email,
+              Strings.nullToEmpty(suggestedReviewerInfo.account.name))
+              : Strings.nullToEmpty(suggestedReviewerInfo.group.name);
+        }
+      });
+>>>>>>> BRANCH (b38e18 ReviewersUtil: Add logging and metrics for reviewer suggesti)
   private final AccountLoader accountLoader;
   private final AccountQueryBuilder accountQueryBuilder;
   private final AccountQueryProcessor accountQueryProcessor;
   private final GroupBackend groupBackend;
   private final GroupMembers.Factory groupMembersFactory;
   private final Provider<CurrentUser> currentUser;
+<<<<<<< HEAD   (471fe9 SshDaemon: Set NIO2_READ_TIMEOUT to sshd.idleTimeout)
   private final ReviewerRecommender reviewerRecommender;
+=======
+>>>>>>> BRANCH (b38e18 ReviewersUtil: Add logging and metrics for reviewer suggesti)
   private final Metrics metrics;
 
   @Inject
@@ -122,7 +174,10 @@ public class ReviewersUtil {
       GroupBackend groupBackend,
       GroupMembers.Factory groupMembersFactory,
       Provider<CurrentUser> currentUser,
+<<<<<<< HEAD   (471fe9 SshDaemon: Set NIO2_READ_TIMEOUT to sshd.idleTimeout)
       ReviewerRecommender reviewerRecommender,
+=======
+>>>>>>> BRANCH (b38e18 ReviewersUtil: Add logging and metrics for reviewer suggesti)
       Metrics metrics) {
     Set<FillOptions> fillOptions = EnumSet.of(FillOptions.SECONDARY_EMAILS);
     fillOptions.addAll(AccountLoader.DETAILED_OPTIONS);
@@ -132,7 +187,11 @@ public class ReviewersUtil {
     this.currentUser = currentUser;
     this.groupBackend = groupBackend;
     this.groupMembersFactory = groupMembersFactory;
+<<<<<<< HEAD   (471fe9 SshDaemon: Set NIO2_READ_TIMEOUT to sshd.idleTimeout)
     this.reviewerRecommender = reviewerRecommender;
+=======
+    this.currentUser = currentUser;
+>>>>>>> BRANCH (b38e18 ReviewersUtil: Add logging and metrics for reviewer suggesti)
     this.metrics = metrics;
   }
 
@@ -159,6 +218,7 @@ public class ReviewersUtil {
       candidateList = suggestAccounts(suggestReviewers);
     }
 
+<<<<<<< HEAD   (471fe9 SshDaemon: Set NIO2_READ_TIMEOUT to sshd.idleTimeout)
     List<Account.Id> sortedRecommendations =
         recommendAccounts(changeNotes, suggestReviewers, projectControl, candidateList);
 
@@ -168,10 +228,30 @@ public class ReviewersUtil {
       for (Account.Id reviewer : sortedRecommendations) {
         if (filteredRecommendations.size() >= limit) {
           break;
+=======
+    try (Timer0.Context ctx = metrics.queryGroupsLatency.start()) {
+      for (GroupReference g : suggestAccountGroup(suggestReviewers, projectControl)) {
+        GroupAsReviewer result = suggestGroupAsReviewer(
+            suggestReviewers, projectControl.getProject(), g, visibilityControl);
+        if (result.allowed || result.allowedWithConfirmation) {
+          GroupBaseInfo info = new GroupBaseInfo();
+          info.id = Url.encode(g.getUUID().get());
+          info.name = g.getName();
+          SuggestedReviewerInfo suggestedReviewerInfo = new SuggestedReviewerInfo();
+          suggestedReviewerInfo.group = info;
+          suggestedReviewerInfo.count = result.size;
+          if (result.allowedWithConfirmation) {
+            suggestedReviewerInfo.confirm = true;
+          }
+          reviewer.add(suggestedReviewerInfo);
+>>>>>>> BRANCH (b38e18 ReviewersUtil: Add logging and metrics for reviewer suggesti)
         }
+<<<<<<< HEAD   (471fe9 SshDaemon: Set NIO2_READ_TIMEOUT to sshd.idleTimeout)
         if (visibilityControl.isVisibleTo(reviewer)) {
           filteredRecommendations.add(reviewer);
         }
+=======
+>>>>>>> BRANCH (b38e18 ReviewersUtil: Add logging and metrics for reviewer suggesti)
       }
     }
 
@@ -240,6 +320,7 @@ public class ReviewersUtil {
     }
   }
 
+<<<<<<< HEAD   (471fe9 SshDaemon: Set NIO2_READ_TIMEOUT to sshd.idleTimeout)
   private List<SuggestedReviewerInfo> suggestAccountGroups(
       SuggestReviewers suggestReviewers,
       ProjectControl projectControl,
@@ -265,6 +346,80 @@ public class ReviewersUtil {
           groups.add(suggestedReviewerInfo);
           if (groups.size() >= limit) {
             break;
+=======
+  private Collection<AccountInfo> suggestAccounts(SuggestReviewers suggestReviewers,
+      VisibilityControl visibilityControl) throws OrmException {
+    try (Timer0.Context ctx = metrics.queryAccountsLatency.start()) {
+      AccountIndex searchIndex = indexes.getSearchIndex();
+      if (searchIndex != null) {
+        return suggestAccountsFromIndex(suggestReviewers, visibilityControl);
+      }
+      log.warn("Account index not available; suggesting reviewers from DB");
+      return suggestAccountsFromDb(suggestReviewers, visibilityControl);
+    }
+  }
+
+  private Collection<AccountInfo> suggestAccountsFromIndex(
+      SuggestReviewers suggestReviewers, VisibilityControl visibilityControl)
+      throws OrmException {
+    try {
+      Map<Account.Id, AccountInfo> matches = new LinkedHashMap<>();
+      QueryResult<AccountState> result = queryProcessor
+          .setLimit(suggestReviewers.getLimit())
+          .query(queryBuilder.defaultQuery(suggestReviewers.getQuery()));
+      for (AccountState accountState : result.entities()) {
+        Account.Id id = accountState.getAccount().getId();
+        if (visibilityControl.isVisibleTo(id)) {
+          matches.put(id, accountLoader.get(id));
+        }
+      }
+
+      accountLoader.fill();
+
+      return matches.values();
+    } catch (QueryParseException e) {
+      return ImmutableList.of();
+    }
+  }
+
+  private Collection<AccountInfo> suggestAccountsFromDb(
+      SuggestReviewers suggestReviewers, VisibilityControl visibilityControl)
+          throws OrmException {
+    String query = suggestReviewers.getQuery();
+    int limit = suggestReviewers.getLimit();
+
+    String a = query;
+    String b = a + MAX_SUFFIX;
+
+    Map<Account.Id, AccountInfo> r = new LinkedHashMap<>();
+    Map<Account.Id, String> queryEmail = new HashMap<>();
+
+    for (Account p : dbProvider.get().accounts()
+        .suggestByFullName(a, b, limit)) {
+      if (p.isActive()) {
+        addSuggestion(r, p.getId(), visibilityControl);
+      }
+    }
+
+    if (r.size() < limit) {
+      for (Account p : dbProvider.get().accounts()
+          .suggestByPreferredEmail(a, b, limit - r.size())) {
+        if (p.isActive()) {
+          addSuggestion(r, p.getId(), visibilityControl);
+        }
+      }
+    }
+
+    if (r.size() < limit) {
+      for (AccountExternalId e : dbProvider.get().accountExternalIds()
+          .suggestByEmailAddress(a, b, limit - r.size())) {
+        if (!r.containsKey(e.getAccountId())) {
+          Account p = accountCache.get(e.getAccountId()).getAccount();
+          if (p.isActive()) {
+            if (addSuggestion(r, p.getId(), visibilityControl)) {
+              queryEmail.put(e.getAccountId(), e.getEmailAddress());
+            }
+>>>>>>> BRANCH (b38e18 ReviewersUtil: Add logging and metrics for reviewer suggesti)
           }
         }
       }
