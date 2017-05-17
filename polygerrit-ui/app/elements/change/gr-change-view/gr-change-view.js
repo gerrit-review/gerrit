@@ -630,8 +630,13 @@
       return this.getBaseUrl() + '/' + changeNum;
     },
 
+<<<<<<< HEAD   (7cdfde Merge "Make sure 'Merge Conflict' displays on change view")
     _computeChangeStatus(change, patchNum) {
       let statusString = this.changeStatusString(change);
+=======
+    _computeChangeStatus: function(change, patchNum) {
+      var statusString = this.changeStatusString(change);
+>>>>>>> BRANCH (94db86 Make sure 'Merge Conflict' displays on change view)
       if (change.status === this.ChangeStatus.NEW) {
         const rev = this.getRevisionByPatchNum(change.revisions, patchNum);
         if (rev && rev.draft === true) {
