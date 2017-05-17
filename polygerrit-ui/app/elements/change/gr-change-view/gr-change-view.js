@@ -630,8 +630,13 @@
       return this.getBaseUrl() + '/' + changeNum;
     },
 
+<<<<<<< HEAD   (75f561 Merge "ES6ify /gr-diff-processor/*")
     _computeChangeStatus(change, patchNum) {
       let statusString = this.changeStatusString(change);
+=======
+    _computeChangeStatus: function(change, patchNum) {
+      var statusString = this.changeStatusString(change);
+>>>>>>> BRANCH (5a1194 ConfigSuite: Fix error message)
       if (change.status === this.ChangeStatus.NEW) {
         const rev = this.getRevisionByPatchNum(change.revisions, patchNum);
         if (rev && rev.draft === true) {
