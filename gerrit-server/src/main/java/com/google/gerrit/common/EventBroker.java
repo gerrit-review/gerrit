@@ -29,9 +29,13 @@ import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.ProjectEvent;
 import com.google.gerrit.server.events.RefEvent;
 import com.google.gerrit.server.notedb.ChangeNotes;
+<<<<<<< HEAD   (837ed1 Merge "PolyGerrit: Add support for muting and unmuting chang)
 import com.google.gerrit.server.permissions.PermissionBackend;
 import com.google.gerrit.server.permissions.PermissionBackendException;
 import com.google.gerrit.server.permissions.ProjectPermission;
+=======
+import com.google.gerrit.server.project.NoSuchChangeException;
+>>>>>>> BRANCH (9169fc Fix firing change related event for deleted change)
 import com.google.gerrit.server.project.ProjectCache;
 import com.google.gerrit.server.project.ProjectControl;
 import com.google.gerrit.server.project.ProjectState;
@@ -39,10 +43,13 @@ import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** Distributes Events to listeners if they are allowed to see them */
 @Singleton
 public class EventBroker implements EventDispatcher {
+  private static final Logger log = LoggerFactory.getLogger(EventBroker.class);
 
   public static class Module extends LifecycleModule {
     @Override
@@ -180,9 +187,15 @@ public class EventBroker implements EventDispatcher {
       String ref = refEvent.getRefName();
       if (PatchSet.isChangeRef(ref)) {
         Change.Id cid = PatchSet.Id.fromRef(ref).getParentKey();
-        Change change =
-            notesFactory.create(dbProvider.get(), refEvent.getProjectNameKey(), cid).getChange();
-        return isVisibleTo(change, user);
+        try {
+          Change change =
+              notesFactory
+                  .createChecked(dbProvider.get(), refEvent.getProjectNameKey(), cid)
+                  .getChange();
+          return isVisibleTo(change, user);
+        } catch (NoSuchChangeException e) {
+          log.debug("Change {} cannot be found, falling back on ref visibility check", cid.id);
+        }
       }
       return isVisibleTo(refEvent.getBranchNameKey(), user);
     } else if (event instanceof ProjectEvent) {
