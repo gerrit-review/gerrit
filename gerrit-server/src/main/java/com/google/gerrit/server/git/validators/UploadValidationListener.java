@@ -39,7 +39,11 @@ public interface UploadValidationListener {
    * @param repository The repository
    * @param project The project
    * @param remoteHost Remote address/hostname of the user
+<<<<<<< HEAD   (946d6c Move prolog:common rule to gerrit-server root build file)
    * @param up the UploadPack instance being processed
+=======
+   * @param up the UploadPack instance being processed.
+>>>>>>> BRANCH (d4019b UploadValidationListener: Use Java 8 default on interface me)
    * @param wants The list of wanted objects. These may be RevObject or RevCommit if the processor
    *     parsed them. Implementors should not rely on the values being parsed.
    * @param haves The list of common objects. Empty on an initial clone request. These may be
