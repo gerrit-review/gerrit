@@ -225,6 +225,20 @@ public class ChangeEditUtil {
               }
             });
         bu.execute();
+<<<<<<< HEAD   (d20c75 Merge branch 'stable-2.14')
+=======
+      } catch (UpdateException e) {
+        if (e.getCause() instanceof IOException
+            && e.getMessage()
+                .equals(
+                    String.format(
+                        "%s: Failed to delete ref %s: %s",
+                        IOException.class.getName(),
+                        edit.getRefName(),
+                        RefUpdate.Result.LOCK_FAILURE.name()))) {
+          throw new ResourceConflictException("edit is already published");
+        }
+>>>>>>> BRANCH (d0211d Improve error message when publishing an already published c)
       }
 
       indexer.index(db.get(), inserter.getChange());
