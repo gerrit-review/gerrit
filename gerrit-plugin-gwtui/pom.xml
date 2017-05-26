@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-plugin-gwtui</artifactId>
+<<<<<<< HEAD   (e79169 Merge "Implement self.get and self.post from Gerrit JS API")
   <version>2.15-SNAPSHOT</version>
+=======
+  <version>2.14.1-SNAPSHOT</version>
+>>>>>>> BRANCH (2c7ffa Merge "Add missing "_" to a caller of LuceneVersionManager.g)
   <packaging>jar</packaging>
   <name>Gerrit Code Review - Plugin GWT UI</name>
   <description>Common Classes for Gerrit GWT UI Plugins</description>
