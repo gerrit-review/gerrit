@@ -49,6 +49,7 @@ limitations under the License.
           [{text: 'John Doe', bold: true}, {text: 'john@doe.com'}]);
     });
 
+<<<<<<< HEAD   (87d50f Make app footer stay in place on horizontal scroll)
     test('test for account without a name', () => {
       element.account = {id: '0001'};
       assert.deepEqual(element.topContent,
@@ -100,6 +101,26 @@ limitations under the License.
       assert.equal(
           interpolate('${}, ${test}, ${TEST}, ${foo}'),
           '${}, TEST, , bar');
+=======
+    test('test for account without a name', function() {
+      element.account = {id: '0001'};
+      assert.deepEqual(element.topContent,
+          [{text: 'Anonymous', bold: true}, {text: ''}]);
+    });
+
+   test('test for account without a name but using config', function() {
+      element._anonymousName = 'WikiGerrit';
+      element.account = {id: '0001'};
+      assert.deepEqual(element.topContent,
+          [{text: 'WikiGerrit', bold: true}, {text: ''}]);
+    });
+
+   test('test for account name as an email', function() {
+      element._anonymousName = 'WikiGerrit';
+      element.account = {email: 'john@doe.com'};
+      assert.deepEqual(element.topContent,
+          [{text: 'john@doe.com', bold: true}, {text: 'john@doe.com'}]);
+>>>>>>> BRANCH (797d4c PolyGerrit: If your account does not have a name use a defau)
     });
   });
 </script>

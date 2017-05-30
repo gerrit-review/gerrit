@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 (function() {
-  'use strict';
+  'use strict'
+
+   var ANONYMOUS_NAME = 'Anonymous';
 
   const INTERPOLATE_URL_PATTERN = /\$\{([\w]+)\}/g;
 
@@ -23,6 +25,10 @@
 
     properties: {
       account: Object,
+<<<<<<< HEAD   (87d50f Make app footer stay in place on horizontal scroll)
+=======
+      _hasAvatars: Boolean,
+>>>>>>> BRANCH (797d4c PolyGerrit: If your account does not have a name use a defau)
       _anonymousName: {
         type: String,
         value: ANONYMOUS_NAME,
@@ -53,6 +59,7 @@
           this._switchAccountUrl = null;
         }
         this._hasAvatars = !!(cfg && cfg.plugin && cfg.plugin.has_avatars);
+<<<<<<< HEAD   (87d50f Make app footer stay in place on horizontal scroll)
 
         if (cfg && cfg.user &&
             cfg.user.anonymous_coward_name &&
@@ -60,8 +67,17 @@
           this._anonymousName = cfg.user.anonymous_coward_name;
         }
       });
+=======
+        if (cfg && cfg.user &&
+            cfg.user.anonymous_coward_name &&
+            cfg.user.anonymous_coward_name !== 'Anonymous Coward') {
+          this._anonymousName = cfg.user.anonymous_coward_name;
+        }
+      }.bind(this));
+>>>>>>> BRANCH (797d4c PolyGerrit: If your account does not have a name use a defau)
     },
 
+<<<<<<< HEAD   (87d50f Make app footer stay in place on horizontal scroll)
     detached() {
       this.unlisten(window, 'location-change', '_handleLocationChange');
     },
@@ -78,12 +94,16 @@
     },
 
     _getTopContent(account, _anonymousName) {
+=======
+    _getTopContent: function(account, _anonymousName) {
+>>>>>>> BRANCH (797d4c PolyGerrit: If your account does not have a name use a defau)
       return [
         {text: this._accountName(account, _anonymousName), bold: true},
         {text: account.email ? account.email : ''},
       ];
     },
 
+<<<<<<< HEAD   (87d50f Make app footer stay in place on horizontal scroll)
     _handleLocationChange() {
       this._path =
           window.location.pathname +
@@ -98,6 +118,9 @@
     },
 
     _accountName(account, _anonymousName) {
+=======
+    _accountName: function(account, _anonymousName) {
+>>>>>>> BRANCH (797d4c PolyGerrit: If your account does not have a name use a defau)
       if (account && account.name) {
         return account.name;
       } else if (account && account.email) {
