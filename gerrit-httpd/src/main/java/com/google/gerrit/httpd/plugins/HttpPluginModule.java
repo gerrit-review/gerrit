@@ -14,7 +14,11 @@
 
 package com.google.gerrit.httpd.plugins;
 
+<<<<<<< HEAD   (b9121d Merge "Note on branch-specific labels with custom rules.pl")
 import com.google.gerrit.extensions.registration.DynamicMap;
+=======
+import com.google.gerrit.extensions.api.lfs.LfsDefinitions;
+>>>>>>> BRANCH (9e6bc9 Document how to set default UI)
 import com.google.gerrit.httpd.resources.Resource;
 import com.google.gerrit.httpd.resources.ResourceKey;
 import com.google.gerrit.httpd.resources.ResourceWeigher;
@@ -35,7 +39,7 @@ public class HttpPluginModule extends ServletModule {
     serveRegex("^/(?:a/)?plugins/(.*)?$").with(HttpPluginServlet.class);
 
     bind(LfsPluginServlet.class);
-    serveRegex(LfsPluginServlet.URL_REGEX).with(LfsPluginServlet.class);
+    serveRegex(LfsDefinitions.LFS_URL_REGEX).with(LfsPluginServlet.class);
 
     bind(StartPluginListener.class)
         .annotatedWith(UniqueAnnotations.create())

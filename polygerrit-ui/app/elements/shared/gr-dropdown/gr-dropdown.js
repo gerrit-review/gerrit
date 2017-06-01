@@ -97,7 +97,11 @@
       return this._computeURLHelper(host, path);
     },
 
+<<<<<<< HEAD   (b9121d Merge "Note on branch-specific labels with custom rules.pl")
     _computeLinkURL(link) {
+=======
+    _computeLinkURL: function(link) {
+>>>>>>> BRANCH (9e6bc9 Document how to set default UI)
       if (typeof link.url === 'undefined') {
         return '';
       }
