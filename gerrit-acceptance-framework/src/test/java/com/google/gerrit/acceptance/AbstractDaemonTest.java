@@ -83,6 +83,7 @@ import com.google.gerrit.server.change.Revisions;
 import com.google.gerrit.server.config.AllProjectsName;
 import com.google.gerrit.server.config.CanonicalWebUrl;
 import com.google.gerrit.server.config.GerritServerConfig;
+import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.gerrit.server.git.MetaDataUpdate;
 import com.google.gerrit.server.git.ProjectConfig;
@@ -169,6 +170,87 @@ public abstract class AbstractDaemonTest {
   @ConfigSuite.Parameter public Config baseConfig;
   @ConfigSuite.Name private String configName;
 
+<<<<<<< HEAD   (121c85 Merge "Fix padding on gr-tooltip with shadow DOM")
+=======
+  @Inject protected AllProjectsName allProjects;
+
+  @Inject protected AccountCreator accounts;
+
+  @Inject private SchemaFactory<ReviewDb> reviewDbProvider;
+
+  @Inject protected GerritApi gApi;
+
+  @Inject protected AcceptanceTestRequestScope atrScope;
+
+  @Inject protected AccountCache accountCache;
+
+  @Inject protected IdentifiedUser.GenericFactory identifiedUserFactory;
+
+  @Inject protected PushOneCommit.Factory pushFactory;
+
+  @Inject protected MetaDataUpdate.Server metaDataUpdateFactory;
+
+  @Inject protected ProjectCache projectCache;
+
+  @Inject protected GroupCache groupCache;
+
+  @Inject protected GitRepositoryManager repoManager;
+
+  @Inject protected ChangeIndexer indexer;
+
+  @Inject protected Provider<InternalChangeQuery> queryProvider;
+
+  @Inject @CanonicalWebUrl protected Provider<String> canonicalWebUrl;
+
+  @Inject @GerritServerConfig protected Config cfg;
+
+  @Inject protected PluginConfigFactory pluginConfig;
+
+  @Inject private InProcessProtocol inProcessProtocol;
+
+  @Inject private Provider<AnonymousUser> anonymousUser;
+
+  @Inject @GerritPersonIdent protected Provider<PersonIdent> serverIdent;
+
+  @Inject protected ChangeData.Factory changeDataFactory;
+
+  @Inject protected PatchSetUtil psUtil;
+
+  @Inject protected ChangeFinder changeFinder;
+
+  @Inject protected Revisions revisions;
+
+  @Inject protected FakeEmailSender sender;
+
+  @Inject protected ChangeNoteUtil changeNoteUtil;
+
+  @Inject protected ChangeResource.Factory changeResourceFactory;
+
+  @Inject protected SystemGroupBackend systemGroupBackend;
+
+  @Inject private EventRecorder.Factory eventRecorderFactory;
+
+  @Inject private ChangeIndexCollection changeIndexes;
+
+  protected TestRepository<InMemoryRepository> testRepo;
+  protected GerritServer server;
+  protected TestAccount admin;
+  protected TestAccount user;
+  protected RestSession adminRestSession;
+  protected RestSession userRestSession;
+  protected SshSession adminSshSession;
+  protected SshSession userSshSession;
+  protected ReviewDb db;
+  protected Project.NameKey project;
+  protected EventRecorder eventRecorder;
+
+  @Inject protected TestNotesMigration notesMigration;
+
+  @Inject protected ChangeNotes.Factory notesFactory;
+
+  @Inject protected Abandon changeAbandoner;
+
+>>>>>>> BRANCH (52e337 Introduce GlobalPluginConfig{s} annotations)
   @Rule public ExpectedException exception = ExpectedException.none();
 
   protected final TemporaryFolder tempSiteDir = new TemporaryFolder();
