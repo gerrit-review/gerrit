@@ -215,12 +215,36 @@ public class AccountCacheImpl implements AccountCache {
         account.setGeneralPreferences(GeneralPreferencesInfo.defaults());
       }
 
+<<<<<<< HEAD   (c4693f Merge "Improve a11y for diff viewing")
       return Optional.of(
           new AccountState(
               account,
               internalGroups,
               externalIds.byAccount(who),
               watchConfig.get().getProjectWatches(who)));
+=======
+      return new AccountState(
+          account, internalGroups, externalIds, watchConfig.get().getProjectWatches(who));
+    }
+  }
+
+  static class ByNameReviewDbLoader extends CacheLoader<String, Optional<Account.Id>> {
+    private final SchemaFactory<ReviewDb> dbProvider;
+
+    @Inject
+    public ByNameReviewDbLoader(SchemaFactory<ReviewDb> dbProvider) {
+      this.dbProvider = dbProvider;
+    }
+
+    @Override
+    public Optional<Account.Id> load(String username) throws Exception {
+      try (ReviewDb db = dbProvider.open()) {
+        return Optional.ofNullable(
+                db.accountExternalIds()
+                    .get(new AccountExternalId.Key(SCHEME_USERNAME + ":" + username)))
+            .map(AccountExternalId::getAccountId);
+      }
+>>>>>>> BRANCH (a85e81 Format Java files with google-java-format)
     }
   }
 
