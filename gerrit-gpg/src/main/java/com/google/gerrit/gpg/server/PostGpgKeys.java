@@ -143,7 +143,11 @@ public class PostGpgKeys implements RestModifyView<AccountResource, Input> {
           toRemove.stream().map(fp -> toExtIdKey(fp.get())).collect(toList());
       externalIdsUpdateFactory
           .create()
+<<<<<<< HEAD   (c93e48 Merge "Make it configurable whether the first user should be)
           .replace(rsrc.getUser().getAccountId(), extIdKeysToRemove, newExtIds);
+=======
+          .replace(db.get(), rsrc.getUser().getAccountId(), extIdKeysToRemove, newExtIds);
+>>>>>>> BRANCH (4847c3 Let ExternalIdsUpdate take care to evict accounts from the a)
       return toJson(newKeys, toRemove, store, rsrc.getUser());
     }
   }

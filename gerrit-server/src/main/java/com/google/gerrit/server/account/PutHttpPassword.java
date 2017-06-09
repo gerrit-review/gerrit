@@ -58,19 +58,31 @@ public class PutHttpPassword implements RestModifyView<AccountResource, Input> {
   }
 
   private final Provider<CurrentUser> self;
+<<<<<<< HEAD   (c93e48 Merge "Make it configurable whether the first user should be)
   private final PermissionBackend permissionBackend;
   private final ExternalIds externalIds;
+=======
+  private final Provider<ReviewDb> dbProvider;
+>>>>>>> BRANCH (4847c3 Let ExternalIdsUpdate take care to evict accounts from the a)
   private final ExternalIdsUpdate.User externalIdsUpdate;
 
   @Inject
   PutHttpPassword(
       Provider<CurrentUser> self,
+<<<<<<< HEAD   (c93e48 Merge "Make it configurable whether the first user should be)
       PermissionBackend permissionBackend,
       ExternalIds externalIds,
+=======
+      Provider<ReviewDb> dbProvider,
+>>>>>>> BRANCH (4847c3 Let ExternalIdsUpdate take care to evict accounts from the a)
       ExternalIdsUpdate.User externalIdsUpdate) {
     this.self = self;
+<<<<<<< HEAD   (c93e48 Merge "Make it configurable whether the first user should be)
     this.permissionBackend = permissionBackend;
     this.externalIds = externalIds;
+=======
+    this.dbProvider = dbProvider;
+>>>>>>> BRANCH (4847c3 Let ExternalIdsUpdate take care to evict accounts from the a)
     this.externalIdsUpdate = externalIdsUpdate;
   }
 
@@ -113,7 +125,11 @@ public class PutHttpPassword implements RestModifyView<AccountResource, Input> {
     }
     ExternalId newExtId =
         ExternalId.createWithPassword(extId.key(), extId.accountId(), extId.email(), newPassword);
+<<<<<<< HEAD   (c93e48 Merge "Make it configurable whether the first user should be)
     externalIdsUpdate.create().upsert(newExtId);
+=======
+    externalIdsUpdate.create().upsert(dbProvider.get(), newExtId);
+>>>>>>> BRANCH (4847c3 Let ExternalIdsUpdate take care to evict accounts from the a)
 
     return Strings.isNullOrEmpty(newPassword) ? Response.<String>none() : Response.ok(newPassword);
   }

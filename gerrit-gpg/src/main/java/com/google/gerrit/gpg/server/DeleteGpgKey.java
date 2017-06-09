@@ -24,8 +24,13 @@ import com.google.gerrit.extensions.restapi.RestModifyView;
 import com.google.gerrit.gpg.PublicKeyStore;
 import com.google.gerrit.gpg.server.DeleteGpgKey.Input;
 import com.google.gerrit.server.GerritPersonIdent;
+<<<<<<< HEAD   (c93e48 Merge "Make it configurable whether the first user should be)
 import com.google.gerrit.server.account.externalids.ExternalId;
 import com.google.gerrit.server.account.externalids.ExternalIdsUpdate;
+=======
+import com.google.gerrit.server.account.ExternalId;
+import com.google.gerrit.server.account.ExternalIdsUpdate;
+>>>>>>> BRANCH (4847c3 Let ExternalIdsUpdate take care to evict accounts from the a)
 import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
 import com.google.inject.Provider;

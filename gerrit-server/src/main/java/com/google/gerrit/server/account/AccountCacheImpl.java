@@ -108,6 +108,15 @@ public class AccountCacheImpl implements AccountCache {
       log.warn("Cannot load AccountState for " + accountId, e);
       return null;
     }
+<<<<<<< HEAD   (c93e48 Merge "Make it configurable whether the first user should be)
+=======
+  }
+
+  @Override
+  public AccountState getIfPresent(Account.Id accountId) {
+    Optional<AccountState> state = byId.getIfPresent(accountId);
+    return state != null ? state.orElse(missing(accountId)) : null;
+>>>>>>> BRANCH (4847c3 Let ExternalIdsUpdate take care to evict accounts from the a)
   }
 
   @Override
@@ -220,10 +229,33 @@ public class AccountCacheImpl implements AccountCache {
 
       return Optional.of(
           new AccountState(
+<<<<<<< HEAD   (c93e48 Merge "Make it configurable whether the first user should be)
               account,
               internalGroups,
               externalIds.byAccount(who),
               watchConfig.get().getProjectWatches(who)));
+=======
+              account, internalGroups, externalIds, watchConfig.get().getProjectWatches(who)));
+    }
+  }
+
+  static class ByNameReviewDbLoader extends CacheLoader<String, Optional<Account.Id>> {
+    private final SchemaFactory<ReviewDb> dbProvider;
+
+    @Inject
+    public ByNameReviewDbLoader(SchemaFactory<ReviewDb> dbProvider) {
+      this.dbProvider = dbProvider;
+    }
+
+    @Override
+    public Optional<Account.Id> load(String username) throws Exception {
+      try (ReviewDb db = dbProvider.open()) {
+        return Optional.ofNullable(
+                db.accountExternalIds()
+                    .get(new AccountExternalId.Key(SCHEME_USERNAME + ":" + username)))
+            .map(AccountExternalId::getAccountId);
+      }
+>>>>>>> BRANCH (4847c3 Let ExternalIdsUpdate take care to evict accounts from the a)
     }
   }
 

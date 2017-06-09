@@ -407,7 +407,11 @@ public class GerritPublicKeyCheckerTest {
     cb.setCommitter(ident);
     assertThat(store.save(cb)).isAnyOf(NEW, FAST_FORWARD, FORCED);
 
+<<<<<<< HEAD   (c93e48 Merge "Make it configurable whether the first user should be)
     externalIdsUpdateFactory.create().insert(newExtIds);
+=======
+    externalIdsUpdateFactory.create().insert(db, newExtIds);
+>>>>>>> BRANCH (4847c3 Let ExternalIdsUpdate take care to evict accounts from the a)
   }
 
   private TestKey add(TestKey k, IdentifiedUser user) throws Exception {

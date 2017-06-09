@@ -532,8 +532,12 @@ public class AccountIT extends AbstractDaemonTest {
         ImmutableList.of(
             ExternalId.createWithEmail(ExternalId.Key.parse(extId1), admin.id, email),
             ExternalId.createWithEmail(ExternalId.Key.parse(extId2), admin.id, email));
+<<<<<<< HEAD   (c93e48 Merge "Make it configurable whether the first user should be)
     externalIdsUpdateFactory.create().insert(extIds);
     accountIndexedCounter.assertReindexOf(admin);
+=======
+    externalIdsUpdateFactory.create().insert(db, extIds);
+>>>>>>> BRANCH (4847c3 Let ExternalIdsUpdate take care to evict accounts from the a)
     assertThat(
             gApi.accounts().self().getExternalIds().stream().map(e -> e.identity).collect(toSet()))
         .containsAllOf(extId1, extId2);
@@ -586,7 +590,11 @@ public class AccountIT extends AbstractDaemonTest {
     String email = "foo.bar@example.com";
     externalIdsUpdateFactory
         .create()
+<<<<<<< HEAD   (c93e48 Merge "Make it configurable whether the first user should be)
         .insert(ExternalId.createWithEmail(ExternalId.Key.parse("foo:bar"), admin.id, email));
+=======
+        .insert(db, ExternalId.createWithEmail(ExternalId.Key.parse("foo:bar"), admin.id, email));
+>>>>>>> BRANCH (4847c3 Let ExternalIdsUpdate take care to evict accounts from the a)
     assertEmail(byEmailCache.get(email), admin);
 
     // wrong case doesn't match
@@ -900,8 +908,12 @@ public class AccountIT extends AbstractDaemonTest {
   public void addOtherUsersGpgKey_Conflict() throws Exception {
     // Both users have a matching external ID for this key.
     addExternalIdEmail(admin, "test5@example.com");
+<<<<<<< HEAD   (c93e48 Merge "Make it configurable whether the first user should be)
     externalIdsUpdate.insert(ExternalId.create("foo", "myId", user.getId()));
     accountIndexedCounter.assertReindexOf(user);
+=======
+    externalIdsUpdate.insert(db, ExternalId.create("foo", "myId", user.getId()));
+>>>>>>> BRANCH (4847c3 Let ExternalIdsUpdate take care to evict accounts from the a)
 
     TestKey key = validKeyWithSecondUserId();
     addGpgKey(key.getPublicKeyArmored());
@@ -1141,8 +1153,12 @@ public class AccountIT extends AbstractDaemonTest {
   private void addExternalIdEmail(TestAccount account, String email) throws Exception {
     checkNotNull(email);
     externalIdsUpdate.insert(
+<<<<<<< HEAD   (c93e48 Merge "Make it configurable whether the first user should be)
         ExternalId.createWithEmail(name("test"), email, account.getId(), email));
     accountIndexedCounter.assertReindexOf(account);
+=======
+        db, ExternalId.createWithEmail(name("test"), email, account.getId(), email));
+>>>>>>> BRANCH (4847c3 Let ExternalIdsUpdate take care to evict accounts from the a)
     setApiUser(account);
   }
 

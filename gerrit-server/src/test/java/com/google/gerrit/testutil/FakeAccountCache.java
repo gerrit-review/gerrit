@@ -45,6 +45,14 @@ public class FakeAccountCache implements AccountCache {
   @Override
   @Nullable
   public synchronized AccountState getOrNull(Account.Id accountId) {
+<<<<<<< HEAD   (c93e48 Merge "Make it configurable whether the first user should be)
+=======
+    return byId.get(accountId);
+  }
+
+  @Override
+  public synchronized AccountState getIfPresent(Account.Id accountId) {
+>>>>>>> BRANCH (4847c3 Let ExternalIdsUpdate take care to evict accounts from the a)
     return byId.get(accountId);
   }
 

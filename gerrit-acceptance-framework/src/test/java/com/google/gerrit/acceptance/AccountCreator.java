@@ -29,8 +29,11 @@ import com.google.gerrit.server.account.AccountCache;
 import com.google.gerrit.server.account.AccountsUpdate;
 import com.google.gerrit.server.account.GroupCache;
 import com.google.gerrit.server.account.VersionedAuthorizedKeys;
+<<<<<<< HEAD   (c93e48 Merge "Make it configurable whether the first user should be)
 import com.google.gerrit.server.account.externalids.ExternalId;
 import com.google.gerrit.server.account.externalids.ExternalIdsUpdate;
+=======
+>>>>>>> BRANCH (4847c3 Let ExternalIdsUpdate take care to evict accounts from the a)
 import com.google.gerrit.server.ssh.SshKeyCache;
 import com.google.gerrit.testutil.SshMode;
 import com.google.gwtorm.server.SchemaFactory;
@@ -130,9 +133,14 @@ public class AccountCreator {
         sshKeyCache.evict(username);
       }
 
+<<<<<<< HEAD   (c93e48 Merge "Make it configurable whether the first user should be)
       if (username != null) {
         accountCache.evictByUsername(username);
       }
+=======
+      accountCache.evict(id);
+      accountCache.evictByUsername(username);
+>>>>>>> BRANCH (4847c3 Let ExternalIdsUpdate take care to evict accounts from the a)
       byEmailCache.evict(email);
 
       account = new TestAccount(id, username, email, fullName, sshKey, httpPass);

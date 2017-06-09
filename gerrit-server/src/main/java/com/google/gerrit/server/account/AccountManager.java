@@ -379,7 +379,12 @@ public class AccountManager {
           Account a = accounts.get(db, to);
           if (a.getPreferredEmail() == null) {
             a.setPreferredEmail(who.getEmailAddress());
+<<<<<<< HEAD   (c93e48 Merge "Make it configurable whether the first user should be)
             accountsUpdateFactory.create().update(db, a);
+=======
+            db.accounts().update(Collections.singleton(a));
+            byIdCache.evict(to);
+>>>>>>> BRANCH (4847c3 Let ExternalIdsUpdate take care to evict accounts from the a)
           }
           byEmailCache.evict(who.getEmailAddress());
         }
@@ -444,7 +449,12 @@ public class AccountManager {
           if (a.getPreferredEmail() != null
               && a.getPreferredEmail().equals(who.getEmailAddress())) {
             a.setPreferredEmail(null);
+<<<<<<< HEAD   (c93e48 Merge "Make it configurable whether the first user should be)
             accountsUpdateFactory.create().update(db, a);
+=======
+            db.accounts().update(Collections.singleton(a));
+            byIdCache.evict(from);
+>>>>>>> BRANCH (4847c3 Let ExternalIdsUpdate take care to evict accounts from the a)
           }
           byEmailCache.evict(who.getEmailAddress());
         }
