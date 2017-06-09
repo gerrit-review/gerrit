@@ -1,6 +1,10 @@
 load("//tools/bzl:maven_jar.bzl", "GERRIT", "MAVEN_LOCAL", "MAVEN_CENTRAL", "maven_jar")
 
+<<<<<<< HEAD   (22ced9 Merge "Merge branch 'stable-2.14'")
 _JGIT_VERS = "4.8.0.201705170830-rc1"
+=======
+_JGIT_VERS = "4.7.1.201706071930-r"
+>>>>>>> BRANCH (873ffc Set version to 2.14.1)
 
 _DOC_VERS = _JGIT_VERS # Set to _JGIT_VERS unless using a snapshot
 
@@ -26,28 +30,45 @@ def jgit_maven_repos():
         name = "jgit_lib",
         artifact = "org.eclipse.jgit:org.eclipse.jgit:" + _JGIT_VERS,
         repository = _JGIT_REPO,
+<<<<<<< HEAD   (22ced9 Merge "Merge branch 'stable-2.14'")
         sha1 = "f1a2099e87cb57525233a5e882b4e35b5a2803dc",
         src_sha1 = "1646655e3ed54c01dfa31881dd6e7fea5ec74dd2",
+=======
+        sha1 = "0023aa574d6ea984e770af60da94da366a0109d2",
+        src_sha1 = "0497d0ac4f7c44eea49a32e7e1d6a5eee6343c33",
+>>>>>>> BRANCH (873ffc Set version to 2.14.1)
         unsign = True,
     )
     maven_jar(
         name = "jgit_servlet",
         artifact = "org.eclipse.jgit:org.eclipse.jgit.http.server:" + _JGIT_VERS,
         repository = _JGIT_REPO,
+<<<<<<< HEAD   (22ced9 Merge "Merge branch 'stable-2.14'")
         sha1 = "4613ff060415639f53fbed0f703f1e81688a9ac5",
+=======
+        sha1 = "0bacf02e5c9c587f8a6e680278d2b4b7fc8df96d",
+>>>>>>> BRANCH (873ffc Set version to 2.14.1)
         unsign = True,
     )
     maven_jar(
         name = "jgit_archive",
         artifact = "org.eclipse.jgit:org.eclipse.jgit.archive:" + _JGIT_VERS,
         repository = _JGIT_REPO,
+<<<<<<< HEAD   (22ced9 Merge "Merge branch 'stable-2.14'")
         sha1 = "8fd983244622c9085f74cec4361761119c7093fe",
+=======
+        sha1 = "83c22720f1b00b4b5e321b9c8b089b91c1d78893",
+>>>>>>> BRANCH (873ffc Set version to 2.14.1)
     )
     maven_jar(
         name = "jgit_junit",
         artifact = "org.eclipse.jgit:org.eclipse.jgit.junit:" + _JGIT_VERS,
         repository = _JGIT_REPO,
+<<<<<<< HEAD   (22ced9 Merge "Merge branch 'stable-2.14'")
         sha1 = "d50f32f886cd4dfe2590dec9631578660c672df5",
+=======
+        sha1 = "5a3f2d6cf33e88f3436acfd22a129bc7e2d2655b",
+>>>>>>> BRANCH (873ffc Set version to 2.14.1)
         unsign = True,
     )
 
