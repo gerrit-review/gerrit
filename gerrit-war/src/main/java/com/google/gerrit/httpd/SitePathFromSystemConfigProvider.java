@@ -17,6 +17,7 @@ package com.google.gerrit.httpd;
 import com.google.gerrit.reviewdb.client.SystemConfig;
 import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gerrit.server.config.SitePath;
+import com.google.gerrit.server.schema.ReviewDbFactory;
 import com.google.gwtorm.server.OrmException;
 import com.google.gwtorm.server.SchemaFactory;
 import com.google.inject.Inject;
@@ -30,7 +31,12 @@ class SitePathFromSystemConfigProvider implements Provider<Path> {
   private final Path path;
 
   @Inject
+<<<<<<< HEAD   (94ca42 Merge "Fix documentation of the review command" into stable-)
   SitePathFromSystemConfigProvider(SchemaFactory<ReviewDb> schemaFactory) throws OrmException {
+=======
+  SitePathFromSystemConfigProvider(@ReviewDbFactory SchemaFactory<ReviewDb> schemaFactory)
+      throws OrmException {
+>>>>>>> BRANCH (d0b688 Fix cyclic dependency when using site_path from system_confi)
     path = read(schemaFactory);
   }
 
