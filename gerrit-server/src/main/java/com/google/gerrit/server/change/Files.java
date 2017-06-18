@@ -258,7 +258,12 @@ public class Files implements ChildCollection<RevisionResource, FileResource> {
         if (patchSet == null) {
           throw new PatchListNotAvailableException(
               String.format(
+<<<<<<< HEAD   (104a6a Fix bazel 0.5.* support)
                   "patch set %s of change %s not found", old.get(), change.getId().get()));
+=======
+                  "patch set %s of change %s not found",
+                  old.get(), change.getId().get()));
+>>>>>>> BRANCH (c74e28 Fix java.lang.ArrayIndexOutOfBoundsException when checking f)
         }
 
         PatchList oldList = patchListCache.get(change, patchSet);
