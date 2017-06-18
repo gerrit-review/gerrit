@@ -225,7 +225,12 @@ public class ChangeKindCacheImpl implements ChangeKindCache {
         }
 
         if ((prior.getParentCount() != 1 || next.getParentCount() != 1)
+<<<<<<< HEAD   (104a6a Fix bazel 0.5.* support)
             && (prior.getParentCount() == 0 || !onlyFirstParentChanged(prior, next))) {
+=======
+            && (prior.getParentCount() == 0
+                || !onlyFirstParentChanged(prior, next))) {
+>>>>>>> BRANCH (c74e28 Fix java.lang.ArrayIndexOutOfBoundsException when checking f)
           // Trivial rebases done by machine only work well on 1 parent.
           return ChangeKind.REWORK;
         }
