@@ -204,7 +204,11 @@ public class MergeOpRepoManager implements AutoCloseable {
       throws NoSuchProjectException, IOException {
     List<BatchUpdate> updates = new ArrayList<>(projects.size());
     for (Project.NameKey project : projects) {
+<<<<<<< HEAD   (29d84e Merge "Update soy to 2017-04-23")
       updates.add(getRepo(project).getUpdate(batchUpdateFactory));
+=======
+      updates.add(getRepo(project).getUpdate().setRefLogMessage("merged"));
+>>>>>>> BRANCH (64d7c0 Set reflog message and identity when merging change)
     }
     return updates;
   }

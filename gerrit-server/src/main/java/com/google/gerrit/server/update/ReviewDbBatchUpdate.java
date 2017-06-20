@@ -411,11 +411,20 @@ class ReviewDbBatchUpdate extends BatchUpdate {
     // May not be opened if the caller added ref updates but no new objects.
     // TODO(dborowitz): Really?
     initRepository();
+<<<<<<< HEAD   (29d84e Merge "Update soy to 2017-04-23")
     batchRefUpdate = repoView.getRepository().getRefDatabase().newBatchUpdate();
     batchRefUpdate.setPushCertificate(pushCert);
     batchRefUpdate.setRefLogMessage(refLogMessage, true);
     batchRefUpdate.setAllowNonFastForwards(true);
     repoView.getCommands().addTo(batchRefUpdate);
+=======
+    batchRefUpdate = repo.getRefDatabase().newBatchUpdate();
+    batchRefUpdate.setRefLogMessage(refLogMessage, true);
+    if (user.isIdentifiedUser()) {
+      batchRefUpdate.setRefLogIdent(user.asIdentifiedUser().newRefLogIdent(when, tz));
+    }
+    commands.addTo(batchRefUpdate);
+>>>>>>> BRANCH (64d7c0 Set reflog message and identity when merging change)
     logDebug("Executing batch of {} ref updates", batchRefUpdate.getCommands().size());
     if (dryrun) {
       return;

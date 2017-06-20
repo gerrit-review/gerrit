@@ -263,7 +263,10 @@ public abstract class BatchUpdate implements AutoCloseable {
   protected Order order;
   protected OnSubmitValidators onSubmitValidators;
   protected RequestId requestId;
+<<<<<<< HEAD   (29d84e Merge "Update soy to 2017-04-23")
   protected PushCertificate pushCert;
+=======
+>>>>>>> BRANCH (64d7c0 Set reflog message and identity when merging change)
   protected String refLogMessage;
 
   private boolean updateChangesInParallel;
@@ -315,6 +318,11 @@ public abstract class BatchUpdate implements AutoCloseable {
   }
 
   public BatchUpdate setRefLogMessage(@Nullable String refLogMessage) {
+    this.refLogMessage = refLogMessage;
+    return this;
+  }
+
+  public BatchUpdate setRefLogMessage(String refLogMessage) {
     this.refLogMessage = refLogMessage;
     return this;
   }
