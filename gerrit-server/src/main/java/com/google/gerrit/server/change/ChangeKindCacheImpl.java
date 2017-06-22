@@ -225,7 +225,12 @@ public class ChangeKindCacheImpl implements ChangeKindCache {
         }
 
         if ((prior.getParentCount() != 1 || next.getParentCount() != 1)
+<<<<<<< HEAD   (64d7c0 Set reflog message and identity when merging change)
             && (prior.getParentCount() == 0 || !onlyFirstParentChanged(prior, next))) {
+=======
+            && (!onlyFirstParentChanged(prior, next)
+                || prior.getParentCount() == 0)) {
+>>>>>>> BRANCH (4f5708 Revert "Fix java.lang.ArrayIndexOutOfBoundsException when ch)
           // Trivial rebases done by machine only work well on 1 parent.
           return ChangeKind.REWORK;
         }
