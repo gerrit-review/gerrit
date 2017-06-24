@@ -164,7 +164,11 @@ public class ChangeIndexer {
   }
 
   private static boolean autoReindexIfStale(Config cfg) {
+<<<<<<< HEAD   (d5b111 Update git submodules)
     return cfg.getBoolean("index", null, "testAutoReindexIfStale", true);
+=======
+    return cfg.getBoolean("index", null, "autoReindexIfStale", true);
+>>>>>>> BRANCH (3747f0 Disable auto-reindexing if stale during online reindex)
   }
 
   /**

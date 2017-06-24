@@ -515,7 +515,11 @@ public class GetRelatedIT extends AbstractDaemonTest {
   }
 
   @Test
+<<<<<<< HEAD   (d5b111 Update git submodules)
   @GerritConfig(name = "index.testAutoReindexIfStale", value = "false")
+=======
+  @GerritConfig(name = "index.autoReindexIfStale", value = "false")
+>>>>>>> BRANCH (3747f0 Disable auto-reindexing if stale during online reindex)
   public void getRelatedForStaleChange() throws Exception {
     RevCommit c1_1 = commitBuilder().add("a.txt", "1").message("subject: 1").create();
 

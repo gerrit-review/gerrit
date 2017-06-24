@@ -2678,6 +2678,7 @@ are the same.
 +
 Defaults to 1024.
 
+<<<<<<< HEAD   (d5b111 Update git submodules)
 [[index.reindexAfterRefUpdate]]index.reindexAfterRefUpdate::
 +
 Whether to reindex all affected open changes after a ref is updated. This
@@ -2688,6 +2689,14 @@ new project configuration (e.g. label definitions).
 Leaving this enabled may result in fresher results, but may cause performance
 problems if there are lots of open changes on a project whose branches advance
 frequently.
+=======
+[[index.autoReindexIfStale]]index.autoReindexIfStale::
++
+Whether to automatically check if a document became stale in the index
+immediately after indexing it. If false, there is a race condition during two
+simultaneous writes that may cause one of the writes to not be reflected in the
+index. The check to avoid this does consume some resources.
+>>>>>>> BRANCH (3747f0 Disable auto-reindexing if stale during online reindex)
 +
 Defaults to true.
 

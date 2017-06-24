@@ -120,7 +120,11 @@ public class ChangeRebuilderIT extends AbstractDaemonTest {
     // unintentional auto-rebuilding of the change in NoteDb during the read
     // path of the reindex-if-stale check. For the purposes of this test, we
     // want precise control over when auto-rebuilding happens.
+<<<<<<< HEAD   (d5b111 Update git submodules)
     cfg.setBoolean("index", null, "testAutoReindexIfStale", false);
+=======
+    cfg.setBoolean("index", null, "autoReindexIfStale", false);
+>>>>>>> BRANCH (3747f0 Disable auto-reindexing if stale during online reindex)
 
     return cfg;
   }
