@@ -14,6 +14,12 @@
 
 package com.google.gerrit.server.project;
 
+<<<<<<< HEAD   (1f0f25 Merge "Make WIP/Ready documentation headings correct level")
+=======
+import static org.eclipse.jgit.lib.Constants.R_HEADS;
+
+import com.google.gerrit.extensions.restapi.AuthException;
+>>>>>>> BRANCH (f71409 Merge changes from topic 'delete-refs' into stable-2.14)
 import com.google.gerrit.extensions.restapi.ResourceConflictException;
 import com.google.gerrit.extensions.restapi.Response;
 import com.google.gerrit.extensions.restapi.RestApiException;
@@ -60,7 +66,7 @@ public class DeleteBranch implements RestModifyView<BranchResource, Input> {
       throw new ResourceConflictException("branch " + rsrc.getBranchKey() + " has open changes");
     }
 
-    deleteRefFactory.create(rsrc).ref(rsrc.getRef()).delete();
+    deleteRefFactory.create(rsrc).ref(rsrc.getRef()).prefix(R_HEADS).delete();
     return Response.none();
   }
 }
