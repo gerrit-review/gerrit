@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,13 +41,22 @@ public class IndexServlet extends HttpServlet {
     String resourcePath = "com/google/gerrit/httpd/raw/PolyGerritIndexHtml.soy";
     SoyFileSet.Builder builder = SoyFileSet.builder();
     builder.add(Resources.getResource(resourcePath));
+    ServletRequest request;
+    HttpServletRequest req = (HttpServletRequest) request;
+    String params = req.getParameter("desktop");
+    String desktop;
+    if ("1".equals(params)) {
+      desktop = "1";
+    } else {
+      desktop = "0";
+    }
     SoyTofu.Renderer renderer =
         builder
             .build()
             .compileToTofu()
             .newRenderer("com.google.gerrit.httpd.raw.Index")
             .setContentKind(SanitizedContent.ContentKind.HTML)
-            .setData(getTemplateData(canonicalURL, cdnPath));
+            .setData(getTemplateData(canonicalURL, cdnPath, desktop));
     indexSource = renderer.render().getBytes(UTF_8);
   }
 
@@ -67,7 +77,7 @@ public class IndexServlet extends HttpServlet {
     return uri.getPath().replaceAll("/$", "");
   }
 
-  static SoyMapData getTemplateData(String canonicalURL, String cdnPath) throws URISyntaxException {
+  static SoyMapData getTemplateData(String canonicalURL, String cdnPath, String desktop) throws URISyntaxException {
     String canonicalPath = computeCanonicalPath(canonicalURL);
 
     String staticPath = "";
@@ -85,6 +95,7 @@ public class IndexServlet extends HttpServlet {
 
     return new SoyMapData(
         "canonicalPath", canonicalPath,
-        "staticResourcePath", sanitizedStaticPath);
+        "staticResourcePath", sanitizedStaticPath,
+        "desktop", desktop);
   }
 }
