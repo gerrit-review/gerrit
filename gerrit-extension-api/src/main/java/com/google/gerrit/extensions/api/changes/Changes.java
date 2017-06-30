@@ -147,27 +147,31 @@ public interface Changes {
    */
   class NotImplemented implements Changes {
     @Override
-    public ChangeApi id(int id) {
+    public ChangeApi id(int id) throws RestApiException {
       throw new NotImplementedException();
     }
 
     @Override
-    public ChangeApi id(String triplet) {
+    public ChangeApi id(String triplet) throws RestApiException {
       throw new NotImplementedException();
     }
 
     @Override
-    public ChangeApi id(String project, String branch, String id) {
+    public ChangeApi id(String project, String branch, String id) throws RestApiException {
       throw new NotImplementedException();
     }
 
     @Override
+<<<<<<< HEAD   (b3f1de dev-release: Add step to sign the announcement mail)
     public ChangeApi id(String project, int id) {
       throw new NotImplementedException();
     }
 
     @Override
     public ChangeApi create(ChangeInput in) {
+=======
+    public ChangeApi create(ChangeInput in) throws RestApiException {
+>>>>>>> BRANCH (d47190 Revert "Remove unneeded exception declarations on methods in)
       throw new NotImplementedException();
     }
 

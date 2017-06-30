@@ -38,7 +38,7 @@ public interface CommentApi {
    */
   class NotImplemented implements CommentApi {
     @Override
-    public CommentInfo get() {
+    public CommentInfo get() throws RestApiException {
       throw new NotImplementedException();
     }
 
