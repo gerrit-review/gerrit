@@ -881,7 +881,35 @@ public abstract class AbstractDaemonTest {
     }
   }
 
+<<<<<<< HEAD   (646788 Merge "Fix improper autocomplete focus behavior")
   protected void removePermission(Project.NameKey project, String ref, String permission)
+=======
+  protected void grantLabel(
+      String permission,
+      int min,
+      int max,
+      Project.NameKey project,
+      String ref,
+      boolean force,
+      AccountGroup.UUID groupUUID)
+      throws RepositoryNotFoundException, IOException, ConfigInvalidException {
+    try (MetaDataUpdate md = metaDataUpdateFactory.create(project)) {
+      md.setMessage(String.format("Grant %s on %s", permission, ref));
+      ProjectConfig config = ProjectConfig.read(md);
+      AccessSection s = config.getAccessSection(ref, true);
+      Permission p = s.getPermission(permission, true);
+      PermissionRule rule = Util.newRule(config, groupUUID);
+      rule.setForce(force);
+      rule.setMin(min);
+      rule.setMax(max);
+      p.add(rule);
+      config.commit(md);
+      projectCache.evict(config.getProject());
+    }
+  }
+
+  protected void removePermission(String permission, Project.NameKey project, String ref)
+>>>>>>> BRANCH (a41014 Merge branch 'stable-2.13' into stable-2.14)
       throws IOException, ConfigInvalidException {
     try (MetaDataUpdate md = metaDataUpdateFactory.create(project)) {
       md.setMessage(String.format("Remove %s on %s", permission, ref));
