@@ -571,6 +571,7 @@ public class EditScreen extends Screen {
         mode = ModeInfo.findMode(content.getContentType(), path);
       }
     }
+<<<<<<< HEAD   (a41014 Merge branch 'stable-2.13' into stable-2.14)
 
     Configuration cfg =
         Configuration.create()
@@ -590,6 +591,25 @@ public class EditScreen extends Screen {
             .set("tabSize", prefs.tabSize())
             .set("theme", prefs.theme().name().toLowerCase())
             .set("value", "");
+=======
+    Configuration cfg = Configuration.create()
+        .set("autoCloseBrackets", prefs.autoCloseBrackets())
+        .set("cursorBlinkRate", prefs.cursorBlinkRate())
+        .set("cursorHeight", 0.85)
+        .set("indentUnit", prefs.indentUnit())
+        .set("keyMap", prefs.keyMapType().name().toLowerCase())
+        .set("lineNumbers", prefs.hideLineNumbers())
+        .set("lineWrapping", prefs.lineWrapping())
+        .set("matchBrackets", prefs.matchBrackets())
+        .set("mode", mode != null ? mode.mime() : null)
+        .set("origLeft", editContent)
+        .set("scrollbarStyle", "overlay")
+        .set("showTrailingSpace", prefs.showWhitespaceErrors())
+        .set("styleSelectedText", true)
+        .set("tabSize", prefs.tabSize())
+        .set("theme", prefs.theme().name().toLowerCase())
+        .set("value", "");
+>>>>>>> BRANCH (6e3ed2 Change lineWrapping from saying false to using prefs.lineWra)
 
     if (editContent.contains("\r\n")) {
       cfg.set("lineSeparator", "\r\n");
