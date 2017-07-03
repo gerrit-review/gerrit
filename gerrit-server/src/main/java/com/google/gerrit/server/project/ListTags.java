@@ -17,13 +17,18 @@ package com.google.gerrit.server.project;
 import com.google.common.collect.ImmutableMap;
 import com.google.gerrit.common.Nullable;
 import com.google.gerrit.extensions.api.projects.TagInfo;
+import com.google.gerrit.extensions.common.WebLinkInfo;
 import com.google.gerrit.extensions.restapi.BadRequestException;
 import com.google.gerrit.extensions.restapi.IdString;
 import com.google.gerrit.extensions.restapi.ResourceNotFoundException;
 import com.google.gerrit.extensions.restapi.RestReadView;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.CommonConverters;
+<<<<<<< HEAD   (0a451e Merge branch 'stable-2.14')
 import com.google.gerrit.server.CurrentUser;
+=======
+import com.google.gerrit.server.WebLinks;
+>>>>>>> BRANCH (433e1a Add support for tag web links)
 import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.gerrit.server.git.SearchingChangeCacheImpl;
 import com.google.gerrit.server.git.VisibleRefFilter;
@@ -54,6 +59,7 @@ public class ListTags implements RestReadView<ProjectResource> {
   private final Provider<CurrentUser> user;
   private final VisibleRefFilter.Factory refFilterFactory;
   @Nullable private final SearchingChangeCacheImpl changeCache;
+  private final WebLinks links;
 
   @Option(
     name = "--limit",
@@ -103,15 +109,24 @@ public class ListTags implements RestReadView<ProjectResource> {
   @Inject
   public ListTags(
       GitRepositoryManager repoManager,
+<<<<<<< HEAD   (0a451e Merge branch 'stable-2.14')
       PermissionBackend permissionBackend,
       Provider<CurrentUser> user,
       VisibleRefFilter.Factory refFilterFactory,
       @Nullable SearchingChangeCacheImpl changeCache) {
+=======
+      Provider<ReviewDb> dbProvider,
+      TagCache tagCache,
+      ChangeNotes.Factory changeNotesFactory,
+      @Nullable SearchingChangeCacheImpl changeCache,
+      WebLinks webLinks) {
+>>>>>>> BRANCH (433e1a Add support for tag web links)
     this.repoManager = repoManager;
     this.permissionBackend = permissionBackend;
     this.user = user;
     this.refFilterFactory = refFilterFactory;
     this.changeCache = changeCache;
+    this.links = webLinks;
   }
 
   @Override
@@ -126,7 +141,11 @@ public class ListTags implements RestReadView<ProjectResource> {
       Map<String, Ref> all =
           visibleTags(pctl, repo, repo.getRefDatabase().getRefs(Constants.R_TAGS));
       for (Ref ref : all.values()) {
+<<<<<<< HEAD   (0a451e Merge branch 'stable-2.14')
         tags.add(createTagInfo(perm.ref(ref.getName()), ref, rw));
+=======
+        tags.add(createTagInfo(ref, rw, pctl.controlForRef(ref.getName()), pctl, links));
+>>>>>>> BRANCH (433e1a Add support for tag web links)
       }
     }
 
@@ -156,6 +175,7 @@ public class ListTags implements RestReadView<ProjectResource> {
         tagName = Constants.R_TAGS + tagName;
       }
       Ref ref = repo.getRefDatabase().exactRef(tagName);
+<<<<<<< HEAD   (0a451e Merge branch 'stable-2.14')
       ProjectControl control = resource.getControl();
       if (ref != null
           && !visibleTags(control, repo, ImmutableMap.of(ref.getName(), ref)).isEmpty()) {
@@ -166,15 +186,29 @@ public class ListTags implements RestReadView<ProjectResource> {
                 .ref(ref.getName()),
             ref,
             rw);
+=======
+      ProjectControl pctl = resource.getControl();
+      if (ref != null && !visibleTags(pctl, repo, ImmutableMap.of(ref.getName(), ref)).isEmpty()) {
+        return createTagInfo(ref, rw, pctl.controlForRef(ref.getName()), pctl, links);
+>>>>>>> BRANCH (433e1a Add support for tag web links)
       }
     }
     throw new ResourceNotFoundException(id);
   }
 
+<<<<<<< HEAD   (0a451e Merge branch 'stable-2.14')
   public static TagInfo createTagInfo(PermissionBackend.ForRef perm, Ref ref, RevWalk rw)
+=======
+  public static TagInfo createTagInfo(
+      Ref ref, RevWalk rw, RefControl control, ProjectControl pctl, WebLinks links)
+>>>>>>> BRANCH (433e1a Add support for tag web links)
       throws MissingObjectException, IOException {
     RevObject object = rw.parseAny(ref.getObjectId());
+<<<<<<< HEAD   (0a451e Merge branch 'stable-2.14')
     boolean canDelete = perm.testOrFalse(RefPermission.DELETE);
+=======
+    List<WebLinkInfo> webLinks = links.getTagLinks(pctl.getProject().getName(), ref.getName());
+>>>>>>> BRANCH (433e1a Add support for tag web links)
     if (object instanceof RevTag) {
       // Annotated or signed tag
       RevTag tag = (RevTag) object;
@@ -185,10 +219,23 @@ public class ListTags implements RestReadView<ProjectResource> {
           tag.getObject().getName(),
           tag.getFullMessage().trim(),
           tagger != null ? CommonConverters.toGitPerson(tag.getTaggerIdent()) : null,
+<<<<<<< HEAD   (0a451e Merge branch 'stable-2.14')
           canDelete);
+=======
+          control.canDelete(),
+          webLinks.isEmpty() ? null : webLinks);
+>>>>>>> BRANCH (433e1a Add support for tag web links)
     }
     // Lightweight tag
+<<<<<<< HEAD   (0a451e Merge branch 'stable-2.14')
     return new TagInfo(ref.getName(), ref.getObjectId().getName(), canDelete);
+=======
+    return new TagInfo(
+        ref.getName(),
+        ref.getObjectId().getName(),
+        control.canDelete(),
+        webLinks.isEmpty() ? null : webLinks);
+>>>>>>> BRANCH (433e1a Add support for tag web links)
   }
 
   private Repository getRepository(Project.NameKey project)
@@ -201,10 +248,16 @@ public class ListTags implements RestReadView<ProjectResource> {
   }
 
   private Map<String, Ref> visibleTags(
+<<<<<<< HEAD   (0a451e Merge branch 'stable-2.14')
       ProjectControl control, Repository repo, Map<String, Ref> tags) {
     return refFilterFactory
         .create(control.getProjectState(), repo)
         .setShowMetadata(false)
+=======
+      ProjectControl pctl, Repository repo, Map<String, Ref> tags) {
+    return new VisibleRefFilter(
+            tagCache, changeNotesFactory, changeCache, repo, pctl, dbProvider.get(), false)
+>>>>>>> BRANCH (433e1a Add support for tag web links)
         .filter(tags, true);
   }
 }
