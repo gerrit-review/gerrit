@@ -2307,9 +2307,13 @@ BranchWebLinks will appear in the branch list in the last column.
 
 FileHistoryWebLinks will appear on the access rights screen.
 
+<<<<<<< HEAD   (0a451e Merge branch 'stable-2.14')
 If a `get*WebLink` implementation returns `null`, the link will be omitted. This
 allows the plugin to selectively "enable" itself on a per-project/branch/file
 basis.
+=======
+TagWebLinks will appear in the tag list in the last column.
+>>>>>>> BRANCH (433e1a Add support for tag web links)
 
 [[lfs-extension]]
 == LFS Storage Plugins
