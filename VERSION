@@ -1,0 +1,8 @@
+<<<<<<< HEAD   (6406b2 Add support for CodeEditor edit config indentWithTabs)
+=======
+# Maven style API version (e.g. '2.x-SNAPSHOT').
+# Used by :api_install and :api_deploy targets
+# when talking to the destination repository.
+#
+GERRIT_VERSION = '2.13.9'
+>>>>>>> BRANCH (9b93ff Set version to 2.13.9)
