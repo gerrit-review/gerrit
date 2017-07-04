@@ -2309,10 +2309,13 @@ FileHistoryWebLinks will appear on the access rights screen.
 
 TagWebLinks will appear in the tag list in the last column.
 
+<<<<<<< HEAD   (34da15 Add support for tag web links)
 If a `get*WebLink` implementation returns `null`, the link will be omitted. This
 allows the plugin to selectively "enable" itself on a per-project/branch/file
 basis.
 
+=======
+>>>>>>> BRANCH (433e1a Add support for tag web links)
 [[lfs-extension]]
 == LFS Storage Plugins
 

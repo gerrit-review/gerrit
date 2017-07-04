@@ -200,7 +200,11 @@ public class WebLinks {
 
   /**
    * @param project Project name
+<<<<<<< HEAD   (34da15 Add support for tag web links)
    * @param branch Tag name
+=======
+   * @param tag Tag name
+>>>>>>> BRANCH (433e1a Add support for tag web links)
    * @return Links for tags.
    */
   public List<WebLinkInfo> getTagLinks(String project, String tag) {

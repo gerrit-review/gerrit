@@ -147,7 +147,12 @@ public class CreateTag implements RestModifyView<ProjectResource, TagInput> {
             result.getObjectId(),
             identifiedUser.get().getAccount());
         try (RevWalk w = new RevWalk(repo)) {
+<<<<<<< HEAD   (34da15 Add support for tag web links)
           return ListTags.createTagInfo(perm, result, w, resource.getNameKey(), links);
+=======
+          ProjectControl pctl = resource.getControl();
+          return ListTags.createTagInfo(result, w, refControl, pctl, links);
+>>>>>>> BRANCH (433e1a Add support for tag web links)
         }
       }
     } catch (InvalidRevisionException e) {

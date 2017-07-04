@@ -24,7 +24,10 @@ import com.google.gerrit.extensions.restapi.ResourceNotFoundException;
 import com.google.gerrit.extensions.restapi.RestReadView;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.CommonConverters;
+<<<<<<< HEAD   (34da15 Add support for tag web links)
 import com.google.gerrit.server.CurrentUser;
+=======
+>>>>>>> BRANCH (433e1a Add support for tag web links)
 import com.google.gerrit.server.WebLinks;
 import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.gerrit.server.git.SearchingChangeCacheImpl;
@@ -106,9 +109,15 @@ public class ListTags implements RestReadView<ProjectResource> {
   @Inject
   public ListTags(
       GitRepositoryManager repoManager,
+<<<<<<< HEAD   (34da15 Add support for tag web links)
       PermissionBackend permissionBackend,
       Provider<CurrentUser> user,
       VisibleRefFilter.Factory refFilterFactory,
+=======
+      Provider<ReviewDb> dbProvider,
+      TagCache tagCache,
+      ChangeNotes.Factory changeNotesFactory,
+>>>>>>> BRANCH (433e1a Add support for tag web links)
       @Nullable SearchingChangeCacheImpl changeCache,
       WebLinks webLinks) {
     this.repoManager = repoManager;
@@ -131,8 +140,12 @@ public class ListTags implements RestReadView<ProjectResource> {
       Map<String, Ref> all =
           visibleTags(pctl, repo, repo.getRefDatabase().getRefs(Constants.R_TAGS));
       for (Ref ref : all.values()) {
+<<<<<<< HEAD   (34da15 Add support for tag web links)
         tags.add(
             createTagInfo(perm.ref(ref.getName()), ref, rw, pctl.getProject().getNameKey(), links));
+=======
+        tags.add(createTagInfo(ref, rw, pctl.controlForRef(ref.getName()), pctl, links));
+>>>>>>> BRANCH (433e1a Add support for tag web links)
       }
     }
 
@@ -164,6 +177,7 @@ public class ListTags implements RestReadView<ProjectResource> {
       Ref ref = repo.getRefDatabase().exactRef(tagName);
       ProjectControl pctl = resource.getControl();
       if (ref != null && !visibleTags(pctl, repo, ImmutableMap.of(ref.getName(), ref)).isEmpty()) {
+<<<<<<< HEAD   (34da15 Add support for tag web links)
         return createTagInfo(
             permissionBackend
                 .user(pctl.getUser())
@@ -173,21 +187,32 @@ public class ListTags implements RestReadView<ProjectResource> {
             rw,
             pctl.getProject().getNameKey(),
             links);
+=======
+        return createTagInfo(ref, rw, pctl.controlForRef(ref.getName()), pctl, links);
+>>>>>>> BRANCH (433e1a Add support for tag web links)
       }
     }
     throw new ResourceNotFoundException(id);
   }
 
   public static TagInfo createTagInfo(
+<<<<<<< HEAD   (34da15 Add support for tag web links)
       PermissionBackend.ForRef perm,
       Ref ref,
       RevWalk rw,
       Project.NameKey projectName,
       WebLinks links)
+=======
+      Ref ref, RevWalk rw, RefControl control, ProjectControl pctl, WebLinks links)
+>>>>>>> BRANCH (433e1a Add support for tag web links)
       throws MissingObjectException, IOException {
     RevObject object = rw.parseAny(ref.getObjectId());
+<<<<<<< HEAD   (34da15 Add support for tag web links)
     boolean canDelete = perm.testOrFalse(RefPermission.DELETE);
     List<WebLinkInfo> webLinks = links.getTagLinks(projectName.get(), ref.getName());
+=======
+    List<WebLinkInfo> webLinks = links.getTagLinks(pctl.getProject().getName(), ref.getName());
+>>>>>>> BRANCH (433e1a Add support for tag web links)
     if (object instanceof RevTag) {
       // Annotated or signed tag
       RevTag tag = (RevTag) object;
@@ -198,14 +223,22 @@ public class ListTags implements RestReadView<ProjectResource> {
           tag.getObject().getName(),
           tag.getFullMessage().trim(),
           tagger != null ? CommonConverters.toGitPerson(tag.getTaggerIdent()) : null,
+<<<<<<< HEAD   (34da15 Add support for tag web links)
           canDelete,
+=======
+          control.canDelete(),
+>>>>>>> BRANCH (433e1a Add support for tag web links)
           webLinks.isEmpty() ? null : webLinks);
     }
     // Lightweight tag
     return new TagInfo(
         ref.getName(),
         ref.getObjectId().getName(),
+<<<<<<< HEAD   (34da15 Add support for tag web links)
         canDelete,
+=======
+        control.canDelete(),
+>>>>>>> BRANCH (433e1a Add support for tag web links)
         webLinks.isEmpty() ? null : webLinks);
   }
 
@@ -220,9 +253,14 @@ public class ListTags implements RestReadView<ProjectResource> {
 
   private Map<String, Ref> visibleTags(
       ProjectControl pctl, Repository repo, Map<String, Ref> tags) {
+<<<<<<< HEAD   (34da15 Add support for tag web links)
     return refFilterFactory
         .create(pctl.getProjectState(), repo)
         .setShowMetadata(false)
+=======
+    return new VisibleRefFilter(
+            tagCache, changeNotesFactory, changeCache, repo, pctl, dbProvider.get(), false)
+>>>>>>> BRANCH (433e1a Add support for tag web links)
         .filter(tags, true);
   }
 }
