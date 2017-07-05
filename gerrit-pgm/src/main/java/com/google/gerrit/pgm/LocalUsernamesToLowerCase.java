@@ -19,16 +19,24 @@ import static com.google.gerrit.server.schema.DataSourceProvider.Context.MULTI_U
 
 import com.google.gerrit.lifecycle.LifecycleManager;
 import com.google.gerrit.pgm.util.SiteProgram;
+<<<<<<< HEAD   (216068 Merge branch 'stable-2.14')
 import com.google.gerrit.server.account.externalids.DisabledExternalIdCache;
 import com.google.gerrit.server.account.externalids.ExternalId;
 import com.google.gerrit.server.account.externalids.ExternalIds;
 import com.google.gerrit.server.account.externalids.ExternalIdsBatchUpdate;
+=======
+import com.google.gerrit.reviewdb.server.ReviewDb;
+import com.google.gerrit.server.account.ExternalId;
+import com.google.gerrit.server.account.ExternalIdsBatchUpdate;
+import com.google.gerrit.server.index.account.AccountSchemaDefinitions;
+>>>>>>> BRANCH (880310 LocalUsernamesToLowerCase: Reindex accounts after updating e)
 import com.google.gerrit.server.schema.SchemaVersionCheck;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import java.util.Collection;
 import java.util.Locale;
+import org.eclipse.jgit.lib.ProgressMonitor;
 import org.eclipse.jgit.lib.TextProgressMonitor;
 
 /** Converts the local username for all accounts to lower case */
@@ -69,8 +77,10 @@ public class LocalUsernamesToLowerCase extends SiteProgram {
 
     externalIdsBatchUpdate.commit("Convert local usernames to lower case");
     monitor.endTask();
+
+    int exitCode = reindexAccounts();
     manager.stop();
-    return 0;
+    return exitCode;
   }
 
   private void convertLocalUserToLowerCase(ExternalId extId) {
@@ -88,5 +98,18 @@ public class LocalUsernamesToLowerCase extends SiteProgram {
         externalIdsBatchUpdate.replace(extId, extIdLowerCase);
       }
     }
+  }
+
+  private int reindexAccounts() throws Exception {
+    monitor.beginTask("Reindex accounts", ProgressMonitor.UNKNOWN);
+    String[] reindexArgs = {
+      "--site-path", getSitePath().toString(), "--index", AccountSchemaDefinitions.NAME
+    };
+    System.out.println("Migration complete, reindexing accounts with:");
+    System.out.println("  reindex " + String.join(" ", reindexArgs));
+    Reindex reindexPgm = new Reindex();
+    int exitCode = reindexPgm.main(reindexArgs);
+    monitor.endTask();
+    return exitCode;
   }
 }
