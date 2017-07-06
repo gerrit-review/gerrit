@@ -299,6 +299,7 @@ limitations under the License.
       });
 
       test('multiple ranges aka firefox implementation', () => {
+<<<<<<< HEAD   (b3287e Merge "Update URL generation in gr-diff-view")
         const startContent = stubContent(119, 'right');
         const endContent = stubContent(120, 'right');
 
@@ -332,6 +333,41 @@ limitations under the License.
       test('multiline grow end highlight over tabs', () => {
         const startContent = stubContent(119, 'right');
         const endContent = stubContent(120, 'right');
+=======
+        var startContent = stubContent(119, 'right');
+        var endContent = stubContent(120, 'right');
+
+        var startRange = document.createRange();
+        startRange.setStart(startContent.firstChild, 10);
+        startRange.setEnd(startContent.firstChild, 11);
+
+        var endRange = document.createRange();
+        endRange.setStart(endContent.lastChild, 6);
+        endRange.setEnd(endContent.lastChild, 7);
+
+        var getRangeAtStub = sandbox.stub();
+        getRangeAtStub
+            .onFirstCall().returns(startRange)
+            .onSecondCall().returns(endRange);
+        sandbox.stub(window, 'getSelection').returns({
+          rangeCount: 2,
+          getRangeAt: getRangeAtStub,
+          removeAllRanges: sandbox.stub(),
+        });
+        element._handleSelection();
+        assert.isTrue(element.isRangeSelected());
+        assert.deepEqual(getActionRange(), {
+          startLine: 119,
+          startChar: 10,
+          endLine: 120,
+          endChar: 36,
+        });
+      });
+
+      test('multiline grow end highlight over tabs', function() {
+        var startContent = stubContent(119, 'right');
+        var endContent = stubContent(120, 'right');
+>>>>>>> BRANCH (6793fa DeleteTagIT: Make TAG field static)
         emulateSelection(startContent.firstChild, 10, endContent.firstChild, 2);
         assert.isTrue(element.isRangeSelected());
         assert.deepEqual(getActionRange(), {

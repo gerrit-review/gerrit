@@ -114,6 +114,7 @@
      *   }
      * }}
      */
+<<<<<<< HEAD   (b3287e Merge "Update URL generation in gr-diff-view")
     _getNormalizedRange() {
       const selection = window.getSelection();
       const rangeCount = selection.rangeCount;
@@ -137,6 +138,31 @@
      */
     _normalizeRange(domRange) {
       const range = GrRangeNormalizer.normalize(domRange);
+=======
+    _getNormalizedRange: function() {
+      var selection = window.getSelection();
+      var rangeCount = selection.rangeCount;
+      if (rangeCount === 0) {
+        return null;
+      } else if (rangeCount === 1) {
+        return this._normalizeRange(selection.getRangeAt(0));
+      } else {
+        var startRange = this._normalizeRange(selection.getRangeAt(0));
+        var endRange = this._normalizeRange(
+            selection.getRangeAt(rangeCount - 1));
+        return {
+          start: startRange.start,
+          end: endRange.end,
+        };
+      }
+    },
+
+    /**
+     * Normalize a specific DOM Range.
+     */
+    _normalizeRange: function(domRange) {
+      var range = GrRangeNormalizer.normalize(domRange);
+>>>>>>> BRANCH (6793fa DeleteTagIT: Make TAG field static)
       return this._fixTripleClickSelection({
         start: this._normalizeSelectionSide(
             range.startContainer, range.startOffset),
@@ -244,13 +270,24 @@
       };
     },
 
+<<<<<<< HEAD   (b3287e Merge "Update URL generation in gr-diff-view")
     _handleSelection() {
       const normalizedRange = this._getNormalizedRange();
+=======
+    _handleSelection: function() {
+      var normalizedRange = this._getNormalizedRange();
+>>>>>>> BRANCH (6793fa DeleteTagIT: Make TAG field static)
       if (!normalizedRange) {
         return;
       }
+<<<<<<< HEAD   (b3287e Merge "Update URL generation in gr-diff-view")
       const domRange = window.getSelection().getRangeAt(0);
       const start = normalizedRange.start;
+=======
+      var domRange = window.getSelection().getRangeAt(0);
+      var start = normalizedRange.start;
+
+>>>>>>> BRANCH (6793fa DeleteTagIT: Make TAG field static)
       if (!start) {
         return;
       }
