@@ -80,7 +80,7 @@ public class Reviewers extends Composite {
   private Change.Id changeId;
 
   Reviewers() {
-    reviewerSuggestOracle = new ReviewerSuggestOracle();
+    reviewerSuggestOracle = new ReviewerSuggestOracle(true);
     suggestBox = new RemoteSuggestBox(reviewerSuggestOracle);
     suggestBox.enableDefaultSuggestions();
     suggestBox.setVisibleLength(55);

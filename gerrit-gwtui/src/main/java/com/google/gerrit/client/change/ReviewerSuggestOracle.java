@@ -31,11 +31,16 @@ import java.util.List;
 
 /** REST API based suggestion Oracle for reviewers. */
 public class ReviewerSuggestOracle extends HighlightSuggestOracle {
+  private final boolean excludeSelf;
   private Change.Id changeId;
+
+  public ReviewerSuggestOracle(boolean excludeSelf) {
+    this.excludeSelf = excludeSelf;
+  }
 
   @Override
   protected void onRequestSuggestions(Request req, Callback cb) {
-    ChangeApi.suggestReviewers(changeId.get(), req.getQuery(), req.getLimit(), false)
+    ChangeApi.suggestReviewers(changeId.get(), req.getQuery(), req.getLimit(), false, excludeSelf)
         .get(
             new GerritCallback<JsArray<SuggestReviewerInfo>>() {
               @Override

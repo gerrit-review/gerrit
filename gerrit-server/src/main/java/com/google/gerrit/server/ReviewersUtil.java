@@ -145,8 +145,7 @@ public class ReviewersUtil {
       ChangeNotes changeNotes,
       SuggestReviewers suggestReviewers,
       ProjectControl projectControl,
-      VisibilityControl visibilityControl,
-      boolean excludeGroups)
+      VisibilityControl visibilityControl)
       throws IOException, OrmException, ConfigInvalidException {
     String query = suggestReviewers.getQuery();
     int limit = suggestReviewers.getLimit();
@@ -177,7 +176,7 @@ public class ReviewersUtil {
     }
 
     List<SuggestedReviewerInfo> suggestedReviewer = loadAccounts(filteredRecommendations);
-    if (!excludeGroups && suggestedReviewer.size() < limit && !Strings.isNullOrEmpty(query)) {
+    if (!suggestReviewers.getExcludeGroups() && suggestedReviewer.size() < limit && !Strings.isNullOrEmpty(query)) {
       // Add groups at the end as individual accounts are usually more
       // important.
       suggestedReviewer.addAll(

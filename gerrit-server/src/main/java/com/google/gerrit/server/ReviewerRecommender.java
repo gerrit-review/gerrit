@@ -84,6 +84,7 @@ public class ReviewerRecommender {
   private final WorkQueue workQueue;
   private final Provider<ReviewDb> dbProvider;
   private final ApprovalsUtil approvalsUtil;
+  private final CurrentUser currentUser;
 
   @Inject
   ReviewerRecommender(
@@ -93,6 +94,7 @@ public class ReviewerRecommender {
       WorkQueue workQueue,
       Provider<ReviewDb> dbProvider,
       ApprovalsUtil approvalsUtil,
+      CurrentUser currentUser,
       @GerritServerConfig Config config) {
     Set<FillOptions> fillOptions = EnumSet.of(FillOptions.SECONDARY_EMAILS);
     fillOptions.addAll(AccountLoader.DETAILED_OPTIONS);
@@ -103,6 +105,7 @@ public class ReviewerRecommender {
     this.workQueue = workQueue;
     this.dbProvider = dbProvider;
     this.approvalsUtil = approvalsUtil;
+    this.currentUser = currentUser;
   }
 
   public List<Account.Id> suggestReviewers(
@@ -116,7 +119,7 @@ public class ReviewerRecommender {
 
     Map<Account.Id, MutableDouble> reviewerScores;
     if (Strings.isNullOrEmpty(query)) {
-      reviewerScores = baseRankingForEmptyQuery(baseWeight);
+      reviewerScores = baseRankingForEmptyQuery(baseWeight, suggestReviewers.getExcludeSelf());
     } else {
       reviewerScores = baseRankingForCandidateList(candidateList, projectControl, baseWeight);
     }
@@ -179,7 +182,9 @@ public class ReviewerRecommender {
 
     if (changeNotes != null) {
       // Remove change owner
-      reviewerScores.remove(changeNotes.getChange().getOwner());
+      if (suggestReviewers.getExcludeSelf()) {
+        reviewerScores.remove(changeNotes.getChange().getOwner());
+      }
 
       // Remove existing reviewers
       reviewerScores
@@ -197,7 +202,7 @@ public class ReviewerRecommender {
     return sortedSuggestions;
   }
 
-  private Map<Account.Id, MutableDouble> baseRankingForEmptyQuery(double baseWeight)
+  private Map<Account.Id, MutableDouble> baseRankingForEmptyQuery(double baseWeight, boolean excludeSelf)
       throws OrmException, IOException, ConfigInvalidException {
     // Get the user's last 25 changes, check approvals
     try {
@@ -216,6 +221,11 @@ public class ReviewerRecommender {
             suggestions.put(id, new MutableDouble(baseWeight));
           }
         }
+      }
+      if (!excludeSelf) {
+        // Explicitly add self as the first entry in the list. The ranking algorithm will never
+        // include the current user as it only covers reviewers of that persons change.
+        suggestions.put(currentUser.getAccountId(), new MutableDouble(Double.MAX_VALUE));
       }
       return suggestions;
     } catch (QueryParseException e) {

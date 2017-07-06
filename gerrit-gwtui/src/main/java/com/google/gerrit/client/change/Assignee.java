@@ -60,14 +60,14 @@ public class Assignee extends Composite {
   @UiField(provided = true)
   RemoteSuggestBox suggestBox;
 
-  private AssigneeSuggestOracle assigneeSuggestOracle;
+  private ReviewerSuggestOracle reviewerSuggestOracle;
   private Change.Id changeId;
   private boolean canEdit;
   private AccountInfo currentAssignee;
 
   Assignee() {
-    assigneeSuggestOracle = new AssigneeSuggestOracle();
-    suggestBox = new RemoteSuggestBox(assigneeSuggestOracle);
+    reviewerSuggestOracle = new ReviewerSuggestOracle(false);
+    suggestBox = new RemoteSuggestBox(reviewerSuggestOracle);
     suggestBox.setVisibleLength(55);
     suggestBox.setHintText(Util.C.approvalTableEditAssigneeHint());
     suggestBox.addCloseHandler(

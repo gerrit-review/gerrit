@@ -256,6 +256,8 @@ public interface ChangeApi {
   abstract class SuggestedReviewersRequest {
     private String query;
     private int limit;
+    private boolean excludeGroups;
+    private boolean excludeSelf;
 
     public abstract List<SuggestedReviewerInfo> get() throws RestApiException;
 
@@ -269,12 +271,31 @@ public interface ChangeApi {
       return this;
     }
 
+
+    public SuggestedReviewersRequest withExcludeSelf(boolean excludeSelf) {
+      this.excludeSelf = excludeSelf;
+      return this;
+    }
+
+    public SuggestedReviewersRequest withExcludeGroups(boolean excludeGroups) {
+      this.excludeGroups = excludeGroups;
+      return this;
+    }
+
     public String getQuery() {
       return query;
     }
 
     public int getLimit() {
       return limit;
+    }
+
+    public boolean getExcludeGroups() {
+      return excludeGroups;
+    }
+
+    public boolean getExcludeSelf() {
+      return excludeSelf;
     }
   }
 

@@ -402,6 +402,13 @@ public class SuggestReviewersIT extends AbstractDaemonTest {
         .inOrder();
   }
 
+  @Test
+  public void reviewerSuggestionRemoveSelf() throws Exception {
+    List<SuggestedReviewerInfo> reviewers = suggestReviewers(createChangeFromApi(), "", 1, true, false);
+    assertThat(reviewers.stream().map(r -> r.account._accountId).collect(toList()))
+        .containsExactly(admin.id.get());
+  }
+
   private List<SuggestedReviewerInfo> suggestReviewers(String changeId, String query)
       throws Exception {
     return gApi.changes().id(changeId).suggestReviewers(query).get();
@@ -410,6 +417,11 @@ public class SuggestReviewersIT extends AbstractDaemonTest {
   private List<SuggestedReviewerInfo> suggestReviewers(String changeId, String query, int n)
       throws Exception {
     return gApi.changes().id(changeId).suggestReviewers(query).withLimit(n).get();
+  }
+
+  private List<SuggestedReviewerInfo> suggestReviewers(String changeId, String query, int n, boolean excludeGroups, boolean removeSelf)
+      throws Exception {
+    return gApi.changes().id(changeId).suggestReviewers(query).withLimit(n).withExcludeGroups(excludeGroups).withExcludeSelf(removeSelf).get();
   }
 
   private AccountGroup group(String name) throws Exception {

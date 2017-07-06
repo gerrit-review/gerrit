@@ -41,13 +41,6 @@ import org.kohsuke.args4j.Option;
 public class SuggestChangeReviewers extends SuggestReviewers
     implements RestReadView<ChangeResource> {
 
-  @Option(
-    name = "--exclude-groups",
-    aliases = {"-e"},
-    usage = "exclude groups from query"
-  )
-  boolean excludeGroups;
-
   private final PermissionBackend permissionBackend;
   private final Provider<CurrentUser> self;
 
@@ -75,8 +68,7 @@ public class SuggestChangeReviewers extends SuggestReviewers
         rsrc.getNotes(),
         this,
         rsrc.getControl().getProjectControl(),
-        getVisibility(rsrc),
-        excludeGroups);
+        getVisibility(rsrc));
   }
 
   private VisibilityControl getVisibility(ChangeResource rsrc) {

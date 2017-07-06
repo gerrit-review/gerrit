@@ -483,6 +483,8 @@ class ChangeApiImpl implements ChangeApi {
       throws RestApiException {
     try {
       suggestReviewers.setQuery(r.getQuery());
+      suggestReviewers.setExcludeGroups(r.getExcludeGroups());
+      suggestReviewers.setExcludeSelf(r.getExcludeSelf());
       suggestReviewers.setLimit(r.getLimit());
       return suggestReviewers.apply(change);
     } catch (Exception e) {

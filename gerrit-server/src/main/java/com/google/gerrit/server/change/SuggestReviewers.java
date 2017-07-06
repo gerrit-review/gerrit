@@ -36,6 +36,8 @@ public class SuggestReviewers {
   private final int maxAllowedWithoutConfirmation;
   protected int limit;
   protected String query;
+  protected boolean excludeGroups;
+  protected boolean excludeSelf;
   protected final int maxSuggestedReviewers;
 
   @Option(
@@ -58,6 +60,24 @@ public class SuggestReviewers {
     this.query = q;
   }
 
+  @Option(
+      name = "--exclude-groups",
+      aliases = {"-e"},
+      usage = "exclude groups from query"
+  )
+  public void setExcludeGroups(boolean excludeGroups) {
+    this.excludeGroups = excludeGroups;
+  }
+
+  @Option(
+      name = "--excludeSelf",
+      aliases = {"-es"},
+      usage = "exclude current user from the list"
+  )
+  public void setExcludeSelf(boolean excludeSelf) {
+    this.excludeSelf = excludeSelf;
+  }
+
   public String getQuery() {
     return query;
   }
@@ -76,6 +96,14 @@ public class SuggestReviewers {
 
   public int getMaxAllowedWithoutConfirmation() {
     return maxAllowedWithoutConfirmation;
+  }
+
+  public boolean getExcludeGroups(){
+    return excludeGroups;
+  }
+
+  public boolean getExcludeSelf() {
+    return excludeSelf;
   }
 
   @Inject

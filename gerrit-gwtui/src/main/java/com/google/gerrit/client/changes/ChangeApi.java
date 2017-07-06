@@ -174,8 +174,8 @@ public class ChangeApi {
     return change(id).view("reviewers");
   }
 
-  public static RestApi suggestReviewers(int id, String q, int n, boolean e) {
-    RestApi api = change(id).view("suggest_reviewers").addParameter("n", n).addParameter("e", e);
+  public static RestApi suggestReviewers(int id, String q, int n, boolean e, boolean excludeSelf) {
+    RestApi api = change(id).view("suggest_reviewers").addParameter("n", n).addParameter("e", e).addParameter("es", excludeSelf);
     if (q != null) {
       api.addParameter("q", q);
     }
