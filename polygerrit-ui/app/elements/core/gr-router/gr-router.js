@@ -85,9 +85,15 @@
         if (data.hash[0] !== '/') {
           data.hash = '/' + data.hash;
         }
+<<<<<<< HEAD   (259761 Merge "Gerrit: Fixup gr-message to support anon user (ie a u)
         const hash = data.hash;
         let newUrl = base + hash;
         if (hash.startsWith('/VE/')) {
+=======
+        var hash = data.hash;
+        var newUrl = base + hash;
+        if (hash.indexOf('/VE/') === 0) {
+>>>>>>> BRANCH (da7a5c PolyGerrit: Fix register links to use base url)
           newUrl = base + '/settings' + data.hash;
         }
         page(newUrl);
@@ -409,7 +415,11 @@
 
     page(/^\/register(\/.*)?/, ctx => {
       app.params = {justRegistered: true};
+<<<<<<< HEAD   (259761 Merge "Gerrit: Fixup gr-message to support anon user (ie a u)
       const path = ctx.params[0] || '/';
+=======
+      var path = ctx.params[0] || '/';
+>>>>>>> BRANCH (da7a5c PolyGerrit: Fix register links to use base url)
       if (path[0] !== '/') { return; }
       page.show(base + path);
     });
