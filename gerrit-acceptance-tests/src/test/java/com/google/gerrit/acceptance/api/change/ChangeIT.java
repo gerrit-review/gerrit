@@ -62,6 +62,7 @@ import com.google.gerrit.extensions.api.changes.NotifyHandling;
 import com.google.gerrit.extensions.api.changes.NotifyInfo;
 import com.google.gerrit.extensions.api.changes.RebaseInput;
 import com.google.gerrit.extensions.api.changes.RecipientType;
+import com.google.gerrit.extensions.api.changes.RevertInput;
 import com.google.gerrit.extensions.api.changes.ReviewInput;
 import com.google.gerrit.extensions.api.changes.ReviewInput.DraftHandling;
 import com.google.gerrit.extensions.api.changes.ReviewResult;
@@ -661,6 +662,40 @@ public class ChangeIT extends AbstractDaemonTest {
     exception.expect(ResourceConflictException.class);
     exception.expectMessage("Cannot revert initial commit");
     gApi.changes().id(r.getChangeId()).revert();
+  }
+
+  @Test
+  public void revertNotify() throws Exception {
+    // Creates a merged change as 'admin'.
+    PushOneCommit.Result result = createChange();
+    String changeId = result.getChangeId();
+    merge(result);
+
+    // Revert the change as 'user'.
+    setApiUser(admin);
+    RevertInput input = new RevertInput();
+
+    // Enable the notification. 'admin' as a reviewer should be notified.
+    input.notify = NotifyHandling.ALL;
+    sender.clear();
+    gApi.changes().id(changeId).revert(input);
+    assertNotifyCc(admin);
+
+    // Disable the notification. 'admin' as a reviewer should not be notified any more.
+    input.notify = NotifyHandling.NONE;
+    sender.clear();
+    gApi.changes().id(changeId).revert(input);
+    assertThat(sender.getMessages()).hasSize(0);
+
+    // Disable the notification. The user provided in the 'notifyDetails' should still be notified.
+    TestAccount userToNotify = accountCreator.user2();
+
+    input.notify = NotifyHandling.NONE;
+    input.notifyDetails =
+        ImmutableMap.of(RecipientType.TO, new NotifyInfo(ImmutableList.of(userToNotify.email)));
+    sender.clear();
+    gApi.changes().id(changeId).revert(input);
+    assertNotifyTo(userToNotify);
   }
 
   @FunctionalInterface
