@@ -15,7 +15,11 @@
 package com.google.gerrit.extensions.api.changes;
 
 import com.google.gerrit.extensions.restapi.DefaultInput;
+import java.util.Map;
 
 public class RevertInput {
   @DefaultInput public String message;
+
+  public NotifyHandling notify = NotifyHandling.ALL;
+  public Map<RecipientType, NotifyInfo> notifyDetails;
 }

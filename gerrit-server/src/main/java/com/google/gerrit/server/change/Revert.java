@@ -45,7 +45,6 @@ import com.google.gerrit.server.notedb.ReviewerStateInternal;
 import com.google.gerrit.server.permissions.PermissionBackend;
 import com.google.gerrit.server.permissions.PermissionBackendException;
 import com.google.gerrit.server.project.ChangeControl;
-import com.google.gerrit.server.project.NoSuchChangeException;
 import com.google.gerrit.server.update.BatchUpdate;
 import com.google.gerrit.server.update.BatchUpdateOp;
 import com.google.gerrit.server.update.ChangeContext;
@@ -62,6 +61,7 @@ import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Set;
+import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.errors.RepositoryNotFoundException;
 import org.eclipse.jgit.lib.CommitBuilder;
 import org.eclipse.jgit.lib.ObjectId;
@@ -93,6 +93,7 @@ public class Revert extends RetryingRestModifyView<ChangeResource, RevertInput, 
   private final PersonIdent serverIdent;
   private final ApprovalsUtil approvalsUtil;
   private final ChangeReverted changeReverted;
+  private final NotifyUtil notifyUtil;
 
   @Inject
   Revert(
@@ -109,7 +110,8 @@ public class Revert extends RetryingRestModifyView<ChangeResource, RevertInput, 
       ChangeJson.Factory json,
       @GerritPersonIdent PersonIdent serverIdent,
       ApprovalsUtil approvalsUtil,
-      ChangeReverted changeReverted) {
+      ChangeReverted changeReverted,
+      NotifyUtil notifyUtil) {
     super(retryHelper);
     this.db = db;
     this.permissionBackend = permissionBackend;
@@ -124,13 +126,14 @@ public class Revert extends RetryingRestModifyView<ChangeResource, RevertInput, 
     this.serverIdent = serverIdent;
     this.approvalsUtil = approvalsUtil;
     this.changeReverted = changeReverted;
+    this.notifyUtil = notifyUtil;
   }
 
   @Override
   public ChangeInfo applyImpl(
       BatchUpdate.Factory updateFactory, ChangeResource rsrc, RevertInput input)
-      throws IOException, OrmException, RestApiException, UpdateException, NoSuchChangeException,
-          PermissionBackendException {
+      throws IOException, OrmException, RestApiException, UpdateException,
+          PermissionBackendException, ConfigInvalidException {
     Change change = rsrc.getChange();
     if (change.getStatus() != Change.Status.MERGED) {
       throw new ResourceConflictException("change is " + ChangeUtil.status(change));
@@ -139,13 +142,12 @@ public class Revert extends RetryingRestModifyView<ChangeResource, RevertInput, 
     CreateChange.checkValidCLA(rsrc.getControl().getProjectControl());
     permissionBackend.user(user).ref(change.getDest()).check(CREATE_CHANGE);
 
-    Change.Id revertId =
-        revert(updateFactory, rsrc.getControl(), Strings.emptyToNull(input.message));
+    Change.Id revertId = revert(updateFactory, rsrc.getControl(), input);
     return json.noOptions().format(rsrc.getProject(), revertId);
   }
 
-  private Change.Id revert(BatchUpdate.Factory updateFactory, ChangeControl ctl, String message)
-      throws OrmException, IOException, RestApiException, UpdateException {
+  private Change.Id revert(BatchUpdate.Factory updateFactory, ChangeControl ctl, RevertInput input)
+      throws OrmException, IOException, RestApiException, UpdateException, ConfigInvalidException {
     Change.Id changeIdToRevert = ctl.getChange().getId();
     PatchSet.Id patchSetId = ctl.getChange().currentPatchSetId();
     PatchSet patch = psUtil.get(db.get(), ctl.getNotes(), patchSetId);
@@ -180,6 +182,7 @@ public class Revert extends RetryingRestModifyView<ChangeResource, RevertInput, 
       revertCommitBuilder.setCommitter(authorIdent);
 
       Change changeToRevert = ctl.getChange();
+      String message = Strings.nullToEmpty(input.message);
       if (message == null) {
         message =
             MessageFormat.format(
@@ -218,6 +221,9 @@ public class Revert extends RetryingRestModifyView<ChangeResource, RevertInput, 
       Set<Account.Id> ccs = new HashSet<>(reviewerSet.byState(ReviewerStateInternal.CC));
       ccs.remove(user.getAccountId());
       ins.setExtraCC(ccs);
+
+      // ins.setNotify(input.notify);
+      // ins.setAccountsToNotify(notifyUtil.resolveAccounts(input.notifyDetails));
 
       try (BatchUpdate bu = updateFactory.create(db.get(), project, user, now)) {
         bu.setRepository(git, revWalk, oi);
