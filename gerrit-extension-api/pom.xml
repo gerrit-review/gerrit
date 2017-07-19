@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-extension-api</artifactId>
+<<<<<<< HEAD   (20c169 Merge "Revert "Update iron-input to 2.0"")
   <version>2.15-SNAPSHOT</version>
+=======
+  <version>2.14.2</version>
+>>>>>>> BRANCH (083ded Set version to 2.14.2)
   <packaging>jar</packaging>
   <name>Gerrit Code Review - Extension API</name>
   <description>API for Gerrit Extensions</description>
