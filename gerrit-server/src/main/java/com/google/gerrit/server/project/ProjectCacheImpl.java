@@ -157,7 +157,14 @@ public class ProjectCacheImpl implements ProjectCache {
 
   @Override
   public void evict(Project p) throws IOException {
+<<<<<<< HEAD   (ec8691 Create project query processor)
     evict(p.getNameKey());
+=======
+    if (p != null) {
+      byName.invalidate(p.getNameKey().get());
+    }
+    indexer.get().index(p.getNameKey());
+>>>>>>> BRANCH (eb4ca2 REST API support for project query)
   }
 
   @Override

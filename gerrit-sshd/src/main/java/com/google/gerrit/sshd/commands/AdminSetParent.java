@@ -177,7 +177,11 @@ final class AdminSetParent extends SshCommand {
       try {
         projectCache.evict(nameKey);
       } catch (IOException e) {
+<<<<<<< HEAD   (ec8691 Create project query processor)
         final String msg = "Cannot reindex project: " + name;
+=======
+        final String msg = "Cannot evict from project cache, name key: " + nameKey.get();
+>>>>>>> BRANCH (eb4ca2 REST API support for project query)
         log.error(msg, e);
         err.append("error: ").append(msg).append("\n");
       }

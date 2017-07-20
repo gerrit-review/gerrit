@@ -45,20 +45,28 @@ public interface ProjectCache {
    */
   ProjectState checkedGet(Project.NameKey projectName) throws IOException;
 
+<<<<<<< HEAD   (ec8691 Create project query processor)
   /**
    * Invalidate the cached information about the given project, and triggers reindexing for it
    *
    * @param p project that is being evicted
    * @throws IOException thrown if the reindexing fails
    */
+=======
+  /** Invalidate the cached information about the given project. */
+>>>>>>> BRANCH (eb4ca2 REST API support for project query)
   void evict(Project p) throws IOException;
 
+<<<<<<< HEAD   (ec8691 Create project query processor)
   /**
    * Invalidate the cached information about the given project, and triggers reindexing for it
    *
    * @param p the NameKey of the project that is being evicted
    * @throws IOException thrown if the reindexing fails
    */
+=======
+  /** Invalidate the cached information about the given project. */
+>>>>>>> BRANCH (eb4ca2 REST API support for project query)
   void evict(Project.NameKey p) throws IOException;
 
   /**

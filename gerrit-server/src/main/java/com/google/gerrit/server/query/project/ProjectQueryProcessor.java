@@ -24,6 +24,7 @@ import com.google.gerrit.server.index.IndexPredicate;
 import com.google.gerrit.server.index.project.ProjectIndexCollection;
 import com.google.gerrit.server.index.project.ProjectIndexRewriter;
 import com.google.gerrit.server.index.project.ProjectSchemaDefinitions;
+<<<<<<< HEAD   (ec8691 Create project query processor)
 import com.google.gerrit.server.permissions.PermissionBackend;
 import com.google.gerrit.server.project.ProjectState;
 import com.google.gerrit.server.query.AndSource;
@@ -67,5 +68,50 @@ public class ProjectQueryProcessor extends QueryProcessor<ProjectState> {
   protected Predicate<ProjectState> enforceVisibility(Predicate<ProjectState> pred) {
     return new AndSource<>(
         pred, new ProjectIsVisibleToPredicate(permissionBackend, userProvider.get()), start);
+=======
+import com.google.gerrit.server.project.ProjectControl;
+import com.google.gerrit.server.project.ProjectState;
+import com.google.gerrit.server.query.AndSource;
+import com.google.gerrit.server.query.Predicate;
+import com.google.gerrit.server.query.QueryProcessor;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+
+public class ProjectQueryProcessor extends QueryProcessor<ProjectState> {
+  private final ProjectControl.GenericFactory projectControlFactory;
+
+  static {
+    // It is assumed that basic rewrites do not touch visibleto predicates.
+    checkState(
+        !ProjectIsVisibleToPredicate.class.isAssignableFrom(IndexPredicate.class),
+        "ProjectQueryProcessor assumes visibleto is not used by the index rewriter.");
+  }
+
+  @Inject
+  protected ProjectQueryProcessor(
+      Provider<CurrentUser> userProvider,
+      AccountLimits.Factory limitsFactory,
+      Metrics metrics,
+      IndexConfig indexConfig,
+      ProjectIndexCollection indexes,
+      ProjectIndexRewriter rewriter,
+      ProjectControl.GenericFactory projectControlFactory) {
+    super(
+        userProvider,
+        limitsFactory,
+        metrics,
+        ProjectSchemaDefinitions.INSTANCE,
+        indexConfig,
+        indexes,
+        rewriter,
+        FIELD_LIMIT);
+    this.projectControlFactory = projectControlFactory;
+  }
+
+  @Override
+  protected Predicate<ProjectState> enforceVisibility(Predicate<ProjectState> pred) {
+    return new AndSource<>(
+        pred, new ProjectIsVisibleToPredicate(projectControlFactory, userProvider.get()), start);
+>>>>>>> BRANCH (eb4ca2 REST API support for project query)
   }
 }

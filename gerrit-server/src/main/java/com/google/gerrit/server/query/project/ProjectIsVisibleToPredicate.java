@@ -15,6 +15,7 @@
 package com.google.gerrit.server.query.project;
 
 import com.google.gerrit.server.CurrentUser;
+<<<<<<< HEAD   (ec8691 Create project query processor)
 import com.google.gerrit.server.permissions.PermissionBackend;
 import com.google.gerrit.server.permissions.ProjectPermission;
 import com.google.gerrit.server.project.ProjectState;
@@ -38,6 +39,26 @@ public class ProjectIsVisibleToPredicate extends IsVisibleToPredicate<ProjectSta
         .user(user)
         .project(projectState.getProject().getNameKey())
         .testOrFalse(ProjectPermission.READ);
+=======
+import com.google.gerrit.server.project.ProjectControl;
+import com.google.gerrit.server.project.ProjectState;
+import com.google.gerrit.server.query.IsVisibleToPredicate;
+import com.google.gerrit.server.query.account.AccountQueryBuilder;
+import com.google.gwtorm.server.OrmException;
+
+public class ProjectIsVisibleToPredicate extends IsVisibleToPredicate<ProjectState> {
+  protected final CurrentUser user;
+
+  public ProjectIsVisibleToPredicate(
+      ProjectControl.GenericFactory ProjectControlFactory, CurrentUser user) {
+    super(AccountQueryBuilder.FIELD_VISIBLETO, describe(user));
+    this.user = user;
+  }
+
+  @Override
+  public boolean match(ProjectState projectState) throws OrmException {
+    return projectState.controlFor(user).canRead();
+>>>>>>> BRANCH (eb4ca2 REST API support for project query)
   }
 
   @Override
