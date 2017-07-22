@@ -30,6 +30,9 @@ abstract class PaginatedProjectScreen extends ProjectScreen {
   }
 
   protected void parseToken(String token) {
+    if (token == null) {
+      return;
+    }
     for (String kvPair : token.split("[,;&/?]")) {
       String[] kv = kvPair.split("=", 2);
       if (kv.length != 2 || kv[0].isEmpty()) {
