@@ -155,11 +155,11 @@
   };
 
   Plugin.prototype.getDomHook = function(endpointName) {
-    const hookName = this._getGeneratedHookName(endpointName);
-    if (!this._hooks[hookName]) {
-      this._hooks[hookName] = new Promise((resolve, reject) => {
+    const hookNames = this._getGeneratedHookName(endpointName);
+    if (!this._hooks[hookNames]) {
+      this._hooks[hookNames] = new Promise((resolve, reject) => {
         Polymer({
-          is: hookName,
+          is: hookNames,
           properties: {
             plugin: Object,
             content: Object,
@@ -168,7 +168,7 @@
             resolve(this);
           },
         });
-        this.registerCustomComponent(endpointName, hookName);
+        this.registerCustomComponent(endpointName, hookNames);
       });
     }
     return this._hooks[hookName];
