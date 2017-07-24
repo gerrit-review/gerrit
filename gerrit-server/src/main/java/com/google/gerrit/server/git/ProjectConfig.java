@@ -190,7 +190,10 @@ public class ProjectConfig extends VersionedMetaData implements ValidationError.
   private boolean checkReceivedObjects;
   private Set<String> sectionsWithUnknownPermissions;
   private boolean hasLegacyPermissions;
+<<<<<<< HEAD   (f73f8c Make mergeable check more explicit)
   private Map<String, List<String>> extensionPanelSections;
+=======
+>>>>>>> BRANCH (ff7c4c Merge changes from topic 'fix-group-reference' into stable-2)
   private Map<String, GroupReference> groupsByName;
 
   public static ProjectConfig read(MetaDataUpdate update)
@@ -572,6 +575,7 @@ public class ProjectConfig extends VersionedMetaData implements ValidationError.
         loadPermissionRules(rc, ACCOUNTS, null, KEY_SAME_GROUP_VISIBILITY, groupsByName, false));
   }
 
+<<<<<<< HEAD   (f73f8c Make mergeable check more explicit)
   private void loadExtensionPanelSections(Config rc) {
     Map<String, String> lowerNames = Maps.newHashMapWithExpectedSize(2);
     extensionPanelSections = Maps.newLinkedHashMap();
@@ -591,6 +595,8 @@ public class ProjectConfig extends VersionedMetaData implements ValidationError.
     }
   }
 
+=======
+>>>>>>> BRANCH (ff7c4c Merge changes from topic 'fix-group-reference' into stable-2)
   private void loadContributorAgreements(Config rc) {
     contributorAgreements = new HashMap<>();
     for (String name : rc.getSubsections(CONTRIBUTOR_AGREEMENT)) {
