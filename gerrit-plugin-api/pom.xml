@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-plugin-api</artifactId>
+<<<<<<< HEAD   (7951b1 Merge "PolyGerrit: Fix redirecting to /login/ in gr-router")
   <version>2.15-SNAPSHOT</version>
+=======
+  <version>2.14.3-SNAPSHOT</version>
+>>>>>>> BRANCH (8c553b StaticModule: Only attempt to parse polygerrit parameter on )
   <packaging>jar</packaging>
   <name>Gerrit Code Review - Plugin API</name>
   <description>API for Gerrit Plugins</description>
