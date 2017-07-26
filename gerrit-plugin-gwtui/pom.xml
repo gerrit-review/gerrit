@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-plugin-gwtui</artifactId>
+<<<<<<< HEAD   (fbfd17 InstallPlugin: Move static Input class to separate class in )
   <version>2.15-SNAPSHOT</version>
+=======
+  <version>2.14.3-SNAPSHOT</version>
+>>>>>>> BRANCH (702e8c StaticModule: Only attempt to parse polygerrit parameter on )
   <packaging>jar</packaging>
   <name>Gerrit Code Review - Plugin GWT UI</name>
   <description>Common Classes for Gerrit GWT UI Plugins</description>
