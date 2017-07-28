@@ -318,6 +318,7 @@
       }
     };
 
+<<<<<<< HEAD   (1adb7a Merge changes from topic 'plugin-api')
     // Matches
     // /c/<project>/+/<changeNum>/[<basePatchNum>..][<patchNum>]/[path].
     // TODO(kaspern): Migrate completely to project based URLs, with backwards
@@ -341,6 +342,10 @@
 
     // Matches /c/<changeNum>/[<basePatchNum>..][<patchNum>][/].
     page(/^\/c\/(\d+)\/?(((\d+)(\.\.(\d+))?))?\/?$/, ctx => {
+=======
+    // Matches /c/<changeNum>/[<basePatchNum>..][<patchNum>][/].
+    page(/^\/c\/(\d+)\/?(((\d+)(\.\.(\d+))?))?\/?$/, function(ctx) {
+>>>>>>> BRANCH (f48e7b PolyGerrit: Fix going to /c/<change>/patch-num>/ with a slas)
       // Parameter order is based on the regex group number matched.
       const params = {
         changeNum: ctx.params[0],
