@@ -19,7 +19,12 @@ EXPORTS = [
     "//gerrit-extension-api:api",
     "//gerrit-gwtexpui:server",
     "//gerrit-reviewdb:server",
+<<<<<<< HEAD   (975d87 Merge changes I8075ae70,Iad6e8f8b)
     "//gerrit-server:prolog-common",
+=======
+    "//gerrit-server/src/main/prolog:common",
+    "//lib/commons:dbcp",
+>>>>>>> BRANCH (5cb381 List{Branches,Tags}: Use "-S' as alias for "--start" instead)
     "//lib/commons:lang",
     "//lib/commons:lang3",
     "//lib/dropwizard:dropwizard-core",
