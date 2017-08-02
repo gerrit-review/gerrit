@@ -56,7 +56,10 @@
       group: String,
       permission: String,
       /** @type {?} */
-      rule: Object,
+      rule: {
+        type: Object,
+        notify: true,
+      },
       section: String,
       _modified: {
         type: Boolean,
