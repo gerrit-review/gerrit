@@ -41,6 +41,10 @@ limitations under the License.
         flex-wrap: nowrap;
         justify-content: space-between;
       }
+      .buttons gr-button {
+        float: left;
+        margin-left: .3em;
+      }
       #undoBtn,
       #force,
       #deletedContainer,
@@ -57,7 +61,9 @@ limitations under the License.
     <div id="mainContainer"
         class$="gr-form-styles [[_computeDeletedClass(_deleted)]]">
       <div id="options">
-        <gr-select id="action" bind-value="{{rule.value.action}}">
+        <gr-select id="action"
+            bind-value="{{rule.value.action}}"
+            on-change="_handleValueChange">
           <select>
             <template is="dom-repeat" items="[[_computeOptions(permission)]]">
               <option value="[[item]]">[[item]]</option>
@@ -65,14 +71,20 @@ limitations under the License.
           </select>
         </gr-select>
         <template is="dom-if" if="[[label]]">
-          <gr-select id="labelMin" bind-value="{{rule.value.min}}">
+          <gr-select
+              id="labelMin"
+              bind-value="{{rule.value.min}}"
+              on-change="_handleValueChange">
             <select>
               <template is="dom-repeat" items="[[label.values]]">
                 <option value="[[item.value]]">[[item.value]]</option>
               </template>
             </select>
           </gr-select>
-          <gr-select id="labelMax" bind-value="{{rule.value.max}}">
+          <gr-select
+              id="labelMax"
+              bind-value="{{rule.value.max}}"
+              on-change="_handleValueChange">
             <select>
               <template is="dom-repeat" items="[[label.values]]">
                 <option value="[[item.value]]">[[item.value]]</option>
@@ -84,7 +96,8 @@ limitations under the License.
         <gr-select
             id="force"
             class$="[[_computeForceClass(permission)]]"
-            bind-value="{{rule.value.force}}">
+            bind-value="{{rule.value.force}}"
+            on-change="_handleValueChange">
           <select>
             <template
                 is="dom-repeat"

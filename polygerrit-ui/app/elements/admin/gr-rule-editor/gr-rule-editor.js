@@ -56,7 +56,10 @@
       group: String,
       permission: String,
       /** @type {?} */
-      rule: Object,
+      rule: {
+        type: Object,
+        notify: true,
+      },
       section: String,
       _modified: {
         type: Boolean,
@@ -69,9 +72,13 @@
       },
     },
 
-    observers: [
-      '_handleValueChange(rule.value.*)',
-    ],
+    ready() {
+      if (!this.rule.value) {
+        this._setDefaultRuleValues();
+      } else if (!this._originalRuleValues) {
+        this._setOriginalRuleValues(this.rule.value);
+      }
+    },
 
     _computeForce(permission) {
       return 'push' === permission || 'editTopicName' === permission;
@@ -138,16 +145,7 @@
     },
 
     _handleValueChange() {
-      if (!this.rule.value) {
-        this._setDefaultRuleValues();
-      } else if (!this._originalRuleValues) {
-        this._setOriginalRuleValues(this.rule.value);
-      } else {
-        // If it was triggered by an event, it should be modified, otherwise it
-        // means it was triggered by the undo button, in which ase modified
-        // should be false.
-        this._modified = true;
-      }
+      this._modified = true;
     },
 
     _setOriginalRuleValues(value) {
