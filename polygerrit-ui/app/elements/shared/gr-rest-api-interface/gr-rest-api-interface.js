@@ -201,6 +201,11 @@
       return this._fetchSharedCacheURL('/config/server/info');
     },
 
+    getProject(project) {
+      return this._fetchSharedCacheURL(
+          '/projects/' + encodeURIComponent(project));
+    },
+
     getProjectConfig(project) {
       return this._fetchSharedCacheURL(
           '/projects/' + encodeURIComponent(project) + '/config');
@@ -998,6 +1003,17 @@
       );
     },
 
+    getProjectAccessRights(projectName) {
+      return this._fetchSharedCacheURL(
+          `/projects/${encodeURIComponent(projectName)}/access`);
+    },
+
+    setProjectAccessRights(projectName, projectInfo) {
+      return this.send(
+          'POST', `/projects/${encodeURIComponent(projectName)}/access`
+          , projectInfo);
+    },
+
     /**
      * @param {string} inputVal
      * @param {number} opt_n
@@ -1007,6 +1023,7 @@
     getSuggestedGroups(inputVal, opt_n, opt_errFn, opt_ctx) {
       const params = {s: inputVal};
       if (opt_n) { params.n = opt_n; }
+      if (opt_p) { params.p = opt_n; }
       return this.fetchJSON('/groups/', opt_errFn, opt_ctx, params);
     },
 
@@ -1643,6 +1660,10 @@
             }
             return null;
           });
+    },
+
+    getCapabilities(token) {
+      return this.fetchJSON( '/config/server/capabilities');
     },
 
     setAssignee(changeNum, assignee) {
