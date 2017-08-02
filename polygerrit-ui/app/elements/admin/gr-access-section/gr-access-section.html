@@ -1,0 +1,109 @@
+<!--
+Copyright (C) 2017 The Android Open Source Project
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../../bower_components/iron-input/iron-input.html">
+<link rel="import" href="../../../styles/gr-form-styles.html">
+<link rel="import" href="../../../styles/shared-styles.html">
+<link rel="import" href="../../shared/gr-button/gr-button.html">
+<link rel="import" href="../../shared/gr-rest-api-interface/gr-rest-api-interface.html">
+<link rel="import" href="../gr-permission/gr-permission.html">
+
+<dom-module id="gr-access-section">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        margin-bottom: 1em;
+      }
+      .editContainer {
+        display: none;
+      }
+      fieldset {
+        border: 1px solid #d1d2d3;
+      }
+      .sectionHeader {
+        background: #f6f6f6;
+        border-bottom: 1px dotted #d1d2d3;
+        padding: .7em .7em;
+      }
+      .sectionHeader gr-button {
+        float: right;
+      }
+      .sectionHeader.editing > :not(.editing) {
+        display: none;
+      }
+      .sectionHeader.editing .editContainer {
+        display: block;
+      }
+      .name {
+        display: inline-block;
+      }
+      #editReference {
+        display: block;
+        float: right;
+      }
+      .sectionContent {
+        padding: .7em;
+      }
+
+    </style>
+    <style include="gr-form-styles"></style>
+    <fieldset class="gr-form-styles">
+      <div class$="sectionHeader [[_computeHeaderClass(_editing)]]">
+        <div>
+          <span class="name"><h3>[[_computeSectionName(section.id)]]</h3></span>
+          <gr-button on-tap="_editReference">Edit Reference</gr-button>
+        </div>
+        <div class="editContainer">
+          <input
+              bind-value="{{section.id}}"
+              is="iron-input"
+              type="text">
+          <gr-button on-tap="_saveReference">Save</gr-button>
+        </div>
+      </div>
+      <div class="sectionContent">
+        <template
+            is="dom-repeat"
+            items="[[_permissions]]"
+            as="permission">
+          <gr-permission
+              name="[[_computePermissionName(section.id, permission)]]"
+              permission="[[permission]]"
+              labels="[[labels]]"
+              section="[[section.id]]"
+              on-permission-updated="_handlePermissionUpdated"
+              on-permission-added="_handlePermissionAdded"
+              on-permission-removed="_handlePermissionRemoved">
+          </gr-permission>
+        </template>
+        Add permission:
+        <select id="permissionSelect">
+          <template
+              is="dom-repeat"
+              items="[[_computePermissions(section.id, capabilities)]]">
+            <option value="[[item.value.id]]">[[item.value.name]]</option>
+          </template>
+        </select>
+        <gr-button on-tap="_handleAddPermission">Add</gr-button>
+      </div>
+    </fieldset>
+    <gr-rest-api-interface id="restAPI"></gr-rest-api-interface>
+  </template>
+  <script src="gr-access-section.js"></script>
+</dom-module>
