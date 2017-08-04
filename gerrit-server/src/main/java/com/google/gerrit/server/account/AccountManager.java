@@ -43,7 +43,12 @@ import com.google.inject.Singleton;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+<<<<<<< HEAD   (661ad6 Merge changes from topics 'reduce-use-of-legacy-group-id-for)
 import java.util.List;
+=======
+import java.util.Collections;
+import java.util.Iterator;
+>>>>>>> BRANCH (a70193 AccountManager: Improve error message on first user creation)
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
@@ -263,6 +268,7 @@ public class AccountManager {
               .getPermission(GlobalCapability.ADMINISTRATE_SERVER);
 
       AccountGroup.UUID uuid = admin.getRules().get(0).getGroup().getUUID();
+<<<<<<< HEAD   (661ad6 Merge changes from topics 'reduce-use-of-legacy-group-id-for)
       GroupsUpdate groupsUpdate = groupsUpdateProvider.get();
       // The user initiated this request by logging in. -> Attribute all modifications to that user.
       groupsUpdate.setCurrentUser(user);
@@ -271,6 +277,18 @@ public class AccountManager {
       } catch (NoSuchGroupException e) {
         throw new AccountException(String.format("Group %s not found", uuid));
       }
+=======
+      Iterator<AccountGroup> adminGroupIt = db.accountGroups().byUUID(uuid).iterator();
+      if (!adminGroupIt.hasNext()) {
+        throw new OrmException(
+            "Administrator group's UUID is misaligned in backend and All-Projects repository");
+      }
+      AccountGroup g = adminGroupIt.next();
+      AccountGroup.Id adminId = g.getId();
+      AccountGroupMember m = new AccountGroupMember(new AccountGroupMember.Key(newId, adminId));
+      auditService.dispatchAddAccountsToGroup(newId, Collections.singleton(m));
+      db.accountGroupMembers().insert(Collections.singleton(m));
+>>>>>>> BRANCH (a70193 AccountManager: Improve error message on first user creation)
     }
 
     if (who.getUserName() != null) {
