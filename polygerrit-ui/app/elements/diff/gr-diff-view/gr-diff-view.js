@@ -201,6 +201,7 @@
     },
 
     _setReviewed(reviewed) {
+      console.log(reviewed);
       this.$.reviewed.checked = reviewed;
       this._saveReviewedState(reviewed).catch(err => {
         this.fire('show-alert', {message: ERR_REVIEW_STATUS});
@@ -209,6 +210,7 @@
     },
 
     _saveReviewedState(reviewed) {
+      console.log(reviewed);
       return this.$.restAPI.saveFileReviewed(this._changeNum,
           this._patchRange.patchNum, this._path, reviewed);
     },
