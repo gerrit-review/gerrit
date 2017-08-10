@@ -18,7 +18,11 @@ import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
 import com.google.common.base.Strings;
+<<<<<<< HEAD   (1b1587 Merge changes Icca726b5,I91cf6da1,Iea3ba2aa)
 import com.google.common.collect.Streams;
+=======
+import com.google.common.collect.Lists;
+>>>>>>> BRANCH (7bd3b9 JdbcAccountPatchReviewStore: Remove unneeded else clauses)
 import com.google.gerrit.common.Nullable;
 import com.google.gerrit.common.data.GlobalCapability;
 import com.google.gerrit.extensions.annotations.RequiresCapability;
@@ -130,6 +134,7 @@ public class ListPlugins implements RestReadView<TopLevelResource> {
     return display(null);
   }
 
+<<<<<<< HEAD   (1b1587 Merge changes Icca726b5,I91cf6da1,Iea3ba2aa)
   public SortedMap<String, PluginInfo> apply() throws BadRequestException {
     format = OutputFormat.JSON;
     return display(null);
@@ -159,6 +164,19 @@ public class ListPlugins implements RestReadView<TopLevelResource> {
       s = s.limit(limit);
     }
     List<Plugin> plugins = s.collect(toList());
+=======
+  public SortedMap<String, PluginInfo> display(@Nullable PrintWriter stdout) {
+    SortedMap<String, PluginInfo> output = new TreeMap<>();
+    List<Plugin> plugins = Lists.newArrayList(pluginLoader.getPlugins(all));
+    Collections.sort(
+        plugins,
+        new Comparator<Plugin>() {
+          @Override
+          public int compare(Plugin a, Plugin b) {
+            return a.getName().compareTo(b.getName());
+          }
+        });
+>>>>>>> BRANCH (7bd3b9 JdbcAccountPatchReviewStore: Remove unneeded else clauses)
 
     if (!format.isJson()) {
       stdout.format("%-30s %-10s %-8s %s\n", "Name", "Version", "Status", "File");
