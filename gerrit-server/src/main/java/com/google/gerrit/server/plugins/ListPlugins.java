@@ -14,9 +14,15 @@
 
 package com.google.gerrit.server.plugins;
 
+<<<<<<< HEAD   (4a6482 Disentangle ListPlugins and PluginLsCommand)
 import static java.util.Comparator.comparing;
 
 import com.google.common.collect.Streams;
+=======
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.google.gerrit.common.Nullable;
+>>>>>>> BRANCH (a5420f Allow running without gerrit.canonicalWebUrl)
 import com.google.gerrit.common.data.GlobalCapability;
 import com.google.gerrit.extensions.annotations.RequiresCapability;
 import com.google.gerrit.extensions.common.PluginInfo;
@@ -24,8 +30,21 @@ import com.google.gerrit.extensions.restapi.BadRequestException;
 import com.google.gerrit.extensions.restapi.RestReadView;
 import com.google.gerrit.extensions.restapi.TopLevelResource;
 import com.google.gerrit.extensions.restapi.Url;
+<<<<<<< HEAD   (4a6482 Disentangle ListPlugins and PluginLsCommand)
+=======
+import com.google.gerrit.server.OutputFormat;
+import com.google.gson.reflect.TypeToken;
+>>>>>>> BRANCH (a5420f Allow running without gerrit.canonicalWebUrl)
 import com.google.inject.Inject;
+<<<<<<< HEAD   (4a6482 Disentangle ListPlugins and PluginLsCommand)
 import java.util.Locale;
+=======
+import java.io.PrintWriter;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+>>>>>>> BRANCH (a5420f Allow running without gerrit.canonicalWebUrl)
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
@@ -129,10 +148,57 @@ public class ListPlugins implements RestReadView<TopLevelResource> {
     return new TreeMap<>(s.collect(Collectors.toMap(p -> p.getName(), p -> toPluginInfo(p))));
   }
 
+<<<<<<< HEAD   (4a6482 Disentangle ListPlugins and PluginLsCommand)
   private void checkMatchOptions(boolean cond) throws BadRequestException {
     if (!cond) {
       throw new BadRequestException("specify exactly one of p/m/r");
+=======
+  public SortedMap<String, PluginInfo> display(@Nullable PrintWriter stdout) {
+    SortedMap<String, PluginInfo> output = new TreeMap<>();
+    List<Plugin> plugins = Lists.newArrayList(pluginLoader.getPlugins(all));
+    Collections.sort(
+        plugins,
+        new Comparator<Plugin>() {
+          @Override
+          public int compare(Plugin a, Plugin b) {
+            return a.getName().compareTo(b.getName());
+          }
+        });
+
+    if (!format.isJson()) {
+      stdout.format("%-30s %-10s %-8s %s\n", "Name", "Version", "Status", "File");
+      stdout.print(
+          "-------------------------------------------------------------------------------\n");
+>>>>>>> BRANCH (a5420f Allow running without gerrit.canonicalWebUrl)
     }
+<<<<<<< HEAD   (4a6482 Disentangle ListPlugins and PluginLsCommand)
+=======
+
+    for (Plugin p : plugins) {
+      PluginInfo info = new PluginInfo(p);
+      if (format.isJson()) {
+        output.put(p.getName(), info);
+      } else {
+        stdout.format(
+            "%-30s %-10s %-8s %s\n",
+            p.getName(),
+            Strings.nullToEmpty(info.version),
+            p.isDisabled() ? "DISABLED" : "ENABLED",
+            p.getSrcFile().getFileName());
+      }
+    }
+
+    if (stdout == null) {
+      return output;
+    } else if (format.isJson()) {
+      format
+          .newGson()
+          .toJson(output, new TypeToken<Map<String, PluginInfo>>() {}.getType(), stdout);
+      stdout.print('\n');
+    }
+    stdout.flush();
+    return null;
+>>>>>>> BRANCH (a5420f Allow running without gerrit.canonicalWebUrl)
   }
 
   public static PluginInfo toPluginInfo(Plugin p) {
