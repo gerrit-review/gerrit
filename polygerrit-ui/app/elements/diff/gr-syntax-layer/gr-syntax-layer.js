@@ -311,16 +311,24 @@
 
       if (this._baseLanguage && baseLine !== undefined) {
         baseLine = this._workaround(this._baseLanguage, baseLine);
-        result = this._hljs.highlight(this._baseLanguage, baseLine, true,
-            state.baseContext);
+        /*result = this._hljs.CodeMirror(this._baseLanguage, baseLine, true,
+            state.baseContext);*/
+        result = this._hljs.CodeMirror.fromTextArea(state.baseContext, {
+                  lineNumbers: true,
+                  mode: /*"javascript"*/ this._baseLanguage
+            });
         this.push('_baseRanges', this._rangesFromString(result.value));
         state.baseContext = result.top;
       }
 
       if (this._revisionLanguage && revisionLine !== undefined) {
         revisionLine = this._workaround(this._revisionLanguage, revisionLine);
-        result = this._hljs.highlight(this._revisionLanguage, revisionLine,
-            true, state.revisionContext);
+        /*result = this._hljs.highlight(this._revisionLanguage, revisionLine,
+            true, state.revisionContext);*/
+        result = this._hljs.CodeMirror.fromTextArea(state.revisionContext, {
+                  lineNumbers: true,
+                  mode: /*"javascript"*/ this._revisionLanguage
+            });
         this.push('_revisionRanges', this._rangesFromString(result.value));
         state.revisionContext = result.top;
       }

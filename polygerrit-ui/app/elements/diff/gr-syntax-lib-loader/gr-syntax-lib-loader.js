@@ -1,4 +1,4 @@
-// Copyright (C) 2016 The Android Open Source Project
+// Copyright (C) 2017 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,8 @@
 (function() {
   'use strict';
 
-  const HLJS_PATH = 'bower_components/highlightjs/highlight.min.js';
+  //const HLJS_PATH = 'bower_components/highlightjs/highlight.min.js';
+  const HLJS_PATH = 'bower_components/codemirror-minified/lib/codemirror.js';
   const LIB_ROOT_PATTERN = /(.+\/)elements\/gr-app\.html/;
 
   Polymer({
@@ -45,6 +46,7 @@
         if (!this._state.loading) {
           this._state.loading = true;
           this._loadHLJS().then(this._onLibLoaded.bind(this));
+          this._onLibLoaded.bind(this);
         }
 
         this._state.callbacks.push(resolve);
@@ -62,12 +64,7 @@
     },
 
     _getHighlightLib() {
-      return window.hljs;
-    },
-
-    _configureHighlightLib() {
-      this._getHighlightLib().configure(
-          {classPrefix: 'gr-diff gr-syntax gr-syntax-'});
+      return window.CodeMirror;
     },
 
     _getLibRoot() {
@@ -84,11 +81,10 @@
       return new Promise(resolve => {
         const script = document.createElement('script');
         script.src = this._getLibRoot() + HLJS_PATH;
-        script.onload = function() {
-          this._configureHighlightLib();
-          resolve();
-        }.bind(this);
         Polymer.dom(document.head).appendChild(script);
+        const script2 = document.createElement('script');
+        script2.src = this._getLibRoot() + 'bower_components/codemirror-minified/mode/javascript/javascript.js';
+        Polymer.dom(document.head).appendChild(script2);
       });
     },
   });

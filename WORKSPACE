@@ -1032,6 +1032,13 @@ npm_binary(
 
 # bower_archive() seed components.
 bower_archive(
+    name = "codemirror-minified",
+    package = "Dominator008/codemirror-minified",
+    sha1 = "673d9d7b878112813e7f3865139af159f570b07e",
+    version = "5.26.0",
+)
+
+bower_archive(
     name = "iron-autogrow-textarea",
     package = "polymerelements/iron-autogrow-textarea",
     sha1 = "68f0ece9b1e56ac26f8ce31d9938c504f6951bca",
