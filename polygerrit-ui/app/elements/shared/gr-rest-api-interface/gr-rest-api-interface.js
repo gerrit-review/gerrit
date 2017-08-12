@@ -696,6 +696,7 @@
       }
     },
 
+<<<<<<< HEAD   (f7117e Merge "Merge branch 'stable-2.14'")
     /**
      * TODO (beckysiegel) this needs to be rewritten with the optional param
      * at the end.
@@ -724,6 +725,17 @@
           this.ListChangesOption.DOWNLOAD_COMMANDS,
           this.ListChangesOption.SUBMITTABLE,
           this.ListChangesOption.WEB_LINKS
+=======
+    getChangeDetail: function(changeNum, opt_errFn, opt_cancelCondition) {
+      var options = this._listChangesOptionsToHex(
+          ListChangesOption.ALL_COMMITS,
+          ListChangesOption.ALL_REVISIONS,
+          ListChangesOption.CHANGE_ACTIONS,
+          ListChangesOption.CURRENT_ACTIONS,
+          ListChangesOption.DOWNLOAD_COMMANDS,
+          ListChangesOption.SUBMITTABLE,
+          ListChangesOption.WEB_LINKS
+>>>>>>> BRANCH (f08389 Request all commits in the change detail)
       );
       return this._getChangeDetail(
           changeNum, options, opt_errFn, opt_cancelCondition)
