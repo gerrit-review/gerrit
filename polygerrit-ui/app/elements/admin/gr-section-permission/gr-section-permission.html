@@ -27,7 +27,7 @@ limitations under the License.
 <link rel="import" href="../../shared/gr-button/gr-button.html">
 <link rel="import" href="../../shared/gr-rest-api-interface/gr-rest-api-interface.html">
 <link rel="import" href="../../shared/gr-select/gr-select.html">
-<link rel="import" href="../gr-permission-rule-editor/gr-permission-rule-editor.html">
+<link rel="import" href="../gr-rule-editor/gr-rule-editor.html">
 
 <dom-module id="gr-section-permission">
   <template>
@@ -60,7 +60,7 @@ limitations under the License.
             items="[[_rules]]"
             as="rule">
             <!-- <a href$="[[_computeGroupPath(item.id)]]">[[rule.id]]</a> -->
-            <gr-permission-rule-editor
+            <gr-rule-editor
                 label="[[_computeLabel(permission)]]"
                 group="[[rule.id]]"
                 permission="[[permission.id]]"
@@ -68,7 +68,7 @@ limitations under the License.
                 section="[[section.id]]"
                 on-value-changed="_handleRuleUpdate"
                 on-add-rule="_handleAddRuleData"
-                on-remove-rule="_handleRemoveRule"></gr-permission-rule-editor>
+                on-remove-rule="_handleRemoveRule"></gr-rule-editor>
           </div>
         </template>
         <div id="addRule">

@@ -133,7 +133,7 @@
 
     /**
      * Handles adding a skeleton item to the dom-repeat.
-     * gr-permission-rule-editor handles setting the default values.
+     * gr-rule-editor handles setting the default values.
      */
     _handleAddRuleItem(e) {
       this.set(['permission', 'value', 'rules', e.detail.value.id], {});
