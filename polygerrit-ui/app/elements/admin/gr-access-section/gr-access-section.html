@@ -21,7 +21,7 @@ limitations under the License.
 <link rel="import" href="../../../styles/shared-styles.html">
 <link rel="import" href="../../shared/gr-button/gr-button.html">
 <link rel="import" href="../../shared/gr-rest-api-interface/gr-rest-api-interface.html">
-<link rel="import" href="../gr-section-permission/gr-section-permission.html">
+<link rel="import" href="../gr-permission/gr-permission.html">
 
 <dom-module id="gr-access-section">
   <template>
@@ -82,7 +82,7 @@ limitations under the License.
             is="dom-repeat"
             items="[[_permissions]]"
             as="permission">
-          <gr-section-permission
+          <gr-permission
               name="[[_computePermissionName(section.id, permission)]]"
               permission="[[permission]]"
               labels="[[labels]]"
@@ -90,7 +90,7 @@ limitations under the License.
               on-permission-updated="_handlePermissionUpdated"
               on-permission-added="_handlePermissionAdded"
               on-permission-removed="_handlePermissionRemoved">
-          </gr-section-permission>
+          </gr-permission>
         </template>
         Add permission:
         <select id="permissionSelect">
