@@ -67,9 +67,13 @@ import com.google.gerrit.server.plugins.PluginRestApiModule;
 import com.google.gerrit.server.plugins.ServerInformationImpl;
 import com.google.gerrit.server.project.DefaultPermissionBackendModule;
 import com.google.gerrit.server.schema.DataSourceType;
+<<<<<<< HEAD   (a4e95e Add admin directory to template testing target)
 import com.google.gerrit.server.schema.H2AccountPatchReviewStore;
 import com.google.gerrit.server.schema.NotesMigrationSchemaFactory;
 import com.google.gerrit.server.schema.ReviewDbFactory;
+=======
+import com.google.gerrit.server.schema.InMemoryAccountPatchReviewStore;
+>>>>>>> BRANCH (585e2b Don't crash on empty diff selection)
 import com.google.gerrit.server.schema.SchemaCreator;
 import com.google.gerrit.server.securestore.DefaultSecureStore;
 import com.google.gerrit.server.securestore.SecureStore;
@@ -219,7 +223,7 @@ public class InMemoryModule extends FactoryModule {
     install(new FakeEmailSender.Module());
     install(new SignedTokenEmailTokenVerifier.Module());
     install(new GpgModule(cfg));
-    install(new H2AccountPatchReviewStore.InMemoryModule());
+    install(new InMemoryAccountPatchReviewStore.Module());
 
     bind(AllAccountsIndexer.class).toProvider(Providers.of(null));
     bind(AllChangesIndexer.class).toProvider(Providers.of(null));

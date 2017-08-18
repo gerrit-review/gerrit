@@ -179,8 +179,13 @@
           end.column === 0 &&
           end.line === start.line &&
           end.side != start.side;
+<<<<<<< HEAD   (a4e95e Add admin directory to template testing target)
       const content = domRange.cloneContents().querySelector('.contentText');
       const lineLength = content && this._getLength(content) || 0;
+=======
+      var content = domRange.cloneContents().querySelector('.contentText');
+      var lineLength = content && this._getLength(content) || 0;
+>>>>>>> BRANCH (585e2b Don't crash on empty diff selection)
       if (lineLength && endsOnOtherSideStart || endsAtOtherSideLineNum) {
         // Selection ends at the beginning of the next line.
         // Move the selection to the end of the previous line.

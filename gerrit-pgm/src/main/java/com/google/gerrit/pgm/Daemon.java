@@ -84,7 +84,7 @@ import com.google.gerrit.server.plugins.PluginModule;
 import com.google.gerrit.server.plugins.PluginRestApiModule;
 import com.google.gerrit.server.project.DefaultPermissionBackendModule;
 import com.google.gerrit.server.schema.DataSourceProvider;
-import com.google.gerrit.server.schema.H2AccountPatchReviewStore;
+import com.google.gerrit.server.schema.InMemoryAccountPatchReviewStore;
 import com.google.gerrit.server.schema.JdbcAccountPatchReviewStore;
 import com.google.gerrit.server.schema.SchemaVersionCheck;
 import com.google.gerrit.server.securestore.DefaultSecureStore;
@@ -398,8 +398,13 @@ public class Daemon extends SiteProgram {
     modules.add(new StreamEventsApiListener.Module());
     modules.add(new EventBroker.Module());
     modules.add(
+<<<<<<< HEAD   (a4e95e Add admin directory to template testing target)
         inMemoryTest
             ? new H2AccountPatchReviewStore.InMemoryModule()
+=======
+        test
+            ? new InMemoryAccountPatchReviewStore.Module()
+>>>>>>> BRANCH (585e2b Don't crash on empty diff selection)
             : new JdbcAccountPatchReviewStore.Module(config));
     modules.add(new ReceiveCommitsExecutorModule());
     modules.add(new DiffExecutorModule());
