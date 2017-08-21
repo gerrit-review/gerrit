@@ -70,7 +70,7 @@
           config => {
             this._groupName = config.name;
             promises.push(this.$.restAPI.getIsGroupOwner(config.name)
-                .then(isOwner => { this._groupOwner = isOwner; }));
+                .then(isOwner => { console.log(isOwner); this._groupOwner = isOwner; }));
             promises.push(this.$.restAPI.getGroupMembers(config.name).then(
                 members => {
                   this._groupMembers = members;

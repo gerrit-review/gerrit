@@ -317,6 +317,7 @@
      */
     getIsGroupOwner(groupName) {
       const encodeName = encodeURIComponent(groupName);
+      console.log(encodeName);
       return this._fetchSharedCacheURL('/groups/?owned&q=' + encodeName)
           .then(configs => configs.hasOwnProperty(encodeName));
     },
