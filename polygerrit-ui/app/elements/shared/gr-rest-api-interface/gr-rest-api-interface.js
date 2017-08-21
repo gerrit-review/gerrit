@@ -201,6 +201,11 @@
       return this._fetchSharedCacheURL('/config/server/info');
     },
 
+    getProject(project) {
+      return this._fetchSharedCacheURL(
+          '/projects/' + encodeURIComponent(project));
+    },
+
     getProjectConfig(project) {
       return this._fetchSharedCacheURL(
           '/projects/' + encodeURIComponent(project) + '/config');
@@ -998,6 +1003,17 @@
       );
     },
 
+    getProjectAccessRights(projectName) {
+      return this._fetchSharedCacheURL(
+          `/projects/${encodeURIComponent(projectName)}/access`);
+    },
+
+    setProjectAccessRights(projectName, projectInfo) {
+      return this.send(
+          'POST', `/projects/${encodeURIComponent(projectName)}/access`
+          , projectInfo);
+    },
+
     /**
      * @param {string} inputVal
      * @param {number} opt_n
@@ -1643,6 +1659,10 @@
             }
             return null;
           });
+    },
+
+    getCapabilities(token) {
+      return this.fetchJSON( '/config/server/capabilities');
     },
 
     setAssignee(changeNum, assignee) {
