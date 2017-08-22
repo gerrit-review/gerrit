@@ -213,7 +213,9 @@
     _setReviewed(reviewed) {
       if (this._editLoaded) { return; }
       this.$.reviewed.checked = reviewed;
-      this._saveReviewedState(reviewed).catch(err => {
+
+      //console.log(this._saveReviewedState(reviewed));
+      this._saveReviewedState(this.$.reviewed.checked).catch(err => {
         this.fire('show-alert', {message: ERR_REVIEW_STATUS});
         throw err;
       });
