@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a63a3970_38243861",
+        "filename": "polygerrit-ui/app/elements/admin/gr-admin-view/gr-admin-view.html",
+        "patchSetId": 27
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-08-23T22:46:46Z",
+      "side": 1,
+      "message": "need to fix theses merge conflicts.",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 36
+      },
+      "revId": "1c2b0793c575154a1be3292a06f1099899b51d05",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e7d5d9fc_0ff28197",
+        "filename": "polygerrit-ui/app/elements/admin/gr-project-access/gr-project-access.html",
+        "patchSetId": 27
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-08-23T22:46:46Z",
+      "side": 1,
+      "message": "need to fix theses merge conflicts.",
+      "revId": "1c2b0793c575154a1be3292a06f1099899b51d05",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
