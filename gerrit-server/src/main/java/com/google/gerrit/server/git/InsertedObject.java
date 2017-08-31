@@ -16,6 +16,7 @@ package com.google.gerrit.server.git;
 
 import com.google.auto.value.AutoValue;
 import com.google.protobuf.ByteString;
+<<<<<<< HEAD   (9b93ff Set version to 2.13.9)
 
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectInserter;
@@ -46,6 +47,38 @@ public abstract class InsertedObject {
 
   public abstract ObjectId id();
   public abstract int type();
+=======
+import java.io.IOException;
+import java.io.InputStream;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.ObjectInserter;
+import org.eclipse.jgit.lib.ObjectLoader;
+
+@AutoValue
+public abstract class InsertedObject {
+  static InsertedObject create(int type, InputStream in) throws IOException {
+    return create(type, ByteString.readFrom(in));
+  }
+
+  static InsertedObject create(int type, ByteString bs) {
+    ObjectId id;
+    try (ObjectInserter.Formatter fmt = new ObjectInserter.Formatter()) {
+      id = fmt.idFor(type, bs.size(), bs.newInput());
+    } catch (IOException e) {
+      throw new IllegalStateException(e);
+    }
+    return new AutoValue_InsertedObject(id, type, bs);
+  }
+
+  static InsertedObject create(int type, byte[] src, int off, int len) {
+    return create(type, ByteString.copyFrom(src, off, len));
+  }
+
+  public abstract ObjectId id();
+
+  public abstract int type();
+
+>>>>>>> BRANCH (bc24c1 MergeUtil: Use InMemoryInserter for dry runs)
   public abstract ByteString data();
 
   ObjectLoader newLoader() {
