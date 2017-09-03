@@ -176,7 +176,11 @@ final class StreamEvents extends BaseCommand {
   }
 
   @Override
+<<<<<<< HEAD   (c65126 PolyGerrit: Remove two extraneous imports)
   protected void onExit(int rc) {
+=======
+  protected void onExit(final int rc) {
+>>>>>>> BRANCH (1e2ead StreamEvents: Fix NPE when invoking the command with --help)
     removeEventListenerRegistration();
 
     synchronized (taskLock) {
