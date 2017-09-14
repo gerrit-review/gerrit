@@ -30,6 +30,10 @@ def define_bower_components():
     seed = True,
   )
   bower_component(
+    name = "font-roboto",
+    license = "//lib:LICENSE-DO_NOT_DISTRIBUTE",
+  )
+  bower_component(
     name = "iron-a11y-announcer",
     license = "//lib:LICENSE-polymer",
     deps = [ ":polymer" ],
@@ -59,6 +63,15 @@ def define_bower_components():
     ],
   )
   bower_component(
+    name = "iron-checked-element-behavior",
+    license = "//lib:LICENSE-DO_NOT_DISTRIBUTE",
+    deps = [
+      ":iron-form-element-behavior",
+      ":iron-validatable-behavior",
+      ":polymer",
+    ],
+  )
+  bower_component(
     name = "iron-dropdown",
     license = "//lib:LICENSE-polymer",
     deps = [
@@ -82,6 +95,28 @@ def define_bower_components():
     deps = [ ":polymer" ],
   )
   bower_component(
+    name = "iron-form-element-behavior",
+    license = "//lib:LICENSE-polymer",
+    deps = [ ":polymer" ],
+  )
+  bower_component(
+    name = "iron-icon",
+    license = "//lib:LICENSE-DO_NOT_DISTRIBUTE",
+    deps = [
+      ":iron-flex-layout",
+      ":iron-meta",
+      ":polymer",
+    ],
+  )
+  bower_component(
+    name = "iron-iconset-svg",
+    license = "//lib:LICENSE-DO_NOT_DISTRIBUTE",
+    deps = [
+      ":iron-meta",
+      ":polymer",
+    ],
+  )
+  bower_component(
     name = "iron-input",
     license = "//lib:LICENSE-polymer",
     deps = [
@@ -90,6 +125,16 @@ def define_bower_components():
       ":polymer",
     ],
     seed = True,
+  )
+  bower_component(
+    name = "iron-menu-behavior",
+    license = "//lib:LICENSE-DO_NOT_DISTRIBUTE",
+    deps = [
+      ":iron-a11y-keys-behavior",
+      ":iron-flex-layout",
+      ":iron-selector",
+      ":polymer",
+    ],
   )
   bower_component(
     name = "iron-meta",
@@ -160,6 +205,99 @@ def define_bower_components():
     name = "page",
     license = "//lib:LICENSE-page.js",
     seed = True,
+  )
+  bower_component(
+    name = "paper-behaviors",
+    license = "//lib:LICENSE-DO_NOT_DISTRIBUTE",
+    deps = [
+      ":iron-behaviors",
+      ":iron-checked-element-behavior",
+      ":paper-ripple",
+      ":polymer",
+    ],
+  )
+  bower_component(
+    name = "paper-dropdown-menu",
+    license = "//lib:LICENSE-polymer",
+    deps = [
+      ":iron-a11y-keys-behavior",
+      ":iron-form-element-behavior",
+      ":iron-icon",
+      ":iron-iconset-svg",
+      ":iron-validatable-behavior",
+      ":paper-behaviors",
+      ":paper-input",
+      ":paper-menu-button",
+      ":paper-ripple",
+      ":paper-styles",
+      ":polymer",
+    ],
+    seed = True,
+  )
+  bower_component(
+    name = "paper-input",
+    license = "//lib:LICENSE-DO_NOT_DISTRIBUTE",
+    deps = [
+      ":iron-a11y-keys-behavior",
+      ":iron-autogrow-textarea",
+      ":iron-behaviors",
+      ":iron-form-element-behavior",
+      ":iron-input",
+      ":paper-styles",
+      ":polymer",
+    ],
+  )
+  bower_component(
+    name = "paper-item",
+    license = "//lib:LICENSE-DO_NOT_DISTRIBUTE",
+    deps = [
+      ":iron-behaviors",
+      ":iron-flex-layout",
+      ":paper-styles",
+      ":polymer",
+    ],
+    seed = True,
+  )
+  bower_component(
+    name = "paper-listbox",
+    license = "//lib:LICENSE-DO_NOT_DISTRIBUTE",
+    deps = [
+      ":iron-behaviors",
+      ":iron-menu-behavior",
+      ":paper-styles",
+      ":polymer",
+    ],
+    seed = True,
+  )
+  bower_component(
+    name = "paper-menu-button",
+    license = "//lib:LICENSE-DO_NOT_DISTRIBUTE",
+    deps = [
+      ":iron-a11y-keys-behavior",
+      ":iron-behaviors",
+      ":iron-dropdown",
+      ":iron-fit-behavior",
+      ":neon-animation",
+      ":paper-styles",
+      ":polymer",
+    ],
+  )
+  bower_component(
+    name = "paper-ripple",
+    license = "//lib:LICENSE-DO_NOT_DISTRIBUTE",
+    deps = [
+      ":iron-a11y-keys-behavior",
+      ":polymer",
+    ],
+  )
+  bower_component(
+    name = "paper-styles",
+    license = "//lib:LICENSE-DO_NOT_DISTRIBUTE",
+    deps = [
+      ":font-roboto",
+      ":iron-flex-layout",
+      ":polymer",
+    ],
   )
   bower_component(
     name = "polymer-resin",

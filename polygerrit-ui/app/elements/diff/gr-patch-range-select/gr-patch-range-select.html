@@ -13,11 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
 
 <link rel="import" href="../../../behaviors/gr-patch-set-behavior/gr-patch-set-behavior.html">
-<link rel="import" href="../../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../shared/gr-select/gr-select.html">
 <link rel="import" href="../../../styles/shared-styles.html">
+<link rel="import" href="../../shared/gr-dropdown-list/gr-dropdown-list.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../../shared/gr-select/gr-select.html">
 
 <dom-module id="gr-patch-range-select">
   <template>
@@ -39,7 +42,19 @@ limitations under the License.
     </style>
     Patch set:
     <span class="patchRange">
-      <gr-select id="leftPatchSelect" bind-value="{{_leftSelected}}"
+      <gr-dropdown-list
+          text='Base'
+          horizontal-align="right">
+        <template is="dom-repeat" items="{{availablePatches}}" as="basePatchNum">
+            <paper-item value$="[[basePatchNum.num]]"
+                disabled$="[[_computeLeftDisabled(basePatchNum.num, patchRange.patchNum, _sortedRevisions)]]">
+              [[basePatchNum.num]]
+              [[_computePatchSetCommentsString(comments, basePatchNum.num)]]
+              [[_computePatchSetDescription(revisions, basePatchNum.num)]]
+            </paper-item>
+        </template>
+      </gr-dropdown-list>
+      <!-- <gr-select id="leftPatchSelect" bind-value="{{_leftSelected}}"
           on-change="_handlePatchChange">
         <select>
           <option value="PARENT">Base</option>
@@ -52,7 +67,7 @@ limitations under the License.
             </option>
           </template>
         </select>
-      </gr-select>
+      </gr-select> -->
     </span>
     <span is="dom-if" if="[[filesWeblinks.meta_a]]" class="filesWeblinks">
       <template is="dom-repeat" items="[[filesWeblinks.meta_a]]" as="weblink">
@@ -62,7 +77,20 @@ limitations under the License.
     </span>
     &rarr;
     <span class="patchRange">
-      <gr-select id="rightPatchSelect" bind-value="{{_rightSelected}}"
+      <gr-dropdown-list
+          text='Base'
+          horizontal-align="right"
+          selected="[[patchNum.num]]">
+          <template is="dom-repeat" items="{{availablePatches}}" as="patchNum">
+            <paper-item  value$="[[patchNum.num]]"
+                disabled$="[[_computeRightDisabled(patchNum.num, patchRange.basePatchNum, _sortedRevisions)]]">
+              [[patchNum.num]]
+              [[_computePatchSetCommentsString(comments, patchNum.num)]]
+              [[_computePatchSetDescription(revisions, patchNum.num)]]
+            </paper-item>
+        </template>
+      </gr-dropdown-list>
+      <!-- <gr-select id="rightPatchSelect" bind-value="{{_rightSelected}}"
           on-change="_handlePatchChange">
         <select>
           <template is="dom-repeat" items="{{availablePatches}}" as="patchNum">
@@ -74,7 +102,7 @@ limitations under the License.
             </option>
           </template>
         </select>
-      </gr-select>
+      </gr-select> -->
       <span is="dom-if" if="[[filesWeblinks.meta_b]]" class="filesWeblinks">
         <template is="dom-repeat" items="[[filesWeblinks.meta_b]]" as="weblink">
           <a target="_blank"
