@@ -28,6 +28,7 @@ import org.jsoup.nodes.Element;
 
 /** Provides functionality for parsing the HTML part of a {@link MailMessage}. */
 public class HtmlParser {
+<<<<<<< HEAD   (2208da Merge "Be more specific about mail provider class names in H)
 
   private static ImmutableList<String> MAIL_PROVIDER_EXTRAS =
       ImmutableList.of(
@@ -36,6 +37,13 @@ public class HtmlParser {
           );
 
   private HtmlParser() {}
+=======
+  private static ImmutableList<String> MAIL_PROVIDER_EXTRAS =
+      ImmutableList.of(
+          "gmail_extra", // "On 01/01/2017 User<user@gmail.com> wrote:"
+          "gmail_quote" // Used for quoting original content
+          );
+>>>>>>> BRANCH (bae11a Be more specific about mail provider class names in HtmlPars)
 
   /**
    * Parses comments from html email.
