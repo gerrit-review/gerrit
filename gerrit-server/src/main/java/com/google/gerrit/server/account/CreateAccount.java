@@ -40,8 +40,11 @@ import com.google.gerrit.server.account.externalids.ExternalIds;
 import com.google.gerrit.server.account.externalids.ExternalIdsUpdate;
 import com.google.gerrit.server.api.accounts.AccountExternalIdCreator;
 import com.google.gerrit.server.group.GroupsCollection;
+<<<<<<< HEAD   (7ecae3 Index files affected by merge commits)
 import com.google.gerrit.server.group.GroupsUpdate;
 import com.google.gerrit.server.group.UserInitiated;
+=======
+>>>>>>> BRANCH (ad36ad Merge "On account creation evict account from account cache")
 import com.google.gerrit.server.mail.send.OutgoingEmailValidator;
 import com.google.gerrit.server.ssh.SshKeyCache;
 import com.google.gwtorm.server.OrmDuplicateKeyException;
@@ -67,7 +70,12 @@ public class CreateAccount implements RestModifyView<TopLevelResource, AccountIn
   private final GroupsCollection groupsCollection;
   private final VersionedAuthorizedKeys.Accessor authorizedKeys;
   private final SshKeyCache sshKeyCache;
+<<<<<<< HEAD   (7ecae3 Index files affected by merge commits)
   private final AccountsUpdate.User accountsUpdate;
+=======
+  private final AccountCache accountCache;
+  private final AccountByEmailCache byEmailCache;
+>>>>>>> BRANCH (ad36ad Merge "On account creation evict account from account cache")
   private final AccountLoader.Factory infoLoader;
   private final DynamicSet<AccountExternalIdCreator> externalIdCreators;
   private final ExternalIds externalIds;
@@ -83,7 +91,12 @@ public class CreateAccount implements RestModifyView<TopLevelResource, AccountIn
       GroupsCollection groupsCollection,
       VersionedAuthorizedKeys.Accessor authorizedKeys,
       SshKeyCache sshKeyCache,
+<<<<<<< HEAD   (7ecae3 Index files affected by merge commits)
       AccountsUpdate.User accountsUpdate,
+=======
+      AccountCache accountCache,
+      AccountByEmailCache byEmailCache,
+>>>>>>> BRANCH (ad36ad Merge "On account creation evict account from account cache")
       AccountLoader.Factory infoLoader,
       DynamicSet<AccountExternalIdCreator> externalIdCreators,
       ExternalIds externalIds,
@@ -96,7 +109,12 @@ public class CreateAccount implements RestModifyView<TopLevelResource, AccountIn
     this.groupsCollection = groupsCollection;
     this.authorizedKeys = authorizedKeys;
     this.sshKeyCache = sshKeyCache;
+<<<<<<< HEAD   (7ecae3 Index files affected by merge commits)
     this.accountsUpdate = accountsUpdate;
+=======
+    this.accountCache = accountCache;
+    this.byEmailCache = byEmailCache;
+>>>>>>> BRANCH (ad36ad Merge "On account creation evict account from account cache")
     this.infoLoader = infoLoader;
     this.externalIdCreators = externalIdCreators;
     this.externalIds = externalIds;
@@ -194,6 +212,13 @@ public class CreateAccount implements RestModifyView<TopLevelResource, AccountIn
       }
     }
 
+<<<<<<< HEAD   (7ecae3 Index files affected by merge commits)
+=======
+    accountCache.evict(id); // triggers reindex
+    accountCache.evictByUsername(username);
+    byEmailCache.evict(input.email);
+
+>>>>>>> BRANCH (ad36ad Merge "On account creation evict account from account cache")
     AccountLoader loader = infoLoader.create(true);
     AccountInfo info = loader.get(id);
     loader.fill();
