@@ -1097,6 +1097,13 @@ bower_archive(
 )
 
 bower_archive(
+    name = "paper-toggle-button",
+    package = "polymerelements/paper-toggle-button",
+    sha1 = "4a2edbdb52c4531d39fe091f12de650bccda270f",
+    version = "1.2.0",
+)
+
+bower_archive(
     name = "moment",
     package = "moment/moment",
     sha1 = "fc8ce2c799bab21f6ced7aff928244f4ca8880aa",

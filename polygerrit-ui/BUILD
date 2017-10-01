@@ -24,6 +24,7 @@ bower_component_bundle(
         "//lib/js:paper-input",
         "//lib/js:paper-item",
         "//lib/js:paper-listbox",
+        "//lib/js:paper-toggle-button",
         "//lib/js:polymer",
         "//lib/js:polymer-resin",
         "//lib/js:promise-polyfill",
