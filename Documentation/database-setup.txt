@@ -67,9 +67,15 @@ rights on it:
 ----
   mysql
 
+<<<<<<< HEAD   (101b3f Merge "Scope enter keypress on file-list locally" into stabl)
   CREATE USER 'gerrit'@'localhost' IDENTIFIED BY 'secret';
   CREATE DATABASE reviewdb;
   GRANT ALL ON reviewdb.* TO 'gerrit'@'localhost';
+=======
+  CREATE USER 'gerrit2'@'localhost' IDENTIFIED BY 'secret';
+  CREATE DATABASE reviewdb DEFAULT CHARACTER SET 'utf8';
+  GRANT ALL ON reviewdb.* TO 'gerrit2'@'localhost';
+>>>>>>> BRANCH (959947 Doc: Set default character set for MySQL)
   FLUSH PRIVILEGES;
 ----
 
