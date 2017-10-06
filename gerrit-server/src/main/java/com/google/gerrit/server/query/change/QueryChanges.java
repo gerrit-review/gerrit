@@ -24,6 +24,7 @@ import com.google.gerrit.extensions.restapi.BadRequestException;
 import com.google.gerrit.extensions.restapi.RestReadView;
 import com.google.gerrit.extensions.restapi.TopLevelResource;
 import com.google.gerrit.index.query.QueryParseException;
+import com.google.gerrit.index.query.QueryRequiresAuthException;
 import com.google.gerrit.index.query.QueryResult;
 import com.google.gerrit.server.change.ChangeJson;
 import com.google.gwtorm.server.OrmException;
@@ -32,8 +33,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.kohsuke.args4j.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -110,7 +109,10 @@ public class QueryChanges implements RestReadView<TopLevelResource> {
     List<List<ChangeInfo>> out;
     try {
       out = query();
+    } catch (QueryRequiresAuthException e) {
+      throw new AuthException("Must be signed-in to use this operator");
     } catch (QueryParseException e) {
+<<<<<<< HEAD   (b045ea Merge "LocalDiskRepositoryManager: remove names set")
       // This is a hack to detect an operator that requires authentication.
       Pattern p =
           Pattern.compile("^Error in operator (.*:self|is:watched|is:owner|is:reviewer|has:.*)$");
@@ -120,6 +122,8 @@ public class QueryChanges implements RestReadView<TopLevelResource> {
         throw new AuthException("Must be signed-in to use " + op);
       }
       log.debug("Reject change query with 400 Bad Request: " + queries, e);
+=======
+>>>>>>> BRANCH (b52780 Merge "Merge branch 'stable-2.14' into stable-2.15" into sta)
       throw new BadRequestException(e.getMessage(), e);
     }
     return out.size() == 1 ? out.get(0) : out;
