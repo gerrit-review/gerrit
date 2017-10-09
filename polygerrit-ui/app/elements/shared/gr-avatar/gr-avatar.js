@@ -32,7 +32,11 @@
       Gerrit.BaseUrlBehavior,
     ],
 
+<<<<<<< HEAD   (733976 Keep "refs/publish/*" as a synonym of "refs/for/*")
     created() {
+=======
+    created: function() {
+>>>>>>> BRANCH (4ff7bd PolyGerrit: Avatars did not make use of gerrit baseurl)
       this.hidden = true;
     },
 
@@ -68,8 +72,13 @@
           return avatars[i].url;
         }
       }
+<<<<<<< HEAD   (733976 Keep "refs/publish/*" as a synonym of "refs/for/*")
       return this.getBaseUrl() + '/accounts/' +
         account._account_id + '/avatar?s=' + this.imageSize;
+=======
+      return this.getBaseUrl() + '/accounts/' + account._account_id +
+          '/avatar?s=' + this.imageSize;
+>>>>>>> BRANCH (4ff7bd PolyGerrit: Avatars did not make use of gerrit baseurl)
     },
   });
 })();
