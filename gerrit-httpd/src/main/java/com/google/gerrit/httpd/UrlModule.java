@@ -133,8 +133,14 @@ class UrlModule extends ServletModule {
           private static final long serialVersionUID = 1L;
 
           @Override
+<<<<<<< HEAD   (da2e26 Merge "Revert "Update mysql-connector-java to 6.0.6"" into s)
           protected void doGet(HttpServletRequest req, HttpServletResponse rsp) throws IOException {
             toGerrit(req.getRequestURI(), req, rsp);
+=======
+          protected void doGet(final HttpServletRequest req, final HttpServletResponse rsp)
+              throws IOException {
+            toGerrit(req.getRequestURI().substring(req.getContextPath().length()), req, rsp);
+>>>>>>> BRANCH (d57189 Redirect polygerrit urls with context to GWTUI)
           }
         });
   }
