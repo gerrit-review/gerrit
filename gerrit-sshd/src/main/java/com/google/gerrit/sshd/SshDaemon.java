@@ -17,6 +17,7 @@ package com.google.gerrit.sshd;
 import static com.google.gerrit.server.ssh.SshAddressesModule.IANA_SSH_PORT;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.apache.sshd.common.channel.ChannelOutputStream.WAIT_FOR_SPACE_TIMEOUT;
 
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
@@ -199,7 +200,16 @@ public class SshDaemon extends SshServer implements SshInfo, LifecycleListener {
             REKEY_BYTES_LIMIT,
             String.valueOf(cfg.getLong("sshd", "rekeyBytesLimit", 1024 * 1024 * 1024 /* 1GB */)));
 
+<<<<<<< HEAD   (9c7247 Add missing registration for VoteDeletedEvent)
     final int maxConnectionsPerUser = cfg.getInt("sshd", "maxConnectionsPerUser", 64);
+=======
+    long waitTimeoutSeconds = ConfigUtil.getTimeUnit(cfg, "sshd", null, "waitTimeout", 30, SECONDS);
+    getProperties()
+        .put(WAIT_FOR_SPACE_TIMEOUT, String.valueOf(SECONDS.toMillis(waitTimeoutSeconds)));
+
+    final int maxConnectionsPerUser =
+        cfg.getInt("sshd", "maxConnectionsPerUser", 64);
+>>>>>>> BRANCH (daafdb SshDaemon: introduce sshd.waitTimeout to set WAIT_FOR_SPACE_)
     if (0 < maxConnectionsPerUser) {
       getProperties().put(MAX_CONCURRENT_SESSIONS, String.valueOf(maxConnectionsPerUser));
     }
