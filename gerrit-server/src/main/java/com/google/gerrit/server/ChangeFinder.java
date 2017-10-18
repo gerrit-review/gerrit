@@ -21,9 +21,13 @@ import com.google.common.collect.Sets;
 import com.google.common.primitives.Ints;
 import com.google.gerrit.index.IndexConfig;
 import com.google.gerrit.reviewdb.client.Change;
+<<<<<<< HEAD   (606b65 Merge "QueryShell: Use SchemaFactory for underlying ReviewDb)
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gerrit.server.cache.CacheModule;
+=======
+import com.google.gerrit.reviewdb.client.RevId;
+>>>>>>> BRANCH (ad068c Set version to 2.14.5)
 import com.google.gerrit.server.change.ChangeTriplet;
 import com.google.gerrit.server.notedb.ChangeNotes;
 import com.google.gerrit.server.project.NoSuchChangeException;
@@ -87,11 +91,22 @@ public class ChangeFinder {
       return Collections.emptyList();
     }
 
+<<<<<<< HEAD   (606b65 Merge "QueryShell: Use SchemaFactory for underlying ReviewDb)
     int z = id.lastIndexOf('~');
     int y = id.lastIndexOf('~', z - 1);
     if (y < 0 && z > 0) {
       // Try project~numericChangeId
       Integer n = Ints.tryParse(id.substring(z + 1));
+=======
+    //Try commit hash
+    if (id.matches("^([0-9a-fA-F]{4," + RevId.LEN + "})$")) {
+      return asChangeControls(query.byCommit(id), user);
+    }
+
+    // Try legacy id
+    if (!id.isEmpty() && id.charAt(0) != '0') {
+      Integer n = Ints.tryParse(id);
+>>>>>>> BRANCH (ad068c Set version to 2.14.5)
       if (n != null) {
         return fromProjectNumber(id.substring(0, z), n.intValue());
       }
