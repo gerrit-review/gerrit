@@ -2,7 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gerrit</groupId>
   <artifactId>gerrit-plugin-api</artifactId>
+<<<<<<< HEAD   (d05889 Merge branch 'stable-2.14' into stable-2.15)
   <version>2.15-rc1</version>
+=======
+  <version>2.14.5.1</version>
+>>>>>>> BRANCH (6219e3 Set version to 2.14.5.1)
   <packaging>jar</packaging>
   <name>Gerrit Code Review - Plugin API</name>
   <description>API for Gerrit Plugins</description>

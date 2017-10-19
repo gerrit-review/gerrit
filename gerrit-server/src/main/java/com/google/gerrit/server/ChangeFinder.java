@@ -110,6 +110,7 @@ public class ChangeFinder {
     // to force rereading in case the index is stale.
     InternalChangeQuery query = queryProvider.get().noFields();
 
+<<<<<<< HEAD   (d05889 Merge branch 'stable-2.14' into stable-2.15)
     //Try commit hash
     if (id.matches("^([0-9a-fA-F]{" + RevId.ABBREV_LEN + "," + RevId.LEN + "})$")) {
       return asChangeNotes(query.byCommit(id));
@@ -121,11 +122,38 @@ public class ChangeFinder {
       if (triplet.isPresent()) {
         ChangeTriplet t = triplet.get();
         return asChangeNotes(query.byBranchKey(t.branch(), t.id()));
+=======
+    // Try legacy id
+    if (!id.isEmpty() && id.charAt(0) != '0') {
+      Integer n = Ints.tryParse(id);
+      if (n != null) {
+        return asChangeControls(query.byLegacyChangeId(new Change.Id(n)), user);
+>>>>>>> BRANCH (6219e3 Set version to 2.14.5.1)
       }
     }
 
+<<<<<<< HEAD   (d05889 Merge branch 'stable-2.14' into stable-2.15)
     // Try isolated Ihash... format ("Change-Id: Ihash").
     return asChangeNotes(query.byKeyPrefix(id));
+=======
+    // Try commit hash
+    if (id.matches("^([0-9a-fA-F]{" + RevId.ABBREV_LEN + "," + RevId.LEN + "})$")) {
+      return asChangeControls(query.byCommit(id), user);
+    }
+
+    // Try isolated changeId
+    if (!id.contains("~")) {
+      return asChangeControls(query.byKeyPrefix(id), user);
+    }
+
+    // Try change triplet
+    Optional<ChangeTriplet> triplet = ChangeTriplet.parse(id);
+    if (triplet.isPresent()) {
+      return asChangeControls(query.byBranchKey(triplet.get().branch(), triplet.get().id()), user);
+    }
+
+    return Collections.emptyList();
+>>>>>>> BRANCH (6219e3 Set version to 2.14.5.1)
   }
 
   private List<ChangeNotes> fromProjectNumber(String project, int changeNumber)
