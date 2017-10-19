@@ -111,8 +111,13 @@ public class ChangeFinder {
     InternalChangeQuery query = queryProvider.get().noFields();
 
     //Try commit hash
+<<<<<<< HEAD   (31674f Make margin around search bar icon symmetrical)
     if (id.matches("^([0-9a-fA-F]{4," + RevId.LEN + "})$")) {
       return asChangeNotes(query.byCommit(id));
+=======
+    if (id.matches("^([0-9a-fA-F]{" + RevId.ABBREV_LEN + "," + RevId.LEN + "})$")) {
+      return asChangeControls(query.byCommit(id), user);
+>>>>>>> BRANCH (616108 Fix changes not found)
     }
 
     if (y > 0 && z > 0) {
