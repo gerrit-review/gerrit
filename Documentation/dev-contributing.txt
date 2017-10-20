@@ -165,7 +165,11 @@ Guide].
 To format Java source code, Gerrit uses the
 link:https://github.com/google/google-java-format[`google-java-format`]
 tool (version 1.3), and to format Bazel BUILD and WORKSPACE files the
+<<<<<<< HEAD   (b853bc Merge branch 'stable-2.14' into stable-2.15)
 link:https://github.com/bazelbuild/buildifier[`buildifier`] tool (version 0.4.5).
+=======
+link:https://github.com/bazelbuild/buildifier[`buildifier`] tool (version 0.6.0).
+>>>>>>> BRANCH (a92a82 Update documentation to recommend using buildifier version 0)
 These tools automatically apply format according to the style guides; this
 streamlines code review by reducing the need for time-consuming, tedious,
 and contentious discussions about trivial issues like whitespace.
