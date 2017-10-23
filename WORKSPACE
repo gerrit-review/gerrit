@@ -100,18 +100,30 @@ maven_jar(
     sha1 = "5d9e2e895e3111622720157d0aa540066d5fce3a",
 )
 
+<<<<<<< HEAD   (780754 Remove duplicate SHA1 variable in js.bzl)
 GWT_VERS = "2.8.1"
+=======
+GWT_VERS = "2.8.2"
+>>>>>>> BRANCH (4142f2 Upgrade GWT to version 2.8.2)
 
 maven_jar(
     name = "user",
     artifact = "com.google.gwt:gwt-user:" + GWT_VERS,
+<<<<<<< HEAD   (780754 Remove duplicate SHA1 variable in js.bzl)
     sha1 = "9a13fbee70848f1f1cddd3ae33ad180af3392d9e",
+=======
+    sha1 = "a2b9be2c996a658c4e009ba652a9c6a81c88a797",
+>>>>>>> BRANCH (4142f2 Upgrade GWT to version 2.8.2)
 )
 
 maven_jar(
     name = "dev",
     artifact = "com.google.gwt:gwt-dev:" + GWT_VERS,
+<<<<<<< HEAD   (780754 Remove duplicate SHA1 variable in js.bzl)
     sha1 = "c7e88c07e9cda90cc623b4451d0d9713ae03aa53",
+=======
+    sha1 = "7a87e060bbf129386b7ae772459fb9f87297c332",
+>>>>>>> BRANCH (4142f2 Upgrade GWT to version 2.8.2)
 )
 
 maven_jar(
