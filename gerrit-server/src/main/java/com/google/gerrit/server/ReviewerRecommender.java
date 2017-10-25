@@ -204,7 +204,11 @@ public class ReviewerRecommender {
           queryProvider
               .get()
               .setLimit(25)
+<<<<<<< HEAD   (a3ff1c Merge "Fix new comments from disappearing when expand/collap)
               .setRequestedFields(ChangeField.APPROVAL)
+=======
+              .setRequestedFields(ImmutableSet.of(ChangeField.APPROVAL.getName()))
+>>>>>>> BRANCH (945a62 ReviewerRecommender: Request APPROVAL field)
               .query(changeQueryBuilder.owner("self"));
       Map<Account.Id, MutableDouble> suggestions = new HashMap<>();
       for (ChangeData cd : result) {
