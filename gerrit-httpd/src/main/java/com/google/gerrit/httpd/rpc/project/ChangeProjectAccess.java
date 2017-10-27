@@ -17,6 +17,8 @@ package com.google.gerrit.httpd.rpc.project;
 import com.google.gerrit.common.Nullable;
 import com.google.gerrit.common.data.AccessSection;
 import com.google.gerrit.common.data.ProjectAccess;
+import com.google.gerrit.extensions.restapi.ResourceConflictException;
+import com.google.gerrit.extensions.restapi.ResourceNotFoundException;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.client.RefNames;
 import com.google.gerrit.server.CurrentUser;
@@ -28,9 +30,11 @@ import com.google.gerrit.server.git.ProjectConfig;
 import com.google.gerrit.server.permissions.PermissionBackend;
 import com.google.gerrit.server.permissions.PermissionBackendException;
 import com.google.gerrit.server.project.ContributorAgreementsChecker;
+import com.google.gerrit.server.project.GetAccess;
 import com.google.gerrit.server.project.NoSuchProjectException;
 import com.google.gerrit.server.project.ProjectCache;
 import com.google.gerrit.server.project.SetParent;
+import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.assistedinject.Assisted;
@@ -66,6 +70,7 @@ class ChangeProjectAccess extends ProjectAccessHandler<ProjectAccess> {
       ContributorAgreementsChecker contributorAgreements,
       Provider<CurrentUser> user,
       PermissionBackend permissionBackend,
+      GetAccess getAccess,
       @Assisted("projectName") Project.NameKey projectName,
       @Nullable @Assisted ObjectId base,
       @Assisted List<AccessSection> sectionList,
@@ -84,6 +89,7 @@ class ChangeProjectAccess extends ProjectAccessHandler<ProjectAccess> {
         message,
         contributorAgreements,
         permissionBackend,
+        getAccess,
         true);
     this.projectAccessFactory = projectAccessFactory;
     this.projectCache = projectCache;
@@ -94,7 +100,7 @@ class ChangeProjectAccess extends ProjectAccessHandler<ProjectAccess> {
   protected ProjectAccess updateProjectConfig(
       ProjectConfig config, MetaDataUpdate md, boolean parentProjectUpdate)
       throws IOException, NoSuchProjectException, ConfigInvalidException,
-          PermissionBackendException {
+          PermissionBackendException, OrmException, ResourceNotFoundException, ResourceConflictException {
     RevCommit commit = config.commit(md);
 
     gitRefUpdated.fire(

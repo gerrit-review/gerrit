@@ -34,6 +34,11 @@ public class AccessSection extends RefConfigSection implements Comparable<Access
     super(refPattern);
   }
 
+  public AccessSection(String refPattern, List<Permission> permissions) {
+    super(refPattern);
+    this.permissions = permissions;
+  }
+
   public List<Permission> getPermissions() {
     if (permissions == null) {
       permissions = new ArrayList<>();

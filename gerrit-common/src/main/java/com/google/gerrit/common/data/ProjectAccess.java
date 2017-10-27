@@ -14,8 +14,14 @@
 
 package com.google.gerrit.common.data;
 
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
+
+import com.google.gerrit.extensions.api.access.PermissionInfo;
+import com.google.gerrit.extensions.api.access.ProjectAccessInfo;
 import com.google.gerrit.reviewdb.client.AccountGroup;
 import com.google.gerrit.reviewdb.client.Project;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,7 +39,39 @@ public class ProjectAccess {
   protected Map<AccountGroup.UUID, GroupInfo> groupInfo;
   protected List<WebLinkInfoCommon> fileHistoryLinks;
 
+  private static List<Permission> toPermissions(Map<String, PermissionInfo> permissionInfos) {
+    List<Permission> permissions = new ArrayList<>(permissionInfos.size());
+    return permissions;
+  }
+
   public ProjectAccess() {}
+
+  public ProjectAccess(ProjectAccessInfo info) {
+    this.canUpload = info.canUpload;
+    this.isConfigVisible = info.configVisible;
+    this.ownerOf = info.ownerOf;
+    this.revision = info.revision;
+    this.inheritsFrom =
+        info.inheritsFrom == null ? null : new Project.NameKey(info.inheritsFrom.name);
+    this.local =
+        info.local == null
+            ? null
+            : info.local
+                .entrySet()
+                .stream()
+                .map(as -> new AccessSection(as.getKey(), toPermissions(as.getValue().permissions)))
+                .collect(toList());
+    this.groupInfo =
+        info.groups == null
+            ? null
+            : info.groups
+                .entrySet()
+                .stream()
+                .collect(
+                    toMap(
+                        e -> new AccountGroup.UUID(e.getKey()),
+                        e -> new GroupInfo(e.getKey(), e.getValue().name, e.getValue().url)));
+  }
 
   public Project.NameKey getProjectName() {
     return projectName;

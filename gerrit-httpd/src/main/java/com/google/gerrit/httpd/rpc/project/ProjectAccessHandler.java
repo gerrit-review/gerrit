@@ -28,6 +28,7 @@ import com.google.gerrit.common.errors.PermissionDeniedException;
 import com.google.gerrit.common.errors.UpdateParentFailedException;
 import com.google.gerrit.extensions.restapi.AuthException;
 import com.google.gerrit.extensions.restapi.ResourceConflictException;
+import com.google.gerrit.extensions.restapi.ResourceNotFoundException;
 import com.google.gerrit.extensions.restapi.UnprocessableEntityException;
 import com.google.gerrit.httpd.rpc.Handler;
 import com.google.gerrit.reviewdb.client.Project;
@@ -42,6 +43,7 @@ import com.google.gerrit.server.permissions.PermissionBackendException;
 import com.google.gerrit.server.permissions.ProjectPermission;
 import com.google.gerrit.server.permissions.RefPermission;
 import com.google.gerrit.server.project.ContributorAgreementsChecker;
+import com.google.gerrit.server.project.GetAccess;
 import com.google.gerrit.server.project.NoSuchProjectException;
 import com.google.gerrit.server.project.RefPattern;
 import com.google.gerrit.server.project.SetParent;
@@ -68,6 +70,7 @@ public abstract class ProjectAccessHandler<T> extends Handler<T> {
   private final ContributorAgreementsChecker contributorAgreements;
   private final PermissionBackend permissionBackend;
   private final Project.NameKey parentProjectName;
+  private final GetAccess getAccess;
 
   protected String message;
 
@@ -88,6 +91,7 @@ public abstract class ProjectAccessHandler<T> extends Handler<T> {
       String message,
       ContributorAgreementsChecker contributorAgreements,
       PermissionBackend permissionBackend,
+      GetAccess getAccess,
       boolean checkIfOwner) {
     this.groupBackend = groupBackend;
     this.metaDataUpdateFactory = metaDataUpdateFactory;
@@ -103,13 +107,14 @@ public abstract class ProjectAccessHandler<T> extends Handler<T> {
     this.contributorAgreements = contributorAgreements;
     this.permissionBackend = permissionBackend;
     this.checkIfOwner = checkIfOwner;
+    this.getAccess = getAccess;
   }
 
   @Override
   public final T call()
       throws NoSuchProjectException, IOException, ConfigInvalidException, InvalidNameException,
           NoSuchGroupException, OrmException, UpdateParentFailedException,
-          PermissionDeniedException, PermissionBackendException {
+          PermissionDeniedException, PermissionBackendException, ResourceNotFoundException, ResourceConflictException {
     try {
       contributorAgreements.check(projectName, user);
     } catch (AuthException e) {
@@ -194,7 +199,7 @@ public abstract class ProjectAccessHandler<T> extends Handler<T> {
   protected abstract T updateProjectConfig(
       ProjectConfig config, MetaDataUpdate md, boolean parentProjectUpdate)
       throws IOException, NoSuchProjectException, ConfigInvalidException, OrmException,
-          PermissionDeniedException, PermissionBackendException;
+          PermissionDeniedException, PermissionBackendException, ResourceNotFoundException, ResourceConflictException;
 
   private void replace(ProjectConfig config, Set<String> toDelete, AccessSection section)
       throws NoSuchGroupException {

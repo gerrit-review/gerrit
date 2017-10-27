@@ -50,6 +50,12 @@ public class GroupInfo {
     }
   }
 
+  public GroupInfo(String uuid, String name, String url) {
+    this.uuid = new AccountGroup.UUID(uuid);
+    this.name = name;
+    this.url = url;
+  }
+
   /** @return the unique local id of the group */
   public AccountGroup.UUID getId() {
     return uuid;
