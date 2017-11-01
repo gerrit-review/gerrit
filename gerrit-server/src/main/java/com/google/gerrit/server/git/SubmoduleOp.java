@@ -554,11 +554,17 @@ public class SubmoduleOp {
       RevCommit newCommit,
       RevCommit oldCommit)
       throws SubmoduleException {
+<<<<<<< HEAD   (9615e3 Merge branch 'stable-2.14' into stable-2.15)
     msgbuf.append("* Update ");
     msgbuf.append(s.getPath());
     msgbuf.append(" from branch '");
     msgbuf.append(s.getSubmodule().getShortName());
     msgbuf.append("'");
+=======
+    msgbuf.append("* Update " + s.getPath());
+    msgbuf.append(" from branch '" + s.getSubmodule().getShortName() + "'");
+    msgbuf.append("\n  to " + newCommit.getName());
+>>>>>>> BRANCH (817d4d Merge "Specify new tip of the branch when updating submodule)
 
     // newly created submodule gitlink, do not append whole history
     if (oldCommit == null) {
