@@ -196,6 +196,7 @@ public class ChangeResource implements RestResource, HasETag {
   }
 
   @Override
+  @SuppressWarnings("deprecation") // Use Hashing.md5 for compatibility.
   public String getETag() {
     Hasher h = Hashing.murmur3_128().newHasher();
     if (user.isIdentifiedUser()) {

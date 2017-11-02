@@ -800,6 +800,7 @@ public class PostReview
           filename, patchSetId, line, side, message, range);
     }
 
+    @SuppressWarnings("deprecation") // Use Hashing.sha1 for compatibility.
     public static CommentSetEntry create(Comment comment) {
       return create(
           comment.key.filename,
