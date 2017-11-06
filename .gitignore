@@ -14,6 +14,7 @@
 /.classpath
 /.factorypath
 /.idea
+<<<<<<< HEAD   (2ee80e Merge "AccountManager#lookup: Don't use account index to res)
 /.metadata
 /.project
 /.settings/org.eclipse.ltk.core.refactoring.prefs
@@ -21,6 +22,22 @@
 /.settings/org.maven.ide.eclipse.prefs
 /bazel-*
 /bin/
+=======
+*.iml
+*.eml
+*.sublime-*
+/gerrit-package-plugins
+/.bazel_path
+/.buckconfig.local
+/.buckjavaargs
+/.buckd
+/bazel-bin
+/bazel-genfiles
+/bazel-gerrit
+/bazel-out
+/bazel-testlogs
+/buck-cache
+>>>>>>> BRANCH (8538b6 Merge "AccountManager: Don't try to lookup external IDs from)
 /buck-out
 /eclipse-out
 /extras

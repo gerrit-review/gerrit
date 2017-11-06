@@ -58,7 +58,10 @@ public class AccountManager {
   private final ProjectCache projectCache;
   private final AtomicBoolean awaitsFirstAccountCheck;
   private final AuditService auditService;
+<<<<<<< HEAD   (2ee80e Merge "AccountManager#lookup: Don't use account index to res)
   private final ExternalIdsUpdate.Server externalIdsUpdateFactory;
+=======
+>>>>>>> BRANCH (8538b6 Merge "AccountManager: Don't try to lookup external IDs from)
 
   @Inject
   AccountManager(
@@ -69,8 +72,12 @@ public class AccountManager {
       IdentifiedUser.GenericFactory userFactory,
       ChangeUserName.Factory changeUserNameFactory,
       ProjectCache projectCache,
+<<<<<<< HEAD   (2ee80e Merge "AccountManager#lookup: Don't use account index to res)
       AuditService auditService,
       ExternalIdsUpdate.Server externalIdsUpdateFactory) {
+=======
+      AuditService auditService) {
+>>>>>>> BRANCH (8538b6 Merge "AccountManager: Don't try to lookup external IDs from)
     this.schema = schema;
     this.byIdCache = byIdCache;
     this.byEmailCache = byEmailCache;
@@ -80,14 +87,30 @@ public class AccountManager {
     this.projectCache = projectCache;
     this.awaitsFirstAccountCheck = new AtomicBoolean(true);
     this.auditService = auditService;
+<<<<<<< HEAD   (2ee80e Merge "AccountManager#lookup: Don't use account index to res)
     this.externalIdsUpdateFactory = externalIdsUpdateFactory;
+=======
+>>>>>>> BRANCH (8538b6 Merge "AccountManager: Don't try to lookup external IDs from)
   }
 
+<<<<<<< HEAD   (2ee80e Merge "AccountManager#lookup: Don't use account index to res)
   /** @return user identified by this external identity string */
   public Optional<Account.Id> lookup(String externalId) throws AccountException {
     try (ReviewDb db = schema.open()) {
       ExternalId extId = findExternalId(db, ExternalId.Key.parse(externalId));
       return extId != null ? Optional.of(extId.accountId()) : Optional.empty();
+=======
+  /**
+   * @return user identified by this external identity string, or null.
+   */
+  public Account.Id lookup(String externalId) throws AccountException {
+    try {
+      try (ReviewDb db = schema.open()) {
+        AccountExternalId ext =
+            db.accountExternalIds().get(new AccountExternalId.Key(externalId));
+        return ext != null ? ext.getAccountId() : null;
+      }
+>>>>>>> BRANCH (8538b6 Merge "AccountManager: Don't try to lookup external IDs from)
     } catch (OrmException e) {
       throw new AccountException("Cannot lookup account " + externalId, e);
     }
@@ -127,8 +150,29 @@ public class AccountManager {
     }
   }
 
+<<<<<<< HEAD   (2ee80e Merge "AccountManager#lookup: Don't use account index to res)
   private ExternalId findExternalId(ReviewDb db, ExternalId.Key key) throws OrmException {
     return ExternalId.from(db.accountExternalIds().get(key.asAccountExternalIdKey()));
+=======
+  private AccountExternalId getAccountExternalId(ReviewDb db,
+      AccountExternalId.Key key) throws OrmException {
+    // We don't have at the moment an account_by_external_id cache
+    // but by using the accounts cache we get the list of external_ids
+    // without having to query the DB every time
+    if (key.getScheme().equals(AccountExternalId.SCHEME_GERRIT)
+        || key.getScheme().equals(AccountExternalId.SCHEME_USERNAME)) {
+      AccountState state = byIdCache.getByUsername(
+          key.get().substring(key.getScheme().length()));
+      if (state != null) {
+        for (AccountExternalId accountExternalId : state.getExternalIds()) {
+          if (accountExternalId.getKey().equals(key)) {
+            return accountExternalId;
+          }
+        }
+      }
+    }
+    return db.accountExternalIds().get(key);
+>>>>>>> BRANCH (8538b6 Merge "AccountManager: Don't try to lookup external IDs from)
   }
 
   private void update(ReviewDb db, AuthRequest who, ExternalId extId)
