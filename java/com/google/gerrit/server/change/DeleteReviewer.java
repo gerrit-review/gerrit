@@ -19,6 +19,10 @@ import com.google.gerrit.extensions.api.changes.DeleteReviewerInput;
 import com.google.gerrit.extensions.restapi.Response;
 import com.google.gerrit.extensions.restapi.RestApiException;
 import com.google.gerrit.reviewdb.server.ReviewDb;
+import com.google.gerrit.server.permissions.ChangePermission;
+import com.google.gerrit.server.permissions.PermissionBackend;
+import com.google.gerrit.server.permissions.PermissionBackendException;
+import com.google.gerrit.server.project.RemoveReviewerControl;
 import com.google.gerrit.server.update.BatchUpdate;
 import com.google.gerrit.server.update.BatchUpdateOp;
 import com.google.gerrit.server.update.RetryHelper;
@@ -35,23 +39,27 @@ public class DeleteReviewer
   private final Provider<ReviewDb> dbProvider;
   private final DeleteReviewerOp.Factory deleteReviewerOpFactory;
   private final DeleteReviewerByEmailOp.Factory deleteReviewerByEmailOpFactory;
+  private final RemoveReviewerControl removeReviewerControl;
 
   @Inject
   DeleteReviewer(
       Provider<ReviewDb> dbProvider,
       RetryHelper retryHelper,
       DeleteReviewerOp.Factory deleteReviewerOpFactory,
-      DeleteReviewerByEmailOp.Factory deleteReviewerByEmailOpFactory) {
+      DeleteReviewerByEmailOp.Factory deleteReviewerByEmailOpFactory,
+      RemoveReviewerControl removeReviewerControl) {
     super(retryHelper);
     this.dbProvider = dbProvider;
     this.deleteReviewerOpFactory = deleteReviewerOpFactory;
     this.deleteReviewerByEmailOpFactory = deleteReviewerByEmailOpFactory;
+    this.removeReviewerControl = removeReviewerControl;
   }
 
   @Override
   protected Response<?> applyImpl(
       BatchUpdate.Factory updateFactory, ReviewerResource rsrc, DeleteReviewerInput input)
-      throws RestApiException, UpdateException {
+      throws RestApiException, UpdateException, PermissionBackendException {
+
     if (input == null) {
       input = new DeleteReviewerInput();
     }
