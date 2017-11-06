@@ -35,11 +35,9 @@ import com.google.gerrit.server.account.externalids.ExternalIdsUpdate;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.group.GroupsUpdate;
 import com.google.gerrit.server.project.ProjectCache;
-import com.google.gerrit.server.query.account.InternalAccountQuery;
 import com.google.gwtorm.server.OrmException;
 import com.google.gwtorm.server.SchemaFactory;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -68,8 +66,12 @@ public class AccountManager {
   private final ChangeUserName.Factory changeUserNameFactory;
   private final ProjectCache projectCache;
   private final AtomicBoolean awaitsFirstAccountCheck;
+<<<<<<< HEAD   (3c4f3f Documentation: Wrong field names in ChangeDetail JSON exampl)
   private final Provider<InternalAccountQuery> accountQueryProvider;
   private final ExternalIds externalIds;
+=======
+  private final AuditService auditService;
+>>>>>>> BRANCH (2ee80e Merge "AccountManager#lookup: Don't use account index to res)
   private final ExternalIdsUpdate.Server externalIdsUpdateFactory;
   private final GroupsUpdate.Factory groupsUpdateFactory;
   private final boolean autoUpdateAccountActiveStatus;
@@ -87,11 +89,16 @@ public class AccountManager {
       IdentifiedUser.GenericFactory userFactory,
       ChangeUserName.Factory changeUserNameFactory,
       ProjectCache projectCache,
+<<<<<<< HEAD   (3c4f3f Documentation: Wrong field names in ChangeDetail JSON exampl)
       Provider<InternalAccountQuery> accountQueryProvider,
       ExternalIds externalIds,
       ExternalIdsUpdate.Server externalIdsUpdateFactory,
       GroupsUpdate.Factory groupsUpdateFactory,
       SetInactiveFlag setInactiveFlag) {
+=======
+      AuditService auditService,
+      ExternalIdsUpdate.Server externalIdsUpdateFactory) {
+>>>>>>> BRANCH (2ee80e Merge "AccountManager#lookup: Don't use account index to res)
     this.schema = schema;
     this.sequences = sequences;
     this.accounts = accounts;
@@ -101,10 +108,15 @@ public class AccountManager {
     this.userFactory = userFactory;
     this.changeUserNameFactory = changeUserNameFactory;
     this.projectCache = projectCache;
+<<<<<<< HEAD   (3c4f3f Documentation: Wrong field names in ChangeDetail JSON exampl)
     this.awaitsFirstAccountCheck =
         new AtomicBoolean(cfg.getBoolean("capability", "makeFirstUserAdmin", true));
     this.accountQueryProvider = accountQueryProvider;
     this.externalIds = externalIds;
+=======
+    this.awaitsFirstAccountCheck = new AtomicBoolean(true);
+    this.auditService = auditService;
+>>>>>>> BRANCH (2ee80e Merge "AccountManager#lookup: Don't use account index to res)
     this.externalIdsUpdateFactory = externalIdsUpdateFactory;
     this.groupsUpdateFactory = groupsUpdateFactory;
     this.autoUpdateAccountActiveStatus =
@@ -114,11 +126,9 @@ public class AccountManager {
 
   /** @return user identified by this external identity string */
   public Optional<Account.Id> lookup(String externalId) throws AccountException {
-    try {
-      AccountState accountState = accountQueryProvider.get().oneByExternalId(externalId);
-      return accountState != null
-          ? Optional.of(accountState.getAccount().getId())
-          : Optional.empty();
+    try (ReviewDb db = schema.open()) {
+      ExternalId extId = findExternalId(db, ExternalId.Key.parse(externalId));
+      return extId != null ? Optional.of(extId.accountId()) : Optional.empty();
     } catch (OrmException e) {
       throw new AccountException("Cannot lookup account " + externalId, e);
     }
