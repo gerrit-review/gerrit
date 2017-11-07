@@ -98,6 +98,13 @@
      */
     QUERY_LEGACY_SUFFIX: /^\/q\/.+,n,z$/,
 
+    /**
+     * Support vestigial params from GWT UI.
+     * @see Issue 7673.
+     * @type {!RegExp}
+     */
+    QUERY_LEGACY_SUFFIX: /^\/q\/.+,n,z$/,
+
     // Matches /c/<changeNum>/[<basePatchNum>..][<patchNum>][/].
     CHANGE_LEGACY: /^\/c\/(\d+)\/?(((-?\d+|edit)(\.\.(\d+|edit))?))?\/?$/,
     CHANGE_NUMBER_LEGACY: /^\/(\d+)\/?/,
@@ -141,6 +148,7 @@
   const LINE_ADDRESS_PATTERN = /^([ab]?)(\d+)$/;
 
   /**
+<<<<<<< HEAD   (adb205 Merge "Remove unnecessary param from observer")
    * Pattern to recognize '+' in url-encoded strings for replacement with ' '.
    */
   const PLUS_PATTERN = /\+/g;
@@ -151,6 +159,8 @@
   const QUESTION_PATTERN = /^\?*/;
 
   /**
+=======
+>>>>>>> BRANCH (d95224 Merge changes I495dac05,I5fb43a85 into stable-2.15)
    * GWT UI would use @\d+ at the end of a path to indicate linenum.
    */
   const LEGACY_LINENUM_PATTERN = /@([ab]?\d+)$/;
@@ -621,6 +631,12 @@
 
       this._mapRoute(RoutePattern.QUERY_LEGACY_SUFFIX,
           '_handleQueryLegacySuffixRoute');
+<<<<<<< HEAD   (adb205 Merge "Remove unnecessary param from observer")
+=======
+
+      this._mapRoute(RoutePattern.ADMIN_PLACEHOLDER,
+          '_handleAdminPlaceholderRoute', true);
+>>>>>>> BRANCH (d95224 Merge changes I495dac05,I5fb43a85 into stable-2.15)
 
       this._mapRoute(RoutePattern.QUERY, '_handleQueryRoute');
 
@@ -1030,6 +1046,10 @@
         query: data.params[0],
         offset: data.params[2],
       });
+    },
+
+    _handleQueryLegacySuffixRoute(ctx) {
+      this._redirect(ctx.path.replace(LEGACY_QUERY_SUFFIX_PATTERN, ''));
     },
 
     _handleQueryLegacySuffixRoute(ctx) {

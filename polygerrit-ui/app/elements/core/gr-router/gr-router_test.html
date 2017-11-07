@@ -571,6 +571,7 @@ limitations under the License.
             '/c/test/+/42#foo');
       });
 
+<<<<<<< HEAD   (adb205 Merge "Remove unnecessary param from observer")
       test('_handleQueryRoute', () => {
         const data = {params: ['project:foo/bar/baz']};
         assertDataToParams(data, '_handleQueryRoute', {
@@ -587,6 +588,8 @@ limitations under the License.
         });
       });
 
+=======
+>>>>>>> BRANCH (d95224 Merge changes I495dac05,I5fb43a85 into stable-2.15)
       test('_handleQueryLegacySuffixRoute', () => {
         element._handleQueryLegacySuffixRoute({path: '/q/foo+bar,n,z'});
         assert.isTrue(redirectStub.calledOnce);
