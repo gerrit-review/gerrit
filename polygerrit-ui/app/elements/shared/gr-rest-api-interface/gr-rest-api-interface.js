@@ -920,6 +920,7 @@
     getChangeEditFiles(changeNum, patchRange) {
       let endpoint = '/edit?list';
       if (patchRange.basePatchNum !== 'PARENT') {
+<<<<<<< HEAD   (e7f8f1 Merge "Make plugin documentation style consistent with core )
         endpoint += '&base=' + encodeURIComponent(patchRange.basePatchNum);
       }
       return this._getChangeURLAndFetch(changeNum, endpoint);
@@ -934,6 +935,12 @@
     queryChangeFiles(changeNum, patchNum, query) {
       return this._getChangeURLAndFetch(changeNum,
           `/files?q=${encodeURIComponent(query)}`, patchNum);
+=======
+        endpoint += '?base=' + encodeURIComponent(patchRange.basePatchNum);
+      }
+      return this._getChangeURLAndFetch(changeNum, endpoint,
+          patchRange.patchNum);
+>>>>>>> BRANCH (a34554 Merge branch 'stable-2.14' into stable-2.15)
     },
 
     getChangeFilesAsSpeciallySortedArray(changeNum, patchRange) {
