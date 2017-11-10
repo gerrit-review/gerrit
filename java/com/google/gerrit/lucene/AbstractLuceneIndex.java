@@ -16,6 +16,7 @@ package com.google.gerrit.lucene;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.stream.Collectors.toList;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Sets;
@@ -30,10 +31,16 @@ import com.google.gerrit.index.FieldType;
 import com.google.gerrit.index.Index;
 import com.google.gerrit.index.Schema;
 import com.google.gerrit.index.Schema.Values;
+import com.google.gerrit.index.query.FieldsBundle;
 import com.google.gerrit.server.config.SitePaths;
 import com.google.gerrit.server.index.IndexUtils;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -52,6 +59,7 @@ import org.apache.lucene.document.StoredField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TrackingIndexWriter;
 import org.apache.lucene.search.ControlledRealTimeReopenThread;
@@ -326,6 +334,47 @@ public abstract class AbstractLuceneIndex<K, V> implements Index<K, V> {
     } else {
       throw FieldType.badFieldType(type);
     }
+  }
+
+  @SuppressWarnings("unchecked")
+  public <T> List<T> getFieldValues(Document doc, FieldDef<?, T> fieldDef) {
+    IndexableField[] fields = doc.getFields(fieldDef.getName());
+    FieldType<?> type = fieldDef.getType();
+    if (type == FieldType.INTEGER || type == FieldType.INTEGER_RANGE) {
+      return (List<T>)
+          Arrays.stream(fields).map(f -> f.numericValue().intValue()).collect(toList());
+    } else if (type == FieldType.LONG) {
+      return (List<T>)
+          Arrays.stream(fields).map(f -> f.numericValue().longValue()).collect(toList());
+    } else if (type == FieldType.TIMESTAMP) {
+      return (List<T>)
+          Arrays.stream(fields)
+              .map(f -> new Timestamp(f.numericValue().longValue()))
+              .collect(toList());
+    } else if (type == FieldType.EXACT || type == FieldType.PREFIX || type == FieldType.FULL_TEXT) {
+      return (List<T>) Arrays.stream(fields).map(f -> f.stringValue()).collect(toList());
+    } else if (type == FieldType.STORED_ONLY) {
+      return (List<T>) Arrays.stream(fields).map(f -> f.binaryValue().bytes).collect(toList());
+    } else {
+      throw FieldType.badFieldType(type);
+    }
+  }
+
+  protected Optional<FieldsBundle> toFieldsBundle(Document doc) {
+    List<IndexableField> fields = doc.getFields();
+    Map<String, Object> rawFields = new HashMap<>(fields.size());
+    for (IndexableField field : fields) {
+      if (field.binaryValue() != null) {
+        rawFields.put(field.name(), field.binaryValue().bytes);
+      } else if (field.numericValue() != null) {
+        rawFields.put(field.name(), field.numericValue().longValue());
+      } else if (field.stringValue() != null) {
+        rawFields.put(field.name(), field.stringValue());
+      } else {
+        // throw exception
+      }
+    }
+    return Optional.of(new FieldsBundle(rawFields));
   }
 
   private static Field.Store store(FieldDef<?, ?> f) {
