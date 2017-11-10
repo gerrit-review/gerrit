@@ -65,7 +65,18 @@ limitations under the License.
         const span = element.$$('span');
         assert.equal(span.textContent.trim(), expected);
         assert.equal(element.title, expectedTooltip);
-        done();
+
+        // Re-set dateStr so that text gets re-rendered. Since showFullDate may
+        // be undefined and is always set initially if true, it does not trigger
+        // a new computation on its own.
+        element.dateStr = '';
+        element.showFullDate = true;
+        element.dateStr = dateStr;
+        flush(() => {
+          const span = element.$$('span');
+          assert.equal(span.textContent.trim(), expectedTooltip);
+          done();
+        });
       });
     }
 

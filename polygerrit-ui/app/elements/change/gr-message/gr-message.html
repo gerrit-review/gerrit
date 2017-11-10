@@ -70,6 +70,13 @@ limitations under the License.
         height: 1.75em;
         width: 1.75em;
       }
+      .longDate,
+      .expanded .shortDate {
+        display: none;
+      }
+      .expanded .longDate {
+        display: inline;
+      }
       .expanded gr-avatar {
         top: 12px;
         height: 2.5em;
@@ -188,15 +195,25 @@ limitations under the License.
         <template is="dom-if" if="[[!message.id]]">
           <span class="date">
             <gr-date-formatter
+                class="shortDate"
                 has-tooltip
                 date-str="[[message.date]]"></gr-date-formatter>
+            <gr-date-formatter
+                class="longDate"
+                date-str="[[message.date]]"
+                show-full-date></gr-date-formatter>
           </span>
         </template>
         <template is="dom-if" if="[[message.id]]">
           <a class="date" href$="[[_computeMessageHash(message)]]" on-tap="_handleLinkTap">
             <gr-date-formatter
+                class="shortDate"
                 has-tooltip
                 date-str="[[message.date]]"></gr-date-formatter>
+            <gr-date-formatter
+                class="longDate"
+                date-str="[[message.date]]"
+                show-full-date></gr-date-formatter>
           </a>
         </template>
       </div>

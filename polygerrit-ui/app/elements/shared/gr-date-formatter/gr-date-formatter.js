@@ -43,6 +43,8 @@
        * native browser tooltip.
        */
       hasTooltip: Boolean,
+      // No default value to prevent flickering.
+      showFullDate: Boolean,
 
       /**
        * The title to be used as the native tooltip or by the tooltip behavior.
@@ -133,6 +135,9 @@
 
     _computeDateStr(dateStr, timeFormat, relative) {
       if (!dateStr) { return ''; }
+      if (this.showFullDate) {
+        return this._computeFullDateStr(dateStr, timeFormat);
+      }
       const date = moment(util.parseDate(dateStr));
       if (!date.isValid()) { return ''; }
       if (relative) {
