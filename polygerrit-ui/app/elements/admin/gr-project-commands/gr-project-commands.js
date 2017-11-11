@@ -31,6 +31,10 @@
       _canCreate: Boolean,
     },
 
+    ready() {
+      this.$.jsAPI.addElement(this.$.jsAPI.Element.PROJECT_ACTIONS, this);
+    },
+
     attached() {
       this._loadProject();
 
